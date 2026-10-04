@@ -3,6 +3,7 @@
     python render.py                  # all lessons -> output/lesson<N>_<name>_1080p30.mp4
     python render.py --only 3 5       # just lessons 3 and 5
     python render.py --preview        # quick 480p15 build
+    python render.py --resume         # skip scenes that are already rendered
 """
 import argparse
 import concurrent.futures as cf
@@ -52,13 +53,17 @@ def main():
     ap.add_argument("--only", nargs="*", type=int)
     ap.add_argument("--jobs", type=int, default=os.cpu_count() or 2)
     ap.add_argument("--preview", action="store_true")
+    ap.add_argument("--resume", action="store_true", help="skip scenes that already have a rendered video")
     args = ap.parse_args()
     res, fps, qdir = ("854,480", 15, "480p15") if args.preview else ("1920,1080", 30, "1080p30")
     nums = args.only or sorted(LESSONS)
     jobs = [(f"v{n}", f"V{n}{part}") for n in nums for part in ("Concept", "Examples")]
+    if args.resume:
+        jobs = [(m, s) for m, s in jobs
+                if not os.path.exists(os.path.join(HERE, "media", "videos", m, qdir, f"{s}.mp4"))]
 
     # compile all LaTeX serially first so parallel renders don't race on the cache
-    for n in nums:
+    for n in sorted({int(m[1:]) for m, _ in jobs}):
         subprocess.call(["manim", "render", "--disable_caching", "-ql", "--dry_run", f"v{n}.py",
                          f"V{n}Concept", f"V{n}Examples"], cwd=HERE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     with cf.ProcessPoolExecutor(args.jobs) as ex:
