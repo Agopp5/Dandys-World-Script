@@ -72,18 +72,22 @@ class VoiceMixin:
     pad the block so the next segment starts after the clip ends."""
 
     _seg_end = 0.0
+    narration_manifest = MANIFEST
+    narration_text = SEGMENT_TEXT
+    narration_audio_dir = AUDIO_DIR
+    narration_pad = PAD
 
     @contextmanager
     def voice(self, key):
-        entry = MANIFEST.get(key)
-        path = os.path.join(AUDIO_DIR, entry["file"]) if entry else None
+        entry = self.narration_manifest.get(key)
+        path = os.path.join(self.narration_audio_dir, entry["file"]) if entry else None
         if path and os.path.exists(path):
             dur = entry["duration"]
             self.add_sound(path)
         else:
-            dur = len(SEGMENT_TEXT[key].split()) / WORDS_PER_SEC
+            dur = len(self.narration_text[key].split()) / WORDS_PER_SEC
         start = self.renderer.time
-        self._seg_end = start + dur + PAD
+        self._seg_end = start + dur + self.narration_pad
         yield dur
         rem = self._seg_end - self.renderer.time
         if rem > 1 / 30:
