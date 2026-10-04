@@ -1,0 +1,897 @@
+{
+ "v1_01": {
+  "file": "v1_01.flac",
+  "duration": 13.36,
+  "fp": "79480fd87671a363d4363fcb5093de91700cc6b0"
+ },
+ "v1_02": {
+  "file": "v1_02.flac",
+  "duration": 16.44,
+  "fp": "8c883bd657d9e3d131ae5d289f58258b5b3e37b7"
+ },
+ "v1_03": {
+  "file": "v1_03.flac",
+  "duration": 14.84,
+  "fp": "36d6afea2c5aad6b60cc98764c1bd246b90a1e99"
+ },
+ "v1_04": {
+  "file": "v1_04.flac",
+  "duration": 17.48,
+  "fp": "4a1cb182fd876373449f98f98c632caa041dc380"
+ },
+ "v1_05": {
+  "file": "v1_05.flac",
+  "duration": 13.76,
+  "fp": "387a76e8701083803268f4ac33334f3d65d4183c"
+ },
+ "v1_06": {
+  "file": "v1_06.flac",
+  "duration": 15.44,
+  "fp": "25c04e71b2833b2cd6ed11a63fe0064ba4c0ad9e"
+ },
+ "v1_07": {
+  "file": "v1_07.flac",
+  "duration": 13.6,
+  "fp": "dd2ed29ee05a85557cdf35e4a173396ec1c248f7"
+ },
+ "v1_09": {
+  "file": "v1_09.flac",
+  "duration": 11.28,
+  "fp": "3a9d553ad03898ebc7b5ac6f2a221051449cb482"
+ },
+ "v1_08": {
+  "file": "v1_08.flac",
+  "duration": 16.04,
+  "fp": "e0617ec3fd6b953120dc256d14454399fd45ee98"
+ },
+ "v1_11": {
+  "file": "v1_11.flac",
+  "duration": 16.12,
+  "fp": "49c938afc87fb56b62fd293bb0ace8e783a05bd8"
+ },
+ "v1_10": {
+  "file": "v1_10.flac",
+  "duration": 22.56,
+  "fp": "4e61514d8879c77cfcffd23dfd95cce8b426c1be"
+ },
+ "v1_12": {
+  "file": "v1_12.flac",
+  "duration": 10.24,
+  "fp": "cc15013a4477021d028e8f3dbc6f98ca7024d5ca"
+ },
+ "v1_13": {
+  "file": "v1_13.flac",
+  "duration": 14.92,
+  "fp": "bb0d7a6057fcd6a723bb98cb29e462691a5aa6c9"
+ },
+ "v1_14": {
+  "file": "v1_14.flac",
+  "duration": 11.28,
+  "fp": "f9a4e39ad175fc7e44f4c0fcb3ec95f0411445de"
+ },
+ "v1_15": {
+  "file": "v1_15.flac",
+  "duration": 16.6,
+  "fp": "f5cc332b25214d3f0d453ede0cbc361fb6cc98d5"
+ },
+ "v1_16": {
+  "file": "v1_16.flac",
+  "duration": 20.56,
+  "fp": "29bd0ab1f31d24be98b6724d1bc0b3d46f8158a5"
+ },
+ "v1_17": {
+  "file": "v1_17.flac",
+  "duration": 13.56,
+  "fp": "a4d9ff1a976056a39cab8e989f90e2436c51d482"
+ },
+ "v1_18": {
+  "file": "v1_18.flac",
+  "duration": 16.8,
+  "fp": "c695f261445635174072394de95beac6922ced86"
+ },
+ "v1_19": {
+  "file": "v1_19.flac",
+  "duration": 10.68,
+  "fp": "d42b2ff983fb7698f7538a8e004000c126ac27b0"
+ },
+ "v1_20": {
+  "file": "v1_20.flac",
+  "duration": 9.2,
+  "fp": "4b4c72c7f3fbaca0fbf5f5bc809ebd7a2b20f39e"
+ },
+ "v1_21": {
+  "file": "v1_21.flac",
+  "duration": 23.12,
+  "fp": "1a5588e3753464505302e43dbd644477b3dc1fda"
+ },
+ "v1_22": {
+  "file": "v1_22.flac",
+  "duration": 15.52,
+  "fp": "ec6688ad06292320e734469350908ce290c1fed7"
+ },
+ "v1_23": {
+  "file": "v1_23.flac",
+  "duration": 21.36,
+  "fp": "959bf265799a696214ba18d7dacbbeab74169a1f"
+ },
+ "v1_24": {
+  "file": "v1_24.flac",
+  "duration": 14.8,
+  "fp": "f8091a1bcdcf61fd99167d001ffc9cf6df4218eb"
+ },
+ "v1_26": {
+  "file": "v1_26.flac",
+  "duration": 15.32,
+  "fp": "1e2c484ea56de59dab2687be7786baa22eca088b"
+ },
+ "v1_25": {
+  "file": "v1_25.flac",
+  "duration": 19.6,
+  "fp": "453c33b6a3afa577e7be6e6922707dd51484fc4e"
+ },
+ "v2_01": {
+  "file": "v2_01.flac",
+  "duration": 12.36,
+  "fp": "249f7d81d77b10073b525506416ec9b896aa290e"
+ },
+ "v2_02": {
+  "file": "v2_02.flac",
+  "duration": 11.92,
+  "fp": "13648a2bafd9052371bdcccf4df275f98c8d4c2f"
+ },
+ "v2_03": {
+  "file": "v2_03.flac",
+  "duration": 14.44,
+  "fp": "ed29835ffec7582bcbc47ef73f27d0b6942d50c4"
+ },
+ "v2_04": {
+  "file": "v2_04.flac",
+  "duration": 6.76,
+  "fp": "ad36baecaf5f801f7169b52cf8b3110b549983de"
+ },
+ "v2_05": {
+  "file": "v2_05.flac",
+  "duration": 14.0,
+  "fp": "cfe08c9efa5cfaafdeea8a160fea1abfe4557892"
+ },
+ "v2_06": {
+  "file": "v2_06.flac",
+  "duration": 15.64,
+  "fp": "1c0c15a17c069d964c647842444bc92c7e052535"
+ },
+ "v2_07": {
+  "file": "v2_07.flac",
+  "duration": 10.04,
+  "fp": "fd28a3f2955b5103f5be57cbb9f6f31565c83f6b"
+ },
+ "v2_08": {
+  "file": "v2_08.flac",
+  "duration": 17.6,
+  "fp": "f7373eb8c96aa75b73259ad8765887f7fda2ff4c"
+ },
+ "v2_09": {
+  "file": "v2_09.flac",
+  "duration": 15.96,
+  "fp": "a68461f4798fd2106396dd722ca682dc4b2c92eb"
+ },
+ "v2_10": {
+  "file": "v2_10.flac",
+  "duration": 6.08,
+  "fp": "1629bdc0fbd3dec9279e973f3b29f1d1283d2f82"
+ },
+ "v2_12": {
+  "file": "v2_12.flac",
+  "duration": 13.76,
+  "fp": "ae95fbfdb000282f55e73dbe5306e287cabd584f"
+ },
+ "v2_11": {
+  "file": "v2_11.flac",
+  "duration": 15.48,
+  "fp": "35f8dd8aee526d20d064483480156cd262e32a41"
+ },
+ "v2_13": {
+  "file": "v2_13.flac",
+  "duration": 9.52,
+  "fp": "16c45314038482763afd5e13b75bba27a6144ff5"
+ },
+ "v2_14": {
+  "file": "v2_14.flac",
+  "duration": 11.04,
+  "fp": "91d3b50904cfca2adf0a79f7b467c0ff8c73bbf4"
+ },
+ "v2_15": {
+  "file": "v2_15.flac",
+  "duration": 10.48,
+  "fp": "36250cb275f43699849af81a4a95d443036903e1"
+ },
+ "v2_16": {
+  "file": "v2_16.flac",
+  "duration": 11.52,
+  "fp": "72e0c5dafbe97058b9766e2f1df51258c778b2c8"
+ },
+ "v2_17": {
+  "file": "v2_17.flac",
+  "duration": 14.12,
+  "fp": "7ee879d66d3095566453b2cb1686281157c0b484"
+ },
+ "v2_18": {
+  "file": "v2_18.flac",
+  "duration": 15.16,
+  "fp": "95b47a8f3d74409cecca68f0c41109b66e3bbf7a"
+ },
+ "v2_19": {
+  "file": "v2_19.flac",
+  "duration": 11.2,
+  "fp": "fe67c4da20e39665ded6bb02dffcf743f0d1c954"
+ },
+ "v2_20": {
+  "file": "v2_20.flac",
+  "duration": 14.4,
+  "fp": "a4365fc09dd719d9f05fc4d7bc43dfe9361fd32f"
+ },
+ "v2_21": {
+  "file": "v2_21.flac",
+  "duration": 18.68,
+  "fp": "693441c343ca0c77d6477b3e0aa75be2dad0cb25"
+ },
+ "v2_22": {
+  "file": "v2_22.flac",
+  "duration": 10.12,
+  "fp": "c0eafc06424f51b2a6fba28137e1a950028267c0"
+ },
+ "v2_23": {
+  "file": "v2_23.flac",
+  "duration": 22.32,
+  "fp": "fec896650c2cc3a1ab51205169e69e27e4889640"
+ },
+ "v2_24": {
+  "file": "v2_24.flac",
+  "duration": 12.12,
+  "fp": "4648ac8fdd0a6118ac3f36476b16948ca64ab26d"
+ },
+ "v2_25": {
+  "file": "v2_25.flac",
+  "duration": 10.92,
+  "fp": "8bd5171f2a75e85f89f4cf0f90ce07584f4ed06c"
+ },
+ "v2_26": {
+  "file": "v2_26.flac",
+  "duration": 18.88,
+  "fp": "19fa68eb53c524c910d3d537378a1fa6af02ae31"
+ },
+ "v2_27": {
+  "file": "v2_27.flac",
+  "duration": 16.0,
+  "fp": "33d54abc8e60a73f169fa5c4eb049b08f28a3a9a"
+ },
+ "v2_28": {
+  "file": "v2_28.flac",
+  "duration": 15.08,
+  "fp": "adeafb308bb447593c801ef5902b474dcbca1e3c"
+ },
+ "v2_29": {
+  "file": "v2_29.flac",
+  "duration": 16.08,
+  "fp": "fafdf8fad392cf32b9f1d43686d011fa97c4cbda"
+ },
+ "v2_31": {
+  "file": "v2_31.flac",
+  "duration": 12.92,
+  "fp": "07ab55427dd7ed65dcb1bd344ac27820e6ef1aa4"
+ },
+ "v2_30": {
+  "file": "v2_30.flac",
+  "duration": 22.96,
+  "fp": "998f34a9f1ce329e9bce524d8decd8eb86c72dca"
+ },
+ "v2_33": {
+  "file": "v2_33.flac",
+  "duration": 11.88,
+  "fp": "2894c569e2a4827870df980b29fd2f8a9103443e"
+ },
+ "v2_32": {
+  "file": "v2_32.flac",
+  "duration": 17.28,
+  "fp": "873b3568fb0b08866dcff0ec09681097d4ca045e"
+ },
+ "v2_34": {
+  "file": "v2_34.flac",
+  "duration": 13.76,
+  "fp": "5da2e98af4b3b200b7e45660f6538c13b99c2337"
+ },
+ "v2_35": {
+  "file": "v2_35.flac",
+  "duration": 17.0,
+  "fp": "d888254734d382da39916997e28bc979d3b7460d"
+ },
+ "v2_36": {
+  "file": "v2_36.flac",
+  "duration": 19.92,
+  "fp": "4c72c83b152d3b3719695f9b3c81755760150326"
+ },
+ "v2_37": {
+  "file": "v2_37.flac",
+  "duration": 20.4,
+  "fp": "b9fce3c25914e37b3f51aaf5486b93f7369d86bd"
+ },
+ "v2_38": {
+  "file": "v2_38.flac",
+  "duration": 15.6,
+  "fp": "9f989dcc030d09f0152059c76a391d4fc80183a7"
+ },
+ "v3_01": {
+  "file": "v3_01.flac",
+  "duration": 12.6,
+  "fp": "d6dc587dcbccb69b86ef88547421cbca4e31a8d3"
+ },
+ "v3_02": {
+  "file": "v3_02.flac",
+  "duration": 12.36,
+  "fp": "7e3cf2f7e3acd7016518c57ea8431724e3a55c3a"
+ },
+ "v3_03": {
+  "file": "v3_03.flac",
+  "duration": 21.24,
+  "fp": "031c34ae73df5f98f5a78454e78948be4da9f691"
+ },
+ "v3_04": {
+  "file": "v3_04.flac",
+  "duration": 21.56,
+  "fp": "fe15ee4dd88e751bda2d387d93f2fd26bc29b969"
+ },
+ "v3_05": {
+  "file": "v3_05.flac",
+  "duration": 16.68,
+  "fp": "5aece8b45f7d317ebe242ac3cabdf7398f8c14a8"
+ },
+ "v3_06": {
+  "file": "v3_06.flac",
+  "duration": 17.2,
+  "fp": "e12f46fcd77245314a3cb44bd0685f280a17c40f"
+ },
+ "v3_07": {
+  "file": "v3_07.flac",
+  "duration": 14.84,
+  "fp": "bdee9cac9a886040312e7baa35e7e07f44b83ad2"
+ },
+ "v3_09": {
+  "file": "v3_09.flac",
+  "duration": 12.8,
+  "fp": "77162499f13a5291f310bef65a9341a993e374bf"
+ },
+ "v3_08": {
+  "file": "v3_08.flac",
+  "duration": 18.24,
+  "fp": "28cb590dcb19c1464150b46250ffad4daac63188"
+ },
+ "v3_10": {
+  "file": "v3_10.flac",
+  "duration": 4.96,
+  "fp": "dc7cb7c34672bb88f6c1b8b46357da38970e418b"
+ },
+ "v3_11": {
+  "file": "v3_11.flac",
+  "duration": 6.08,
+  "fp": "66770539761b5ba9b19e1df3eb4057f500915a3e"
+ },
+ "v3_12": {
+  "file": "v3_12.flac",
+  "duration": 6.84,
+  "fp": "558d8ca45941896a3e6c5f741a3812371322b029"
+ },
+ "v3_13": {
+  "file": "v3_13.flac",
+  "duration": 10.84,
+  "fp": "dbf7a5a44e3b31e810ff373876c8da02905fbdd1"
+ },
+ "v3_14": {
+  "file": "v3_14.flac",
+  "duration": 22.6,
+  "fp": "692e613f5b90148a2a2030e34b003d977a746472"
+ },
+ "v3_15": {
+  "file": "v3_15.flac",
+  "duration": 19.24,
+  "fp": "c88d72e76c8c40a6a189e12510e1497af0cc9b36"
+ },
+ "v3_17": {
+  "file": "v3_17.flac",
+  "duration": 12.04,
+  "fp": "855c34444a3c3ab565bbbdfd971b7d05de8e4e91"
+ },
+ "v3_16": {
+  "file": "v3_16.flac",
+  "duration": 16.68,
+  "fp": "052b932e7fb7ae62e5f41d5f2e55f251cc15e28b"
+ },
+ "v3_19": {
+  "file": "v3_19.flac",
+  "duration": 9.28,
+  "fp": "3d1842edac01a10e09dd3ec8dc3e9a76ab80243e"
+ },
+ "v3_18": {
+  "file": "v3_18.flac",
+  "duration": 20.28,
+  "fp": "364c0d1fef29ed43acaa733a9d1fe1d28d83e81e"
+ },
+ "v3_20": {
+  "file": "v3_20.flac",
+  "duration": 14.28,
+  "fp": "2a693ef0c4931b1298907c3da105fe9eb2c04be0"
+ },
+ "v3_21": {
+  "file": "v3_21.flac",
+  "duration": 15.44,
+  "fp": "402d3fdc862243f564a36e0a78eaeb20f770fbf4"
+ },
+ "v3_22": {
+  "file": "v3_22.flac",
+  "duration": 17.0,
+  "fp": "3a152bb0ae2029164fe90419cc10d2589dcc4edf"
+ },
+ "v3_23": {
+  "file": "v3_23.flac",
+  "duration": 16.64,
+  "fp": "751531dba79ef90a17ee9391ec10ccd9bf76443c"
+ },
+ "v3_24": {
+  "file": "v3_24.flac",
+  "duration": 10.84,
+  "fp": "17616131b692d87a827499c931ebc0000fee5ae6"
+ },
+ "v3_25": {
+  "file": "v3_25.flac",
+  "duration": 16.36,
+  "fp": "b23e1f565ca6afe3069588a6bc44d17f12e11bec"
+ },
+ "v3_26": {
+  "file": "v3_26.flac",
+  "duration": 14.0,
+  "fp": "4916963fe99a534ffda6971b83c81abd4e4d309b"
+ },
+ "v3_27": {
+  "file": "v3_27.flac",
+  "duration": 12.2,
+  "fp": "a489c8d690fff125d92ffb6e210d4d15e0da1cbf"
+ },
+ "v3_28": {
+  "file": "v3_28.flac",
+  "duration": 16.92,
+  "fp": "f37008eac73be28a83e9347cbfb77328067365f5"
+ },
+ "v3_29": {
+  "file": "v3_29.flac",
+  "duration": 11.4,
+  "fp": "1c854542070fd021535c47832e28c41d814c4eeb"
+ },
+ "v3_30": {
+  "file": "v3_30.flac",
+  "duration": 19.24,
+  "fp": "6820da0d51637543b981c4706ab4ad503561cbe4"
+ },
+ "v3_31": {
+  "file": "v3_31.flac",
+  "duration": 11.28,
+  "fp": "1cb136ce5508159734b036d07ec1c0403ce5207c"
+ },
+ "v3_32": {
+  "file": "v3_32.flac",
+  "duration": 15.24,
+  "fp": "c6b29f85f58dbd5b167d90bc7b68dbfbf5ba94de"
+ },
+ "v3_33": {
+  "file": "v3_33.flac",
+  "duration": 12.56,
+  "fp": "7b1e14a51b6ff4dab36af09878b0cd9270343d4f"
+ },
+ "v4_01": {
+  "file": "v4_01.flac",
+  "duration": 12.28,
+  "fp": "61e9cae5576af4c408358f3e839c5751d42d5e4b"
+ },
+ "v4_02": {
+  "file": "v4_02.flac",
+  "duration": 11.68,
+  "fp": "9c0ed52ade8c7f47bde9a588aa79a6c655ee216c"
+ },
+ "v4_04": {
+  "file": "v4_04.flac",
+  "duration": 12.28,
+  "fp": "250e329c58c0718d4e31d31321570a27d9cff9b3"
+ },
+ "v4_03": {
+  "file": "v4_03.flac",
+  "duration": 17.92,
+  "fp": "ccc4683845ff832f33f09d36a74d3b326682ccea"
+ },
+ "v4_05": {
+  "file": "v4_05.flac",
+  "duration": 10.92,
+  "fp": "f047dfd35cb8af1854e8adf490ee36e9c716e7d7"
+ },
+ "v4_06": {
+  "file": "v4_06.flac",
+  "duration": 18.2,
+  "fp": "2f0c107e011958e399fc54246ceb9e775a42b57f"
+ },
+ "v4_07": {
+  "file": "v4_07.flac",
+  "duration": 11.52,
+  "fp": "0afa5ef2c8c8a19b8bf7634d9fc119d9a382a29a"
+ },
+ "v4_08": {
+  "file": "v4_08.flac",
+  "duration": 15.16,
+  "fp": "74ee193649d8f08e44b04706b81424f8046ea672"
+ },
+ "v4_09": {
+  "file": "v4_09.flac",
+  "duration": 14.48,
+  "fp": "27c38c6bf17126423fd30446b06451d2a471d043"
+ },
+ "v4_10": {
+  "file": "v4_10.flac",
+  "duration": 16.68,
+  "fp": "8d2944a451caac20f849ba28efef0854946961fd"
+ },
+ "v4_11": {
+  "file": "v4_11.flac",
+  "duration": 19.08,
+  "fp": "2ee104fe57dc71ac88954bd85ac206b541c65198"
+ },
+ "v4_12": {
+  "file": "v4_12.flac",
+  "duration": 14.92,
+  "fp": "27fa571aca19c30b9c3dd7ee6e0291e8d85cfd65"
+ },
+ "v4_13": {
+  "file": "v4_13.flac",
+  "duration": 17.84,
+  "fp": "a6cecce4d59cdbf7fe61511c63b2328a193e45dd"
+ },
+ "v4_14": {
+  "file": "v4_14.flac",
+  "duration": 10.0,
+  "fp": "18332d609d1d6cb94e92ee13f009758438dd2d9b"
+ },
+ "v4_15": {
+  "file": "v4_15.flac",
+  "duration": 9.8,
+  "fp": "991de5091992cd48a936733f8c7076c01fadd7af"
+ },
+ "v4_16": {
+  "file": "v4_16.flac",
+  "duration": 24.0,
+  "fp": "34e5e9627ae9021281038ee87c33f57f77deafa3"
+ },
+ "v4_17": {
+  "file": "v4_17.flac",
+  "duration": 24.84,
+  "fp": "a0295ba94996fbf05b2dc9913cd3d4f50ca62393"
+ },
+ "v4_18": {
+  "file": "v4_18.flac",
+  "duration": 14.96,
+  "fp": "532df5e05cbb2281039221b158780ec45f8d97c0"
+ },
+ "v4_19": {
+  "file": "v4_19.flac",
+  "duration": 13.16,
+  "fp": "386f2f77be8ec00d6f11bf523e6dfbcea605ca8b"
+ },
+ "v4_20": {
+  "file": "v4_20.flac",
+  "duration": 20.52,
+  "fp": "255f89ffa3b5e02778178c7013e79a6e033ec6d0"
+ },
+ "v4_21": {
+  "file": "v4_21.flac",
+  "duration": 16.8,
+  "fp": "27c39054b0ae6fd3891f00c3081a2a7a078d2e37"
+ },
+ "v4_23": {
+  "file": "v4_23.flac",
+  "duration": 9.52,
+  "fp": "ddb20098ddbe386b9fa1b0eb58ce9f38fcefd526"
+ },
+ "v4_22": {
+  "file": "v4_22.flac",
+  "duration": 19.84,
+  "fp": "7e9f9d7171de549e40a42a578143738a58363e32"
+ },
+ "v4_24": {
+  "file": "v4_24.flac",
+  "duration": 17.04,
+  "fp": "4c1bc4bdbd59c316b6e2657aa1ca3dc6d86ad326"
+ },
+ "v4_25": {
+  "file": "v4_25.flac",
+  "duration": 12.4,
+  "fp": "e810121b28f372796609d5ddcbd8aebaf5630851"
+ },
+ "v4_26": {
+  "file": "v4_26.flac",
+  "duration": 18.2,
+  "fp": "c1787af09da0f0cd8871a8a2ad13768bc74a3aad"
+ },
+ "v4_27": {
+  "file": "v4_27.flac",
+  "duration": 19.56,
+  "fp": "e8c713516751f7bb5a8739c789a0a3c14c5bb4b0"
+ },
+ "v4_28": {
+  "file": "v4_28.flac",
+  "duration": 10.4,
+  "fp": "b9a492442668516d1cb894354c98d1e4c794485d"
+ },
+ "v4_29": {
+  "file": "v4_29.flac",
+  "duration": 20.36,
+  "fp": "8400426112580e0f53e6d8f8f366a8ca9eda8ee4"
+ },
+ "v5_01": {
+  "file": "v5_01.flac",
+  "duration": 10.6,
+  "fp": "2f0a279a58a358956571ce1efe9ba4037a4d977e"
+ },
+ "v5_02": {
+  "file": "v5_02.flac",
+  "duration": 14.12,
+  "fp": "9d39227e2534e630109347cf67fc5d1af433dc86"
+ },
+ "v5_03": {
+  "file": "v5_03.flac",
+  "duration": 16.16,
+  "fp": "05bd94429fb3a008c7ae19611cf60e17508b83df"
+ },
+ "v5_04": {
+  "file": "v5_04.flac",
+  "duration": 10.56,
+  "fp": "926ab39145749bd8e72182e843bd467e3fdadc6d"
+ },
+ "v5_05": {
+  "file": "v5_05.flac",
+  "duration": 13.92,
+  "fp": "03ebc87e1b111d7d5cef05fea8e614e4d556316a"
+ },
+ "v5_07": {
+  "file": "v5_07.flac",
+  "duration": 6.96,
+  "fp": "1a314b95b04c8986fa9d2d79ddaa22cb2b3fd8ad"
+ },
+ "v5_06": {
+  "file": "v5_06.flac",
+  "duration": 14.44,
+  "fp": "bc37b4587277d5e419f163876c7c057ded19b257"
+ },
+ "v5_09": {
+  "file": "v5_09.flac",
+  "duration": 11.84,
+  "fp": "9e1353b6eeaa307da19f44e49b088f1c31fe5a0b"
+ },
+ "v5_08": {
+  "file": "v5_08.flac",
+  "duration": 15.04,
+  "fp": "f78552c209274be9ca05b902a7c8bc821a6a24d6"
+ },
+ "v5_10": {
+  "file": "v5_10.flac",
+  "duration": 10.68,
+  "fp": "0d921e926b47a799d0f125ded573faa2d5aa177e"
+ },
+ "v5_11": {
+  "file": "v5_11.flac",
+  "duration": 13.72,
+  "fp": "770d427326e8962bedadc9224f2e2c736d1f1566"
+ },
+ "v5_12": {
+  "file": "v5_12.flac",
+  "duration": 9.72,
+  "fp": "2135d98b7e06eb7aa1412f89e13b3c1529f6b600"
+ },
+ "v5_13": {
+  "file": "v5_13.flac",
+  "duration": 12.12,
+  "fp": "175856e8acf2bc6e10881be181b9ea2dea2931b1"
+ },
+ "v5_14": {
+  "file": "v5_14.flac",
+  "duration": 23.44,
+  "fp": "b929b43fae3030dfe78a9e060c86154f6cfaf93a"
+ },
+ "v5_15": {
+  "file": "v5_15.flac",
+  "duration": 10.48,
+  "fp": "cbf01858e8ae43e098d28e4b8b23b825b4461dcd"
+ },
+ "v5_16": {
+  "file": "v5_16.flac",
+  "duration": 7.92,
+  "fp": "060eba83e1487c413268e2d7356ac4984759c727"
+ },
+ "v5_17": {
+  "file": "v5_17.flac",
+  "duration": 18.76,
+  "fp": "d4abf995b5829ffeef3c8d8e0797f47eb0de23db"
+ },
+ "v5_19": {
+  "file": "v5_19.flac",
+  "duration": 7.96,
+  "fp": "1dabfd79b52fb58a19b411977907126a43797b96"
+ },
+ "v5_18": {
+  "file": "v5_18.flac",
+  "duration": 17.52,
+  "fp": "57da0b5d94ddb83b58ad0db2af99f8261baeba5e"
+ },
+ "v5_20": {
+  "file": "v5_20.flac",
+  "duration": 15.0,
+  "fp": "247e6ae2346cdfe26de76ab641236ace57e6b6e8"
+ },
+ "v5_21": {
+  "file": "v5_21.flac",
+  "duration": 19.4,
+  "fp": "eecf781f3bb4a3c028f07257e65945af66816b1a"
+ },
+ "v5_22": {
+  "file": "v5_22.flac",
+  "duration": 14.04,
+  "fp": "d7d3e72b6a04f74ca5033d39bec07f6ca2e2d1da"
+ },
+ "v5_23": {
+  "file": "v5_23.flac",
+  "duration": 25.12,
+  "fp": "dd94a51e493d96d8ba913e35043f2d5d1cab1180"
+ },
+ "v5_24": {
+  "file": "v5_24.flac",
+  "duration": 18.64,
+  "fp": "ff44f28f4c4b83df33f4d9d6b01ad22ccfc35496"
+ },
+ "v5_26": {
+  "file": "v5_26.flac",
+  "duration": 10.92,
+  "fp": "19916ae4d71cf8e5df0cf21cde4296b579d1a324"
+ },
+ "v5_25": {
+  "file": "v5_25.flac",
+  "duration": 18.0,
+  "fp": "b1ab2dff5cc33ebabd62c53266a8c4424be23873"
+ },
+ "v5_27": {
+  "file": "v5_27.flac",
+  "duration": 14.44,
+  "fp": "e6eee6d9ec0aa3c6d76c523f4a131255beb2a5e6"
+ },
+ "v6_01": {
+  "file": "v6_01.flac",
+  "duration": 11.76,
+  "fp": "3c1a925113a47b80f37dfbfb074f86cd1220a070"
+ },
+ "v6_03": {
+  "file": "v6_03.flac",
+  "duration": 8.08,
+  "fp": "636da8c4e814bfce9bce847d22ba963b5c81da7a"
+ },
+ "v6_02": {
+  "file": "v6_02.flac",
+  "duration": 15.16,
+  "fp": "56f265a0a6c1d0b42968ba25572ff276b49db692"
+ },
+ "v6_04": {
+  "file": "v6_04.flac",
+  "duration": 14.28,
+  "fp": "c12a277e22d5cc417adbe71537d232d45ecd7912"
+ },
+ "v6_05": {
+  "file": "v6_05.flac",
+  "duration": 14.32,
+  "fp": "4502d7d309bb02ca46869995cf27393888e92f76"
+ },
+ "v6_07": {
+  "file": "v6_07.flac",
+  "duration": 11.68,
+  "fp": "05d1208bbfb3aea32af31b37eeb383d0f15a61aa"
+ },
+ "v6_06": {
+  "file": "v6_06.flac",
+  "duration": 18.68,
+  "fp": "a026e025cac5cbef8ed5b3d5c58de77ca53442f1"
+ },
+ "v6_08": {
+  "file": "v6_08.flac",
+  "duration": 11.04,
+  "fp": "5a8add7f7a367c5b098e26f8a14275db413cde99"
+ },
+ "v6_09": {
+  "file": "v6_09.flac",
+  "duration": 14.52,
+  "fp": "a0d0f06a81c5d5d7124f7cb678a807385328cee0"
+ },
+ "v6_10": {
+  "file": "v6_10.flac",
+  "duration": 7.48,
+  "fp": "8875eea62b251016bda7de41841867451a911088"
+ },
+ "v6_11": {
+  "file": "v6_11.flac",
+  "duration": 8.88,
+  "fp": "c9a9d1e652dbc61562e95f64d955843e7d026cd8"
+ },
+ "v6_12": {
+  "file": "v6_12.flac",
+  "duration": 7.24,
+  "fp": "fded7de0b63aaf79288d80b08154a3623e589492"
+ },
+ "v6_14": {
+  "file": "v6_14.flac",
+  "duration": 21.64,
+  "fp": "7dd190f1dcc9588e03183408d3c14d5d495a3aab"
+ },
+ "v6_13": {
+  "file": "v6_13.flac",
+  "duration": 28.32,
+  "fp": "74d750157a9d33b9d75f5bd1a72597cca617af1c"
+ },
+ "v6_15": {
+  "file": "v6_15.flac",
+  "duration": 11.4,
+  "fp": "537091ca59704033478b9653fd33913d33d52e86"
+ },
+ "v6_16": {
+  "file": "v6_16.flac",
+  "duration": 11.84,
+  "fp": "73327c6cdca4033504c80fea07cc9fcd74c9044e"
+ },
+ "v6_17": {
+  "file": "v6_17.flac",
+  "duration": 10.48,
+  "fp": "c9cc2fc066091fadbf5c4969e071f5c2f4e6c928"
+ },
+ "v6_18": {
+  "file": "v6_18.flac",
+  "duration": 5.6,
+  "fp": "49711fe131d9bddbdc6e126df0b445d607bfc8d8"
+ },
+ "v6_19": {
+  "file": "v6_19.flac",
+  "duration": 23.56,
+  "fp": "265bbb60adfae7f78f7044b12cfab6e17a6b071f"
+ },
+ "v6_20": {
+  "file": "v6_20.flac",
+  "duration": 20.64,
+  "fp": "f0e6b10d8ea46a8bf4ad7059dcc5dc695a6cd442"
+ },
+ "v6_21": {
+  "file": "v6_21.flac",
+  "duration": 17.48,
+  "fp": "bbbd3acb290ed9510a414d305c45954877429d2d"
+ },
+ "v6_22": {
+  "file": "v6_22.flac",
+  "duration": 18.6,
+  "fp": "abeb5713ef388038b79b775e41fb95451fc7c2de"
+ },
+ "v6_23": {
+  "file": "v6_23.flac",
+  "duration": 12.68,
+  "fp": "ced4d0337705f5c4f53f351fb5f5f1cfc8593597"
+ },
+ "v6_24": {
+  "file": "v6_24.flac",
+  "duration": 21.68,
+  "fp": "affe4df1ef672576ecb49eab836626af644a90d3"
+ },
+ "v6_25": {
+  "file": "v6_25.flac",
+  "duration": 13.28,
+  "fp": "f2f652222b17d793a9887877ddb73ec988673fa6"
+ },
+ "v6_26": {
+  "file": "v6_26.flac",
+  "duration": 16.16,
+  "fp": "2661c5d316d8f273c6fc72e4142f277bdf75129d"
+ }
+}
