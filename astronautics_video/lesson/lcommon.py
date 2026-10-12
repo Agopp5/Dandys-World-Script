@@ -47,6 +47,7 @@ class Board:
         self.scale, self.buff = scale, buff
         self.items = VGroup()          # lines and their reasons
         self.lines = []
+        self.partner = {}              # line -> its reason, so they scroll away together
 
     def _place(self, m, indent=0.0, gap=None):
         if self.lines:
@@ -58,6 +59,8 @@ class Board:
     def line(self, *tex, reason=None, indent=0.0, color=WHITE, rt=1.4, gap=None, mob=None,
              from_mob=None, scale=None, anim=True, below=False):
         m = mob if mob is not None else T(*tex, color=color).scale(scale or self.scale)
+        if reason and not below and m.width > self.right - self.left - indent - 3.2:
+            below = True               # never squeeze an equation to make room for its note
         max_w = self.right - self.left - indent - (3.2 if reason and not below else 0)
         if m.width > max_w:
             m.scale_to_fit_width(max_w)
@@ -78,6 +81,7 @@ class Board:
             if r:
                 r.shift(shift)
             gone = [it for it in self.items if it.get_top()[1] + shift[1] > self.ceiling]
+            gone += [self.partner[it] for it in gone if it in self.partner and self.partner[it] not in gone]
             keep = [it for it in self.items if it not in gone]
             self.s.play(*[it.animate.shift(shift) for it in keep], *[FadeOut(it, shift=shift) for it in gone], run_time=0.6)
             for it in gone:
@@ -98,6 +102,7 @@ class Board:
                 self.s.add(r)
         if r:
             self.items.add(r)
+            self.partner[m] = r
         return m
 
     def box(self, m, color=YELLOW):
@@ -113,6 +118,7 @@ class Board:
             self.s.remove(self.items, *members)
         self.items = VGroup()
         self.lines = []
+        self.partner = {}
 
 
 def title_card(scene, number, title, sub):
