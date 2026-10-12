@@ -46,3 +46,15 @@ python tts.py --project orbits           # narration -> orbits/audio
 cd orbits && python render.py            # -> orbits/output/part<N>_*_1080p30.mp4
 python render.py --only 10 11            # re-render specific parts
 ```
+
+**Narration note:** the OpenRouter account ran out of credits partway through voicing, after
+216 of the 242 clips. The last 26 clips (the end of Part 11, from "Back to the probe", and all
+of Part 12) are temporary stand-ins: the same Achird voice, but from an earlier, slower take,
+with long pauses trimmed and played 1.2× faster. Their manifest fingerprints are marked
+`fallback-…`, so once credits are added, the commands below re-voice just those clips and
+re-render the two parts:
+
+```bash
+python tts.py --project orbits           # only the 26 stand-in clips are regenerated
+cd orbits && python render.py --only 11 12
+```

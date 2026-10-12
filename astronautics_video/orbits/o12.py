@@ -54,7 +54,7 @@ class O12Problem(OLesson):
         self.play(FadeOut(notes))
 
         # generic orbit for the definitions
-        Om, inc, w, e, p = np.radians(40), np.radians(38), np.radians(70), 0.3, 1.75
+        Om, inc, w, e, p = np.radians(40), np.radians(38), np.radians(70), 0.3, 1.4
         ph, qh, wh = pqw(Om, inc, w)
         nhat = np.array([np.cos(Om), np.sin(Om), 0.0])
         orbit = D.curve(orbit_fn(Om, inc, w, e, p), (-PI, PI), YELLOW, 3.5, n=140, k=0)

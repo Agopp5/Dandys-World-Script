@@ -61,12 +61,15 @@ class O8Examples(OLesson):
         with self.voice("o8_05"):
             note = VGroup(Tx(r"Sheet prints $\dfrac{2r_pr_a}{r_p + r_a + a}$: the extra $a$ looks like a typo.", color=P_COL),
                           Tx(r"Circle check ($r_p = r_a = r$): \ $\dfrac{2r^2}{2r} = r$ \ \checkmark \qquad $\dfrac{2r^2}{3r} = \tfrac23 r$ \ $\times$", color=WHITE)).scale(0.58)
-            note.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([2.6, -2.3, 0])
-            self.play(FadeIn(note))
+            note.arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+            bd.clear()
+            bd = Board(self, left=-1.0, top=2.7, scale=0.78, buff=0.42)
+            l = bd.line(r"p = \frac{2\,r_p\,r_a}{r_p + r_a}", color=YELLOW)
+            bd.box(l)
+            bd.line(None, mob=note)
             self.hold()
 
         with self.voice("o8_06"):
-            self.play(FadeOut(note))
             bd.line(r"\frac{1}{p} = \frac12\Big(\frac{1}{r_p} + \frac{1}{r_a}\Big)", color=Q_COL, reason="$p$ is the harmonic mean", below=True)
             self.hold()
         bd.clear()
@@ -113,8 +116,7 @@ class O8Examples(OLesson):
             x = Cross(stroke_width=4, scale_factor=0.12).move_to(pp).set_color(P_COL)
             lab = Tx(r"perigee $\approx$ 216 km\\underground (schematic)", color=P_COL).scale(0.5).next_to(ep, DOWN, buff=0.15)
             self.play(FadeIn(x), FadeIn(lab))
-            no = Tx(r"Not a stable orbit: it re-enters and impacts.", color=YELLOW).scale(0.65).move_to([2.6, -3.3, 0])
-            self.play(FadeIn(no))
+            bd.line(r"\text{Not a stable orbit: it re-enters and impacts.}", color=YELLOW)
             self.hold()
         bd.clear()
         self.play(FadeOut(Group(*[m for m in self.mobjects if not isinstance(m, ValueTracker) and m is not hdr])))
@@ -235,7 +237,7 @@ class O8Examples(OLesson):
         a_ = -mm / (2 * E_)
         p_ = h_ ** 2 / mm
         e_ = np.sqrt(1 - p_ / a_)
-        Mc = np.array([-3.4, -1.0, 0])
+        Mc = np.array([-3.4, -1.4, 0])
         k = 1.0 / 1300
         orb = Orb(focus=Mc, k=k)
         moon = Circle(radius=Rm * k, color=GREY_B, fill_color="#3A3A44", fill_opacity=1).move_to(Mc)
@@ -243,7 +245,7 @@ class O8Examples(OLesson):
             self.play(Transform(hdr, header("Problem 2.32: Lunar Orbiter 1")))
             self.play(FadeIn(moon), Create(orb.conic(p_, e_, color=YELLOW, width=3)))
             g = given([r"h = 3509.8\ \text{km}^2/\text{s}", r"\mathcal E = -0.886641\ \text{km}^2/\text{s}^2",
-                       r"\mu_{\text{Moon}} = 4902.8\ \text{km}^3/\text{s}^2", r"R_{\text{Moon}} = 1737.5\ \text{km}"], at=(-4.3, 2.4), scale=0.52)
+                       r"\mu_{\text{Moon}} = 4902.8\ \text{km}^3/\text{s}^2", r"R_{\text{Moon}} = 1737.5\ \text{km}"], at=(-4.3, 1.9), scale=0.52)
             self.play(FadeIn(g))
             self.hold()
 
