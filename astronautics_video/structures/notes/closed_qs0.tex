@@ -1,0 +1,38 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.7in]{geometry}
+\usepackage{amsmath,amssymb,xcolor}
+\setlength{\parindent}{0pt}\setlength{\parskip}{3pt}\pagestyle{empty}
+\newcommand{\hsec}[1]{\vspace{5pt}{\large\bfseries\color{blue!50!black}#1}\par\vspace{-3pt}\hrule\vspace{3pt}}
+\begin{document}
+{\LARGE\bfseries AERSP 301 --- closed sections: finding $q_{s,0}$}
+
+\hsec{Setup (always)}
+Cut the closed section at a convenient point. The shear flow is $q_s=q_b+q_{s,0}$, where $q_b$ is the open-section ``basic'' flow (zero at the cut) and $q_{s,0}$ is the unknown constant that closes the loop. Every method below only finds $q_{s,0}$; they differ in \emph{which condition} fixes it.
+
+\hsec{1. General moment equation (load anywhere, position known)}
+\[ S_x\,\eta_0 - S_y\,\xi_0=\oint p\,q_b\,ds+2A\,q_{s,0}
+\ \Longrightarrow\ q_{s,0}=\frac{S_x\eta_0-S_y\xi_0-\oint p\,q_b\,ds}{2A} \]
+$p$ is the perpendicular distance from the moment center to the tangent of the wall; $A$ is the area enclosed by the wall midline; $(\xi_0,\eta_0)$ locate the line of action of the load relative to the moment center.\\
+\textbf{Use when} the load acts at a \emph{known} position, and you do not want to pick a clever moment center.
+
+\hsec{2. Moment center on the load's line of action}
+\[ q_{s,0}=-\frac{\oint p\,q_b\,ds}{2A} \]
+Special case of (1): choose the moment center so the applied moment is zero ($\xi_0=\eta_0=0$).\\
+\textbf{Use when} the load passes through a point you can name, e.g.\ a vertex, an apex, or the shear center. \emph{This is the one for HW 3, Problem 2:} the load is applied at the apex, so take moments about the apex. Walls through the apex have $p=0$ and drop out.
+
+\hsec{3. Zero twist (load through the shear center)}
+\[ \frac{d\theta}{dz}=\frac{1}{2A}\oint\frac{q_s}{Gt}\,ds=0
+\ \Longrightarrow\ q_{s,0}=-\frac{\oint (q_b/Gt)\,ds}{\oint ds/(Gt)} \]
+\textbf{Use when} the load acts through the shear center (no twist), or you are \emph{solving for} the shear center. Valid for any $G$ and $t$ that vary around the section. No moment center needed.
+
+\hsec{4. Zero twist, $Gt$ constant}
+\[ q_{s,0}=-\frac{\oint q_b\,ds}{\oint ds} \]
+Special case of (3). \textbf{Use when} $G$ and $t$ are the same on every wall. Per-wall thickness differences (e.g.\ one wall $2t$) mean you must use (3), not (4).
+
+\hsec{How they fit together: shear center of a closed section}
+\begin{enumerate}
+\item Use (3) or (4) to get $q_{s,0}$, hence $q_s=q_b+q_{s,0}$ (load through the shear center means no twist).
+\item Take moments of this $q_s$ about any convenient point to get the shear-center coordinate: $S_y\,\xi_s=\oint p\,q_s\,ds$ (or the $\eta_s$ version for $S_x$).
+\item Check: methods (2) and (3)/(4) give the \emph{same} $q_{s,0}$ only if the load really is at the shear center. A load elsewhere twists the section, and then (2) is the right one.
+\end{enumerate}
+\end{document}
