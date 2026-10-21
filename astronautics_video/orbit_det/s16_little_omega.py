@@ -104,17 +104,34 @@ class S16_omega(VScene):
         res_card.move_to([3.3, 2.55, 0])
         k1 = E(r"\cos|\omega|=|\dfrac{\vec n\cdot\vec e}{n\,e}", size=42)
         tint(k1[3], [((0, 2), LIME), ((3, 5), ROSE), ((6, 7), LIME), ((7, 8), ROSE)])
-        k2 = E(r"=|0.00001|\approx|0", size=42)
+        # substitution: n = K x h = (-50602, 35432, 0), e = (0.1903, 0.2718, -0.6627); the two terms cancel
+        T1, T2 = -50602 * 0.1903, 35432 * 0.2718
+        assert round(T1) == -9630 and round(T2) == 9630 and abs(NV @ EV) < 1
+        s1 = E(r"\vec n\cdot\vec e|=|(-50{,}602)(0.1903)", size=42)
+        paint(s1, {0: LIME})
+        tint(s1[0], [((3, 5), ROSE)])
+        s2 = E(r"+\,(35{,}432)(0.2718)+0", size=42)
+        s3 = E(r"=|-9{,}630+9{,}630|\approx|0", size=42)
+        s3f = E(r"\vec n\cdot\vec e|=|-9{,}630+9{,}630|\approx|0", size=42)
+        paint(s3f, {0: LIME})
+        tint(s3f[0], [((3, 5), ROSE)])
+        k2 = E(r"\cos|\omega|=|0.00001|\approx|0", size=42)
         k3 = E(r"\omega|=|90^\circ\ \text{or}\ 270^\circ\,?", size=42)
-        for m in (k1, k2, k3):
+        for m in (k1, s1, s2, s3, s3f, k2, k3):
             fit(m, 6.4, 1.4)
-        k1.move_to([3.3, 0.85, 0])
-        k2.next_to(k1, DOWN, buff=.3).align_to(k1[2], LEFT)
-        k3.next_to(k2, DOWN, buff=.45).set_x(3.3)
+        k1.move_to([3.3, 1.05, 0])
+        s1.move_to([3.3, -0.25, 0])
+        s2.next_to(s1, DOWN, buff=.3).align_to(s1[2], LEFT)
+        s3.next_to(s2, DOWN, buff=.3).align_to(s1[1], LEFT)
+        s3f.move_to([3.3, -0.25, 0])
+        k2.next_to(s3f, DOWN, buff=.4).set_x(3.3)
+        k3.next_to(k2, DOWN, buff=.4).set_x(3.3)
         why2 = T("arccos can't tell which", size=26, color=MUTED).next_to(k3, DOWN, buff=.2)
         clear = [FadeOut(VGroup(cblock, colbox, t13, t23, l1, l2, l3, why, g1)), FadeIn(res_card)]
         self.beat("The textbook route: the cosine of omega is n dot e over n e, which is essentially zero. So omega is ninety or two seventy. Arc cosine can't tell which.",
-                  clear, Write(k1), Write(k2), .1, [Write(k3), FadeIn(why2)], w=(.15, .3, .2, .25))
+                  clear, Write(k1), Write(s1), Write(s2), Write(s3),
+                  [FadeOut(VGroup(s1, s2)), ReplacementTransform(s3, s3f)], Write(k2), .1,
+                  [Write(k3), FadeIn(why2)], w=(.07, .13, .12, .1, .12, .1, .1, .16))
 
         # ---- e_Z decides ----
         drop_pt = np.array([PERI[0], PERI[1], 0.0])
@@ -132,7 +149,7 @@ class S16_omega(VScene):
         j2.next_to(j1, DOWN, buff=.5)
         why3 = T("perigee below the equator", size=26, color=MUTED).next_to(j2, DOWN, buff=.2)
         self.beat("Look at the eccentricity vector's K component: minus zero point six six two seven. Perigee is below the equator, so it's two seventy.",
-                  [FadeOut(VGroup(k1, k2, why2)), k3.animate.next_to(res_card, DOWN, buff=.3)],
+                  [FadeOut(VGroup(k1, s3f, k2, why2)), k3.animate.next_to(res_card, DOWN, buff=.3)],
                   [grow(e_arrow), FadeIn(e_lbl)], Write(j1),
                   [Create(drop), FadeIn(foot), FadeIn(p_lbl), Flash(peri, color=ROSE)],
                   [Write(j2), FadeIn(why3), FadeIn(glow(j2[3], MINT))], w=(.12, .2, .23, .2, .25))

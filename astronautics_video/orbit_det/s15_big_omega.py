@@ -34,6 +34,8 @@ N_VEC = np.cross([0.0, 0.0, 1.0], H)
 assert np.allclose(N_VEC, [-50602, 35432, 0], atol=2)
 N_MAG = np.linalg.norm(N_VEC)
 assert abs(N_MAG - 61774) < 2
+assert np.allclose(H, [35432, 50602, 30934], atol=2)        # (h_x, h_y, h_z); K x h = (-h_y, h_x, 0)
+assert abs(np.sqrt(50602 ** 2 + 35432 ** 2) - 61774) < 1
 COS_OM, SIN_OM = N_VEC[0] / N_MAG, N_VEC[1] / N_MAG
 assert abs(COS_OM - (-0.8192)) < 5e-5 and abs(SIN_OM - 0.5736) < 5e-5
 assert abs(-50602 / 61774 - (-0.8192)) < 1e-4 and abs(35432 / 61774 - 0.5736) < 1e-4  # rounded inputs
@@ -73,14 +75,13 @@ class S15_Omega(VScene):
         block = VGroup(grp, tags).move_to([-2.75, 1.35, 0])
         ent = mat.get_entries()
         row_box = SurroundingRectangle(mat.get_rows()[2], color=LILAC, buff=.12)
-        row_eq = M(r"\text{row 3} = \big(\sin i\,\sin\Omega,\ \ {-\sin i}\,\cos\Omega,\ \ \cos i\big)", size=40)
-        fit(row_eq, 6.6, 1)
-        row_eq.move_to([-3.5, -.55, 0])
-        m31 = E(r"C_{31}|=|0.5129", size=40)
-        m32 = E(r"-C_{32}|=|-0.7324", size=40)
+        row_eq = M(r"\text{row 3} = \big(\sin i\,\sin\Omega,\ \ {-\sin i}\,\cos\Omega,\ \ \cos i\big)", size=42)
+        row_eq.move_to([-2.75, -.55, 0])
+        m31 = E(r"C_{31}|=|0.5129", size=42)
+        m32 = E(r"-C_{32}|=|-0.7324", size=42)
         m31[2].set_color(SKY)
         m32[2].set_color(SKY)
-        marks = VGroup(m31, m32).arrange(RIGHT, buff=.9).move_to([-3.5, -1.65, 0])
+        marks = VGroup(m31, m32).arrange(RIGHT, buff=.9).move_to([-2.75, -1.7, 0])
         b31 = SurroundingRectangle(ent[6], color=SKY, buff=.08)
         b32 = SurroundingRectangle(ent[7], color=SKY, buff=.08)
         self.beat("For capital Omega, take the first two entries of the bottom row. C three one is zero point five one two nine. C three two is zero point seven three two four, so minus C three two is negative.",
@@ -105,7 +106,7 @@ class S15_Omega(VScene):
         dy = DashedLine(P, [O[0], P[1], 0], color=MUTED)
         sin_lab = M(r"\sin\Omega > 0", size=40).next_to(O + Rc * UP, UR, buff=.12)
         cos_lab = M(r"\cos\Omega < 0", size=40).next_to(O + Rc * LEFT, DOWN, buff=.25)
-        q_lab = T("quadrant II", size=26, color=MUTED).next_to(O + Rc * UP, UL, buff=.12).shift(.3 * LEFT)
+        q_lab = T("quadrant II", size=28, color=MUTED).next_to(O + Rc * UP, UL, buff=.12).shift(.3 * LEFT)
         atan = E(r"\Omega|=|\operatorname{atan2}(0.5129,\,-0.7324)|=|145.0^\circ", size=44)
         atan.set_color(SKY).move_to([0, -3.0, 0])
         self.beat("Positive sine, negative cosine. That's the second quadrant. atan two gives one hundred forty five degrees.",
@@ -128,36 +129,40 @@ class S15_Omega(VScene):
         nlab = label3(view, r"\vec n", 3.05 * N_HAT, LIME, 40)
 
         chip = E(r"\Omega|=|145.0^\circ", size=40).set_color(SKY)
-        chip_note = TX(r"from row 3 of $C_{PN}$", size=26, color=MUTED)
+        chip_note = TX(r"from row 3 of $C_{PN}$", size=28, color=MUTED)
         chip_g = VGroup(chip, chip_note).arrange(RIGHT, buff=.35)
         eqn1 = E(r"\vec n|=|\hat K|\times|\vec h", size=44, cmap={r"\hat K": INK2})
         eqn2 = M(r"=\big(-50{,}602,\ 35{,}432,\ 0\big)", size=40)
-        note = T("points to the ascending node", size=26, color=MUTED)
-        col = VGroup(chip_g, eqn1, eqn2, note).arrange(DOWN, aligned_edge=LEFT, buff=.38)
-        eqn2.shift(.4 * RIGHT)
-        col.move_to([4.0, 1.75, 0])
+        x1 = M(r"=(0,\ 0,\ 1)\times(h_x,\ h_y,\ h_z)", size=40)
+        x2 = M(r"=(-h_y,\ h_x,\ 0)", size=40)
+        note = T("points to the ascending node", size=28, color=MUTED)
+        col = VGroup(chip_g, eqn1, x1, x2, eqn2, note).arrange(DOWN, aligned_edge=LEFT, buff=.3)
+        for m in (x1, x2, eqn2):
+            m.shift(.4 * RIGHT)
+        col.move_to([3.2, 3.3 - col.height / 2, 0])
         old = VGroup(block, row_box, row_eq, m31, m32, b31, b32, xax, yax, circ, quad, ray, dot,
                      arcO, labO, dx, dy, sin_lab, cos_lab, q_lab)
         self.beat("The textbook gets the same answer with the node vector: n equals K cross h. It points along the line of nodes, toward the ascending node.",
                   [FadeOut(old), ReplacementTransform(atan, chip), FadeIn(chip_note)],
                   [FadeIn(g), FadeIn(axs), FadeIn(eqd), FadeIn(orb), FadeIn(harr), FadeIn(hlab)],
-                  Write(eqn1), FadeIn(eqn2),
+                  Write(eqn1), FadeIn(x1), FadeIn(x2), FadeIn(eqn2),
                   [Create(node), grow(narr), FadeIn(nlab), FadeIn(asc)], FadeIn(note),
-                  w=(.14, .16, .14, .12, .3, .14))
+                  w=(.12, .14, .1, .1, .1, .1, .22, .12))
 
         # ---------- beat 4: cos and sin of Omega from n, arc in the equator ----------
         cos_eq = E(r"\cos\Omega|=|\frac{-50{,}602}{61{,}774}|=|-0.8192", size=40)
         sin_eq = E(r"\sin\Omega|=|\frac{35{,}432}{61{,}774}|=|0.5736", size=40)
-        cs = VGroup(cos_eq, sin_eq).arrange(DOWN, aligned_edge=LEFT, buff=.35)
-        cs.next_to(note, DOWN, buff=.5, aligned_edge=LEFT)
-        nmag = T("divide by its length, 61,774", size=26, color=MUTED).next_to(cs, DOWN, buff=.3, aligned_edge=LEFT)
+        nmag = M(r"\lvert\vec n\rvert = \sqrt{50{,}602^2 + 35{,}432^2} = 61{,}774", size=40)
+        cs = VGroup(nmag, cos_eq, sin_eq).arrange(DOWN, aligned_edge=LEFT, buff=.35)
+        cs.next_to(x1, DOWN, buff=.45).align_to(eqn1, LEFT)
         tick = M(r"\checkmark", size=52, color=GOOD).next_to(chip, LEFT, buff=.25)
         arc_om = arc3(view, KZ, IX, ang, 1.55, SKY)
         mid = ang / 2
         arc_lab = label3(view, r"\Omega", 1.95 * np.array([np.cos(mid), np.sin(mid), 0]), SKY, 40)
         self.beat("Its components give cosine Omega equals minus zero point eight one nine two, and sine Omega equals zero point five seven three six. The same quadrant, the same one hundred forty five degrees.",
-                  [FadeIn(cos_eq), FadeIn(nmag)], FadeIn(sin_eq), [grow(arc_om), FadeIn(arc_lab)],
-                  [FadeIn(tick), Indicate(chip, color=SKY)], w=(.3, .25, .25, .2))
+                  [FadeOut(x1), FadeOut(x2), FadeOut(note), eqn2.animate.move_to(x1, aligned_edge=LEFT)], FadeIn(nmag),
+                  FadeIn(cos_eq), FadeIn(sin_eq), [grow(arc_om), FadeIn(arc_lab)],
+                  [FadeIn(tick), Indicate(chip, color=SKY)], w=(.1, .15, .2, .2, .2, .15))
 
         # ---------- beat 5: q-hat lies on n-hat ----------
         qarr = arrow3(view, ZERO, 2.7 * Q_HAT, LIME)
@@ -167,7 +172,7 @@ class S15_Omega(VScene):
         qg = VGroup(qq, why).arrange(DOWN, aligned_edge=LEFT, buff=.35).move_to(cs, aligned_edge=UL)
         halo = glow(qq, LIME)
         self.beat("A fun coincidence: q hat equals the node direction here. That's not an accident; it happens because little omega turns out to be two seventy.",
-                  [FadeOut(cs), FadeOut(nmag), FadeOut(nlab)],
+                  [FadeOut(cs), FadeOut(nlab)],
                   [grow(qarr), FadeIn(qlab), FadeIn(qq)], [FadeIn(halo)], .1,
                   [FadeIn(why), FadeOut(halo)], w=(.12, .3, .15, .33))
         self.wipe()
