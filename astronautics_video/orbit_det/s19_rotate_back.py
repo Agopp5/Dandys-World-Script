@@ -36,6 +36,15 @@ RN, VN = CPN.T @ RP, CPN.T @ VP
 assert np.allclose(RN, [9031, -5317, -1647], atol=1.0)            # shown rounded to the km
 assert np.allclose(VN, [-2.864, 5.111, -5.081], atol=1e-3)
 assert np.allclose(RN, R0, atol=1e-6) and np.allclose(VN, V0, atol=1e-9)   # the round trip closes
+# hand multiplication with 4-digit p-hat, q-hat (S14/S15): each shown value within 2 in its last digit
+P4, Q4 = np.round(PH, 4), np.round(QH, 4)
+assert np.allclose(P4, [0.2568, 0.3668, -0.8942]) and np.allclose(Q4, [-0.8192, 0.5736, 0.0])
+for k, (pp, qq, tot) in enumerate([(473, 8559, 9031), (676, -5993, -5317), (-1647, 0, -1647)]):
+    assert abs(1842 * P4[k] - pp) <= 2 and abs(-10448 * Q4[k] - qq) <= 2
+    assert abs(1842 * P4[k] - 10448 * Q4[k] - tot) <= 2
+for k, (pp, qq, tot) in enumerate([(1.459, -4.324, -2.864), (2.084, 3.027, 5.111), (-5.081, 0, -5.081)]):
+    assert abs(5.682 * P4[k] - pp) <= 2e-3 and abs(5.278 * Q4[k] - qq) <= 2e-3
+    assert abs(5.682 * P4[k] + 5.278 * Q4[k] - tot) <= 2e-3
 # the transpose really is the inverse (rows orthonormal)
 assert np.allclose(CPN.T @ CPN, np.eye(3), atol=1e-9)
 
@@ -46,8 +55,11 @@ OM, INC, W = np.radians(145.0), np.radians(I_DEG), np.radians(270.0)
 O3 = np.zeros(3)
 
 
-def col(m, y=0.0):
-    """Right-hand column: x in [0.7, 6.9], shrink only if needed."""
+def col(m, y=0.0, wide=False):
+    """Right-hand column: x in [0.7, 6.9] (wide: [-0.8, 6.9] for pure algebra), shrink only if needed."""
+    if wide:
+        fit(m, 7.6, 7.4)
+        return m.move_to([3.05, y, 0])
     fit(m, 6.1, 7.3)
     return m.move_to([3.8, y, 0])
 
@@ -70,7 +82,7 @@ class S19_Rotate_Back(VScene):
     budget = 148
 
     def construct(self):
-        view = View(elev=65, azim=25, scale=1.0, center=(-3.6, -1.9))
+        view = View(elev=65, azim=25, scale=1.08, center=(-3.75, -1.75))
         s = ValueTracker(0.0)        # 0: perifocal page lying flat, 1: rotated into place
         Mt = ValueTracker(M0)        # mean anomaly drives the satellite
 
@@ -101,7 +113,8 @@ class S19_Rotate_Back(VScene):
             return sat() + k * (vx * C[0] + vy * C[1])
 
         earth = globe(view)
-        ax = axes3(view, 1.8)
+        ax = VGroup(*[arrow3(view, O3, 1.8 * u, INK2) for u in np.eye(3)],
+                    label3(view, r"\hat K", np.array([0, 0, 2.1]), INK2, 34))   # I, J labels dropped: crowded
         plane = disc3(view, lambda: Cs()[0], lambda: Cs()[1], 2.3, MUTED, 0.14)
         orb = curve(view, P3, 0, TAU, INK, width=4, R=1.0)
         pA = arrow3(view, O3, lambda: 1.5 * Cs()[0], ROSE)
@@ -118,8 +131,8 @@ class S19_Rotate_Back(VScene):
         mat.get_brackets().set_color(INK)
         rows = VGroup(M(r"C_{PN}=", size=44), mat).arrange(RIGHT, buff=.2)
         eq1 = E(r"\vec r_N|=|C_{PN}^T|\,\vec r_P", size=50)
-        note1 = VGroup(T("rows are the frame's axes,", size=27, color=MUTED),
-                       T("so the transpose undoes it", size=27, color=MUTED)).arrange(DOWN, buff=.12)
+        note1 = VGroup(T("rows are the frame's axes,", size=30, color=MUTED),
+                       T("so the transpose undoes it", size=30, color=MUTED)).arrange(DOWN, buff=.12)
         col1 = VGroup(rows, eq1, note1).arrange(DOWN, buff=.55)
         col(col1)
         with self.say("Step two: rotate into E C I. The rows of C P N are p hat, q hat and h hat, so going back uses the transpose.") as d:
@@ -141,7 +154,7 @@ class S19_Rotate_Back(VScene):
         eq1t = eq1.copy()
         l1 = E(r"\vec r_N|=|1842\,|\hat p", size=44)
         l2 = E(r"+\,(-10{,}448)\,|\hat q", size=44)
-        note2 = T("added tip to tail in ECI", size=27, color=MUTED)
+        note2 = T("added tip to tail in ECI", size=30, color=MUTED)
         col2 = VGroup(eq1t, l1, l2, note2).arrange(DOWN, buff=.45)
         l2.align_to(l1[2], LEFT)
         col(col2)
@@ -152,25 +165,57 @@ class S19_Rotate_Back(VScene):
             self.play(Write(l2), grow(a2), run_time=.25 * d)
             self.play(grow(rA), FadeIn(sdot), FadeIn(rL), FadeIn(note2), run_time=.2 * d)
 
-        # ---- beat 3: multiply it out ----
+        # ---- beat 3: multiply it out, one component at a time ----
         vA = arrow3(view, sat, vtip, ACCENT)
         vL = label3(view, r"\vec v", lambda: vtip() + 0.35 * (vtip() - sat()) / np.linalg.norm(vtip() - sat()), ACCENT, 36)
-        rres = M(r"=\begin{bmatrix}9031\\-5317\\-1647\end{bmatrix}\,\mathrm{km}", size=42)
-        veq = E(r"\vec v_N|=|C_{PN}^T|\,\vec v_P", size=46)
-        vres = M(r"=\begin{bmatrix}-2.864\\5.111\\-5.081\end{bmatrix}\,\mathrm{km/s}", size=42)
+
+        def comp(head, a, b, res):
+            """two lines: 'x: a(p) + b(q)' then an indented '= ...'; p-hat parts ROSE, q-hat parts LIME"""
+            l1 = E(head + "|" + a[0] + r"\,|" + a[1] + "|+" + b[0] + r"\,|" + b[1], size=40)
+            paint(l1, {2: ROSE, 4: LIME})
+            l2 = M(res, size=40)
+            return VGroup(l1, l2)
+
+        rP_line = M(r"\vec r_P=(1842,\ -10{,}448,\ 0)\ \mathrm{km}", size=40, color=INK2)
+        rx = comp(r"x:\ ", ("1842", "(0.2568)"), ("(-10{,}448)", "(-0.8192)"), r"=473+8{,}559\approx 9{,}031")
+        ry = comp(r"y:\ ", ("1842", "(0.3668)"), ("(-10{,}448)", "(0.5736)"), r"=676-5{,}993\approx -5{,}317")
+        rz = comp(r"z:\ ", ("1842", "(-0.8942)"), ("(-10{,}448)", "(0)"), r"=-1{,}647")
         eq1u = eq1.copy()
-        col3 = VGroup(eq1u, rres, veq, vres).arrange(DOWN, buff=.3)
-        col(col3)
+        col3a = VGroup(eq1u, rP_line, rx, ry, rz)
+        for g in (rx, ry, rz):
+            g.arrange(DOWN, aligned_edge=LEFT, buff=.2)
+            g[1].shift(RIGHT * .7)
+        col3a.arrange(DOWN, aligned_edge=LEFT, buff=.42)
+        col(col3a, wide=True)
+
+        rres = M(r"\vec r_N=\begin{bmatrix}9031\\-5317\\-1647\end{bmatrix}\,\mathrm{km}", size=42)
+        veq = M(r"\vec v_N=C_{PN}^T\,\vec v_P,\qquad \vec v_P=(5.682,\ 5.278,\ 0)", size=40)
+        vx = comp(r"x:\ ", ("5.682", "(0.2568)"), ("+5.278", "(-0.8192)"), r"=1.459-4.324\approx -2.864")
+        vy = comp(r"y:\ ", ("5.682", "(0.3668)"), ("+5.278", "(0.5736)"), r"=2.084+3.027\approx 5.111")
+        vz = comp(r"z:\ ", ("5.682", "(-0.8942)"), ("+5.278", "(0)"), r"=-5.081\ \ \mathrm{km/s}")
+        col3b = VGroup(rres, veq, vx, vy, vz)
+        for g in (vx, vy, vz):
+            g.arrange(DOWN, aligned_edge=LEFT, buff=.2)
+            g[1].shift(RIGHT * .7)
+        col3b.arrange(DOWN, aligned_edge=LEFT, buff=.38)
+        col(col3b, wide=True)
         with self.say("Multiply it out, and we get nine thousand thirty one, minus five thousand three hundred seventeen, minus one thousand six hundred forty seven kilometers. The velocity comes out minus two point eight six four, five point one one one, minus five point zero eight one.") as d:
             self.play(FadeOut(VGroup(l1, l2, note2)), FadeOut(VGroup(a1, a2)), Transform(eq1, eq1u),
-                      run_time=.1 * d)
-            self.play(Write(rres), run_time=.4 * d)
-            self.play(Write(veq), grow(vA), FadeIn(vL), run_time=.15 * d)
-            self.play(Write(vres), run_time=.3 * d)
+                      FadeIn(rP_line), run_time=.05 * d)
+            for g in (rx, ry, rz):
+                self.play(Write(g[0]), run_time=.09 * d)
+                self.play(Write(g[1]), run_time=.06 * d)
+            self.play(FadeOut(VGroup(eq1, rP_line)),
+                      ReplacementTransform(VGroup(rx, ry, rz), rres), run_time=.06 * d)
+            self.play(Write(veq), grow(vA), FadeIn(vL), run_time=.07 * d)
+            for g in (vx, vy, vz):
+                self.play(Write(g[0]), run_time=.07 * d)
+                self.play(Write(g[1]), run_time=.05 * d)
+        self.wait(2.5)       # let the full v working sit before it folds
 
         # ---- beat 4: the round trip closes ----
-        hd1 = T("rotated back", size=28, color=MUTED)
-        hd2 = T("measured", size=28, color=MUTED)
+        hd1 = T("rotated back", size=32, color=MUTED)
+        hd2 = T("measured", size=32, color=MUTED)
         rc = M(r"\begin{bmatrix}9031\\-5317\\-1647\end{bmatrix}", size=40)
         rm = M(r"\begin{bmatrix}9031.5\\-5316.9\\-1647.2\end{bmatrix}", size=40)
         vc = M(r"\begin{bmatrix}-2.864\\5.111\\-5.081\end{bmatrix}", size=40)
@@ -181,7 +226,7 @@ class S19_Rotate_Back(VScene):
         ck2 = M(r"\checkmark", size=48, color=GOOD)
         grid = VGroup(VGroup(VMobject(), hd1, hd2, VMobject()),
                       VGroup(rlab, rc, rm, ck1), VGroup(vlab, vc, vm, ck2))
-        xs = [0, 1.35, 3.75, 5.5]
+        xs = [0, 1.45, 4.0, 5.8]
         for k, row in enumerate(grid):
             for j, m in enumerate(row):
                 m.move_to([xs[j], -k * 2.1, 0])
@@ -189,15 +234,15 @@ class S19_Rotate_Back(VScene):
         hd1.move_to([xs[1], -0.75, 0])
         col(grid)
         with self.say("Those are exactly the measured r and v we started from. The round trip closes.") as d:
-            self.play(FadeOut(VGroup(eq1, veq)),
-                      ReplacementTransform(rres, rc), ReplacementTransform(vres, vc),
+            self.play(FadeOut(veq),
+                      ReplacementTransform(rres, rc), ReplacementTransform(VGroup(vx, vy, vz), vc),
                       FadeIn(VGroup(rlab, vlab, hd1)), run_time=.3 * d)
             self.play(FadeIn(VGroup(hd2, rm, vm), shift=LEFT * .3), run_time=.25 * d)
             self.play(FadeIn(ck1, scale=1.5), FadeIn(ck2, scale=1.5), run_time=.2 * d)
 
         # ---- beat 5: propagate with frozen elements ----
         frozen = VGroup(
-            T("frozen", size=28, color=MUTED),
+            T("frozen", size=32, color=MUTED),
             E(r"a|=26{,}564\ \mathrm{km}\qquad|e|=0.741", size=38),
             E(r"i|=63.4^\circ\quad|\Omega|=145^\circ\quad|\omega|=270^\circ", size=38),
         ).arrange(DOWN, buff=.22)
