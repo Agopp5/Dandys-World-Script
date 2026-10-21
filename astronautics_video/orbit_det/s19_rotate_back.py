@@ -70,7 +70,7 @@ class S19_Rotate_Back(VScene):
     budget = 148
 
     def construct(self):
-        view = View(elev=80, azim=25, scale=1.2, center=(-3.7, -1.7))
+        view = View(elev=80, azim=25, scale=1.0, center=(-3.6, -1.9))
         s = ValueTracker(0.0)        # 0: perifocal page lying flat, 1: rotated into place
         Mt = ValueTracker(M0)        # mean anomaly drives the satellite
 
@@ -154,7 +154,7 @@ class S19_Rotate_Back(VScene):
 
         # ---- beat 3: multiply it out ----
         vA = arrow3(view, sat, vtip, ACCENT)
-        vL = label3(view, r"\vec v", lambda: vtip() + np.array([0, 0, .3]), ACCENT, 36)
+        vL = label3(view, r"\vec v", lambda: vtip() + 0.35 * (vtip() - sat()) / np.linalg.norm(vtip() - sat()), ACCENT, 36)
         rres = M(r"=\begin{bmatrix}9031\\-5317\\-1647\end{bmatrix}\,\mathrm{km}", size=42)
         veq = E(r"\vec v_N|=|C_{PN}^T|\,\vec v_P", size=46)
         vres = M(r"=\begin{bmatrix}-2.864\\5.111\\-5.081\end{bmatrix}\,\mathrm{km/s}", size=42)
@@ -207,13 +207,15 @@ class S19_Rotate_Back(VScene):
         n0 = T("Kepler's equation", size=30)
         n2 = M(r"\vec r_P,\ \vec v_P", size=42)
         n3 = M(r"\vec r,\ \vec v", size=42)
-        chain = VGroup(n0, thr, n2, n3).arrange(DOWN, buff=.75)
+        chain = VGroup(n0, thr, n2, n3).arrange(DOWN, buff=.6)
         arrs = VGroup(*[Arrow(chain[k].get_bottom(), chain[k + 1].get_top(), buff=.1, color=MUTED,
                               stroke_width=4) for k in range(3)])
         cT = M(r"C_{PN}^T", size=36).next_to(arrs[2], RIGHT, buff=.2)
         flow = VGroup(chain, arrs, cT)
-        col5 = VGroup(card, flow).arrange(DOWN, buff=.5)
+        col5 = VGroup(card, flow).arrange(DOWN, buff=.4)
+        h5 = col5.height
         col(col5)
+        print("S19 col5 shrink", col5.height / h5)
         thr.clear_updaters()
         thr_live = readout(r"\theta =", lambda: np.degrees(th()) % 360, digits=1)
         thr_live.set_color(GOLD).move_to(thr)

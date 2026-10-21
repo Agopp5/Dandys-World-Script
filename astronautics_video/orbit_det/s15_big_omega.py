@@ -115,7 +115,7 @@ class S15_Omega(VScene):
                   Write(atan), w=(.12, .18, .2, .2, .3))
 
         # ---------- beat 3: the textbook route, n = K x h, in 3D ----------
-        view = View(elev=26, azim=30, scale=.9, center=(-3.3, -1.7))
+        view = View(elev=34, azim=0, scale=.9, center=(-3.3, -1.7))
         g = globe(view)
         axs = axes3(view, 2.4)
         eqd = disc3(view, IX, JY, 2.6, MUTED, .1)

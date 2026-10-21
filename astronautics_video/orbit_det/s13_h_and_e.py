@@ -61,9 +61,9 @@ class S13_h_and_e(VScene):
     budget = 135
 
     def construct(self):
-        # el 25, azim -100 -> -80 (turn in beat 2): the orbit is seen ~60 deg off its normal, so it stays open
+        # el 25, azim -155 -> -140 (turn in beat 2): the orbit is seen ~60 deg off its normal, so it stays open
         # and the near-Earth pieces (r0, perigee, h) land apart; scale 1.45 fits apogee..globe in the frame height
-        view = View(elev=25, azim=-100, scale=1.45, center=(-2.5, -1.85))
+        view = View(elev=25, azim=-155, scale=1.45, center=(-3.3, -1.75))
         earth = globe(view)
         KH = np.array([0.0, 0.0, 1.0])
         ax = VGroup(arrow3(view, np.zeros(3), 1.7 * np.array([1.0, 0, 0]), INK2),
@@ -75,17 +75,17 @@ class S13_h_and_e(VScene):
         r_arr = arrow3(view, np.zeros(3), R0D, INK)
         v_arr = arrow3(view, R0D, R0D + 1.0 * VDIR, ACCENT)                    # tangent at theta0 = 280 deg
         r_lab = label3(view, r"\vec r_0", R0D + 0.3 * R0D / np.linalg.norm(R0D) - 0.25 * KH, INK, 34)
-        v_lab = label3(view, r"\vec v_0", R0D + 1.0 * VDIR + 0.3 * KH, ACCENT, 34)
+        v_lab = label3(view, r"\vec v_0", R0D + 1.0 * VDIR - 0.35 * KH, ACCENT, 34)
         h_arr = arrow3(view, np.zeros(3), 2.4 * HH, LILAC)
         h_lab = label3(view, r"\vec h", 2.7 * HH, LILAC, 38)
         TS = np.linspace(0, TAU, 160)
         plane = always_redraw(lambda: Polygon(*[view.p(pos(t)) for t in TS], stroke_width=0,
                                               fill_color=LILAC, fill_opacity=0.12).set_z_index(-1))
         e_arr = arrow3(view, np.zeros(3), 1.0 * PH, ROSE)
-        e_lab = label3(view, r"\vec e", 0.55 * PH - 0.75 * np.array([1.0, 0, 0]), ROSE, 38)
+        e_lab = label3(view, r"\vec e", 0.8 * PH + 1.2 * np.array([0, 1.0, 0]), ROSE, 38)
         e_ext = line3(view, 1.0 * PH, PERI, ROSE, dashed=True)
         peri = dot3(view, PERI, ROSE)
-        peri_lab = label3(view, r"\text{perigee}", PERI - 0.42 * KH + 0.3 * np.array([1.0, 0, 0]), ROSE, 34)
+        peri_lab = label3(view, r"\text{perigee}", PERI - 0.42 * KH, ROSE, 34)
 
         X = 3.95                               # right-column center
         # ---- beat 1: h = r x v
@@ -107,7 +107,7 @@ class S13_h_and_e(VScene):
         n2.next_to(hb, DOWN, buff=.45)
         self.beat("h sticks straight out of the orbit plane, so it already pins down the plane's tilt. "
                   "We'll use that in a moment.",
-                  [FadeIn(plane), FadeIn(n2)], Indicate(h_lab, color=LILAC), view.turn(20), .1,
+                  [FadeIn(plane), FadeIn(n2)], Indicate(h_lab, color=LILAC), view.turn(15), .1,
                   w=(.3, .2, .4))
 
         # ---- beat 3: e vector; fold h into one boxed result

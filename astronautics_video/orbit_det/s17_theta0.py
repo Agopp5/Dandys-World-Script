@@ -84,7 +84,7 @@ class S17_theta0(VScene):
         e_lab = label3(view, r"\vec e", 2.35 * ph, ROSE, 40)
         r_arr = arrow3(view, o, pos, INK)
         r_lab = label3(view, r"\vec r_0", 1.45 * pos, INK, 40)
-        ang = arc3(view, -hh, ph, np.radians(80), 0.75, GOLD)
+        ang = arc3(view, -hh, ph, np.radians(80), 1.35, GOLD)
         g3 = Group(earth, orb, e_arr, e_lab, r_arr, r_lab, ang)
 
         eq1 = col(E(r"\cos|\theta_0|=|\frac{\vec e\cdot\vec r_0}{e\,r_0}|=|0.1736", size=44), 1.9)

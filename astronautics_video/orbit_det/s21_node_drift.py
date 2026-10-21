@@ -36,7 +36,7 @@ assert np.isclose(sso_incl(500), 97.4, atol=0.05) and np.isclose(sso_incl(800), 
 RO = 2.4                       # drawn orbit radius (circular, not to scale: ISS / SSO are near-circular)
 K3 = np.array([0.0, 0.0, 1.0])
 I3 = np.array([1.0, 0.0, 0.0])
-XR = 3.95                      # x of the right column
+XR = 4.2                       # x of the right column
 
 
 def nhat(Om):
@@ -56,9 +56,9 @@ class S21_Node_Drift(VScene):
         om = lambda: np.radians(Om.get_value())
         ii = lambda: np.radians(inc.get_value())
 
-        view = View(elev=18, azim=15, scale=1.3, center=(-3.4, -0.5))
+        view = View(elev=18, azim=15, scale=1.3, center=(-3.6, -0.6))
         earth = globe(view)
-        ax3 = axes3(view, 3.2)
+        ax3 = axes3(view, 2.9)
         equator = curve(view, lambda t: (RO * np.cos(t), RO * np.sin(t), 0.0), 0, TAU, MUTED, width=2, R=1.0)
         plane = disc3(view, lambda: nhat(om()), lambda: mhat(om(), ii()), RO, INK2, 0.12)
         orb = curve(view, lambda t: RO * (np.cos(t) * nhat(om()) + np.sin(t) * mhat(om(), ii())),
