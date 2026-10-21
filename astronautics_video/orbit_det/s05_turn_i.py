@@ -157,12 +157,12 @@ class S05_Turn_i(VScene):
         rows.set_x(rd.get_x())
         motion = arrow3(view, lambda: orb(np.pi - .3), lambda: orb(np.pi + .3), ACCENT)
         spin = arrow3(view, -2.2 * NHAT + .45 * MHAT, -2.2 * NHAT - .45 * MHAT, INK2)
-        spin_lab = label3(view, r"\text{Earth's spin}", -2.2 * NHAT + np.array([0, 0, -.45]), INK2, 26)
+        spin_lab = label3(view, r"\text{Earth's spin}", -2.2 * NHAT + 1.1 * MHAT, INK2, 28)
 
         with self.say("Below ninety, the satellite travels eastward, the same way the Earth spins. That's a "
                       "prograde orbit. At exactly ninety, it passes over both poles: a polar orbit. Above "
                       "ninety, it travels westward: retrograde.") as d:
-            self.play(view.elev.animate.set_value(62), FadeOut(eq_cos), FadeOut(rng), FadeOut(dsc),
+            self.play(view.elev.animate.set_value(80), FadeOut(eq_cos), FadeOut(rng), FadeOut(dsc),
                       FadeIn(motion), FadeIn(spin), FadeIn(spin_lab), FadeOut(kh_lab), run_time=.14 * d)
             self.play(FadeIn(rows[0]), run_time=.1 * d)
             self.snap("prograde")

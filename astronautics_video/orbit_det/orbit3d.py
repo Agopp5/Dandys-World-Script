@@ -10,7 +10,7 @@
   label3(view, tex, xyz, color, size)         MathTex pinned to a 3D point (screen-aligned)
   axes3(view, L)            I, J, K arrows with labels -> VGroup
   Every factory accepts callables for its geometry, so pieces can move with ValueTrackers.
-  grow(m) / k-tracker: arrow3, curve and arc3 have .k (0..1 drawn fraction): self.play(m.k.animate.set_value(1)).
+  grow(m): self.play(grow(m)) draws an arrow3 / curve / arc3 from nothing (they carry .k, the 0..1 drawn fraction).
 
 Orbit math (radians; C rows are p-hat, q-hat, h-hat written in ECI):
   C1(x), C3(x)  elementary rotations (course convention, rows = new axes in old)
@@ -114,6 +114,12 @@ def globe(view, R=1.0, color="#2b6cb0"):
     g.add_updater(upd)
     upd(g)
     return g
+
+
+def grow(m, **kw):
+    """Animation that draws a k-tracked piece (arrow3, curve, arc3) from nothing: self.play(grow(m))."""
+    m.k.set_value(0)
+    return UpdateFromAlphaFunc(m, lambda mob, a: m.k.set_value(a), suspend_mobject_updating=False, **kw)
 
 
 def _tracked(make, k=1.0):

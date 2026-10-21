@@ -172,7 +172,7 @@ class S06_Turn_omega(VScene):
 
         # ---------------- predict: i greater than ninety
         self.drop(apo, apo_lab, peri_lab, moving, notes, mol_card)
-        self.predict("Inclination over ninety degrees: which way does it cross at the ascending node?",
+        self.predict("Inclination over ninety: which way at the node?",
                      "Quick question before we move on.")
 
         # ---------------- i = 120 demo: still northbound, but westward
