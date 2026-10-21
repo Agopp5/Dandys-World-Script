@@ -56,18 +56,19 @@ class S16_omega(VScene):
         orb = curve(view, F, 0, TAU, INK, R=1.0)
         node_line = line3(view, -2.6 * NHAT, 2.6 * NHAT, SKY, dashed=True)
         asc = dot3(view, ASC, SKY)
-        asc_lbl = label3(view, r"\text{node}", ASC + np.array([0, 0, 0.45]), SKY, 28)
+        asc_lbl = label3(view, r"\text{node}", ASC + np.array([0, 0, 0.5]), SKY, 28)
         peri = dot3(view, PERI, ROSE, radius=0.09)
         apo = dot3(view, APO, INK2)
         pic = Group(eq_disc, earth, orb, node_line, asc, asc_lbl, peri, apo)
 
         # ---- C_PN with its third column ----
-        mat = Matrix(CPN, h_buff=1.4, v_buff=0.75,
+        mat = Matrix(CPN, h_buff=1.85, v_buff=0.75,
                      element_to_mobject=lambda s: MathTex(s, font_size=40, color=INK))
         lhs = M(r"C_{PN}=", size=40)
         cblock = VGroup(lhs, mat).arrange(RIGHT, buff=.2)
-        fit(cblock, 7.4, 2.6)
-        cblock.move_to([3.2, 1.85, 0])
+        lhs.next_to(mat, UP, buff=.12).align_to(mat, LEFT)
+        fit(cblock, 6.6, 3.1)
+        cblock.move_to([3.3, 2.05, 0])
         col3 = mat.get_columns()[2]
         colbox = SurroundingRectangle(col3, color=MINT, buff=.12, corner_radius=.08)
         e13, e23 = mat.get_entries()[2], mat.get_entries()[5]
@@ -121,7 +122,7 @@ class S16_omega(VScene):
         e_lbl = label3(view, r"\vec e", PERI + 0.5 * NHAT, ROSE, 40)
         drop = line3(view, PERI, drop_pt, ROSE, dashed=True)
         foot = dot3(view, drop_pt, MUTED, radius=0.05)
-        p_lbl = label3(view, r"\text{perigee}", PERI + np.array([0, 0, -0.45]), ROSE, 28)
+        p_lbl = label3(view, r"\text{perigee}", PERI - 0.9 * NHAT + np.array([0, 0, -0.3]), ROSE, 28)
         j1 = E(r"e_Z|=|-0.6627|<|0", size=42)
         paint(j1, {0: ROSE, 2: ROSE})
         j2 = E(r"\Rightarrow|\omega|=|270^\circ", size=44)
@@ -137,10 +138,10 @@ class S16_omega(VScene):
                   [Write(j2), FadeIn(why3), FadeIn(glow(j2[3], MINT))], w=(.12, .2, .23, .2, .25))
 
         # ---- the omega arc in the orbit plane ----
-        w_arc = arc3(view, HHAT, NHAT, W, 1.7, MINT, width=6)
+        w_arc = arc3(view, HHAT, NHAT, W, 1.4, MINT, width=6)
         mid = np.cos(W / 2) * NHAT + np.sin(W / 2) * np.cross(HHAT, NHAT)
-        w_lbl = label3(view, r"\omega", 2.1 * mid, MINT, 40)
-        a_lbl = label3(view, r"\text{apogee}", APO - 0.75 * NHAT, INK2, 28)
+        w_lbl = label3(view, r"\omega", 1.85 * mid, MINT, 40)
+        a_lbl = label3(view, r"\text{apogee}", APO - 1.15 * NHAT, INK2, 28)
         self.beat("That matches the picture: perigee at the very bottom of the orbit, apogee high over the north.",
                   grow(w_arc), FadeIn(w_lbl),
                   [Indicate(peri, color=ROSE), FadeIn(a_lbl), Indicate(apo, color=INK)], .1, w=(.4, .15, .35))

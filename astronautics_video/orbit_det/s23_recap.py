@@ -43,7 +43,7 @@ class S23_Recap(VScene):
                   row("it does not spin with the Earth"))
         # 2. six elements
         r2a = row("$a", "size,", "$e", "shape,", r"$\theta", "where the satellite is")
-        r2b = row("three turns:", r"$\Omega", "about", r"$\hat K", ",  ", "$i", "about the node line,",
+        r2b = row("three turns:", r"$\Omega", "about", r"$\hat K|,", "$i", "about the node line,",
                   r"$\omega", "about", r"$\hat h")
         k2 = card(2, r2a, r2b)
         # 3. C_PN and the angles back out
@@ -53,9 +53,9 @@ class S23_Recap(VScene):
         at2 = E(r"\omega|=|\operatorname{atan2}(C_{13},C_{23})", size=40)
         k3 = card(3, VGroup(cpn_eq, acos).arrange(RIGHT, buff=.8), VGroup(at1, at2).arrange(RIGHT, buff=.8))
         # 4. from r and v
-        r4a = row("energy", r"$\mathcal{E}", "gives", "$a", ";  ", r"$\vec h|,\,|\vec e", "give", "$e",
+        r4a = row("energy", r"$\mathcal{E}", "gives", "$a|;", r"$\vec h|,\,|\vec e", "give", "$e",
                   "and the frame", r"$\hat p|,\,|\hat q|,\,|\hat h")
-        r4b = row(r"$\vec r\cdot\vec v", "settles", r"$\theta", ";  the transpose", r"$C_{PN}^{T}",
+        r4b = row(r"$\vec r\cdot\vec v", "settles", r"$\theta|;", "the transpose", r"$C_{PN}^{T}",
                   "takes you back")
         k4 = card(4, r4a, r4b)
         # 5. J2
@@ -67,9 +67,9 @@ class S23_Recap(VScene):
 
         boxes = [k1, k2, k3, k4, k5]
         stack = VGroup(*boxes).arrange(DOWN, buff=.14, aligned_edge=LEFT)
-        print("STACK", stack.width, stack.height)
-        fit(stack, 13.8, 7.8)
-        stack.move_to(ORIGIN)
+        stack.shift(-VGroup(*boxes[:4]).get_center())   # four boxes fit at full size; box 5 scrolls box 1 off
+        lift = (k1.get_top() - k2.get_top())[1] * UP
+        k5.shift(lift)
 
         def add(k, j):
             dim = [boxes[m].animate.set_opacity(.5) for m in range(j)]
@@ -93,14 +93,14 @@ class S23_Recap(VScene):
                   w=(.15, .2, .25, .2, .2))
 
         # the closing picture: the Molniya orbit (drawn a = 3, e = 0.6, not to scale), perigee frozen
-        view = View(elev=16, azim=20, scale=0.85, center=(-3.0, -1.9))
+        view = View(elev=16, azim=20, scale=0.85, center=(-3.0, -1.6))
         earth = globe(view)
         f = orbit(3.0, 0.6, M_OM, M_I, M_W)
         orb = curve(view, f, 0, 2 * np.pi, INK, width=5, R=1.0)
         kax = arrow3(view, (0, 0, 0), (0, 0, 2.2), INK2)
         klab = label3(view, r"\hat K", (0, 0, 2.5), INK2, 40)
         peri = dot3(view, f(0.0), ROSE)
-        plab = label3(view, r"\text{perigee}", f(0.0) * 1.9, ROSE, 36)
+        plab = T("perigee", size=30, color=ROSE).next_to(peri, RIGHT, buff=.25)
         side = VGroup(T("Molniya", size=40, weight=BOLD),
                       E(r"i|=|63.4^\circ", size=48),
                       VGroup(E(r"\dot\omega|\approx|0", size=44), T("perigee frozen", size=30, color=INK2))
@@ -109,9 +109,10 @@ class S23_Recap(VScene):
         place(side, "right")
         with self.say("And Earth's bulge slowly turns the node and the perigee, except at the critical "
                       "inclination, where the perigee stands still.") as d:
-            self.play(*add(k5, 4), run_time=.2 * d)
+            self.play(FadeOut(k1), FadeIn(k5, shift=.2 * UP),
+                      *[boxes[m].animate.shift(lift).set_opacity(.5) for m in (1, 2, 3)], run_time=.2 * d)
             self.play(Indicate(r5b[1]), run_time=.25 * d)
-            self.play(FadeOut(stack), FadeIn(earth), FadeIn(side), FadeIn(kax), FadeIn(klab), run_time=.2 * d)
+            self.play(FadeOut(VGroup(*boxes[1:])), FadeIn(earth), FadeIn(side), FadeIn(kax), FadeIn(klab), run_time=.2 * d)
             self.play(grow(orb), run_time=.25 * d)
             self.play(FadeIn(peri), FadeIn(plab), run_time=.1 * d)
         self.wait(1.5)

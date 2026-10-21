@@ -61,38 +61,46 @@ class S13_h_and_e(VScene):
     budget = 135
 
     def construct(self):
-        view = View(elev=20, azim=0, scale=0.88, center=(-3.0, -1.5))
+        # el 25, azim -100 -> -80 (turn in beat 2): the orbit is seen ~60 deg off its normal, so it stays open
+        # and the near-Earth pieces (r0, perigee, h) land apart; scale 1.45 fits apogee..globe in the frame height
+        view = View(elev=25, azim=-100, scale=1.45, center=(-2.5, -1.85))
         earth = globe(view)
-        ax = axes3(view, 1.8)
+        KH = np.array([0.0, 0.0, 1.0])
+        ax = VGroup(arrow3(view, np.zeros(3), 1.7 * np.array([1.0, 0, 0]), INK2),
+                    arrow3(view, np.zeros(3), 1.7 * np.array([0, 1.0, 0]), INK2),
+                    arrow3(view, np.zeros(3), 1.7 * KH, INK2),
+                    label3(view, r"\hat K", 1.95 * KH - 0.25 * np.array([1.0, 0, 0]), INK2, 32))
         orb = curve(view, lambda t: pos(t), 0, TAU, INK, width=3, R=1.0)
-        r_arr = arrow3(view, ORIGIN * 0, R0D, INK)
-        v_arr = arrow3(view, R0D, R0D + 1.1 * VDIR, ACCENT)
-        r_lab = label3(view, r"\vec r_0", R0D * 1.12 + 0.25 * QH, INK, 34)
-        v_lab = label3(view, r"\vec v_0", R0D + 1.25 * VDIR, ACCENT, 34)
-        h_arr = arrow3(view, np.zeros(3), 2.6 * HH, LILAC)
-        h_lab = label3(view, r"\vec h", 2.85 * HH, LILAC, 38)
-        plane = disc3(view, PH, QH, 3.2, LILAC, 0.16)
+        assert np.isclose(np.linalg.norm(R0D), P_SL / (1 + DE * np.cos(TH0)))   # r0 tip sits on the orbit
+        r_arr = arrow3(view, np.zeros(3), R0D, INK)
+        v_arr = arrow3(view, R0D, R0D + 1.0 * VDIR, ACCENT)                    # tangent at theta0 = 280 deg
+        r_lab = label3(view, r"ec r_0", R0D + 0.3 * R0D / np.linalg.norm(R0D) - 0.25 * KH, INK, 34)
+        v_lab = label3(view, r"ec v_0", R0D + 1.0 * VDIR + 0.3 * KH, ACCENT, 34)
+        h_arr = arrow3(view, np.zeros(3), 2.4 * HH, LILAC)
+        h_lab = label3(view, r"\vec h", 2.7 * HH, LILAC, 38)
+        TS = np.linspace(0, TAU, 160)
+        plane = always_redraw(lambda: Polygon(*[view.p(pos(t)) for t in TS], stroke_width=0,
+                                              fill_color=LILAC, fill_opacity=0.12).set_z_index(-1))
         e_arr = arrow3(view, np.zeros(3), 1.0 * PH, ROSE)
-        e_lab = label3(view, r"\vec e", 0.6 * PH - 0.4 * QH, ROSE, 38)
+        e_lab = label3(view, r"\vec e", 0.55 * PH - 0.75 * np.array([1.0, 0, 0]), ROSE, 38)
         e_ext = line3(view, 1.0 * PH, PERI, ROSE, dashed=True)
         peri = dot3(view, PERI, ROSE)
-        peri_lab = label3(view, r"\text{perigee}", PERI * 1.3 + 0.5 * QH, ROSE, 34)
+        peri_lab = label3(view, r"\text{perigee}", PERI - 0.42 * KH + 0.3 * np.array([1.0, 0, 0]), ROSE, 34)
 
-        X = 3.75                               # right-column center
+        X = 3.95                               # right-column center
         # ---- beat 1: h = r x v
         h1 = E(r"\vec h|=|\vec r_0 \times \vec v_0", size=48)
         h2 = M(r"= (35{,}432,\ 50{,}602,\ 30{,}934)", size=40)
-        h2u = M(r"\mathrm{km^2/s}", size=40, color=INK2)
         h3 = E(r"|\vec h|| = 69{,}086\ \mathrm{km^2/s}", size=44)
         paint(h3, {0: LILAC})
-        hb = VGroup(h1, h2, h2u, h3).arrange(DOWN, buff=.32)
-        fit(hb, 6.0, 4.0)
+        hb = VGroup(h1, h2, h3).arrange(DOWN, buff=.32)
+        fit(hb, 5.8, 4.0)
         hb.move_to([X, 1.6, 0])
         self.beat("Next, the angular momentum: h equals r cross v.",
                   [FadeIn(earth), FadeIn(ax), FadeIn(orb)], [FadeIn(r_arr), FadeIn(v_arr), FadeIn(r_lab), FadeIn(v_lab)],
-                  Write(h1), FadeIn(h2), FadeIn(h2u),
+                  Write(h1), FadeIn(h2),
                   [grow(h_arr), FadeIn(h_lab)], Write(h3),
-                  w=(.12, .1, .14, .14, .06, .26, .18))
+                  w=(.12, .1, .16, .18, .26, .18))
 
         # ---- beat 2: the orbit plane is perpendicular to h
         n2 = note("h is perpendicular to the orbit plane:\nit fixes the plane's tilt")
@@ -109,7 +117,7 @@ class S13_h_and_e(VScene):
         e1 = E(r"\vec e|=|\frac{\vec v_0 \times \vec h}{\mu}|-|\frac{\vec r_0}{r_0}", size=48)
         e2 = M(r"= (0.1903,\ 0.2718,\ -0.6627)", size=42)
         eb = VGroup(e1, e2).arrange(DOWN, buff=.35)
-        fit(eb, 6.0, 3.0)
+        fit(eb, 5.8, 3.0)
         eb.next_to(hbox, DOWN, buff=.5)
         eb.set_x(X)
         self.beat("Now the eccentricity vector, from the last chapter: v cross h over mu, minus the unit vector along r.",
@@ -135,7 +143,7 @@ class S13_h_and_e(VScene):
         c3 = M(r"= 0.7411", size=46, color=GOOD)
         tick = T("agrees", size=30, color=GOOD)
         cb = VGroup(c1, c2, VGroup(c3, tick).arrange(RIGHT, buff=.35)).arrange(DOWN, buff=.35)
-        fit(cb, 6.0, 4.2)
+        fit(cb, 5.8, 4.2)
         ebox = panel(E(r"e| = 0.7411", size=40, cmap={"e": ROSE}), color=ROSE)
         ebox.move_to([X, 3.0, 0])
         cb.next_to(ebox, DOWN, buff=.5).set_x(X)
@@ -156,10 +164,10 @@ class S13_h_and_e(VScene):
         pb = VGroup(a_ln, p1, p1n, p2, p2n).arrange(DOWN, buff=.3)
         pb[2].shift(UP * .1)
         pb[4].shift(UP * .1)
-        fit(pb, 6.0, 4.6)
+        fit(pb, 5.8, 4.6)
         pb.next_to(ebox, DOWN, buff=.5).set_x(X)
         apo = dot3(view, pos(PI), INK2)
-        apo_lab = label3(view, r"\text{apogee}", pos(PI) * 0.92 + 0.9 * QH, INK2, 34)
+        apo_lab = label3(view, r"\text{apogee}", pos(PI) + 0.4 * KH, INK2, 34)
         self.beat("So the perigee radius is about six thousand eight hundred seventy seven kilometers, "
                   "just five hundred kilometers up, and the apogee is about forty six thousand two hundred "
                   "fifty kilometers away.",

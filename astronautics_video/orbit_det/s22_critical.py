@@ -49,17 +49,23 @@ class S22_Critical(VScene):
                   Write(wdot), .15, Circumscribe(brk, color=GOLD), w=(.7, .3))
 
         # ---- beat 2: plot the bracket --------------------------------------------------------------
-        ax = axes([0, 180, 30], [-2.0, 0.5, 0.5], width=7.6, height=4.6, xlabel=r"i\,(^\circ)",
-                  ylabel=r"\tfrac{5}{2}\sin^2 i-2")
-        ax.to_corner(DL, buff=0.55).shift(0.2 * RIGHT)
+        ax = axes([0, 180, 30], [-2.0, 0.5, 0.5], width=7.6, height=4.6, xlabel="", ylabel="")
+        ax.to_corner(DL, buff=1.0).shift(0.6 * RIGHT)
         g = ax.plot(lambda x: bracket(x), x_range=[0, 180, 0.5], color=INK, stroke_width=5)
         pos = ax.get_area(g, x_range=[I_CRIT, 180 - I_CRIT], color=MINT, opacity=0.45)
         neg = VGroup(ax.get_area(g, x_range=[0, I_CRIT], color=ROSE, opacity=0.35),
                      ax.get_area(g, x_range=[180 - I_CRIT, 180], color=ROSE, opacity=0.35))
         plus = M(r"\dot{\omega} > 0", size=34, color=MINT).move_to(ax.c2p(90, -0.55))
         minus = M(r"\dot{\omega} < 0", size=34, color=ROSE).move_to(ax.c2p(30, -0.45))
+        ticks = VGroup(*[M(str(x) + r"^\circ", size=30, color=INK2).next_to(ax.c2p(x, -2.0), DOWN, buff=0.2)
+                         for x in (0, 90, 180)])
+        ticks.add(M("0", size=30, color=INK2).next_to(ax.c2p(0, 0), LEFT, buff=0.2),
+                  M("-2", size=30, color=INK2).next_to(ax.c2p(0, -2), LEFT, buff=0.2))
+        xl = E(r"i", size=40).next_to(ax.c2p(180, -2.0), DR, buff=0.2)
+        yl = M(r"\tfrac{5}{2}\sin^2 i-2", size=36).next_to(ax.c2p(0, 0.5), UP, buff=0.15).shift(0.6 * RIGHT)
+        tint(yl, [((7, 8), EMBER)])
         self.beat("The sign depends on that last bracket. Here it is, plotted against inclination.",
-                  Indicate(brk, color=GOLD), Create(ax), Create(g), [FadeIn(pos), FadeIn(neg)],
+                  Indicate(brk, color=GOLD), [Create(ax), FadeIn(ticks), FadeIn(xl), FadeIn(yl)], Create(g), [FadeIn(pos), FadeIn(neg)],
                   [FadeIn(plus), FadeIn(minus)], w=(.15, .2, .3, .2, .15))
 
         # ---- beat 3: solve for the zero ------------------------------------------------------------
@@ -80,9 +86,9 @@ class S22_Critical(VScene):
                   [Create(box), FadeIn(s3b), FadeIn(zl1), FadeIn(zl2)], w=(.15, .25, .2, .2, .2))
 
         # ---- beat 4: perigee frozen at 63.4, drifting at 50 ------------------------------------------
-        self.drop(wdot, ax, g, pos, neg, plus, minus, steps, s3b, z1, z2, zl1, zl2, box)
-        vL = View(elev=20, azim=-60, scale=0.62, center=(-3.6, -0.9))
-        vR = View(elev=20, azim=-60, scale=0.62, center=(3.6, -0.9))
+        self.drop(wdot, ax, ticks, xl, yl, g, pos, neg, plus, minus, steps, s3b, z1, z2, zl1, zl2, box)
+        vL = View(elev=20, azim=-60, scale=0.95, center=(-3.6, -0.7))
+        vR = View(elev=20, azim=-60, scale=0.95, center=(3.6, -0.7))
         Om0, w0 = 50 * DEG, 60 * DEG
         t = ValueTracker(0)
         wL = lambda: w0 - 75 * DEG * t.get_value()           # perigee regresses (bracket < 0), sped up
@@ -131,20 +137,20 @@ class S22_Critical(VScene):
 
         # ---- beat 6: Molniya in 3D, perigee parked, node drifting ------------------------------------
         self.wipe()
-        v = View(elev=12, azim=-35, scale=0.78, center=(-3.0, -1.9))
+        v = View(elev=12, azim=-35, scale=0.9, center=(-3.0, -2.2))
         Om = ValueTracker(145 * DEG)
         aM, eM, iM, wM = 3.0, 0.6, I_M * DEG, 270 * DEG
         fM = lambda: orbit(aM, eM, Om.get_value(), iM, wM)
         earth = globe(v)
         orb = always_redraw(lambda: curve(v, fM(), 0, TAU, INK, R=1.0))
         nhat = lambda: np.array([np.cos(Om.get_value()), np.sin(Om.get_value()), 0.0])
-        node = always_redraw(lambda: line3(v, -2.2 * nhat(), 2.2 * nhat(), SKY, dashed=True))
+        node = always_redraw(lambda: line3(v, -3.0 * nhat(), 3.0 * nhat(), SKY, dashed=True))
         peri = dot3(v, lambda: fM()(0), ROSE)
         apo = dot3(v, lambda: fM()(PI), GOLD)
         peri.set_z_index(5)
         apo.set_z_index(5)
         plab = always_redraw(lambda: T("perigee (south)", size=28, color=ROSE).next_to(peri, DOWN, buff=0.2))
-        alab = always_redraw(lambda: T("apogee (north)", size=28, color=GOLD).next_to(apo, RIGHT, buff=0.2))
+        alab = always_redraw(lambda: T("apogee (north)", size=28, color=GOLD).next_to(apo, RIGHT, buff=0.3))
         r1 = E(r"\dot{\omega}|=|0", size=48)
         r1[0].set_color(MINT)
         r2 = E(r"\dot{\Omega}|=|-0.15^\circ/\text{day}", size=48)
