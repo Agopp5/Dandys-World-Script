@@ -37,8 +37,8 @@ check(5.770 * .9147, 5.278)
 # ---- drawn orbit (not to scale): a = 3.0, e = 0.6 in Earth radii, flat in the p-q plane ----
 A_D, E_D = 3.0, 0.6
 P_D = A_D * (1 - E_D ** 2)
-S = 1.1                           # screen units per Earth radius
-F = np.array([-1.5, -0.6, 0])   # focus (Earth's center) on screen
+S = 1.05                          # screen units per Earth radius
+F = np.array([-1.8, -0.6, 0])   # focus (Earth's center) on screen
 VS = 1.0                          # drawn mu/h (screen units), only sets the velocity arrow length
 
 
@@ -75,9 +75,9 @@ class S18_Perifocal_rv(VScene):
         th = ValueTracker(np.radians(150))
         ell = ParametricFunction(pt, t_range=[0, TAU], color=INK, stroke_width=4)
         earth = Circle(radius=S, stroke_color=AXIS, stroke_width=2, fill_color=SKY, fill_opacity=.35).move_to(F)
-        pax = Arrow(F, F + RIGHT * 1.55, buff=0, color=ROSE, stroke_width=4, max_tip_length_to_length_ratio=.1)
+        pax = Arrow(F, F + RIGHT * 1.75, buff=0, color=ROSE, stroke_width=4, max_tip_length_to_length_ratio=.1)
         qax = Arrow(F, F + UP * 2.85, buff=0, color=LIME, stroke_width=4, max_tip_length_to_length_ratio=.08)
-        plab = M(r"\hat p", size=44, color=ROSE).next_to(pax.get_end(), DOWN, buff=.15).shift(LEFT * .1)
+        plab = M(r"\hat p", size=44, color=ROSE).next_to(pax.get_end(), DOWN, buff=.15)
         qlab = M(r"\hat q", size=44, color=LIME).next_to(qax.get_end(), LEFT, buff=.15)
         peri = Dot(pt(0), color=ROSE, radius=.06)
         plane = VGroup(earth, ell, pax, qax, plab, qlab, peri)
