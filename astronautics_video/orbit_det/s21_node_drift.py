@@ -56,7 +56,7 @@ class S21_Node_Drift(VScene):
         om = lambda: np.radians(Om.get_value())
         ii = lambda: np.radians(inc.get_value())
 
-        view = View(elev=20, azim=-60, scale=1.3, center=(-3.4, -0.5))
+        view = View(elev=18, azim=15, scale=1.3, center=(-3.4, -0.5))
         earth = globe(view)
         ax3 = axes3(view, 3.2)
         equator = curve(view, lambda t: (RO * np.cos(t), RO * np.sin(t), 0.0), 0, TAU, MUTED, width=2, R=1.0)
@@ -67,9 +67,12 @@ class S21_Node_Drift(VScene):
         node_dot = dot3(view, lambda: RO * nhat(om()), SKY)
         om_arc = arc3(view, K3, I3, om, 1.5, SKY)
         om_lab = label3(view, r"\Omega", lambda: 1.95 * nhat(om() / 2), SKY, 40)
-        i_arc = arc3(view, lambda: nhat(om()), lambda: np.cross(K3, nhat(om())), ii, 1.2, EMBER)
-        i_lab = label3(view, "i", lambda: 1.5 * mhat(om(), ii() / 2), EMBER, 40)
-        scene3d = Group(earth, ax3, equator, plane, orb, node_line, node_dot, om_arc, om_lab, i_arc, i_lab)
+        i_arc = arc3(view, lambda: nhat(om()), lambda: np.cross(K3, nhat(om())), ii, 1.75, EMBER)
+        i_lab = label3(view, "i", lambda: 2.1 * mhat(om(), ii() / 2), EMBER, 40)
+        hhat = lambda: np.cross(nhat(om()), mhat(om(), ii()))
+        h_arr = arrow3(view, np.zeros(3), lambda: 2.3 * hhat(), LILAC)
+        h_lab = label3(view, r"\hat h", lambda: 2.65 * hhat(), LILAC, 40)
+        scene3d = Group(earth, ax3, equator, plane, orb, node_line, node_dot, om_arc, om_lab, i_arc, i_lab, h_arr, h_lab)
 
         # live inclination readout (top left)
         i_num = DecimalNumber(51.6, num_decimal_places=1, unit=r"^{\circ}", font_size=44, color=EMBER)
@@ -86,7 +89,7 @@ class S21_Node_Drift(VScene):
         with self.say("The drift rate of the node is Omega dot equals minus three n J two R squared, over two a squared, times one minus e squared, squared, times cosine i.") as d:
             self.play(FadeIn(earth), FadeIn(ax3), Create(equator), run_time=0.12 * d)
             self.play(FadeIn(plane), Create(orb), FadeIn(node_line), FadeIn(node_dot),
-                      Create(om_arc), FadeIn(om_lab), Create(i_arc), FadeIn(i_lab), FadeIn(i_read),
+                      Create(om_arc), FadeIn(om_lab), Create(i_arc), FadeIn(i_lab), FadeIn(i_read), FadeIn(h_arr), FadeIn(h_lab),
                       run_time=0.13 * d)
             self.play(Write(fml), run_time=0.45 * d)
             self.play(FadeIn(nline, shift=0.2 * UP), FadeIn(nnote), run_time=0.15 * d)
@@ -191,24 +194,29 @@ class S21_Node_Drift(VScene):
 
         # ------------------------------------------------ beat 6: a, e, i only wiggle
         x_max = 6
-        ax_a = axes([0, x_max, 1], [-1, 1, 1], width=5.6, height=3.0, xlabel="t", ylabel="a")
-        ax_o = axes([0, x_max, 1], [-1, 1, 1], width=5.6, height=3.0, xlabel="t", ylabel=r"\Omega")
-        ax_a.move_to([-3.5, 0.25, 0])
-        ax_o.move_to([3.5, 0.25, 0])
+        ax_a = axes([0, x_max, 1], [-1, 1, 1], width=6.0, height=3.8, xlabel="", ylabel="")
+        ax_o = axes([0, x_max, 1], [-1, 1, 1], width=6.0, height=3.8, xlabel="", ylabel="")
+        ax_a.move_to([-3.45, 0.3, 0])
+        ax_o.move_to([3.45, 0.3, 0])
         f_a = lambda t: 0.22 * np.sin(4 * PI * t)                   # short-period wiggle, twice per orbit
         f_o = lambda t: 0.7 - 0.25 * t + 0.16 * np.sin(4 * PI * t)  # same wiggle on a steady downward trend
         c_a = ax_a.plot(f_a, x_range=[0, x_max, 0.02], color=INK, stroke_width=4)
         c_o = ax_o.plot(f_o, x_range=[0, x_max, 0.02], color=SKY, stroke_width=4)
         m_a = DashedLine(ax_a.c2p(0, 0), ax_a.c2p(x_max, 0), color=MUTED, stroke_width=3)
         m_o = DashedLine(ax_o.c2p(0, 0.7), ax_o.c2p(x_max, 0.7 - 0.25 * x_max), color=MUTED, stroke_width=3)
+        yl_a = M("a", size=40).next_to(ax_a.c2p(0, 1), LEFT, buff=0.25)
+        yl_o = M(r"\Omega", size=40, color=SKY).next_to(ax_o.c2p(0, 1), LEFT, buff=0.25)
+        xl_a = M("t", size=40).next_to(ax_a.c2p(x_max, 0), DR, buff=0.12)
+        xl_o = M("t", size=40).next_to(ax_o.c2p(x_max, 0), DR, buff=0.12)
         head = T("a, e and i only wiggle", size=36).move_to([0, 3.3, 0])
-        cap_a = TX(r"$a$: wiggles, no trend", size=30).next_to(ax_a, DOWN, buff=0.45)
-        cap_o = TX(r"$\Omega$: wiggles plus a steady drift", size=30).next_to(ax_o, DOWN, buff=0.45)
+        cap_a = T("a: wiggles, no trend", size=30).next_to(ax_a, DOWN, buff=0.45)
+        cap_o = VGroup(M(r"\Omega", size=40, color=SKY), T(": wiggles plus a steady drift", size=30)).arrange(RIGHT, buff=0.1).next_to(ax_o, DOWN, buff=0.45)
         note6 = T("schematic, t in orbits", size=26, color=MUTED).move_to([0, -3.55, 0])
         old4 = [sun_scene, leg, fml, s1, s2, s2n, t5, e5, g5, n5]
         with self.say("Meanwhile a, e and i don't drift. They only wiggle a little each orbit, like your notes sketch.") as d:
             self.play(*[FadeOut(m) for m in old4], run_time=0.1 * d)
-            self.play(FadeIn(head), Create(ax_a), Create(ax_o), run_time=0.15 * d)
+            self.play(FadeIn(head), Create(ax_a), Create(ax_o), FadeIn(yl_a), FadeIn(yl_o), FadeIn(xl_a),
+                      FadeIn(xl_o), run_time=0.15 * d)
             self.play(Create(m_a), Create(c_a), FadeIn(cap_a), run_time=0.3 * d, rate_func=linear)
             self.play(Create(m_o), Create(c_o), FadeIn(cap_o), FadeIn(note6), run_time=0.3 * d, rate_func=linear)
         self.wipe()

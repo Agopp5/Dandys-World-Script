@@ -141,7 +141,7 @@ class S16_omega(VScene):
         w_arc = arc3(view, HHAT, NHAT, W, 1.4, MINT, width=6)
         mid = np.cos(W / 2) * NHAT + np.sin(W / 2) * np.cross(HHAT, NHAT)
         w_lbl = label3(view, r"\omega", 1.85 * mid, MINT, 40)
-        a_lbl = label3(view, r"\text{apogee}", APO - 1.15 * NHAT, INK2, 28)
+        a_lbl = label3(view, r"\text{apogee}", APO - 1.6 * NHAT + np.array([0, 0, 0.2]), INK2, 28)
         self.beat("That matches the picture: perigee at the very bottom of the orbit, apogee high over the north.",
                   grow(w_arc), FadeIn(w_lbl),
                   [Indicate(peri, color=ROSE), FadeIn(a_lbl), Indicate(apo, color=INK)], .1, w=(.4, .15, .35))

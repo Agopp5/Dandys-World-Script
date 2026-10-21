@@ -130,7 +130,7 @@ class S14_Build_C(VScene):
         eq2 = E(r"i|=|\arccos(0.4478)|=|63.4^\circ", size=44).move_to([XR, -2.5, 0])
         eq2[4].set_color(EMBER)
         arc = arc3(view, ARC_AXIS, K_HAT, INC, 2.0, EMBER)
-        l_i = label3(view, "i", 2.4 * ARC_MID, EMBER, 38)
+        l_i = label3(view, "i", 2.4 * ARC_MID, EMBER, 40)
         with self.say("The corner entry is zero point four four seven eight. Its arc cosine is the inclination: sixty three point four degrees.") as d:
             self.play(Create(box), Indicate(c33, color=EMBER), run_time=.18 * d)
             self.play(Write(eq1), run_time=.2 * d)

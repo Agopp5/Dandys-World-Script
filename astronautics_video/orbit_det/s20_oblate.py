@@ -79,16 +79,16 @@ class S20_Oblate(VScene):
             self.wait(.2 * d)
 
         # ---- beat 3: the J2 potential
-        l1 = E(r"V|=|-\frac{\mu}{r}|\Big[\,1", size=46)
-        l2 = E(r"-\,J_2|\Big(\frac{R}{r}\Big)^2|\frac{3\sin^2\phi-1}{2}\,\Big]", size=46)
-        l2.next_to(l1, DOWN, buff=0.35).align_to(l1[2], LEFT).shift(0.4 * RIGHT)
+        l1 = E(r"V|=|-\frac{\mu}{r}|\Big[\,1", size=54)
+        l2 = E(r"-\,J_2|\Big(\frac{R}{r}\Big)^2|\frac{3\sin^2\phi-1}{2}\,\Big]", size=54)
+        l2.next_to(l1, DOWN, buff=0.35).align_to(l1[2], LEFT)
         n1 = T("a perfect sphere", 28, INK2).next_to(l1[2], UP, buff=0.25)
         n2 = VGroup(T("bulge correction,", 28, INK2), M(r"\phi", size=40), T("= latitude", 28, INK2)).arrange(RIGHT, buff=0.15).next_to(l2, DOWN, buff=0.3)
-        jv = E(r"J_2|=|1.08263\times 10^{-3}", size=46)
+        jv = E(r"J_2|=|1.08263\times 10^{-3}", size=52)
         pot = VGroup(n1, l1, l2, n2, jv)
         jv.next_to(n2, DOWN, buff=0.6)
-        pot.move_to((3.3, -0.2, 0))
-        fit(pot, 6.6, 6.8)
+        pot.move_to((3.25, -0.2, 0))
+        fit(pot, 7.2, 7.0)
         with self.say("Your notes add one correction term to the gravity potential. Its size is set by a single number, J two, about one point oh eight times ten to the minus three.") as d:
             self.play(FadeOut(VGroup(diff, bulge_tag, eq_line, po_line, eq_lab, po_lab)), run_time=.1 * d)
             self.play(Write(l1), FadeIn(n1), run_time=.2 * d)

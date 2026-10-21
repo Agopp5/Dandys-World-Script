@@ -112,6 +112,7 @@ class S23_Recap(VScene):
             self.play(FadeOut(k1), FadeIn(k5, shift=.2 * UP),
                       *[boxes[m].animate.shift(lift).set_opacity(.5) for m in (1, 2, 3)], run_time=.2 * d)
             self.play(Indicate(r5b[1]), run_time=.25 * d)
+            self.snap("key line 5")
             self.play(FadeOut(VGroup(*boxes[1:])), FadeIn(earth), FadeIn(side), FadeIn(kax), FadeIn(klab), run_time=.2 * d)
             self.play(grow(orb), run_time=.25 * d)
             self.play(FadeIn(peri), FadeIn(plab), run_time=.1 * d)

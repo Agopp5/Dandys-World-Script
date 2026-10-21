@@ -46,6 +46,12 @@ OM, INC, W = np.radians(145.0), np.radians(I_DEG), np.radians(270.0)
 O3 = np.zeros(3)
 
 
+def col(m, y=0.0):
+    """Right-hand column: x in [0.7, 6.9], shrink only if needed."""
+    fit(m, 6.1, 7.3)
+    return m.move_to([3.8, y, 0])
+
+
 def kepler_theta(M, e=ECC):
     """Kepler's equation M = E - e sin E by Newton from E = pi (converges for every M, e < 1)."""
     M = M % TAU
@@ -64,7 +70,7 @@ class S19_Rotate_Back(VScene):
     budget = 148
 
     def construct(self):
-        view = View(elev=80, azim=-55, scale=0.78, center=(-3.0, -1.2))
+        view = View(elev=80, azim=25, scale=1.2, center=(-3.7, -1.7))
         s = ValueTracker(0.0)        # 0: perifocal page lying flat, 1: rotated into place
         Mt = ValueTracker(M0)        # mean anomaly drives the satellite
 
@@ -115,12 +121,12 @@ class S19_Rotate_Back(VScene):
         note1 = VGroup(T("rows are the frame's axes,", size=27, color=MUTED),
                        T("so the transpose undoes it", size=27, color=MUTED)).arrange(DOWN, buff=.12)
         col1 = VGroup(rows, eq1, note1).arrange(DOWN, buff=.55)
-        place(col1, "right")
+        col(col1)
         with self.say("Step two: rotate into E C I. The rows of C P N are p hat, q hat and h hat, so going back uses the transpose.") as d:
             self.play(FadeIn(earth), FadeIn(ax), FadeIn(plane), FadeIn(orb), run_time=.12 * d)
-            self.play(grow(pA), grow(qA), grow(hA), FadeIn(VGroup(pL, qL, hL)), run_time=.1 * d)
+            self.play(grow(pA), grow(qA), FadeIn(VGroup(pL, qL)), run_time=.1 * d)
             self.play(s.animate.set_value(1), view.elev.animate.set_value(22), Write(rows), run_time=.43 * d)
-            self.play(Write(eq1), run_time=.15 * d)
+            self.play(Write(eq1), grow(hA), FadeIn(hL), run_time=.15 * d)
             self.play(FadeIn(note1), Indicate(eq1[2]), run_time=.15 * d)
 
         # ---- beat 2: tip to tail ----
@@ -131,14 +137,14 @@ class S19_Rotate_Back(VScene):
         a2 = arrow3(view, xr, sat, LIME)
         rA = arrow3(view, O3, sat, INK)
         sdot = dot3(view, sat, GOLD)
-        rL = label3(view, r"\vec r", lambda: sat() * 1.12 + np.array([0, 0, .25]), INK, 36)
+        rL = label3(view, r"\vec r", lambda: 0.55 * sat() - 0.4 * np.cross(Cs()[2], sat() / np.linalg.norm(sat())), INK, 36)
         eq1t = eq1.copy()
         l1 = E(r"\vec r_N|=|1842\,|\hat p", size=44)
         l2 = E(r"+\,(-10{,}448)\,|\hat q", size=44)
         note2 = T("added tip to tail in ECI", size=27, color=MUTED)
         col2 = VGroup(eq1t, l1, l2, note2).arrange(DOWN, buff=.45)
         l2.align_to(l1[2], LEFT)
-        place(col2, "right")
+        col(col2)
         with self.say("In words: r is its p component times p hat, plus its q component times q hat. The transpose just adds those arrows in E C I coordinates.") as d:
             self.play(FadeOut(rows), FadeOut(note1), Transform(eq1, eq1t), FadeOut(VGroup(qA, qL)),
                       run_time=.15 * d)
@@ -154,7 +160,7 @@ class S19_Rotate_Back(VScene):
         vres = M(r"=\begin{bmatrix}-2.864\\5.111\\-5.081\end{bmatrix}\,\mathrm{km/s}", size=42)
         eq1u = eq1.copy()
         col3 = VGroup(eq1u, rres, veq, vres).arrange(DOWN, buff=.3)
-        place(col3, "right")
+        col(col3)
         with self.say("Multiply it out, and we get nine thousand thirty one, minus five thousand three hundred seventeen, minus one thousand six hundred forty seven kilometers. The velocity comes out minus two point eight six four, five point one one one, minus five point zero eight one.") as d:
             self.play(FadeOut(VGroup(l1, l2, note2)), FadeOut(VGroup(a1, a2)), Transform(eq1, eq1u),
                       run_time=.1 * d)
@@ -175,13 +181,13 @@ class S19_Rotate_Back(VScene):
         ck2 = M(r"\checkmark", size=48, color=GOOD)
         grid = VGroup(VGroup(VMobject(), hd1, hd2, VMobject()),
                       VGroup(rlab, rc, rm, ck1), VGroup(vlab, vc, vm, ck2))
-        xs = [0, 1.25, 3.3, 4.95]
+        xs = [0, 1.35, 3.75, 5.5]
         for k, row in enumerate(grid):
             for j, m in enumerate(row):
-                m.move_to([xs[j], -k * 2.0 + (0.7 if k == 0 else 0), 0])
-        hd2.move_to([xs[2], 1.0, 0])
-        hd1.move_to([xs[1], 1.0, 0])
-        place(grid, "right")
+                m.move_to([xs[j], -k * 2.1, 0])
+        hd2.move_to([xs[2], -0.75, 0])
+        hd1.move_to([xs[1], -0.75, 0])
+        col(grid)
         with self.say("Those are exactly the measured r and v we started from. The round trip closes.") as d:
             self.play(FadeOut(VGroup(eq1, veq)),
                       ReplacementTransform(rres, rc), ReplacementTransform(vres, vc),
@@ -196,7 +202,7 @@ class S19_Rotate_Back(VScene):
             E(r"i|=63.4^\circ\quad|\Omega|=145^\circ\quad|\omega|=270^\circ", size=36),
         ).arrange(DOWN, buff=.22)
         card = panel(frozen)
-        thr = readout(r"\theta", lambda: np.degrees(th()) % 360, digits=1)
+        thr = readout(r"\theta =", lambda: np.degrees(th()) % 360, digits=1)
         thr.set_color(GOLD)
         n0 = T("Kepler's equation", size=30)
         n2 = M(r"\vec r_P,\ \vec v_P", size=42)
@@ -207,9 +213,9 @@ class S19_Rotate_Back(VScene):
         cT = M(r"C_{PN}^T", size=36).next_to(arrs[2], RIGHT, buff=.2)
         flow = VGroup(chain, arrs, cT)
         col5 = VGroup(card, flow).arrange(DOWN, buff=.5)
-        place(col5, "right")
+        col(col5)
         thr.clear_updaters()
-        thr_live = readout(r"\theta", lambda: np.degrees(th()) % 360, digits=1)
+        thr_live = readout(r"\theta =", lambda: np.degrees(th()) % 360, digits=1)
         thr_live.set_color(GOLD).move_to(thr)
         thr_live.add_updater(lambda m: m.move_to(thr))
         with self.say("And here's why elements are worth the trouble. To move the satellite forward in time, five numbers stay frozen. Only theta advances, using Kepler's equation. Then one rotation gives r and v again.") as d:

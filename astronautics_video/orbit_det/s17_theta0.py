@@ -72,7 +72,7 @@ class S17_theta0(VScene):
         self.section("Step six: where is the satellite?")
 
         # ---- 3D: e and r0 ----
-        view = View(elev=40, azim=30, scale=0.95, center=(-3.4, -0.3))
+        view = View(elev=40, azim=30, scale=0.85, center=(-3.4, -1.5))
         f = orbit(DA, DE, *ANG)
         C = cpn(*ANG)
         ph, hh = C[0], C[2]

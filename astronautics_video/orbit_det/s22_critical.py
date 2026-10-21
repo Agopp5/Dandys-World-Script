@@ -61,7 +61,7 @@ class S22_Critical(VScene):
                          for x in (0, 90, 180)])
         ticks.add(M("0", size=30, color=INK2).next_to(ax.c2p(0, 0), LEFT, buff=0.2),
                   M("-2", size=30, color=INK2).next_to(ax.c2p(0, -2), LEFT, buff=0.2))
-        xl = E(r"i", size=40).next_to(ax.c2p(180, -2.0), DR, buff=0.2)
+        xl = E(r"i", size=40).next_to(ax.c2p(180, 0), RIGHT, buff=0.25)
         yl = M(r"\tfrac{5}{2}\sin^2 i-2", size=36).next_to(ax.c2p(0, 0.5), UP, buff=0.15).shift(0.6 * RIGHT)
         tint(yl, [((7, 8), EMBER)])
         self.beat("The sign depends on that last bracket. Here it is, plotted against inclination.",
