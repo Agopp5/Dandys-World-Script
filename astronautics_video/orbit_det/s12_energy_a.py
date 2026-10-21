@@ -32,12 +32,19 @@ assert np.isclose(T_H, 11.97, atol=5e-3)
 RD = R0 / RE
 VD = 1.5 * V0 / v0
 
+# the true-scale Molniya orbit (Earth radii) for beat 5; r0 sits on it at theta = 280 deg
+MOL = orbit(A / RE, 0.7411, np.radians(145.0), np.radians(63.4), np.radians(270.0))
+assert np.allclose(MOL(np.radians(280.0)), RD, atol=.02)
+APO = np.array(MOL(np.pi))
+CEN = (np.array(MOL(0.0)) + APO) / 2
+assert np.isclose(np.linalg.norm(APO - CEN), A / RE, atol=.01)
+
 
 def measurement_card():
-    r = M(r"\vec r_0 = (9031.5,\ -5316.9,\ -1647.2)\ \text{km}", size=34)
-    v = M(r"\vec v_0 = (-2.8640,\ 5.1112,\ -5.0805)\ \text{km/s}", size=34, color=ACCENT)
+    r = M(r"\vec r_0 = (9031.5,\ -5316.9,\ -1647.2)\ \text{km}", size=30)
+    v = M(r"\vec v_0 = (-2.8640,\ 5.1112,\ -5.0805)\ \text{km/s}", size=30, color=ACCENT)
     body = VGroup(r, v).arrange(DOWN, aligned_edge=LEFT, buff=.22)
-    fit(body, 6.0, 2)
+    fit(body, 5.6, 2)
     card = panel(body)
     card.to_corner(UR, buff=.3)
     return card
@@ -47,12 +54,12 @@ class S12_Energy_a(VScene):
     budget = 107
 
     def construct(self):
-        view = View(elev=35, azim=20, scale=1.45, center=(-3.6, -0.6))
+        view = View(elev=55, azim=-110, scale=1.5, center=(-3.6, -0.9))
         earth = globe(view)
-        ax = axes3(view, 2.0)
+        ax = axes3(view, 1.8)
         ar = arrow3(view, (0, 0, 0), tuple(RD), INK)
         av = arrow3(view, tuple(RD), tuple(RD + VD), ACCENT)
-        lr = label3(view, r"\vec r_0", tuple(RD * 1.12 + np.array([0, 0, -.25])), INK, 34)
+        lr = label3(view, r"\vec r_0", tuple(RD * 1.16), INK, 34)
         lv = label3(view, r"\vec v_0", tuple(RD + VD * 1.15), ACCENT, 34)
         card = measurement_card()
         X = card.get_left()[0] + .1   # left edge of the algebra column
@@ -123,7 +130,16 @@ class S12_Energy_a(VScene):
         p1.next_to(s1, DOWN, buff=.35).align_to(short, LEFT)
         for m in (s1, p1):
             fit(m, 7.0 - X, 1)
-        self.beat("That's about four Earth radii, and a period of almost exactly twelve hours.",
-                  FadeIn(s1, shift=UP * .2), Write(p1[0]), Write(p1[1]), FadeIn(glow(p1[1], GOLD)),
-                  w=(.3, .3, .25, .15))
+        mol = curve(view, MOL, 0, TAU, INK, width=3, R=1.0, k=0)
+        semi = line3(view, tuple(CEN), tuple(APO), INK2, width=3, dashed=True, k=0)
+        la = label3(view, "a", tuple((CEN + APO) / 2 + np.array([.5, 0, 0])), INK2, 40)
+        self.add(mol, semi)
+        with self.say("That's about four Earth radii, and a period of almost exactly twelve hours.") as d:
+            self.play(view.scale.animate.set_value(.42), view.elev.animate.set_value(25),
+                      FadeIn(s1, shift=UP * .2), run_time=.25 * d)
+            self.play(mol.k.animate.set_value(1), run_time=.2 * d)
+            self.play(semi.k.animate.set_value(1), FadeIn(la), Indicate(s1, color=INK), run_time=.2 * d)
+            self.play(Write(p1[0]), run_time=.15 * d)
+            self.play(Write(p1[1]), FadeIn(glow(p1[1], GOLD)), run_time=.15 * d)
+            self.wait(.05 * d)
         self.wipe()

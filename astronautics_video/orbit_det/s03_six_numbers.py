@@ -123,7 +123,7 @@ class S03_Six_Numbers(VScene):
         # ---- beat 5: where the satellite is now --------------------------------------------
         peri_line = line3(view, (0, 0, 0), peri, ROSE)
         peri_dot = dot3(view, peri, ROSE)
-        sat_line = line3(view, (0, 0, 0), lambda: f(TH0), GOLD, dashed=True)
+        sat_line = line3(view, (0, 0, 0), lambda: f(TH0), GOLD)
         sat_dot = dot3(view, lambda: f(TH0), GOLD)
         th_arc = arc3(view, lambda: Cm()[2], lambda: Cm()[0], TH0, 1.7, GOLD)
         th_arc.k.set_value(0)

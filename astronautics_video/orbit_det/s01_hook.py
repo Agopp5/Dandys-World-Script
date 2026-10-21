@@ -63,7 +63,7 @@ assert np.isclose(theta_from_mean(M0), TH0_R)
 _r, _v = rv_eci(TH0_R)
 assert np.allclose(_r, R0, atol=2.0) and np.allclose(_v, V0, atol=2e-3)   # round trip matches the measurement
 
-FS = 38                                            # readout digit size
+FS = 44                                            # readout digit size
 
 
 def column(label_tex, vals, nd, widest, unit):
@@ -78,8 +78,8 @@ def column(label_tex, vals, nd, widest, unit):
         [[xL - 0.08, top, 0], [xL - 0.22, top, 0], [xL - 0.22, bot, 0], [xL - 0.08, bot, 0]])
     rb = VMobject(stroke_color=INK, stroke_width=3).set_points_as_corners(
         [[xR + 0.08, top, 0], [xR + 0.22, top, 0], [xR + 0.22, bot, 0], [xR + 0.08, bot, 0]])
-    lab = M(label_tex + "=", size=40).next_to(lb, LEFT, buff=0.18)
-    un = M(r"\text{" + unit + "}", size=30, color=MUTED).next_to(rb, RIGHT, buff=0.15)
+    lab = M(label_tex + "=", size=46).next_to(lb, LEFT, buff=0.18)
+    un = M(r"\text{" + unit + "}", size=34, color=MUTED).next_to(rb, RIGHT, buff=0.15)
     g = VGroup(lab, lb, nums, rb, un)
     g.nums = nums
     return g
@@ -90,7 +90,7 @@ class S01_Hook(VScene):
 
     def construct(self):
         # ------------------------------------------------ 3D view (left two thirds)
-        view = View(scale=0.62)
+        view = View(elev=22, azim=62, scale=1.0, center=(-3.0, -1.6))  # looks roughly down h-hat: the ellipse reads open
         earth = globe(view)
         ax3 = axes3(view, 2.2)
         Om, inc, w = np.radians(RAAN), np.radians(INC), np.radians(ARGP)
@@ -113,8 +113,8 @@ class S01_Hook(VScene):
         r_arr.k.set_value(0)
         v_arr.k.set_value(0)
         sat_dot = dot3(view, sat, INK)
-        r_lab = label3(view, r"\vec r", lambda: 0.55 * sat() + np.array([0, 0, 0.4]), INK, 32)
-        v_lab = label3(view, r"\vec v", lambda: sat() + 1.25 * vvec(), ACCENT, 32)
+        r_lab = label3(view, r"\vec r", lambda: 0.55 * sat() + np.array([0, 0, 0.4]), INK, 36)
+        v_lab = label3(view, r"\vec v", lambda: sat() + 1.25 * vvec(), ACCENT, 36)
         path = curve(view, f, 0, TAU, INK, width=4, R=1.0)
 
         # ------------------------------------------------ right: the measurement
@@ -146,17 +146,17 @@ class S01_Hook(VScene):
 
         # ------------------------------------------------ the same orbit, six better numbers
         rows = VGroup(
-            E(r"a|=|26{,}564\ \text{km}", size=40),
-            E(r"e|=|0.741", size=40, cmap={"e": ROSE}),
-            E(r"i|=|63.4^\circ", size=40),
-            E(r"\Omega|=|145^\circ", size=40),
-            E(r"\omega|=|270^\circ", size=40),
+            E(r"a|=|26{,}564\ \text{km}", size=48),
+            E(r"e|=|0.741", size=48, cmap={"e": ROSE}),
+            E(r"i|=|63.4^\circ", size=48),
+            E(r"\Omega|=|145^\circ", size=48),
+            E(r"\omega|=|270^\circ", size=48),
         )
         hues = [INK, ROSE, EMBER, SKY, MINT]
         for row, hue in zip(rows, hues):
             row[0].set_color(hue)
             row[2].set_color(hue)
-        th_lab = E(r"\theta_0|=", size=40)
+        th_lab = E(r"\theta_0|=", size=48)
         th_num = DecimalNumber(round(TH0), num_decimal_places=0, unit=r"^\circ", font_size=FS + 2, color=GOLD,
                                edge_to_fix=LEFT)
         th_row = VGroup(th_lab[0], th_lab[1], th_num)
@@ -168,7 +168,7 @@ class S01_Hook(VScene):
         eq_x = rows[0][1].get_center()[0]
         for row in rows:
             row.shift(RIGHT * (eq_x - row[1].get_center()[0]))
-        rows.move_to(RIGHT * 4.4 + UP * 0.9)
+        rows.move_to(RIGHT * 4.5 + UP * 1.0)
 
         with self.say("Now here is the same orbit, described by a different set of six numbers.") as d:
             self.play(FadeOut(qs), FadeIn(path), mt.animate(rate_func=linear).set_value(M0 + TAU),
@@ -180,7 +180,7 @@ class S01_Hook(VScene):
                       *[FadeOut(m) for m in (rcol[0], rcol[1], rcol[3], rcol[4], vcol[0], vcol[1], vcol[3], vcol[4])],
                       *[FadeIn(VGroup(r[0], r[1])) for r in rows], run_time=0.4 * d)
 
-        th_new = E(r"\theta", size=40)[0].move_to(th_lab[0], aligned_edge=RIGHT)
+        th_new = E(r"\theta", size=48)[0].move_to(th_lab[0], aligned_edge=RIGHT)
         th_num.add_updater(lambda m: m.set_value(round(np.degrees(th())) % 360))
         with self.say("Five of them never change. Only the last one moves, like the hand of a clock. And every one of them has a picture you can see.") as d:
             glows = VGroup(*[glow(rows[k], hues[k]) for k in range(5)])
@@ -191,7 +191,7 @@ class S01_Hook(VScene):
                                   lag_ratio=0.25), Indicate(path, color=INK2, scale_factor=1.0), run_time=0.24 * d)
         th_num.clear_updaters()
 
-        chips = VGroup(chip("meaning", ACCENT), chip("r, v to elements", ACCENT), chip("elements to r, v", ACCENT))
+        chips = VGroup(chip("meaning", ACCENT), chip("r, v to elements", ACCENT), chip("elements to r, v", ACCENT)).scale(1.35)
         chips.arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(rows, DOWN, buff=0.55).align_to(rows, LEFT)
         self.beat("This lesson is about those six numbers: what each one means, how to get them from a measurement, and how to go back.",
                   .2, FadeIn(chips[0], shift=0.2 * UP), .15, FadeIn(chips[1], shift=0.2 * UP), .15,

@@ -37,11 +37,11 @@ class S09_DCM(VScene):
     budget = 145
 
     def construct(self):
-        view = View(elev=22, azim=-55, scale=.8, center=(-3.4, -0.4))
+        view = View(elev=22, azim=-110, scale=.95, center=(-3.6, -0.2))
         earth = globe(view)
-        ax = axes3(view, 2.0)
+        ax = axes3(view, 2.3)
         orb = curve(view, orbit(2.4, .5, OM, INC, W), 0, 2 * PI, INK, width=3, R=1.0)
-        L = 1.75
+        L = 2.0
         pa = arrow3(view, ORIGIN, L * P_HAT, ROSE)
         qa = arrow3(view, ORIGIN, L * Q_HAT, LIME)
         ha = arrow3(view, ORIGIN, L * H_HAT, LILAC)
@@ -55,10 +55,10 @@ class S09_DCM(VScene):
         # the matrix: rows are p-hat, q-hat, h-hat in I, J, K components
         vecs = [r"\hat p", r"\hat q", r"\hat h"]
         axs = [r"\hat I", r"\hat J", r"\hat K"]
-        ents = [[E(v + r"|\cdot|" + a, size=34) for a in axs] for v in vecs]
-        mat = MobjectMatrix(ents, h_buff=1.45, v_buff=.8)
+        ents = [[E(v + r"|\cdot|" + a, size=40) for a in axs] for v in vecs]
+        mat = MobjectMatrix(ents, h_buff=1.75, v_buff=.85)
         lhs = E(r"C_{PN}|=", size=40)
-        tags = VGroup(*[E(r"\leftarrow|" + v, size=34) for v in vecs])
+        tags = VGroup(*[E(r"\leftarrow|" + v, size=40) for v in vecs])
         mblock = VGroup(lhs, mat).arrange(RIGHT, buff=.2)
         for t, row in zip(tags, mat.get_rows()):
             t.next_to(mat, RIGHT, buff=.2).set_y(row.get_y())
@@ -89,10 +89,10 @@ class S09_DCM(VScene):
         VGroup(cosl, val).arrange(DOWN, buff=.25).move_to([XR, -1.75, 0])
         axis = np.cross(I_HAT, P_HAT)
         axis = axis / np.linalg.norm(axis)
-        arc = arc3(view, axis, I_HAT, ALPHA, 1.1, ACCENT)
+        arc = arc3(view, axis, I_HAT, ALPHA, 1.35, ACCENT)
         arc.k.set_value(0)
         mid = np.cos(ALPHA / 2) * I_HAT + np.sin(ALPHA / 2) * np.cross(axis, I_HAT)
-        al = label3(view, r"\alpha", 1.4 * mid, ACCENT, 34)
+        al = label3(view, r"\alpha", 1.65 * mid, ACCENT, 34)
         others = VGroup(qa, ha, ql, hl, orb)
         self.beat("Each entry is a dot product, the cosine of the angle between one perifocal axis and one E C I axis.",
                   Create(box), [others.animate.set_opacity(.25), Indicate(ax[0], color=ACCENT)],

@@ -28,7 +28,7 @@ def node_velocity(Om, inc, w, a=2.4, e=0.5):
     rP, vP = rv_perifocal(a * 6378.137, e, -w)
     return cpn(Om, inc, w).T @ np.asarray(vP)
 for inc_deg, west in [(120.0, True), (40.0, False)]:
-    vN = node_velocity(R(50), R(inc_deg), 0.0)
+    vN = node_velocity(R(50), R(inc_deg), R(90.0))
     east = np.array([-np.sin(R(50)), np.cos(R(50)), 0.0])
     assert vN[2] > 0                                  # still northbound at the ascending node
     assert (vN @ east < 0) == west                    # westward only when i > 90
@@ -53,7 +53,7 @@ class S06_Turn_omega(VScene):
     budget = 181
 
     def construct(self):
-        view = View()
+        view = View(scale=0.85)
         Om, Inc, W = ValueTracker(50.0), ValueTracker(40.0), ValueTracker(0.0)
         A, Ecc = ValueTracker(2.4), ValueTracker(0.5)
 
@@ -81,15 +81,16 @@ class S06_Turn_omega(VScene):
         earth = globe(view)
         ax = axes3(view, 2.0)
         equator = disc3(view, np.array([1.0, 0, 0]), np.array([0, 1.0, 0]), 3.9, MUTED, opacity=0.08)
-        plane = disc3(view, nh, mh, 4.2, LILAC, opacity=0.10)
+        plane = disc3(view, nh, mh, 3.5, LILAC, opacity=0.10)
         node_line = line3(view, lambda: -4.0 * nh(), lambda: 4.0 * nh(), SKY, dashed=True)
         ell = curve(view, lambda t: pos(t), 0, TAU, INK, R=1.0)
         harr = arrow3(view, lambda: np.zeros(3), lambda: 2.2 * hh(), LILAC)
         hlab = label3(view, r"\vec h", lambda: 2.5 * hh(), LILAC)
         node_dot = dot3(view, lambda: pos(-R(W.get_value())), SKY)
-        peri_line = line3(view, lambda: np.zeros(3), lambda: pos(0.0), ROSE)
+        peri_line = line3(view, lambda: np.zeros(3), lambda: 2.3 * ph(), ROSE)
+        peri_txt = label3(view, r"\text{periapsis}", lambda: 2.75 * ph(), ROSE, 28)
         peri_dot = dot3(view, lambda: pos(0.0), ROSE, radius=0.09)
-        scene3d = Group(equator, plane, earth, ax, node_line, ell, harr, hlab, peri_line, node_dot, peri_dot)
+        scene3d = Group(equator, plane, earth, ax, node_line, ell, harr, hlab, peri_line, node_dot, peri_dot, peri_txt)
 
         w_eq = E(r"\omega|=|60^\circ", size=48)
         place(w_eq, "right")
@@ -99,8 +100,9 @@ class S06_Turn_omega(VScene):
                   w=(.2, .15, .45, .2))
 
         # ---------------- the omega arc: node -> periapsis, in the plane, in the direction of motion
-        w_arc = arc3(view, hh, nh, lambda: R(W.get_value()), 1.45, MINT, width=6, k=0.0)
-        w_lab = label3(view, r"\omega", lambda: 1.8 * (np.cos(R(W.get_value()) / 2) * nh()
+        w_arc = arc3(view, hh, nh, lambda: R(W.get_value()), 2.0, MINT, width=7, k=0.0)
+        self.add(w_arc)
+        w_lab = label3(view, r"\omega", lambda: 2.35 * (np.cos(R(W.get_value()) / 2) * nh()
                                                        + np.sin(R(W.get_value()) / 2) * mh()), MINT, 40)
         defn = VGroup(T("from the ascending node", size=28, color=INK2),
                       T("to periapsis, in the orbit plane,", size=28, color=INK2),
@@ -113,14 +115,16 @@ class S06_Turn_omega(VScene):
 
         # ---------------- theta zero
         TH0 = 40.0
-        th_arc = arc3(view, hh, ph, R(TH0), 1.15, GOLD, width=6, k=0.0)
+        th_arc = arc3(view, hh, ph, R(TH0), 1.65, GOLD, width=7, k=0.0)
+        self.add(th_arc)
+        th_ray = line3(view, lambda: np.zeros(3), lambda: 2.0 * pos(R(TH0)) / np.linalg.norm(pos(R(TH0))), GOLD)
         sat = dot3(view, lambda: pos(R(TH0)), GOLD, radius=0.1)
-        th_lab = label3(view, r"\theta_0", lambda: 1.55 * (np.cos(R(TH0 / 2)) * ph()
+        th_lab = label3(view, r"\theta_0", lambda: 1.95 * (np.cos(R(TH0 / 2)) * ph()
                                                          + np.sin(R(TH0 / 2)) * np.cross(hh(), ph())), GOLD, 36)
         th_eq = E(r"\theta_0|=|40^\circ", size=48)
         th_eq.next_to(w_eq, DOWN, buff=.5).align_to(w_eq, LEFT)
         self.beat("The ellipse is now completely placed. The last number, the true anomaly at epoch theta zero, is the angle from periapsis to the satellite at the moment of the measurement.",
-                  Circumscribe(ell, color=INK2), FadeOut(defn), .1, FadeIn(sat, scale=2), th_arc.k.animate.set_value(1.0),
+                  Circumscribe(ell, color=INK2), FadeOut(defn), .1, [FadeIn(sat, scale=2), FadeIn(th_ray)], th_arc.k.animate.set_value(1.0),
                   FadeIn(th_lab), FadeIn(th_eq), w=(.25, .1, .15, .25, .1, .15))
 
         # ---------------- the order of the turns: 3, 1, 3
@@ -140,24 +144,25 @@ class S06_Turn_omega(VScene):
         mol_head = T("Molniya", size=34, weight=BOLD)
         mol_card = VGroup(mol_head, mol).arrange(DOWN, aligned_edge=LEFT, buff=.4)
         place(mol_card, "right")
-        mol_card.shift(UP * 1.0)
         self.beat("Here's the Molniya orbit from the beginning, built the same way.",
-                  [FadeOut(stack), FadeOut(w_arc), FadeOut(w_lab), FadeOut(th_arc), FadeOut(th_lab), FadeOut(sat)],
+                  [FadeOut(stack), FadeOut(w_arc), FadeOut(w_lab), FadeOut(th_arc), FadeOut(th_lab), FadeOut(sat), FadeOut(th_ray), FadeOut(peri_txt)],
                   [Om.animate.set_value(145.0), Inc.animate.set_value(63.4), W.animate.set_value(270.0),
-                   A.animate.set_value(3.0), Ecc.animate.set_value(0.6), view.scale.animate.set_value(0.78)],
+                   A.animate.set_value(3.0), Ecc.animate.set_value(0.6), view.scale.animate.set_value(0.7)],
                   FadeIn(mol_card), w=(.15, .6, .25))
-        self.drop(w_arc, w_lab, th_arc, th_lab, sat)
+        self.drop(w_arc, w_lab, th_arc, th_lab, sat, th_ray, peri_txt)
 
         # ---------------- perigee far south, apogee half over the north
         apo = curve(view, lambda t: 1.1 * pos(t), R(90), R(270), GOLD, width=7, k=0.0)
         apo_lab = label3(view, r"\text{apogee half}", lambda: 1.18 * pos(np.pi) + 0.35 * K, GOLD, 30)
         peri_lab = label3(view, r"\text{perigee}", lambda: pos(0.0) - 0.45 * K, ROSE, 30)
+        self.add(apo)
         M = ValueTracker(0.0)
         moving = dot3(view, lambda: pos(kepler_theta(M.get_value(), Ecc.get_value())), GOLD, radius=0.1)
         notes = VGroup(T("perigee: far south", size=28, color=ROSE),
                        T("apogee: high over the north,", size=28, color=GOLD),
                        T("slow, for hours", size=28, color=GOLD)).arrange(DOWN, aligned_edge=LEFT, buff=.15)
         notes.next_to(mol_card, DOWN, buff=.55).align_to(mol_card, LEFT)
+        place(VGroup(mol_card, notes), "right")
         with self.say("Little omega of two seventy puts the perigee at the southernmost point of the orbit. So the long, slow apogee half hangs high over the northern hemisphere, where it can watch Russia for hours.") as d:
             self.play(Indicate(mol[2], color=MINT), Flash(peri_dot, color=ROSE), FadeIn(peri_lab), run_time=.15 * d)
             self.play(FadeIn(notes[0]), run_time=.1 * d)
@@ -179,22 +184,26 @@ class S06_Turn_omega(VScene):
             return v / np.linalg.norm(v)
         v_arr = arrow3(view, lambda: pos(-R(W.get_value())), lambda: pos(-R(W.get_value())) + 1.3 * vel_dir(),
                        ACCENT, k=0.0)
-        west = arc3(view, -K, nh, R(55), 1.12, ACCENT, width=6, k=0.0)
-        west_lab = label3(view, r"\text{west}", lambda: 1.3 * (np.cos(R(-60)) * nh()
-                                                             + np.sin(R(-60)) * np.cross(K, nh())), ACCENT, 30)
+        def west_dir():
+            o = R(Om.get_value())
+            return np.array([np.sin(o), -np.cos(o), 0.0])
+        node_p = lambda: pos(-R(W.get_value()))
+        west = arrow3(view, node_p, lambda: node_p() + 1.1 * west_dir(), INK2, k=0.0)
+        west_lab = label3(view, r"\text{west}", lambda: node_p() + 1.45 * west_dir() + 0.25 * K, INK2, 30)
         i_eq = E(r"i|=|120^\circ", size=48)
         tips = VGroup(T("ascending node:", size=28, color=SKY),
                       T("always the northbound crossing", size=28, color=INK2),
-                      T("i > 90: motion runs west", size=28, color=ACCENT)).arrange(DOWN, aligned_edge=LEFT, buff=.18)
+                      T("past ninety degrees,", size=28, color=INK2),
+                      T("the motion runs west", size=28, color=INK2)).arrange(DOWN, aligned_edge=LEFT, buff=.18)
         card = VGroup(i_eq, tips).arrange(DOWN, aligned_edge=LEFT, buff=.5)
         place(card, "right")
         with self.say("Still northward. The ascending node is always the northbound crossing. What changes is that the motion over the Earth runs westward instead of east.") as d:
-            self.play(Om.animate.set_value(50.0), Inc.animate.set_value(120.0), W.animate.set_value(0.0),
-                      A.animate.set_value(2.4), Ecc.animate.set_value(0.5), view.scale.animate.set_value(1.0),
+            self.play(Om.animate.set_value(50.0), Inc.animate.set_value(120.0), W.animate.set_value(90.0),
+                      A.animate.set_value(2.4), Ecc.animate.set_value(0.5), view.scale.animate.set_value(0.85),
                       FadeIn(i_eq), run_time=.3 * d)
             self.add(v_arr)
             self.play(Flash(node_dot, color=SKY), v_arr.k.animate.set_value(1.0), FadeIn(tips[:2]), run_time=.3 * d)
             self.add(west)
-            self.play(west.k.animate.set_value(1.0), FadeIn(west_lab), FadeIn(tips[2]), run_time=.3 * d)
+            self.play(west.k.animate.set_value(1.0), FadeIn(west_lab), FadeIn(tips[2:]), run_time=.3 * d)
             self.wait(.1 * d)
         self.wipe()

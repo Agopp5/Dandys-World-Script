@@ -32,6 +32,9 @@ says so: use a = 2.4, e = 0.5 for the generic orbit and a = 3.0, e = 0.6 for the
 a = 4.16 R_E, e = 0.741, does not fit). Generic orientation for episode 2: Omega = 50 deg, i = 40 deg,
 omega = 60 deg, theta0 = 40 deg. Keep the 3D view on the left two thirds and text/equations on the right
 (place(m, "right")), unless a beat is pure algebra.
+Readability (this viewer struggles with small text): derivation lines at size 40 or more, grey "why" notes at
+26 or more beside or under each line, numbers cards at 30 or more. Use the full frame height; never pack algebra
+into the top third. At most about four equation lines on screen at once: fold finished steps into one boxed result.
 Notation: matrices are C_{PN} (rows: p-hat, q-hat, h-hat written in ECI), C_1, C_3 the course's elementary rotations
 (rows = new axes in old): C_3(x) = [[cos x, sin x, 0], [-sin x, cos x, 0], [0, 0, 1]],
 C_1(x) = [[1, 0, 0], [0, cos x, sin x], [0, -sin x, cos x]]. Use theta (not nu) for true anomaly.

@@ -17,8 +17,8 @@ for _Om, _inc, _w in [np.radians([50, 40, 60]), np.radians([145.0, 63.4, 270.0])
     assert np.allclose(np.asarray(C1(_inc)) @ _K, [0, np.sin(_inc), np.cos(_inc)])      # column 3 of C1(i)
     assert np.allclose(_C @ _K, [np.sin(_w) * np.sin(_inc), np.cos(_w) * np.sin(_inc), np.cos(_inc)])
     assert np.allclose(_C[:, 2], _C @ _K)
-# picture of beat 4: generic orientation, h-hat's K component is cos i
-OM_G, I_G = np.radians(50), np.radians(40)
+# picture of beat 4: generic i = 40 deg; node angle chosen so h-hat leans to screen-left (not toward the camera)
+OM_G, I_G = np.radians(-45), np.radians(40)
 HH = np.array([np.sin(I_G) * np.sin(OM_G), -np.sin(I_G) * np.cos(OM_G), np.cos(I_G)])
 assert np.isclose(np.linalg.norm(HH), 1) and np.isclose(HH @ _K, np.cos(I_G))
 assert np.isclose(np.degrees(np.arccos(HH @ _K)), 40)
@@ -82,25 +82,26 @@ class S10_Multiply(VScene):
                   Indicate(L2[-2:], color=SKY), [Write(L3), FadeIn(R3)], Create(box3), w=(.25, .55, .2))
 
         # ---- picture check: h-hat leans from K by i
-        view = View(elev=18, azim=-52, scale=1.6, center=(-4.3, -1.3))
+        view = View(elev=18, azim=-52, scale=1.6, center=(-4.3, -1.6))
         ax = axes3(view, 1.9)
         eq_plane = disc3(view, [1, 0, 0], [0, 1, 0], 1.6, INK2, .08)
-        hvec = arrow3(view, [0, 0, 0], 1.7 * HH, LILAC)
-        hlab = label3(view, r"\hat h", 1.95 * HH, LILAC, 34)
+        hvec = arrow3(view, [0, 0, 0], 1.8 * HH, LILAC)
+        hlab = label3(view, r"\hat h", 2.05 * HH, LILAC, 34)
         axis = np.cross(_K, HH)
         axis = axis / np.linalg.norm(axis)
-        iarc = arc3(view, axis, _K, I_G, .75, EMBER)
+        iarc = arc3(view, axis, _K, I_G, 1.0, EMBER)
         mid = (_K + HH) / np.linalg.norm(_K + HH)
-        ilab = label3(view, "i", 1.0 * mid, EMBER, 34)
-        foot = 1.7 * np.cos(I_G) * _K
-        proj = line3(view, 1.7 * HH, foot, LILAC, dashed=True)
+        ilab = label3(view, "i", 1.25 * mid, EMBER, 34)
+        foot = 1.8 * np.cos(I_G) * _K
+        proj = line3(view, 1.8 * HH, foot, LILAC, dashed=True)
+        kseg = Line(view.p([0, 0, 0]), view.p(foot), color=LILAC, stroke_width=7)
         fdot = Dot(view.p(foot), radius=.06, color=LILAC)
-        clab = E(r"\cos|i", size=32).next_to(view.p(.5 * foot), LEFT, buff=.2)
-        pic = VGroup(eq_plane, ax, hvec, hlab, iarc, ilab, proj, fdot, clab)
+        clab = E(r"\cos|i", size=32).next_to(view.p(.5 * foot), RIGHT, buff=.2)
+        pic = VGroup(eq_plane, ax, hvec, hlab, iarc, ilab, proj, kseg, fdot, clab)
         self.beat("Check it with the picture. h hat leans away from K by the angle i, so its K component is cosine i.",
                   [FadeOut(Mx), FadeOut(labs), FadeOut(rowbox)], [FadeIn(eq_plane), FadeIn(ax)],
                   [FadeIn(hvec), FadeIn(hlab)], [FadeIn(iarc), FadeIn(ilab)],
-                  [Create(proj), FadeIn(fdot), FadeIn(clab)], Indicate(L3[10:12], color=LILAC),
+                  [Create(proj), FadeIn(fdot), Create(kseg), FadeIn(clab)], Indicate(L3[10:12], color=LILAC),
                   w=(.1, .15, .15, .2, .2, .2))
 
         # ---- third column

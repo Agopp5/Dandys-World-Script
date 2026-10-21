@@ -21,7 +21,7 @@ assert np.isclose(N_EQ @ I_, 0)                  # the intersection line is X, p
 def grow(m):
     """Draw a k-tracked piece (arrow3, curve, arc3) from nothing."""
     m.k.set_value(0)
-    return m.k.animate.set_value(1)
+    return UpdateFromAlphaFunc(m, lambda mob, a: m.k.set_value(a), suspend_mobject_updating=False)
 
 
 L = 2.3                                          # axis length in Earth radii
@@ -56,11 +56,11 @@ class S02_ECI_Frame(VScene):
                   w=(.3, .7))
 
         # inset: Earth at origin, Sun at (2, 0, 0); the ecliptic is the circle around the Sun through Earth
-        v2 = View(elev=20, azim=-70, scale=.75, center=(2.6, -1.0))
+        v2 = View(elev=22, azim=-72, scale=1.1, center=(2.3, -.9))
         sun_c = np.array([2.0, 0, 0])
         ecl = curve(v2, lambda t: sun_c + 2.0 * np.array([np.cos(t), np.sin(t), 0]), 0, TAU, MUTED, width=3)
         sun = Dot(v2.p(sun_c), radius=.16, color=GOLD)
-        sun_lab = T("Sun", size=26, color=INK2).next_to(sun, UP, buff=.15)
+        sun_lab = T("Sun", size=26, color=INK2).next_to(sun, DOWN, buff=.15)
         mini = globe(v2, R=.32)
         ecl_disc = disc3(v2, (1, 0, 0), (0, 1, 0), .75, MUTED, .18)
         equ = curve(v2, lambda t: .75 * (np.cos(t) * I_ + np.sin(t) * N_EQ), 0, TAU, INK2, width=3)
@@ -68,8 +68,8 @@ class S02_ECI_Frame(VScene):
         tilt_lab = label3(v2, r"23.4^\circ", (0, .95, .45), ACCENT, 30)
         ecl_lab = T("ecliptic", size=26, color=MUTED).move_to(v2.p(sun_c + 2.0 * np.array([0, 1, 0])) + UP * .3)
         equ_lab = T("equator", size=26, color=INK2).next_to(v2.p(-.75 * N_EQ), LEFT, buff=.15)
-        frame = RoundedRectangle(width=6.0, height=4.6, corner_radius=.15, stroke_color=HAIR, stroke_width=2) \
-            .move_to((3.75, -.4, 0))
+        frame = RoundedRectangle(width=6.6, height=5.4, corner_radius=.15, stroke_color=HAIR, stroke_width=2) \
+            .move_to((3.55, -.5, 0))
         inset = Group(frame, ecl, sun, sun_lab, ecl_lab, mini, ecl_disc, equ, equ_lab, tilt, tilt_lab)
         self.beat("Picture Earth going around the Sun. Earth's equator is tilted about twenty three and a half degrees to the plane of its orbit, the ecliptic.",
                   FadeOut(q), [Create(frame), FadeIn(sun), FadeIn(sun_lab)], [grow(ecl), FadeIn(mini), FadeIn(ecl_lab)],
@@ -77,10 +77,11 @@ class S02_ECI_Frame(VScene):
                   w=(.05, .2, .25, .25, .25))
 
         node = line3(v2, (-.9, 0, 0), (.9, 0, 0), ACCENT)
+        halo = glow(node, ACCENT)
         vern = arrow3(v2, (.35, 0, 0), (1.65, 0, 0), INK2)
         vern_lab = T("vernal equinox", size=26, color=INK2).next_to(v2.p((1.0, 0, 0)), DOWN, buff=.3)
         with self.say("The two planes cross along one line. On the March equinox, that line points from the Earth straight at the Sun. That is the vernal equinox direction, and I points along it.") as d:
-            self.play(FadeIn(node), FadeIn(glow(node, ACCENT)), run_time=.15 * d)
+            self.play(FadeIn(node), FadeIn(halo), run_time=.15 * d)
             self.wait(.1 * d)
             self.play(grow(vern), run_time=.2 * d)
             self.play(FadeIn(vern_lab), run_time=.1 * d)
@@ -98,7 +99,7 @@ class S02_ECI_Frame(VScene):
         head = arrow3(view, 1.45 * np.array([np.cos(PI / 2 * .8), np.sin(PI / 2 * .8), 0]),
                       1.45 * np.array([0, 1, 0]), ACCENT)
         self.beat("J is ninety degrees from I in the equator, completing a right handed set with K.",
-                  [FadeOut(inset), FadeOut(node), FadeOut(vern), FadeOut(vern_lab)],
+                  [FadeOut(inset), FadeOut(node), FadeOut(halo), FadeOut(vern), FadeOut(vern_lab)],
                   [grow(curl), FadeIn(head)], [Indicate(aJ, color=ACCENT), Indicate(lJ, color=ACCENT),
                                                Indicate(aK, color=ACCENT), Indicate(lK, color=ACCENT)],
                   Write(rh), FadeIn(rh_lab), w=(.15, .25, .25, .25, .1))
@@ -109,7 +110,7 @@ class S02_ECI_Frame(VScene):
         def merid(lon):
             return lambda t: 1.01 * np.array([np.sin(t) * np.cos(lon + spin.get_value()),
                                               np.sin(t) * np.sin(lon + spin.get_value()), np.cos(t)])
-        mers = VGroup(*[curve(view, merid(k * PI / 3), 0, PI, GOLD if k == 0 else HAIR, width=3 if k == 0 else 2,
+        mers = VGroup(*[curve(view, merid(k * PI / 3), 0, PI, GOLD if k == 0 else MUTED, width=4 if k == 0 else 2,
                               R=1.0) for k in range(6)])
         clk_c = np.array([3.8, -2.2, 0])
         dial = Circle(radius=.55, color=INK2, stroke_width=3).move_to(clk_c)

@@ -45,7 +45,7 @@ class S11_Read_Angles(VScene):
                  r"C_{32}|=|-\sin|i|\cos|\Omega",
                  r"C_{13}|=|\sin|\omega|\sin|i",
                  r"C_{23}|=|\cos|\omega|\sin|i"]
-        rows = VGroup(*[E(s, size=38) for s in specs]).arrange(DOWN, aligned_edge=LEFT, buff=.3)
+        rows = VGroup(*[E(s, size=44) for s in specs]).arrange(DOWN, aligned_edge=LEFT, buff=.3)
         card = panel(rows)
         card.move_to([-4.0, .75, 0])
         r33, r31, r32, r13, r23 = rows
@@ -57,19 +57,19 @@ class S11_Read_Angles(VScene):
             return MoveToTarget(m)
 
         # 1: i = arccos C33
-        i_eq = E(r"i|=|\arccos|C_{33}", size=50).move_to([RX, 2.4, 0])
+        i_eq = E(r"i|=|\arccos|C_{33}", size=56).move_to([RX, 2.4, 0])
         self.beat("Now reverse it. The corner entry C three three is cosine i. So i is the arc cosine of C three three.",
-                  FadeIn(card), Circumscribe(r33, color=EMBER), Write(i_eq), FadeIn(glow(i_eq[0], EMBER)),
+                  FadeIn(card), Circumscribe(r33, color=EMBER), Write(i_eq), Indicate(i_eq[0], color=EMBER),
                   w=(.25, .3, .3, .15))
 
         # 2: arccos range = inclination range
         nl = NumberLine(x_range=[0, 180, 30], length=4.8, color=AXIS, include_numbers=False)
         nl.move_to([RX - .2, .1, 0])
-        ticks = VGroup(*[M(rf"{v}^\circ", size=28).next_to(nl.n2p(v), DOWN, buff=.2) for v in (0, 90, 180)])
+        ticks = VGroup(*[M(rf"{v}^\circ", size=32).next_to(nl.n2p(v), DOWN, buff=.2) for v in (0, 90, 180)])
         brace = Brace(Line(nl.n2p(0), nl.n2p(180)), UP, color=INK2)
-        out_lbl = T("arccos returns", size=26, color=INK2).next_to(brace, UP, buff=.12)
+        out_lbl = T("arccos returns", size=32, color=INK2).next_to(brace, UP, buff=.12)
         shade = Line(nl.n2p(0), nl.n2p(180), color=EMBER, stroke_width=14).set_opacity(.75)
-        inc_lbl = TX(r"every possible inclination $i$", size=28).next_to(ticks, DOWN, buff=.25)
+        inc_lbl = TX(r"every possible inclination $i$", size=44).next_to(ticks, DOWN, buff=.25)
         inc_lbl.set_color(EMBER)
         check = M(r"\checkmark", size=64, color=GOOD).next_to(nl, RIGHT, buff=.35)
         self.beat("Arc cosine always returns an angle from zero to one hundred eighty degrees. That's exactly the range of inclination, so no extra check is needed.",
@@ -79,26 +79,27 @@ class S11_Read_Angles(VScene):
         nl_grp = VGroup(nl, ticks, brace, out_lbl, shade, inc_lbl, check)
 
         # 3: (-C32, C31) = sin i (cos Omega, sin Omega): a point on a circle of radius sin i
-        O = np.array([RX, -.9, 0])
-        R = 1.7
+        O = np.array([RX, -1.05, 0])
+        R = 1.95
         ang = np.radians(145)
         P = O + R * np.array([np.cos(ang), np.sin(ang), 0])
-        xax = Line(O + 2.4 * LEFT, O + 2.4 * RIGHT, color=AXIS, stroke_width=2)
-        yax = Line(O + 2.1 * DOWN, O + 2.1 * UP, color=AXIS, stroke_width=2)
+        xax = Line(O + 2.6 * LEFT, O + 2.6 * RIGHT, color=AXIS, stroke_width=2)
+        yax = Line(O + 2.3 * DOWN, O + 2.3 * UP, color=AXIS, stroke_width=2)
         circ = Circle(radius=R, color=INK2, stroke_width=2.5).move_to(O)
         rad = Line(O, P, color=INK, stroke_width=3)
-        rad_lbl = E(r"\sin|i", size=30).move_to((O + P) / 2 + .38 * np.array([-np.sin(ang), np.cos(ang), 0]))
+        rad_lbl = E(r"\sin|i", size=34).move_to((O + P) / 2 + .38 * np.array([-np.sin(ang), np.cos(ang), 0]))
         pdot = Dot(P, color=SKY, radius=.09)
         xfoot = np.array([P[0], O[1], 0])
         yfoot = np.array([O[0], P[1], 0])
         dx = DashedLine(P, xfoot, color=MUTED)
         dy = DashedLine(P, yfoot, color=MUTED)
-        xl = M(r"-C_{32}", size=30).next_to(xfoot, DOWN, buff=.15)
-        yl = M(r"C_{31}", size=30).next_to(yfoot, UL, buff=.08)
+        xl = M(r"-C_{32}", size=34).next_to(xfoot, DR, buff=.1)
+        yl = M(r"C_{31}", size=34).next_to(yfoot, UL, buff=.08)
         arc = Arc(radius=.5, start_angle=0, angle=ang, arc_center=O, color=SKY, stroke_width=4)
-        om_lbl = E(r"\Omega", size=34).move_to(O + .82 * np.array([np.cos(np.radians(62)), np.sin(np.radians(62)), 0]))
-        coord = E(r"(-C_{32},\,C_{31})|=|\sin|i|\,(\cos|\Omega|,\,\sin|\Omega|)", size=40).move_to([RX, 2.4, 0])
-        nonneg = TX(r"$\sin i \ge 0$", size=28).next_to(coord, DOWN, buff=.2).align_to(coord[2], LEFT)
+        om_lbl = E(r"\Omega", size=38).move_to(O + .82 * np.array([np.cos(np.radians(62)), np.sin(np.radians(62)), 0]))
+        coord = E(r"(-C_{32},\,C_{31})|=|\sin|i|\,(\cos|\Omega|,\,\sin|\Omega|)", size=42).move_to([RX, 2.5, 0])
+        fit(coord, 6.5, 1).move_to([RX, 2.5, 0])
+        nonneg = TX(r"$\sin i \ge 0$", size=44).next_to(coord, DOWN, buff=.2).align_to(coord[2], LEFT)
         with self.say("Next, Omega. C three one is sine i sine Omega, and minus C three two is sine i cosine Omega. Since sine i is never negative, this pair points in the direction of Omega.") as d:
             self.play(FadeOut(nl_grp), slot(i_eq, 0), run_time=.08 * d)
             self.play(Circumscribe(r31, color=SKY), Circumscribe(r32, color=SKY), run_time=.12 * d)
@@ -111,7 +112,7 @@ class S11_Read_Angles(VScene):
             self.wait(.1 * d)
 
         # 4: Omega = atan2(C31, -C32), boxed in SKY
-        om_eq = E(r"\Omega|=|\operatorname{atan2}(C_{31},\,-C_{32})", size=46).move_to([RX, 2.4, 0])
+        om_eq = E(r"\Omega|=|\operatorname{atan2}(C_{31},\,-C_{32})", size=52).move_to([RX, 2.4, 0])
         om_box = SurroundingRectangle(om_eq, color=SKY, buff=.18, corner_radius=.08)
         om_grp = VGroup(om_eq, om_box)
         self.beat("So Omega is atan two of C three one and minus C three two.",
@@ -124,15 +125,16 @@ class S11_Read_Angles(VScene):
         qdot = Dot(Q, color=SKY, radius=.09)
         rad2 = Line(O, Q, color=INK, stroke_width=3)
         same_x = DashedLine(P, Q, color=GOLD)
-        p_lbl = M(r"145^\circ", size=28).next_to(P, LEFT, buff=.15)
-        q_lbl = M(r"215^\circ", size=28).next_to(Q, LEFT, buff=.15)
+        p_lbl = M(r"145^\circ", size=34).next_to(P, LEFT, buff=.15)
+        q_lbl = M(r"215^\circ", size=34).next_to(Q, LEFT, buff=.15)
         arc2 = DashedVMobject(Arc(radius=.38, start_angle=0, angle=-ang, arc_center=O, color=SKY, stroke_width=3),
                               num_dashes=14)
-        row_ac = VGroup(TX(r"arccos: \ $145^\circ$ and $145^\circ$", size=30),
-                        M(r"\times", size=40, color=BAD)).arrange(RIGHT, buff=.3)
-        row_at = VGroup(TX(r"atan2: \ $145^\circ$ and $-145^\circ = 215^\circ$", size=30),
-                        M(r"\checkmark", size=40, color=GOOD)).arrange(RIGHT, buff=.3)
-        table = VGroup(row_ac, row_at).arrange(DOWN, aligned_edge=LEFT, buff=.3).move_to([RX, 2.3, 0])
+        row_ac = VGroup(TX(r"arccos: \ $145^\circ$ and $145^\circ$", size=46),
+                        M(r"\times", size=48, color=BAD)).arrange(RIGHT, buff=.3)
+        row_at = VGroup(TX(r"atan2: \ $145^\circ$ and $-145^\circ = 215^\circ$", size=46),
+                        M(r"\checkmark", size=48, color=GOOD)).arrange(RIGHT, buff=.3)
+        table = VGroup(row_ac, row_at).arrange(DOWN, aligned_edge=LEFT, buff=.3)
+        fit(table, 6.4, 1.6).move_to([RX, 2.3, 0])
         with self.say("Why atan two and not arc cosine? Arc cosine can only give zero to one eighty. It can't tell one forty five degrees from two hundred fifteen. atan two looks at the signs of both entries, so it lands in the correct quadrant.") as d:
             self.play(slot(om_grp, 1), FadeOut(VGroup(dx, dy, xl, yl, rad_lbl)), run_time=.1 * d)
             self.play(FadeIn(p_lbl), run_time=.06 * d)
@@ -147,8 +149,9 @@ class S11_Read_Angles(VScene):
         circle_grp = VGroup(xax, yax, circ, rad, pdot, arc, om_lbl, qdot, rad2, same_x, p_lbl, q_lbl, arc2)
 
         # 6: omega = atan2(C13, C23), boxed in MINT
-        sup = E(r"(C_{23},\,C_{13})|=|\sin|i|\,(\cos|\omega|,\,\sin|\omega|)", size=40).move_to([RX, 1.7, 0])
-        w_eq = E(r"\omega|=|\operatorname{atan2}(C_{13},\,C_{23})", size=46).move_to([RX, .2, 0])
+        sup = E(r"(C_{23},\,C_{13})|=|\sin|i|\,(\cos|\omega|,\,\sin|\omega|)", size=42).move_to([RX, 1.7, 0])
+        fit(sup, 6.5, 1).move_to([RX, 1.7, 0])
+        w_eq = E(r"\omega|=|\operatorname{atan2}(C_{13},\,C_{23})", size=52).move_to([RX, .2, 0])
         w_box = SurroundingRectangle(w_eq, color=MINT, buff=.18, corner_radius=.08)
         w_grp = VGroup(w_eq, w_box)
         self.beat("The same reasoning for the third column gives little omega equals atan two of C one three and C two three.",
@@ -158,16 +161,16 @@ class S11_Read_Angles(VScene):
                   w=(.1, .2, .25, .3, .15))
 
         # 7: two practical notes
-        n1 = VGroup(badge(1), VGroup(
-            TX(r"atan2 returns $-180^\circ$ to $180^\circ$:", size=28),
-            TX(r"add $360^\circ$ to a negative answer \ ($-90^\circ \to 270^\circ$)", size=28)
+        n1 = VGroup(badge(1).scale(1.5), VGroup(
+            TX(r"atan2 returns $-180^\circ$ to $180^\circ$.", size=44),
+            TX(r"Negative? Add $360^\circ$: \ $-90^\circ \to 270^\circ$", size=44)
         ).arrange(DOWN, aligned_edge=LEFT, buff=.15)).arrange(RIGHT, buff=.3)
-        n2 = VGroup(badge(2), VGroup(
-            TX(r"If $i = 0$: both pairs are $0/0$.", size=28),
-            TX(r"The equatorial orbit has no node.", size=28)
+        n2 = VGroup(badge(2).scale(1.5), VGroup(
+            TX(r"If $i = 0$: both pairs are $0/0$.", size=44),
+            TX(r"Equatorial orbit: no node.", size=44)
         ).arrange(DOWN, aligned_edge=LEFT, buff=.15)).arrange(RIGHT, buff=.3)
         notes = VGroup(panel(n1), panel(n2)).arrange(DOWN, aligned_edge=LEFT, buff=.35)
-        fit(notes, 6.6, 4.5)
+        fit(notes, 6.8, 4.5)
         notes.move_to([RX - .1, .6, 0])
         with self.say("Two practical notes. atan two returns minus one eighty to one eighty, so add three sixty to a negative answer. And if i is zero, both pairs are zero over zero: that's the equatorial orbit, with no node.") as d:
             self.play(slot(w_grp, 2), FadeOut(sup), run_time=.12 * d)

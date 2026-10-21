@@ -104,7 +104,7 @@ class S05_Turn_i(VScene):
             self.play(th.animate.set_value(1.5 * np.pi), run_time=.1 * d, rate_func=linear)
 
         # --- ascending and descending node ---
-        dim_sky = interpolate_color(SKY, BG, .5)
+        dim_sky = interpolate_color(ManimColor(SKY), ManimColor(BG), .5).to_hex()
         asc = dot3(view, lambda: orb(0), SKY)
         dsc = dot3(view, lambda: orb(np.pi), dim_sky)
         asc_lab = label3(view, r"\text{ascending node}", 1.2 * NHAT + np.array([0, 0, -.55]), SKY, 28)
@@ -113,7 +113,7 @@ class S05_Turn_i(VScene):
         self.beat("Where it crosses heading north is the ascending node. Where it crosses heading south is "
                   "the descending node. Now you can see why Omega is measured to the ascending node.",
                   [FadeIn(asc), FadeIn(asc_lab), FadeOut(col1)], .15, [FadeIn(dsc), FadeIn(dsc_lab)], .15,
-                  FadeIn(om_glow), w=(.15, .15, .15, .15, .4))
+                  FadeIn(om_glow), w=(.2, .2, .3))
 
         # --- i is also the angle between K and h ---
         h_arr = arrow3(view, ORIGIN, lambda: 2.3 * hh(), LILAC)

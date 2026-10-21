@@ -42,7 +42,7 @@ class S07_Special_Cases(VScene):
 
     def construct(self):
         vL = View(elev=24, azim=-55, scale=.85, center=(-3.6, .35))
-        vR = View(elev=24, azim=-55, scale=.85, center=(3.6, .35))
+        vR = View(elev=32, azim=30, scale=.85, center=(3.6, .35))
 
         # left view
         gL = globe(vL)
