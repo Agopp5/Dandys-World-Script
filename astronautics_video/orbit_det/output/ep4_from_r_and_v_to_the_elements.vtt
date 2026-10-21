@@ -1,0 +1,175 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.533
+Now the real job: start from one measurement and find all six elements.
+
+00:00:04.533 --> 00:00:06.640
+We'll use the textbook's example.
+
+00:00:06.967 --> 00:00:08.598
+First, the lengths.
+
+00:00:08.598 --> 00:00:14.520
+The position vector is ten thousand six hundred nine kilometers long.
+
+00:00:14.520 --> 00:00:19.927
+The speed is seven point seven five five kilometers per second.
+
+00:00:20.267 --> 00:00:23.634
+The energy is v squared over two, minus mu over r.
+
+00:00:23.634 --> 00:00:28.954
+That's minus seven point five zero three kilometers squared per second squared.
+
+00:00:28.954 --> 00:00:30.907
+Negative, so it's an ellipse.
+
+00:00:31.767 --> 00:00:38.086
+Energy gives the semi major axis directly: a equals minus mu over two E.
+
+00:00:38.086 --> 00:00:43.527
+That's twenty six thousand five hundred sixty four kilometers.
+
+00:00:44.433 --> 00:00:49.713
+That's about four Earth radii, and a period of almost exactly twelve hours.
+
+00:00:50.633 --> 00:00:55.713
+Next, the angular momentum: h equals r cross v.
+
+00:01:08.733 --> 00:01:14.317
+h sticks straight out of the orbit plane, so it already pins down the plane's tilt.
+
+00:01:14.317 --> 00:01:16.133
+We'll use that in a moment.
+
+00:01:16.500 --> 00:01:24.300
+Now the eccentricity vector, from the last chapter: v cross h over mu, minus the unit vector along r.
+
+00:01:28.166 --> 00:01:31.940
+Its length is the eccentricity: zero point seven four one one.
+
+00:01:31.940 --> 00:01:35.166
+And it points from the focus straight to the perigee.
+
+00:01:35.566 --> 00:01:45.716
+Your notes give a second way to get the same number, from energy and h alone: e equals the square root of one plus two E h squared over mu squared.
+
+00:01:45.716 --> 00:01:46.406
+It agrees.
+
+00:01:46.766 --> 00:01:59.766
+So the perigee radius is about six thousand eight hundred seventy seven kilometers, just five hundred kilometers up, and the apogee is about forty six thousand two hundred fifty kilometers away.
+
+00:02:01.199 --> 00:02:05.263
+Now build the perifocal frame from these two vectors.
+
+00:02:05.263 --> 00:02:09.479
+p hat is the eccentricity vector divided by its length.
+
+00:02:10.599 --> 00:02:14.319
+h hat is h divided by its length.
+
+00:02:17.232 --> 00:02:22.592
+And q hat completes the right handed set: h hat cross p hat.
+
+00:02:25.866 --> 00:02:30.866
+Stack them as rows, and that's C P N, with real numbers in it.
+
+00:02:31.199 --> 00:02:34.851
+The corner entry is zero point four four seven eight.
+
+00:02:34.851 --> 00:02:39.399
+Its arc cosine is the inclination: sixty three point four degrees.
+
+00:02:40.866 --> 00:02:45.065
+For capital Omega, take the first two entries of the bottom row.
+
+00:02:45.065 --> 00:02:47.952
+C three one is zero point five one two nine.
+
+00:02:47.952 --> 00:02:53.266
+C three two is zero point seven three two four, so minus C three two is negative.
+
+00:02:53.599 --> 00:02:55.829
+Positive sine, negative cosine.
+
+00:02:55.829 --> 00:02:57.771
+That's the second quadrant.
+
+00:02:57.771 --> 00:03:01.079
+atan two gives one hundred forty five degrees.
+
+00:03:01.433 --> 00:03:06.926
+The textbook gets the same answer with the node vector: n equals K cross h.
+
+00:03:06.926 --> 00:03:11.393
+It points along the line of nodes, toward the ascending node.
+
+00:03:11.733 --> 00:03:21.772
+Its components give cosine Omega equals minus zero point eight one nine two, and sine Omega equals zero point five seven three six.
+
+00:03:21.772 --> 00:03:26.293
+The same quadrant, the same one hundred forty five degrees.
+
+00:03:26.699 --> 00:03:31.035
+A fun coincidence: q hat equals the node direction here.
+
+00:03:31.035 --> 00:03:37.539
+That's not an accident; it happens because little omega turns out to be two seventy.
+
+00:03:38.999 --> 00:03:49.559
+Little omega uses the third column: C one three is minus zero point eight nine four two, and C two three is zero.
+
+00:03:49.966 --> 00:03:54.498
+atan two of a negative number and zero is minus ninety degrees.
+
+00:03:54.498 --> 00:03:58.886
+Add three sixty: little omega is two hundred seventy degrees.
+
+00:03:59.232 --> 00:04:06.753
+The textbook route: the cosine of omega is n dot e over n e, which is essentially zero.
+
+00:04:06.753 --> 00:04:09.692
+So omega is ninety or two seventy.
+
+00:04:09.692 --> 00:04:12.112
+Arc cosine can't tell which.
+
+00:04:12.532 --> 00:04:17.601
+Look at the eccentricity vector's K component: minus zero point six six two seven.
+
+00:04:17.601 --> 00:04:20.692
+Perigee is below the equator, so it's two seventy.
+
+00:04:21.066 --> 00:04:27.786
+That matches the picture: perigee at the very bottom of the orbit, apogee high over the north.
+
+00:04:29.232 --> 00:04:31.122
+Last, the true anomaly.
+
+00:04:31.122 --> 00:04:38.352
+Its cosine is e dot r over e times r, which comes out to zero point one seven three six.
+
+00:04:38.732 --> 00:04:40.479
+Arc cosine says eighty degrees.
+
+00:04:40.479 --> 00:04:45.212
+But the satellite could be eighty degrees past perigee, or eighty degrees before it.
+
+00:04:45.565 --> 00:04:46.965
+Which one is it?
+
+00:04:50.632 --> 00:04:51.818
+Check r dot v.
+
+00:04:51.818 --> 00:04:56.643
+It's minus forty four thousand six hundred seventy three.
+
+00:04:56.643 --> 00:05:03.586
+Negative means the distance is shrinking: the satellite is falling toward perigee.
+
+00:05:03.586 --> 00:05:09.512
+So theta zero is three sixty minus eighty: two hundred eighty degrees.
+
+00:05:10.532 --> 00:05:19.652
+And that's all six: a, e, i, capital Omega, little omega, and theta zero, from one measurement.

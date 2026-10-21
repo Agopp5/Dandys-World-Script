@@ -1,0 +1,109 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:08.480
+A tracking station measures a satellite and radios down six numbers: three for its position, and three for its velocity.
+
+00:00:08.767 --> 00:00:09.887
+Here they are.
+
+00:00:09.887 --> 00:00:13.087
+Can you tell what this orbit looks like?
+
+00:00:13.087 --> 00:00:15.087
+Is it round or stretched?
+
+00:00:15.087 --> 00:00:16.287
+Tilted or flat?
+
+00:00:16.287 --> 00:00:19.087
+Where is the satellite in its loop?
+
+00:00:19.400 --> 00:00:24.000
+Worse, as the satellite moves, all six numbers keep changing.
+
+00:00:24.300 --> 00:00:29.340
+Now here is the same orbit, described by a different set of six numbers.
+
+00:00:29.633 --> 00:00:31.503
+Five of them never change.
+
+00:00:31.503 --> 00:00:35.100
+Only the last one moves, like the hand of a clock.
+
+00:00:35.100 --> 00:00:38.553
+And every one of them has a picture you can see.
+
+00:00:38.833 --> 00:00:45.073
+This lesson is about those six numbers: what each one means, how to get them from a measurement, and how to go back.
+
+00:00:46.033 --> 00:00:48.954
+First we need a frame to measure everything in.
+
+00:00:48.954 --> 00:00:52.433
+It's called the Earth centered inertial frame, or E C I.
+
+00:00:52.766 --> 00:00:55.326
+K points through the North Pole.
+
+00:00:55.326 --> 00:00:58.526
+I and J lie in the plane of the equator.
+
+00:00:59.433 --> 00:01:02.265
+But which way, exactly, does I point?
+
+00:01:02.265 --> 00:01:05.633
+It has to be a direction the stars agree on.
+
+00:01:07.800 --> 00:01:09.774
+Picture Earth going around the Sun.
+
+00:01:09.774 --> 00:01:15.640
+Earth's equator is tilted about twenty three and a half degrees to the plane of its orbit, the ecliptic.
+
+00:01:16.766 --> 00:01:19.079
+The two planes cross along one line.
+
+00:01:19.079 --> 00:01:23.832
+On the March equinox, that line points from the Earth straight at the Sun.
+
+00:01:23.832 --> 00:01:27.686
+That is the vernal equinox direction, and I points along it.
+
+00:01:28.033 --> 00:01:34.513
+J is ninety degrees from I in the equator, completing a right handed set with K.
+
+00:01:34.900 --> 00:01:37.278
+One more detail matters a lot.
+
+00:01:37.278 --> 00:01:40.447
+This frame does not spin with the Earth.
+
+00:01:40.447 --> 00:01:47.420
+The Earth turns underneath it once a day, while I, J and K stay fixed against the stars.
+
+00:01:48.433 --> 00:01:52.148
+Position and velocity together are called the state vector.
+
+00:01:52.148 --> 00:01:55.233
+Those six numbers completely determine the orbit.
+
+00:01:55.600 --> 00:02:01.520
+The classical orbital elements are a different six numbers that determine the same orbit.
+
+00:02:01.866 --> 00:02:07.166
+Two describe size and shape: the semi major axis a, and the eccentricity e.
+
+00:02:07.166 --> 00:02:10.346
+You already know these from the last chapter.
+
+00:02:10.633 --> 00:02:19.153
+Three describe orientation: how steeply the orbit plane is tilted, which way that tilt faces, and how the ellipse is turned within its plane.
+
+00:02:19.566 --> 00:02:27.126
+And one says where the satellite is at the moment of the measurement: the true anomaly at epoch, theta zero.
+
+00:02:27.533 --> 00:02:29.865
+Five constants and one clock.
+
+00:02:29.865 --> 00:02:35.253
+Next, we'll build the three orientation angles, one turn at a time.

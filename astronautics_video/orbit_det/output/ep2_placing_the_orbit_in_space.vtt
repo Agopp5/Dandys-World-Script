@@ -1,0 +1,139 @@
+WEBVTT
+
+00:00:00.500 --> 00:00:03.062
+Here's a way to see all three angles.
+
+00:00:03.062 --> 00:00:09.500
+Start with the orbit lying flat in the equator, with its periapsis pointing straight along I.
+
+00:00:11.600 --> 00:00:18.080
+Turn one: spin the whole orbit about K by an angle, capital Omega.
+
+00:00:18.400 --> 00:00:23.369
+The direction where the periapsis now points is about to become a hinge.
+
+00:00:23.369 --> 00:00:25.440
+It's called the line of nodes.
+
+00:00:26.500 --> 00:00:33.500
+Capital Omega is measured in the equator, from I, counterclockwise as seen from the North Pole.
+
+00:00:33.500 --> 00:00:37.921
+It can be anything from zero to three hundred sixty degrees.
+
+00:00:37.921 --> 00:00:41.900
+Its name is the right ascension of the ascending node.
+
+00:00:42.900 --> 00:00:47.900
+Turn two: tilt the orbit about the line of nodes, by the inclination, i.
+
+00:00:48.267 --> 00:00:52.659
+Now the orbit plane and the equator cross along the line of nodes.
+
+00:00:52.659 --> 00:00:55.987
+Each lap, the satellite crosses the equator twice.
+
+00:00:56.400 --> 00:00:59.954
+Where it crosses heading north is the ascending node.
+
+00:00:59.954 --> 00:01:03.576
+Where it crosses heading south is the descending node.
+
+00:01:03.576 --> 00:01:07.600
+Now you can see why Omega is measured to the ascending node.
+
+00:01:07.933 --> 00:01:16.013
+The inclination is also the angle between K and the angular momentum vector h, which sticks straight out of the orbit plane.
+
+00:01:16.367 --> 00:01:21.727
+Inclination only runs from zero to one hundred eighty degrees.
+
+00:01:22.067 --> 00:01:27.174
+Below ninety, the satellite travels eastward, the same way the Earth spins.
+
+00:01:27.174 --> 00:01:28.808
+That's a prograde orbit.
+
+00:01:28.808 --> 00:01:32.894
+At exactly ninety, it passes over both poles: a polar orbit.
+
+00:01:32.894 --> 00:01:36.027
+Above ninety, it travels westward: retrograde.
+
+00:01:36.400 --> 00:01:43.600
+So i says how steeply the plane is tilted, and Omega says which way the tilt faces.
+
+00:01:44.566 --> 00:01:48.207
+Turn three happens inside the tilted plane.
+
+00:01:48.207 --> 00:01:53.966
+Spin the ellipse about h by the argument of periapsis, little omega.
+
+00:01:55.266 --> 00:02:03.226
+So little omega is the angle from the ascending node to the periapsis, measured in the orbit plane, in the direction the satellite moves.
+
+00:02:03.566 --> 00:02:05.803
+The ellipse is now completely placed.
+
+00:02:05.803 --> 00:02:13.846
+The last number, the true anomaly at epoch theta zero, is the angle from periapsis to the satellite at the moment of the measurement.
+
+00:02:15.266 --> 00:02:20.651
+Notice the order of the turns: about K, then about the node line, then about h.
+
+00:02:20.651 --> 00:02:22.560
+Three, then one, then three.
+
+00:02:22.560 --> 00:02:26.786
+Keep that pattern in mind; it comes back as a rotation matrix.
+
+00:02:28.266 --> 00:02:32.186
+Here's the Molniya orbit from the beginning, built the same way.
+
+00:02:33.133 --> 00:02:39.730
+Little omega of two seventy puts the perigee at the southernmost point of the orbit.
+
+00:02:39.730 --> 00:02:48.133
+So the long, slow apogee half hangs high over the northern hemisphere, where it can watch Russia for hours.
+
+00:02:49.066 --> 00:02:50.786
+Quick question before we move on.
+
+00:02:54.466 --> 00:02:55.619
+Still northward.
+
+00:02:55.619 --> 00:02:59.438
+The ascending node is always the northbound crossing.
+
+00:02:59.438 --> 00:03:04.986
+What changes is that the motion over the Earth runs westward instead of east.
+
+00:03:05.899 --> 00:03:09.179
+Two kinds of orbit break these definitions.
+
+00:03:09.532 --> 00:03:15.134
+A circular orbit has no periapsis, so little omega and theta have nothing to measure from.
+
+00:03:15.134 --> 00:03:21.545
+Instead we use the argument of latitude, u, measured from the ascending node straight to the satellite.
+
+00:03:21.545 --> 00:03:24.532
+For any orbit, u equals little omega plus theta.
+
+00:03:24.866 --> 00:03:33.111
+An equatorial orbit never crosses the equator, so it has no ascending node, and capital Omega is undefined.
+
+00:03:33.111 --> 00:03:39.430
+Then we use the longitude of periapsis, measured from I straight to the periapsis.
+
+00:03:39.430 --> 00:03:42.666
+It equals capital Omega plus little omega.
+
+00:03:43.066 --> 00:03:52.837
+And the true longitude, capital Omega plus little omega plus theta, measures from I all the way to the satellite.
+
+00:03:52.837 --> 00:03:54.306
+It always exists.
+
+00:03:55.299 --> 00:03:58.419
+That's every orbital element and what it looks like.
