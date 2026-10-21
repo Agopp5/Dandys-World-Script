@@ -81,7 +81,7 @@ class S14_Build_C(VScene):
     def construct(self):
         self.section("Step three: build the rotation matrix")
 
-        view = View(elev=22, azim=-15, scale=0.86, center=(-3.75, -1.8))
+        view = View(elev=22, azim=-15, scale=0.86, center=(-3.75, -1.3))
         earth = globe(view)
         ax = axes3(view, 3.0)
         orb = curve(view, orbit(3.0, 0.6, OM, INC, W), 0, 2 * np.pi, INK, width=3, R=1.0)
@@ -140,14 +140,14 @@ class S14_Build_C(VScene):
         w_q = T("q_z is zero up to rounding", size=26, color=MUTED).next_to(results[2], RIGHT, buff=.5)
         n_q = vec_line(r"\hat q", ROWS[1], LIME).move_to([XR, STACK_Y[2], 0])
         with self.say("And q hat completes the right handed set: h hat cross p hat.") as d:
-            self.play(Write(d_q), grow(a_q), FadeIn(l_q), run_time=.3 * d)
+            self.play(Write(d_q), grow(a_q), FadeIn(l_q), run_time=.25 * d)
             for c in comps:
                 self.play(Write(c), run_time=.22 * d)
-            self.wait(.04 * d)
-        for c, r in zip(comps, results):
-            self.play(*morph(c, r, [(0, 0), (1, 1)]), run_time=.7)
-        self.play(FadeIn(w_q), run_time=.5)
-        self.wait(1.0)
+            self.wait(.09 * d)
+        self.play(*[a for c, r in zip(comps, results) for a in morph(c, r, [(0, 0), (1, 1)])], FadeIn(w_q),
+                  run_time=1.0)
+        self.snap("q components")
+        self.wait(.7)
         self.play(ReplacementTransform(d_q[0], n_q[0]), FadeOut(d_q[1:]), FadeOut(w_q),
                   *[ReplacementTransform(r[2], n_q[k]) for r, k in zip(results, (3, 5, 7))],
                   *[FadeOut(r[:2]) for r in results],
