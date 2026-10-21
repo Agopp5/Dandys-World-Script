@@ -81,17 +81,17 @@ class S17_theta0(VScene):
         self.section("Step six: where is the satellite?")
 
         # ---- beat 1: pure algebra, full width ----
-        f0 = E(r"\cos|\theta_0|=|\frac{\vec e\cdot\vec r_0}{e\,r_0}", size=48).move_to([0, 2.35, 0])
+        f0 = E(r"\cos|\theta_0|=|\frac{\vec e\cdot\vec r_0}{e\,r_0}", size=48).move_to([0, 2.45, 0])
         l1 = E(r"\vec e\cdot\vec r_0|=|0.1903(9031.5)+0.2718(-5316.9)+(-0.6627)(-1647.2)", size=40)
-        l1.move_to([0, 1.05, 0])
+        l1.move_to([0, 1.0, 0])
         l2 = E(r"=|1{,}718.9-1{,}445.3+1{,}091.5|=|1{,}365.2", size=40)
         l2.next_to(l1, DOWN, buff=.45).align_to(l1[1], LEFT)
-        n2 = note("component by component", l2)
+        n2 = note("multiply, then add", l2)
         l3 = E(r"e\,r_0|=|0.7411\times 10{,}609|=|7{,}862.3", size=40)
-        l3.next_to(l2, DOWN, buff=.6).align_to(l1, LEFT)
+        l3.next_to(l2, DOWN, buff=.85).align_to(l1, LEFT)
         n3 = note("the two lengths", l3)
         l4 = E(r"\cos|\theta_0|=|\frac{1{,}365.2}{7{,}862.3}|=|0.1736", size=44)
-        l4.next_to(l3, DOWN, buff=.5).align_to(l1, LEFT)
+        l4.next_to(l3, DOWN, buff=.75).align_to(l1, LEFT)
         n4 = note("divide", l4)
         self.beat("Last, the true anomaly. Its cosine is e dot r over e times r, which comes out to zero point one seven three six.",
                   Write(f0), Write(l1), [Write(l2), FadeIn(n2)], [Write(l3), FadeIn(n3)],
@@ -136,8 +136,8 @@ class S17_theta0(VScene):
         r1.move_to([0, 1.45, 0]).align_to([x0, 0, 0], LEFT)
         r2 = E(r"+(-5316.9)(5.1112)", size=40).next_to(r1, DOWN, buff=.35).align_to(r1[2], LEFT)
         r3 = E(r"+(-1647.2)(-5.0805)", size=40).next_to(r2, DOWN, buff=.35).align_to(r1[2], LEFT)
-        r4 = E(r"=|-25{,}866-27{,}176+8{,}369", size=40).next_to(r3, DOWN, buff=.45).align_to(r1[1], LEFT)
-        r5 = E(r"=|-44{,}673\ \mathrm{km^2/s}|<0", size=40).next_to(r4, DOWN, buff=.45).align_to(r1[1], LEFT)
+        r4 = E(r"=|-25{,}866-27{,}176+8{,}369", size=40).next_to(r3, DOWN, buff=.45).align_to(r1, LEFT)
+        r5 = E(r"=|-44{,}673\ \mathrm{km^2/s}|<0", size=40).next_to(r4, DOWN, buff=.45).align_to(r1, LEFT)
         rf = E(r"\vec r_0\cdot\vec v_0|=|-44{,}673\ \mathrm{km^2/s}|<0", size=40).move_to([CX, 1.2, 0])
         nt = VGroup(T("distance shrinking:", 30, MUTED), T("heading to perigee", 30, MUTED)).arrange(DOWN, buff=.12)
         nt.next_to(rf, DOWN, buff=.3)
@@ -150,15 +150,20 @@ class S17_theta0(VScene):
         eq4 = E(r"\theta_0|=|360^\circ-80^\circ|=|280^\circ", size=48).move_to([CX, -1.6, 0])
         for m in (va, vb, vbl, rb, a280, a280l):
             m.set_z_index(2)
-        self.beat("Check r dot v. It's minus forty four thousand six hundred seventy three. Negative means the distance is shrinking: the satellite is falling toward perigee. So theta zero is three sixty minus eighty: two hundred eighty degrees.",
-                  [FadeOut(eq2), Write(r1)], Write(r2), Write(r3), Write(r4), Write(r5),
-                  [FadeOut(r1), FadeOut(r2), FadeOut(r3), FadeOut(r4), *morph(r5, rf, [(0, 1), (1, 2), (2, 3)])],
-                  [FadeIn(nt), GrowArrow(va), GrowArrow(vb), FadeIn(vbl)],
-                  [candA.animate.set_opacity(.2), va.animate.set_opacity(.2), FadeOut(ab), FadeOut(lb), GrowArrow(rb),
-                   Indicate(db, color=GOLD)],
-                  [Write(eq4), Create(a280), FadeIn(a280l), db.animate.set_color(GOLD)],
-                  FadeIn(glow(eq4[4], GOLD)),
-                  w=(.08, .06, .06, .07, .07, .1, .12, .14, .22, .08))
+        steps = [[FadeOut(eq2), Write(r1)], [Write(r2)], [Write(r3)], [Write(r4)], [Write(r5)], "snap",
+                 [FadeOut(r1), FadeOut(r2), FadeOut(r3), FadeOut(r4), *morph(r5, rf, [(0, 1), (1, 2), (2, 3)])],
+                 [FadeIn(nt), GrowArrow(va), GrowArrow(vb), FadeIn(vbl)],
+                 [candA.animate.set_opacity(.2), va.animate.set_opacity(.2), FadeOut(ab), FadeOut(lb), GrowArrow(rb),
+                  Indicate(db, color=GOLD)],
+                 [Write(eq4), Create(a280), FadeIn(a280l), db.animate.set_color(GOLD)],
+                 [FadeIn(glow(eq4[4], GOLD))]]
+        fr = iter((.08, .06, .06, .07, .07, .1, .12, .14, .22, .08))
+        with self.say("Check r dot v. It's minus forty four thousand six hundred seventy three. Negative means the distance is shrinking: the satellite is falling toward perigee. So theta zero is three sixty minus eighty: two hundred eighty degrees.") as d:
+            for st in steps:
+                if st == "snap":
+                    self.snap("r dot v worked out")
+                    continue
+                self.play(*st, run_time=next(fr) * d)
         self.wipe()
 
         # ---- beat 5: all six ----
