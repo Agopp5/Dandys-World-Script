@@ -51,7 +51,8 @@ Why does $\omega$ not appear in it?}
 For the practice orbit above, find (a) the energy $\mathcal E = v_0^2/2 - \mu/r_0$ and the semi-major axis $a$;
 (b) $\vec h = \vec r_0\times\vec v_0$, one component at a time, and $h = |\vec h|$;
 (c) $\vec e = \dfrac{\vec v_0\times\vec h}{\mu} - \dfrac{\vec r_0}{r_0}$ and $e = |\vec e|$;
-(d) the perigee and apogee radii. Check $e$ a second way with $e = \sqrt{1 + 2\mathcal E h^2/\mu^2}$.}
+(d) the perigee and apogee radii. Check $e$ a second way with $e = \sqrt{1 + 2\mathcal E h^2/\mu^2}$.
+Keep five digits in the two pieces of $\vec e$: its $Y$ component is a small difference of nearly equal numbers.}
 
 \checkpoint[7cm]{4.2}{Practice orbit: $C_{PN}$, then $i$, $\Omega$, $\omega$}{%
 Using your $\vec e$ and $\vec h$ from 4.1, build $\hat p = \vec e/e$, $\hat h = \vec h/h$ and
@@ -59,10 +60,11 @@ $\hat q = \hat h\times\hat p$, and stack them as the rows of $C_{PN}$. Then read
 $i = \arccos C_{33}$, $\Omega = \operatorname{atan2}(C_{31}, -C_{32})$ and
 $\omega = \operatorname{atan2}(C_{13}, C_{23})$, each in $[0^\circ, 360^\circ)$.
 Confirm $\Omega$ and $\omega$ with the textbook route: $\vec n = \hat K\times\vec h$, $\cos\Omega = n_X/n$,
-$\cos\omega = \vec n\cdot\vec e/(n\,e)$, and say which sign check picks the quadrant for each.}
+$\cos\omega = \vec n\cdot\vec e/(n\,e)$. Arc cosine only returns $0^\circ$ to $180^\circ$: if $n_Y < 0$,
+$\Omega = 360^\circ - \arccos(n_X/n)$, and if $e_Z < 0$, $\omega = 360^\circ - \arccos(\cdot)$. Which checks fire here?}
 
 \checkpoint[5cm]{4.3}{Which side of perigee?}{%
-(a) For the Molniya, $\cos\theta_0 = 0.1736$, so $\theta_0$ is $80^\circ$ or $280^\circ$. Which quantity,
+(a) For the Molniya, $\cos\theta_0 = 0.1736$, so $\theta_0$ is $80^\circ$ or $280^\circ$. Predict: which quantity,
 computed straight from $\vec r_0$ and $\vec v_0$, decides between them, and how?
 (b) Find $\theta_0$ for the practice orbit.}
 
@@ -70,8 +72,8 @@ computed straight from $\vec r_0$ and $\vec v_0$, decides between them, and how?
 
 \checkpoint[7cm]{5.1}{Practice orbit: back to $\vec r$ and $\vec v$}{%
 Take the practice orbit's elements $a = 12{,}000\km$, $e = 0.2$, $i = 50^\circ$, $\Omega = 230^\circ$,
-$\omega = 300^\circ$, $\theta_0 = 75^\circ$. (a) Find $p$, $h$, $r$, then $\vec r_P$ and $\vec v_P$ in the
-perifocal frame. (b) Build $C_{PN} = C_3(\omega)C_1(i)C_3(\Omega)$ from the angles and compare it with your
+$\omega = 300^\circ$, $\theta_0 = 75^\circ$ (your answers to 4.1--4.3, so do those first). (a) Find
+$p = a(1-e^2)$, $h = \sqrt{\mu p}$ and $r = p/(1+e\cos\theta_0)$, then $\vec r_P$ and $\vec v_P$ in the perifocal frame. (b) Build $C_{PN} = C_3(\omega)C_1(i)C_3(\Omega)$ from the angles and compare it with your
 $C_{PN}$ from 4.2. (c) Rotate back with $\vec r_N = C_{PN}^T\vec r_P$, $\vec v_N = C_{PN}^T\vec v_P$ and
 compare with the measured $\vec r_0$, $\vec v_0$.}
 
@@ -81,13 +83,14 @@ compare with the measured $\vec r_0$, $\vec v_0$.}
 (a) For the practice orbit ($a = 12{,}000\km$, $e = 0.2$, $i = 50^\circ$), find the mean motion
 $n = \sqrt{\mu/a^3}$ and the node drift
 $\dot\Omega = -\dfrac{3nJ_2R^2}{2a^2(1-e^2)^2}\cos i$ in degrees per day. Which way does the node move?
-(b) A circular orbit at $600\km$ altitude must be sun-synchronous: $\dot\Omega = +360^\circ$ per
-$365.24$ days. What inclination does it need?}
+(b) A circular orbit ($e = 0$, $a = R + 600\km$) must be sun-synchronous: $\dot\Omega = +360^\circ$ per
+$365.24$ days. What inclination does it need? (Put both rates in the same units first.)}
 
 \checkpoint[5cm]{6.2}{Where the perigee stops turning}{%
 $\dot\omega = -\dfrac{3nJ_2R^2}{2a^2(1-e^2)^2}\left(\tfrac52\sin^2 i - 2\right)$.
 (a) Find every inclination in $[0^\circ, 180^\circ]$ where $\dot\omega = 0$.
-(b) Find $\dot\omega$ for the practice orbit in degrees per day. Does its perigee advance or regress?}
+(b) Find $\dot\omega$ for the practice orbit in degrees per day. Does its perigee advance ($\dot\omega > 0$, turning
+with the motion) or regress ($\dot\omega < 0$)? Watch the two minus signs.}
 
 \clearpage
 \section*{Hints}\label{hints}
@@ -139,9 +142,9 @@ $\vec h = (-39{,}765,\ 33{,}367,\ 43{,}557)\ \mathrm{km^2/s}$, $h = 67{,}763\ \m
 (\vec v_0\times\vec h)_Y &= (4.8031)(-39{,}765) - (3.4111)(43{,}557) = -190{,}995.3 - 148{,}577.3 = -339{,}572.6\\
 (\vec v_0\times\vec h)_Z &= (3.4111)(33{,}367) - (-2.2048)(-39{,}765) = 113{,}818.2 - 87{,}673.9 = 26{,}144.3
 \end{align*}
-Divided by $\mu$: $(-0.6430,\ -0.8519,\ 0.0656)$. And $\vec r_0/r_0 = (-0.4934,\ -0.8469,\ 0.1983)$. So
+Divided by $\mu$: $(-0.64300,\ -0.85192,\ 0.06559)$. And $\vec r_0/r_0 = (-0.49344,\ -0.84688,\ 0.19826)$. So
 \[
-\vec e = (-0.1496,\ -0.0050,\ -0.1327), \qquad e = \sqrt{0.1496^2 + 0.0050^2 + 0.1327^2} = 0.2000 .
+\vec e = (-0.14956,\ -0.00504,\ -0.13268), \qquad e = \sqrt{0.14956^2 + 0.00504^2 + 0.13268^2} = 0.2000 .
 \]
 (d) $r_p = a(1-e) = 9{,}600\km$ (altitude $3{,}222\km$) and $r_a = a(1+e) = 14{,}400\km$.
 Check: $\sqrt{1 + 2(-16.6085)(67{,}763)^2/(398{,}600)^2} = 0.2000$. \checkmark
@@ -164,8 +167,8 @@ $\omega = \operatorname{atan2}(-0.6634,\ 0.3830) = -60.0^\circ$, so $\omega = 30
 Textbook route: $\vec n = \hat K\times\vec h = (-h_Y,\ h_X,\ 0) = (-33{,}367,\ -39{,}765,\ 0)$, $n = 51{,}910$.
 $\cos\Omega = -33{,}367/51{,}910 = -0.6428$, and $\arccos$ gives $130^\circ$; but $n_Y < 0$, so
 $\Omega = 360^\circ - 130^\circ = 230^\circ$.
-$\vec n\cdot\vec e = (-33{,}367)(-0.1496) + (-39{,}765)(-0.0050) + 0 = 4{,}991.7 + 198.8 = 5{,}190.5$, and
-$\cos\omega = 5{,}190.5/(51{,}910 \times 0.2000) = 0.5000$, so $\arccos$ gives $60^\circ$; but $e_Z < 0$
+$\vec n\cdot\vec e = (-33{,}367)(-0.14956) + (-39{,}765)(-0.00504) + 0 = 4{,}990.4 + 200.4 = 5{,}190.8$, and
+$\cos\omega = 5{,}190.8/(51{,}910 \times 0.2000) = 0.5000$, so $\arccos$ gives $60^\circ$; but $e_Z < 0$
 (perigee is below the equator), so $\omega = 300^\circ$. Both routes agree. \checkmark
 
 \solutionfor{4.3}{Which side of perigee?}
@@ -173,8 +176,11 @@ $\cos\omega = 5{,}190.5/(51{,}910 \times 0.2000) = 0.5000$, so $\arccos$ gives $
 toward perigee and $\theta_0$ is in $(180^\circ, 360^\circ)$: $280^\circ$ for the Molniya. Positive means it is
 climbing away from perigee and $\theta_0$ is in $(0^\circ, 180^\circ)$.
 
-(b) $\vec e\cdot\vec r_0 = (-0.1496)(-5404.7) + (-0.0050)(-9275.9) + (-0.1327)(2171.6) = 808.3 + 46.7 - 288.1 = 566.9$
-and $e\,r_0 = 0.2000\times 10{,}953.0 = 2{,}190.6$, so $\cos\theta_0 = 566.9/2{,}190.6 = 0.2588$ and
+(b) \begin{align*}
+\vec e\cdot\vec r_0 &= (-0.14956)(-5404.7) + (-0.00504)(-9275.9) + (-0.13268)(2171.6)\\
+&= 808.33 + 46.75 - 288.13 = 566.95
+\end{align*}
+and $e\,r_0 = 0.2000\times 10{,}953.0 = 2{,}190.6$, so $\cos\theta_0 = 566.95/2{,}190.6 = 0.2588$ and
 $\arccos$ gives $75.0^\circ$.
 \begin{align*}
 \vec r_0\cdot\vec v_0 &= (-5404.7)(3.4111) + (-9275.9)(-2.2048) + (2171.6)(4.8031)\\
