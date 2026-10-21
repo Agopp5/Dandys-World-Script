@@ -50,8 +50,8 @@ class S16_omega(VScene):
         hdr = self.section("Step five: little omega")
 
         # ---- 3D picture on the left ----
-        view = View(elev=18, azim=-40, scale=0.85, center=(-3.4, -1.3))
-        eq_disc = disc3(view, (1, 0, 0), (0, 1, 0), 3.0, INK2, opacity=0.10)
+        view = View(elev=20, azim=20, scale=0.94, center=(-3.6, -1.75))
+        eq_disc = disc3(view, (1, 0, 0), (0, 1, 0), 2.6, INK2, opacity=0.10)
         earth = globe(view)
         orb = curve(view, F, 0, TAU, INK, R=1.0)
         node_line = line3(view, -2.6 * NHAT, 2.6 * NHAT, SKY, dashed=True)
@@ -62,17 +62,20 @@ class S16_omega(VScene):
         pic = Group(eq_disc, earth, orb, node_line, asc, asc_lbl, peri, apo)
 
         # ---- C_PN with its third column ----
-        mat = Matrix(CPN, h_buff=1.75, v_buff=0.8,
+        mat = Matrix(CPN, h_buff=1.4, v_buff=0.75,
                      element_to_mobject=lambda s: MathTex(s, font_size=40, color=INK))
         lhs = M(r"C_{PN}=", size=40)
         cblock = VGroup(lhs, mat).arrange(RIGHT, buff=.2)
-        fit(cblock, 5.6, 2.6)
-        cblock.move_to([3.85, 1.85, 0])
+        fit(cblock, 7.4, 2.6)
+        cblock.move_to([3.2, 1.85, 0])
         col3 = mat.get_columns()[2]
         colbox = SurroundingRectangle(col3, color=MINT, buff=.12, corner_radius=.08)
         e13, e23 = mat.get_entries()[2], mat.get_entries()[5]
-        t13 = M(r"C_{13}", size=40, color=MINT).next_to(colbox, UP, buff=.12)
-        t23 = M(r"C_{23}", size=40, color=MINT).next_to(colbox, RIGHT, buff=.12).align_to(e23, DOWN)
+        t13 = E(r"C_{13}|=|-0.8942", size=40)
+        t23 = E(r"C_{23}|=|0", size=40)
+        for t in (t13, t23):
+            paint(t, {0: MINT, 2: MINT})
+        VGroup(t13, t23).arrange(RIGHT, buff=.9).next_to(cblock, DOWN, buff=.4).set_x(3.3)
         self.beat("Little omega uses the third column: C one three is minus zero point eight nine four two, and C two three is zero.",
                   [FadeIn(pic), FadeIn(cblock)], Create(colbox),
                   [e13.animate.set_color(MINT), FadeIn(t13)],
@@ -84,38 +87,38 @@ class S16_omega(VScene):
         l3 = E(r"\omega|=|-90^\circ+360^\circ|=|270^\circ", size=42)
         paint(l3, {4: MINT})
         for m in (l1, l2, l3):
-            fit(m, 5.6, 1)
-        l1.move_to([3.85, -0.15, 0])
+            fit(m, 6.4, 1)
+        l1.move_to([3.3, -0.75, 0])
         l2.next_to(l1, DOWN, buff=.35).align_to(l1[1], LEFT)
-        l3.next_to(l2, DOWN, buff=.45).set_x(3.85)
+        l3.next_to(l2, DOWN, buff=.4).set_x(3.3)
         why = T("add 360 degrees", size=26, color=MUTED).next_to(l3, DOWN, buff=.2)
         self.beat("atan two of a negative number and zero is minus ninety degrees. Add three sixty: little omega is two hundred seventy degrees.",
-                  Write(l1), Write(l2), .1, [Write(l3), FadeIn(why)], FadeIn(glow(l3[4], MINT)), w=(.3, .2, .1, .25, .15))
+                  Write(l1), Write(l2), .1, [Write(l3), FadeIn(why)], FadeIn(g1 := glow(l3[4], MINT)), w=(.3, .2, .25, .15))
 
         # fold: one boxed result, then the textbook route
         res = E(r"\omega|=|270^\circ", size=40)
         paint(res, {2: MINT})
         res_note = T("from the matrix", size=30, color=MUTED)
         res_card = panel(VGroup(res, res_note).arrange(RIGHT, buff=.3), color=MINT)
-        res_card.move_to([3.85, 2.55, 0])
+        res_card.move_to([3.3, 2.55, 0])
         k1 = E(r"\cos|\omega|=|\dfrac{\vec n\cdot\vec e}{n\,e}", size=42)
         tint(k1[3], [((0, 2), LIME), ((3, 5), ROSE), ((6, 7), LIME), ((7, 8), ROSE)])
         k2 = E(r"=|0.00001|\approx|0", size=42)
         k3 = E(r"\omega|=|90^\circ\ \text{or}\ 270^\circ\,?", size=42)
         for m in (k1, k2, k3):
-            fit(m, 5.6, 1.4)
-        k1.move_to([3.85, 0.85, 0])
+            fit(m, 6.4, 1.4)
+        k1.move_to([3.3, 0.85, 0])
         k2.next_to(k1, DOWN, buff=.3).align_to(k1[2], LEFT)
-        k3.next_to(k2, DOWN, buff=.45).set_x(3.85)
+        k3.next_to(k2, DOWN, buff=.45).set_x(3.3)
         why2 = T("arccos can't tell which", size=26, color=MUTED).next_to(k3, DOWN, buff=.2)
-        clear = [FadeOut(VGroup(cblock, colbox, t13, t23, l1, l2, l3, why)), FadeIn(res_card)]
+        clear = [FadeOut(VGroup(cblock, colbox, t13, t23, l1, l2, l3, why, g1)), FadeIn(res_card)]
         self.beat("The textbook route: the cosine of omega is n dot e over n e, which is essentially zero. So omega is ninety or two seventy. Arc cosine can't tell which.",
-                  clear, Write(k1), Write(k2), .1, [Write(k3), FadeIn(why2)], w=(.15, .3, .2, .1, .25))
+                  clear, Write(k1), Write(k2), .1, [Write(k3), FadeIn(why2)], w=(.15, .3, .2, .25))
 
         # ---- e_Z decides ----
         drop_pt = np.array([PERI[0], PERI[1], 0.0])
         e_arrow = arrow3(view, (0, 0, 0), PERI, ROSE)
-        e_lbl = label3(view, r"\vec e", 0.55 * PERI + np.array([0.25, 0, 0.1]), ROSE, 40)
+        e_lbl = label3(view, r"\vec e", PERI + 0.5 * NHAT, ROSE, 40)
         drop = line3(view, PERI, drop_pt, ROSE, dashed=True)
         foot = dot3(view, drop_pt, MUTED, radius=0.05)
         p_lbl = label3(view, r"\text{perigee}", PERI + np.array([0, 0, -0.45]), ROSE, 28)
@@ -123,8 +126,8 @@ class S16_omega(VScene):
         paint(j1, {0: ROSE, 2: ROSE})
         j2 = E(r"\Rightarrow|\omega|=|270^\circ", size=44)
         paint(j2, {3: MINT})
-        fit(j1, 5.6, 1); fit(j2, 5.6, 1)
-        j1.move_to([3.85, 0.4, 0])
+        fit(j1, 6.4, 1); fit(j2, 6.4, 1)
+        j1.move_to([3.3, 0.4, 0])
         j2.next_to(j1, DOWN, buff=.5)
         why3 = T("perigee below the equator", size=26, color=MUTED).next_to(j2, DOWN, buff=.2)
         self.beat("Look at the eccentricity vector's K component: minus zero point six six two seven. Perigee is below the equator, so it's two seventy.",
@@ -134,11 +137,11 @@ class S16_omega(VScene):
                   [Write(j2), FadeIn(why3), FadeIn(glow(j2[3], MINT))], w=(.12, .2, .23, .2, .25))
 
         # ---- the omega arc in the orbit plane ----
-        w_arc = arc3(view, HHAT, NHAT, W, 0.85, MINT, width=6)
+        w_arc = arc3(view, HHAT, NHAT, W, 1.7, MINT, width=6)
         mid = np.cos(W / 2) * NHAT + np.sin(W / 2) * np.cross(HHAT, NHAT)
-        w_lbl = label3(view, r"\omega", 1.25 * mid, MINT, 40)
-        a_lbl = label3(view, r"\text{apogee}", APO + np.array([0, 0, 0.4]), INK2, 28)
+        w_lbl = label3(view, r"\omega", 2.1 * mid, MINT, 40)
+        a_lbl = label3(view, r"\text{apogee}", APO - 0.75 * NHAT, INK2, 28)
         self.beat("That matches the picture: perigee at the very bottom of the orbit, apogee high over the north.",
                   grow(w_arc), FadeIn(w_lbl),
-                  [Indicate(peri, color=ROSE), FadeIn(a_lbl), Indicate(apo, color=INK)], .1, w=(.4, .15, .35, .1))
+                  [Indicate(peri, color=ROSE), FadeIn(a_lbl), Indicate(apo, color=INK)], .1, w=(.4, .15, .35))
         self.wipe()

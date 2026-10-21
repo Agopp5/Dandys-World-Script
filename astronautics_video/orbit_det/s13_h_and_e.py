@@ -61,7 +61,7 @@ class S13_h_and_e(VScene):
     budget = 135
 
     def construct(self):
-        view = View(elev=18, azim=-40, scale=0.72, center=(-3.4, -1.3))
+        view = View(elev=20, azim=0, scale=0.88, center=(-3.0, -1.5))
         earth = globe(view)
         ax = axes3(view, 1.8)
         orb = curve(view, lambda t: pos(t), 0, TAU, INK, width=3, R=1.0)
@@ -73,10 +73,10 @@ class S13_h_and_e(VScene):
         h_lab = label3(view, r"\vec h", 2.85 * HH, LILAC, 38)
         plane = disc3(view, PH, QH, 3.2, LILAC, 0.16)
         e_arr = arrow3(view, np.zeros(3), 1.0 * PH, ROSE)
-        e_lab = label3(view, r"\vec e", 0.75 * PH + 0.35 * QH, ROSE, 38)
+        e_lab = label3(view, r"\vec e", 0.6 * PH - 0.4 * QH, ROSE, 38)
         e_ext = line3(view, 1.0 * PH, PERI, ROSE, dashed=True)
         peri = dot3(view, PERI, ROSE)
-        peri_lab = label3(view, r"\text{perigee}", PERI + 0.55 * QH - 0.2 * PH, ROSE, 30)
+        peri_lab = label3(view, r"\text{perigee}", PERI * 1.3 + 0.5 * QH, ROSE, 34)
 
         X = 3.75                               # right-column center
         # ---- beat 1: h = r x v
@@ -99,7 +99,7 @@ class S13_h_and_e(VScene):
         n2.next_to(hb, DOWN, buff=.45)
         self.beat("h sticks straight out of the orbit plane, so it already pins down the plane's tilt. "
                   "We'll use that in a moment.",
-                  [FadeIn(plane), FadeIn(n2)], Indicate(h_lab, color=LILAC), view.turn(25), .1,
+                  [FadeIn(plane), FadeIn(n2)], Indicate(h_lab, color=LILAC), view.turn(20), .1,
                   w=(.3, .2, .4))
 
         # ---- beat 3: e vector; fold h into one boxed result
@@ -159,7 +159,7 @@ class S13_h_and_e(VScene):
         fit(pb, 6.0, 4.6)
         pb.next_to(ebox, DOWN, buff=.5).set_x(X)
         apo = dot3(view, pos(PI), INK2)
-        apo_lab = label3(view, r"\text{apogee}", pos(PI) + 0.45 * QH, INK2, 30)
+        apo_lab = label3(view, r"\text{apogee}", pos(PI) * 0.92 + 0.9 * QH, INK2, 34)
         self.beat("So the perigee radius is about six thousand eight hundred seventy seven kilometers, "
                   "just five hundred kilometers up, and the apogee is about forty six thousand two hundred "
                   "fifty kilometers away.",

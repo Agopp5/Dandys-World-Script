@@ -58,7 +58,7 @@ class S14_Build_C(VScene):
     def construct(self):
         self.section("Step three: build the rotation matrix")
 
-        view = View(elev=22, azim=-55, scale=0.8, center=(-3.4, -1.2))
+        view = View(elev=22, azim=-15, scale=0.8, center=(-3.2, -1.6))
         earth = globe(view)
         ax = axes3(view, 2.6)
         orb = curve(view, orbit(3.0, 0.6, OM, INC, W), 0, 2 * np.pi, INK, width=3, R=1.0)
@@ -71,7 +71,7 @@ class S14_Build_C(VScene):
         l_q = label3(view, r"\hat q", (L + 0.4) * Q_HAT, LIME, 40)
 
         # right column: definition, then numbers, then a grey note
-        y_p, y_h, y_q = 2.3, 0.6, -1.1
+        y_p, y_h, y_q = 2.4, 0.4, -1.6
         d_p = E(r"\hat p|=|\vec e|\,/\,|e", size=44).move_to([XR, y_p, 0])
         n_p = vec_line(r"\hat p", ROWS[0], ROSE).move_to([XR, y_p, 0])
         w_p = T("unit vector toward perigee", size=26, color=MUTED).next_to(n_p, DOWN, buff=.2)
@@ -96,24 +96,19 @@ class S14_Build_C(VScene):
                   morph(d_q, n_q, [(0, 0), (1, 1)]), FadeIn(w_q), w=(.25, .25, .3, .15))
 
         # ---- stack the rows into C_PN
-        mat = Matrix(ROWS, h_buff=1.9, v_buff=.85)
+        mat = Matrix(ROWS, h_buff=1.75, v_buff=.85)
         mat.scale(40 / 48)
         for r, col in enumerate((ROSE, LIME, LILAC)):
             mat.get_rows()[r].set_color(col)
         lhs = M(r"C_{PN}", "=", size=44)
         grp = VGroup(lhs, mat).arrange(RIGHT, buff=.25)
-        rlab = VGroup(*[M(s, size=40, color=c) for s, c in
-                        ((r"\hat p", ROSE), (r"\hat q", LIME), (r"\hat h", LILAC))])
-        full = VGroup(grp, rlab)
-        full.move_to([XR - 0.1, 1.2, 0])
-        for r in range(3):
-            rlab[r].next_to(mat, RIGHT, buff=.3).set_y(mat.get_rows()[r].get_y())
+        grp.move_to([3.6, 1.5, 0])
         ent = mat.get_rows()
         moves = []
         for line, r in ((n_p, 0), (n_q, 1), (n_h, 2)):
             for j, k in enumerate((3, 5, 7)):
                 moves.append(ReplacementTransform(line[k], ent[r][j]))
-            moves.append(ReplacementTransform(line[0], rlab[r]))
+            moves.append(line[0].animate.move_to(lhs[0]).set_opacity(0))   # the three hats merge into C_PN
             moves += [FadeOut(line[k]) for k in (1, 2, 4, 6, 8)]
         self.beat("Stack them as rows, and that's C P N, with real numbers in it.",
                   [FadeOut(w_p), FadeOut(w_h), FadeOut(w_q)], moves,
@@ -122,7 +117,7 @@ class S14_Build_C(VScene):
         # ---- the corner entry and the inclination
         c33 = ent[2][2]
         box = SurroundingRectangle(c33, color=EMBER, buff=.1)
-        eq1 = E(r"\cos|i|=|C_{33}|=|0.4478", size=44).move_to([XR, -1.2, 0])
+        eq1 = E(r"\cos|i|=|C_{33}|=|0.4478", size=44).move_to([XR, -1.0, 0])
         eq2 = E(r"i|=|\arccos(0.4478)|=|63.4^\circ", size=44).move_to([XR, -2.5, 0])
         eq2[4].set_color(EMBER)
         arc = arc3(view, ARC_AXIS, K_HAT, INC, 1.5, EMBER)

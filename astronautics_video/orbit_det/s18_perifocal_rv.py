@@ -26,9 +26,9 @@ check(VP_M[1], 5.278)
 # ---- drawn orbit (not to scale): a = 3.0, e = 0.6 in Earth radii, flat in the p-q plane ----
 A_D, E_D = 3.0, 0.6
 P_D = A_D * (1 - E_D ** 2)
-S = 1.0                           # screen units per Earth radius
-F = np.array([-1.35, -0.6, 0])   # focus (Earth's center) on screen
-VS = 0.8                          # drawn mu/h (screen units), only sets the velocity arrow length
+S = 1.1                           # screen units per Earth radius
+F = np.array([-1.5, -0.6, 0])   # focus (Earth's center) on screen
+VS = 1.0                          # drawn mu/h (screen units), only sets the velocity arrow length
 
 
 def pt(th):
@@ -52,27 +52,27 @@ class S18_Perifocal_rv(VScene):
                        T("step 2: rotate into ECI", size=28, color=MUTED)).arrange(RIGHT, buff=1.0)
         steps.next_to(title, DOWN, buff=.3)
         self.beat("Sometimes we need the reverse: start from the elements and find r and v in E C I. It takes two steps, and the first one is easy.",
-                  Write(title), .1, FadeIn(steps[0], shift=UP * .2), FadeIn(steps[1], shift=UP * .2), .2,
-                  Indicate(steps[0], color=GOLD), w=(.4, .05, .15, .15, .05, .2))
+                  Write(title), .07, FadeIn(steps[0], shift=UP * .2), FadeIn(steps[1], shift=UP * .2), .18,
+                  Indicate(steps[0], color=GOLD), w=(.35, .12, .12, .16))
 
         # ---- the orbit plane ----
-        th = ValueTracker(np.radians(50))
+        th = ValueTracker(np.radians(35))
         ell = ParametricFunction(pt, t_range=[0, TAU], color=INK, stroke_width=4)
         earth = Circle(radius=S, stroke_color=AXIS, stroke_width=2, fill_color=SKY, fill_opacity=.35).move_to(F)
         pax = Arrow(F, F + RIGHT * 1.65, buff=0, color=ROSE, stroke_width=4, max_tip_length_to_length_ratio=.1)
-        qax = Arrow(F, F + UP * 2.6, buff=0, color=LIME, stroke_width=4, max_tip_length_to_length_ratio=.08)
+        qax = Arrow(F, F + UP * 2.85, buff=0, color=LIME, stroke_width=4, max_tip_length_to_length_ratio=.08)
         plab = M(r"\hat p", size=40, color=ROSE).next_to(pax.get_end(), DOWN, buff=.15)
-        qlab = M(r"\hat q", size=40, color=LIME).next_to(qax.get_end(), RIGHT, buff=.15)
+        qlab = M(r"\hat q", size=40, color=LIME).next_to(qax.get_end(), LEFT, buff=.15)
         peri = Dot(pt(0), color=ROSE, radius=.06)
         plane = VGroup(earth, ell, pax, qax, plab, qlab, peri)
 
         rvec = always_redraw(lambda: Arrow(F, pt(th.get_value()), buff=0, color=INK, stroke_width=5,
                                            max_tip_length_to_length_ratio=.12))
         sat = always_redraw(lambda: Dot(pt(th.get_value()), color=INK, radius=.08).set_z_index(3))
-        arc = always_redraw(lambda: Arc(radius=.5, start_angle=0, angle=th.get_value(), arc_center=F,
+        arc = always_redraw(lambda: Arc(radius=.55, start_angle=0, angle=th.get_value(), arc_center=F,
                                         color=GOLD, stroke_width=4))
         thlab = M(r"\theta", size=40, color=GOLD)
-        thlab.add_updater(lambda m: m.move_to(F + .85 * np.array([np.cos(th.get_value() / 2),
+        thlab.add_updater(lambda m: m.move_to(F + .9 * np.array([np.cos(th.get_value() / 2),
                                                                   np.sin(th.get_value() / 2), 0])))
         projx = always_redraw(lambda: DashedLine(pt(th.get_value()), [pt(th.get_value())[0], F[1], 0],
                                                  color=MUTED, stroke_width=2))
@@ -83,7 +83,10 @@ class S18_Perifocal_rv(VScene):
             t = th.get_value()
             a, b = F, pt(t)
             d = (b - a) / np.linalg.norm(b - a)
-            m.move_to(a + .55 * (b - a) + .35 * np.array([-d[1], d[0], 0]))
+            nrm = np.array([-d[1], d[0], 0])
+            if np.dot(nrm, [np.cos(t / 2), np.sin(t / 2), 0]) > 0:   # keep the label off the theta arc
+                nrm = -nrm
+            m.move_to(a + .55 * (b - a) + .38 * nrm)
         rlab = M(r"\vec r", size=40)
         rlab.add_updater(rlab_pos)
 
@@ -110,7 +113,7 @@ class S18_Perifocal_rv(VScene):
                                            color=ACCENT, stroke_width=5, max_tip_length_to_length_ratio=.2))
         vlab = M(r"\vec v", size=40, color=ACCENT)
         vlab.add_updater(lambda m: m.move_to(pt(th.get_value()) + vel(th.get_value())
-                                             + .3 * vel(th.get_value()) / np.linalg.norm(vel(th.get_value()))))
+                                             + .32 * vel(th.get_value()) / np.linalg.norm(vel(th.get_value()))))
         veq = E(r"\vec v_P|=\frac{\mu}{h}\Big(|-\sin|\theta|,\ e+\cos|\theta|,\ 0\Big)", size=44,
                 cmap={r"\vec v_P": ACCENT})
         fit(veq, 6.6, 1.4)
@@ -118,7 +121,7 @@ class S18_Perifocal_rv(VScene):
         vnote = T("hodograph result (last chapter)", size=26, color=MUTED).next_to(veq, DOWN, buff=.18)
         self.beat("The velocity is mu over h, times minus sine theta, e plus cosine theta, zero. That's the hodograph result from the last chapter.",
                   [FadeIn(vvec), FadeIn(vlab)], Write(veq), .1, FadeIn(vnote, shift=UP * .15), .1,
-                  w=(.15, .4, .05, .15, .25))
+                  w=(.15, .45, .2))
 
         # ---- beat 4: the Molniya numbers at theta = 280 deg ----
         general = VGroup(req, veq)

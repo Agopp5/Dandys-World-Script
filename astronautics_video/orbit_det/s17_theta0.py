@@ -144,7 +144,7 @@ class S17_theta0(VScene):
         self.wipe()
 
         # ---- all six ----
-        sh = sheet("Six elements from one measurement", [
+        sh = sheet(T("Six elements from one measurement", 34), [
             ("energy", INK2, [E(r"a|=|26{,}564\ \mathrm{km}", size=40)]),
             ("h and e vector", ROSE, [E(r"e|=|0.7411", size=40)]),
             ("the matrix C PN", ACCENT, [E(r"i|=|63.4^\circ|,\quad|\Omega|=|145.0^\circ|,\quad|\omega|=|270^\circ", size=40)]),
@@ -152,5 +152,5 @@ class S17_theta0(VScene):
         ])
         self.beat("And that's all six: a, e, i, capital Omega, little omega, and theta zero, from one measurement.",
                   FadeIn(sh.head), LaggedStart(*[FadeIn(r, shift=.2 * RIGHT) for r in sh.rows], lag_ratio=.35),
-                  .15, w=(.12, .7, .18))
+                  .15, w=(.15, .7))
         self.wipe()
