@@ -74,8 +74,8 @@ class S13_h_and_e(VScene):
         assert np.isclose(np.linalg.norm(R0D), P_SL / (1 + DE * np.cos(TH0)))   # r0 tip sits on the orbit
         r_arr = arrow3(view, np.zeros(3), R0D, INK)
         v_arr = arrow3(view, R0D, R0D + 1.0 * VDIR, ACCENT)                    # tangent at theta0 = 280 deg
-        r_lab = label3(view, r"ec r_0", R0D + 0.3 * R0D / np.linalg.norm(R0D) - 0.25 * KH, INK, 34)
-        v_lab = label3(view, r"ec v_0", R0D + 1.0 * VDIR + 0.3 * KH, ACCENT, 34)
+        r_lab = label3(view, r"\vec r_0", R0D + 0.3 * R0D / np.linalg.norm(R0D) - 0.25 * KH, INK, 34)
+        v_lab = label3(view, r"\vec v_0", R0D + 1.0 * VDIR + 0.3 * KH, ACCENT, 34)
         h_arr = arrow3(view, np.zeros(3), 2.4 * HH, LILAC)
         h_lab = label3(view, r"\vec h", 2.7 * HH, LILAC, 38)
         TS = np.linspace(0, TAU, 160)

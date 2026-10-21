@@ -112,7 +112,7 @@ class S14_Build_C(VScene):
         mat = VGroup(cells, brackets)
         lhs = M(r"C_{PN}", "=", size=44)
         grp = VGroup(lhs, mat).arrange(RIGHT, buff=.25)
-        grp.move_to([3.7, 1.5, 0])
+        grp.move_to([3.5, 1.5, 0])
         moves = []
         for line, r in ((n_p, 0), (n_q, 1), (n_h, 2)):
             for j, k in enumerate((3, 5, 7)):
@@ -129,8 +129,8 @@ class S14_Build_C(VScene):
         eq1 = E(r"\cos|i|=|C_{33}|=|0.4478", size=44).move_to([XR, -1.0, 0])
         eq2 = E(r"i|=|\arccos(0.4478)|=|63.4^\circ", size=44).move_to([XR, -2.5, 0])
         eq2[4].set_color(EMBER)
-        arc = arc3(view, ARC_AXIS, K_HAT, INC, 1.5, EMBER)
-        l_i = label3(view, "i", 1.85 * ARC_MID, EMBER, 38)
+        arc = arc3(view, ARC_AXIS, K_HAT, INC, 2.0, EMBER)
+        l_i = label3(view, "i", 2.4 * ARC_MID, EMBER, 38)
         with self.say("The corner entry is zero point four four seven eight. Its arc cosine is the inclination: sixty three point four degrees.") as d:
             self.play(Create(box), Indicate(c33, color=EMBER), run_time=.18 * d)
             self.play(Write(eq1), run_time=.2 * d)

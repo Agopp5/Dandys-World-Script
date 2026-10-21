@@ -72,7 +72,7 @@ class S17_theta0(VScene):
         self.section("Step six: where is the satellite?")
 
         # ---- 3D: e and r0 ----
-        view = View(scale=0.62, center=(-3.4, -1.3))
+        view = View(elev=40, azim=30, scale=0.95, center=(-3.4, -0.3))
         f = orbit(DA, DE, *ANG)
         C = cpn(*ANG)
         ph, hh = C[0], C[2]
@@ -145,7 +145,7 @@ class S17_theta0(VScene):
 
         # ---- all six ----
         sh = sheet(T("Six elements from one measurement", 40), [
-            ("energy", INK2, [E(r"a|=|26{,}564\ \mathrm{km}", size=40)]),
+            ("energy", INK2, [E(r"a|=|26{,}564\ \mathrm{km}", size=50)]),
             ("h, e vector", ROSE, [E(r"e|=|0.7411", size=50)]),
             ("matrix C PN", ACCENT, [E(r"i|=|63.4^\circ|,\quad|\Omega|=|145.0^\circ|,\quad|\omega|=|270^\circ", size=50)]),
             ("dot products", GOLD, [E(r"\theta_0|=|280^\circ", size=50)]),
