@@ -44,7 +44,7 @@ assert np.allclose(F(np.radians(90.0)), ASC, atol=1e-6)
 
 
 class S16_omega(VScene):
-    budget = 115
+    budget = 142
 
     def construct(self):
         hdr = self.section("Step five: little omega")
@@ -162,4 +162,6 @@ class S16_omega(VScene):
         self.beat("That matches the picture: perigee at the very bottom of the orbit, apogee high over the north.",
                   grow(w_arc), FadeIn(w_lbl),
                   [Indicate(peri, color=ROSE), FadeIn(a_lbl), Indicate(apo, color=INK)], .1, w=(.4, .15, .35))
+        your_turn(self, "Your turn. Pause here and do checkpoint four point two: build C P N for your practice orbit, then read off i, capital Omega and little omega.", "4.2", "Practice orbit: build C P N, then i, Omega, omega",
+                  *practice_lines(), r"\text{build }C_{PN}\text{, then }|i|,\ |\Omega|,\ |\omega")
         self.wipe()

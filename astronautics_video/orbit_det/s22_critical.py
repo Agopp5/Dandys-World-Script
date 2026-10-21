@@ -37,7 +37,7 @@ DEG = PI / 180
 
 
 class S22_Critical(VScene):
-    budget = 157
+    budget = 173
 
     def construct(self):
         # ---- beat 1: the omega-dot formula, with an ellipse whose perigee turns in its plane ---------
@@ -97,6 +97,9 @@ class S22_Critical(VScene):
                   [Create(ax), FadeIn(ticks), FadeIn(xl), FadeIn(yl)], Create(g), [FadeIn(pos), FadeIn(neg)],
                   [Indicate(wdot[2], color=GOLD, scale_factor=1.6), FadeIn(flip), FadeIn(lab_neg), FadeIn(lab_pos)],
                   w=(.15, .2, .25, .15, .25))
+
+        your_turn(self, "Your turn. Pause here and do checkpoint six point two: find where the bracket crosses zero.", "6.2", "Where does the bracket cross zero?",
+                  r"\tfrac{5}{2}\sin^2 i - 2 = 0 \quad\Rightarrow\quad i = \ ?")
 
         # ---- beat 3: solve for the zero ------------------------------------------------------------
         s1 = E(r"\tfrac{5}{2}\sin^2|i|=|2", size=42)

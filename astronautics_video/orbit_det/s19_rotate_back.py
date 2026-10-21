@@ -79,7 +79,7 @@ assert np.isclose(np.cos(kepler_theta(M0)), np.cos(TH0)) and np.isclose(np.sin(k
 
 
 class S19_Rotate_Back(VScene):
-    budget = 148
+    budget = 168
 
     def construct(self):
         view = View(elev=65, azim=25, scale=1.08, center=(-3.75, -1.75))
@@ -240,6 +240,9 @@ class S19_Rotate_Back(VScene):
                       FadeIn(VGroup(rlab, vlab, hd1)), run_time=.3 * d)
             self.play(FadeIn(VGroup(hd2, rm, vm), shift=LEFT * .3), run_time=.25 * d)
             self.play(FadeIn(ck1, scale=1.5), FadeIn(ck2, scale=1.5), run_time=.2 * d)
+
+        your_turn(self, "Your turn. Pause here and do checkpoint five point one: take your practice orbit's elements back to r and v.", "5.1", "Practice orbit: from the elements back to r and v",
+                  r"a = 12{,}000\ \mathrm{km},\ \ e = 0.2,\ \ i = 50^\circ", r"\Omega = 230^\circ,\ \ \omega = 300^\circ,\ \ \theta_0 = 75^\circ", r"\text{find }\vec r,\ \vec v\text{ in ECI; compare with your }\vec r_0,\ \vec v_0")
 
         # ---- beat 5: propagate with frozen elements ----
         frozen = VGroup(

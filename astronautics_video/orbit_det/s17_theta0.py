@@ -128,7 +128,8 @@ class S17_theta0(VScene):
                   [Create(lb), Create(ab), FadeIn(db), FadeIn(tb_l)],
                   w=(.2, .25, .27, .28))
 
-        self.predict("80 degrees or 280 degrees? What could tell you?", "Which one is it?")
+        self.beat("Which one is it?")
+        self.checkpoint("4.3", "80 or 280? Then theta zero for your practice orbit")
 
         # ---- beat 4: r.v decides ----
         x0 = 1.15

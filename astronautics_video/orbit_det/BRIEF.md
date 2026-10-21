@@ -167,7 +167,7 @@ Picture: the tilted orbit from S05.
 6. "Little omega of two seventy puts the perigee at the southernmost point of the orbit. So the long, slow apogee half hangs high over the northern hemisphere, where it can watch Russia for hours."
    → ROSE perigee dot below the equator; a GOLD bracket on the apogee half above; satellite slows near apogee.
 7. "Quick question before we move on."
-   → self.predict("If the inclination were greater than ninety degrees, which way would the satellite cross the equator at the ascending node?", <this line>)
+   → self.checkpoint("2.1", "Inclination over ninety: which way at the node?")
 8. "Still northward. The ascending node is always the northbound crossing. What changes is that the motion over the Earth runs westward instead of east."
    → short demo with i = 120: the northbound crossing highlighted, westward arrow.
 
@@ -210,19 +210,21 @@ Picture: mostly algebra on the right; small 3D view with the PQW triad on the le
 5. "These are the same elementary rotations from the kinematics lessons. C three turns about the third axis. C one turns about the first."
    → C_3(x) and C_1(x) matrices written out.
 
-## S10_Multiply [126] Multiplying out what we need
+## S10_Multiply [139] Multiplying out what we need
 Picture: algebra, line by line, with a grey reason beside each step (sheet-style rows).
 1. "We don't need all nine entries. Start with the third row, which is h hat."
    → C_PN shown with its third row boxed in LILAC.
-2. "The third row of C three of omega is just zero, zero, one. So the third row of the whole product is the third row of C one of i, times C three of Omega."
+2. "Your turn. Pause here and work checkpoint three point one in your guide."
+   → self.checkpoint("3.1", "Multiply out the third row of C P N")
+3. "The third row of C three of omega is just zero, zero, one. So the third row of the whole product is the third row of C one of i, times C three of Omega."
    → step: row3(C_PN) = (0, 0, 1) C_1(i) C_3(Omega) = (0, -sin i, cos i) C_3(Omega). Reason: "row 3 of C3 is (0,0,1)".
-3. "Multiply that row into C three of Omega. The result is sine i sine Omega, minus sine i cosine Omega, and cosine i."
+4. "Multiply that row into C three of Omega. The result is sine i sine Omega, minus sine i cosine Omega, and cosine i."
    → step: = (sin i sin Omega, -sin i cos Omega, cos i). Reason: "row times matrix".
-4. "Check it with the picture. h hat leans away from K by the angle i, so its K component is cosine i."
+5. "Check it with the picture. h hat leans away from K by the angle i, so its K component is cosine i."
    → small 3D: h-hat with the i arc from K; the cos i projection onto K dashed.
-5. "Now the third column. Multiply C P N by the unit vector along K, working from the right."
+6. "Now the third column. Multiply C P N by the unit vector along K, working from the right."
    → step: C_PN K = C_3(omega) C_1(i) (0, 0, 1) = C_3(omega) (0, sin i, cos i).
-6. "That gives sine omega sine i, cosine omega sine i, and cosine i."
+7. "That gives sine omega sine i, cosine omega sine i, and cosine i."
    → step: = (sin omega sin i, cos omega sin i, cos i), boxed. Both results in a small table: C31, C32, C33, C13, C23.
 
 ## S11_Read_Angles [197] Reading the angles back out
@@ -257,7 +259,7 @@ Picture: the measurement card stays at top right for the whole episode; algebra 
 5. "That's about four Earth radii, and a period of almost exactly twelve hours."
    → T = 2 pi sqrt(a^3/mu) = 11.97 h.
 
-## S13_h_and_e [135] Step two: angular momentum and eccentricity
+## S13_h_and_e [155] Step two: angular momentum and eccentricity
 Picture: algebra; 3D view shows h and e vectors appear.
 1. "Next, the angular momentum: h equals r cross v."
    → h = r0 x v0 = (35,432, 50,602, 30,934) km^2/s; |h| = 69,086. LILAC h arrow grows in the 3D view.
@@ -271,6 +273,8 @@ Picture: algebra; 3D view shows h and e vectors appear.
    → e = sqrt(1 + 2 E h^2/mu^2) = 0.7411, GOOD check.
 6. "So the perigee radius is about six thousand eight hundred seventy seven kilometers, just five hundred kilometers up, and the apogee is about forty six thousand two hundred fifty kilometers away."
    → r_p = a(1-e) = 6,877 km; r_a = a(1+e) = 46,250 km.
+7. "Your turn. Pause here and do checkpoint four point one in your guide: the same steps, for your practice orbit."
+   → self.checkpoint("4.1", "Practice orbit: find a, h and e")
 
 ## S14_Build_C [75] Step three: build C_PN, read the inclination
 Picture: three unit vectors become the rows of C_PN.
@@ -298,7 +302,7 @@ Picture: C_PN third row highlighted; unit circle for the quadrant.
 5. "A fun coincidence: q hat equals the node direction here. That's not an accident; it happens because little omega turns out to be two seventy."
    → q-hat arrow and n-hat arrow overlap; brief glow.
 
-## S16_omega [115] Step five: little omega
+## S16_omega [142] Step five: little omega
 Picture: third column of C_PN highlighted.
 1. "Little omega uses the third column: C one three is minus zero point eight nine four two, and C two three is zero."
    → C13, C23 marked.
@@ -310,6 +314,8 @@ Picture: third column of C_PN highlighted.
    → e_Z = -0.6627 < 0 -> 270 deg; in 3D the perigee dot is below the equatorial disc.
 5. "That matches the picture: perigee at the very bottom of the orbit, apogee high over the north."
    → MINT arc from the ascending node to perigee in the orbit plane.
+6. "Your turn. Pause here and do checkpoint four point two: build C P N for your practice orbit, then read off i, capital Omega and little omega."
+   → self.checkpoint("4.2", "Practice orbit: build C P N, then i, Omega, omega")
 
 ## S17_theta0 [101] Step six: where is the satellite?
 Picture: e and r0 arrows in 3D and on the 2D orbit plane.
@@ -318,7 +324,7 @@ Picture: e and r0 arrows in 3D and on the 2D orbit plane.
 2. "Arc cosine says eighty degrees. But the satellite could be eighty degrees past perigee, or eighty degrees before it."
    → 2D orbit plane: two candidate dots at +80 and -80 (280) from perigee.
 3. "Which one is it?"
-   → self.predict("80 degrees or 280 degrees? What could tell you?", <this line>)
+   → self.checkpoint("4.3", "80 or 280? Then theta zero for your practice orbit")
 4. "Check r dot v. It's minus forty four thousand six hundred seventy three. Negative means the distance is shrinking: the satellite is falling toward perigee. So theta zero is three sixty minus eighty: two hundred eighty degrees."
    → r0.v0 = -44,673 km^2/s < 0; the inbound candidate highlighted; theta0 = 280 deg in GOLD.
 5. "And that's all six: a, e, i, capital Omega, little omega, and theta zero, from one measurement."
@@ -339,7 +345,7 @@ Picture: 2D orbit plane on the left (p and q axes), algebra right.
 5. "So the position is one thousand eight hundred forty two, minus ten thousand four hundred forty eight, zero kilometers, and the velocity is five point six eight two, five point two seven eight, zero kilometers per second."
    → r_P = (1,842, -10,448, 0) km; v_P = (5.682, 5.278, 0) km/s; arrows drawn in the 2D plane.
 
-## S19_Rotate_Back [148] Step two: rotate into ECI
+## S19_Rotate_Back [168] Step two: rotate into ECI
 Picture: the 2D plane lifts into the 3D view while the algebra completes.
 1. "Step two: rotate into E C I. The rows of C P N are p hat, q hat and h hat, so going back uses the transpose."
    → r_N = C_PN^T r_P.
@@ -349,7 +355,9 @@ Picture: the 2D plane lifts into the 3D view while the algebra completes.
    → r_N = (9,031, -5,317, -1,647) km; v_N = (-2.864, 5.111, -5.081) km/s.
 4. "Those are exactly the measured r and v we started from. The round trip closes."
    → side by side with r0, v0 from S12; GOOD check marks.
-5. "And here's why elements are worth the trouble. To move the satellite forward in time, five numbers stay frozen. Only theta advances, using Kepler's equation. Then one rotation gives r and v again."
+5. "Your turn. Pause here and do checkpoint five point one: take your practice orbit's elements back to r and v."
+   → self.checkpoint("5.1", "Practice orbit: from the elements back to r and v")
+6. "And here's why elements are worth the trouble. To move the satellite forward in time, five numbers stay frozen. Only theta advances, using Kepler's equation. Then one rotation gives r and v again."
    → satellite moves; five elements frozen, theta ticking; arrow "Kepler's equation -> theta -> r_P, v_P -> C_PN^T -> r, v".
 
 # Episode 6: Earth Is Not a Sphere | J2 and the critical inclination
@@ -367,7 +375,7 @@ Picture: a globe squashed (exaggerated) with the equatorial bulge shaded; a tilt
 5. "And like a top, the orbit doesn't fall flat. It precesses: the whole orbit plane slowly swings around the pole."
    → animate Omega slowly decreasing; the node line sweeps westward; a ghost trail of earlier node lines.
 
-## S21_Node_Drift [150] The node drifts
+## S21_Node_Drift [163] The node drifts
 Picture: formula on the right, the drifting plane on the left; a Sun inset later.
 1. "The drift rate of the node is Omega dot equals minus three n J two R squared, over two a squared, times one minus e squared, squared, times cosine i."
    → Omega-dot formula written; n = sqrt(mu/a^3) noted as the mean motion.
@@ -381,20 +389,24 @@ Picture: formula on the right, the drifting plane on the left; a Sun inset later
    → i = 98.2 deg at 700 km; "same lighting every pass".
 6. "Meanwhile a, e and i don't drift. They only wiggle a little each orbit, like your notes sketch."
    → two small plots: a(t) wiggling flat; Omega(t) wiggling with a steady downward trend.
+7. "Your turn. Pause here and do checkpoint six point one in your guide."
+   → self.checkpoint("6.1", "Practice orbit: node drift, and a sun-synchronous tilt")
 
-## S22_Critical [157] The critical inclination
+## S22_Critical [173] The critical inclination
 Picture: omega-dot formula; graph of (5/2 sin^2 i - 2) versus i; the Molniya at the end.
 1. "J two turns the ellipse inside its plane too. The perigee drifts at omega dot equals minus three n J two R squared over two a squared, one minus e squared, squared, times five halves sine squared i, minus two."
    → omega-dot formula.
 2. "The sign depends on that last bracket. Here it is, plotted against inclination."
    → graph of 5/2 sin^2 i - 2 for i from 0 to 180; positive region shaded MINT, negative region shaded ROSE.
-3. "It crosses zero when five halves sine squared i equals two. So sine squared i is four fifths, and i is sixty three point four three degrees."
+3. "Your turn. Pause here and do checkpoint six point two: find where the bracket crosses zero."
+   → self.checkpoint("6.2", "Where does the bracket cross zero?")
+4. "It crosses zero when five halves sine squared i equals two. So sine squared i is four fifths, and i is sixty three point four three degrees."
    → step lines: 5/2 sin^2 i = 2 -> sin^2 i = 4/5 -> i = 63.43 deg (and 116.57 deg); zero crossings marked.
-4. "At that inclination, the perigee simply stops turning. It's called the critical inclination."
+5. "At that inclination, the perigee simply stops turning. It's called the critical inclination."
    → the perigee dot on an orbit at 63.4 deg stays put while a 50 deg orbit's perigee drifts.
-5. "Now look back at the hook. The Molniya orbit was inclined at sixty three point four degrees. That's no accident."
+6. "Now look back at the hook. The Molniya orbit was inclined at sixty three point four degrees. That's no accident."
    → the hook's six-element list returns with i = 63.4 deg glowing.
-6. "At that inclination, the perigee stays parked over the south, so the long, slow apogee stays over Russia, year after year, with no fuel spent. Its node still drifts a little, about point one five degrees per day, but that doesn't matter for coverage."
+7. "At that inclination, the perigee stays parked over the south, so the long, slow apogee stays over Russia, year after year, with no fuel spent. Its node still drifts a little, about point one five degrees per day, but that doesn't matter for coverage."
    → Molniya in 3D: perigee fixed in the south; node line drifting slowly; label omega-dot = 0, Omega-dot = -0.15 deg/day.
 
 ## S23_Recap [145] Recap

@@ -223,3 +223,32 @@ def axes3(view, L=2.4, color=INK2):
         g.add(arrow3(view, ORIGIN, L * d, color, 4))
         g.add(label3(view, name, (L + 0.32) * d, color, 32))
     return g
+
+
+# ---- guide checkpoints: the practice orbit of guide.tex (check_guide.py asserts its answers)
+PRACTICE_R0 = (-5404.7, -9275.9, 2171.6)
+PRACTICE_V0 = (3.4111, -2.2048, 4.8031)
+
+
+def practice_lines():
+    """The practice orbit's state vector as two MathTex lines."""
+    r, v = PRACTICE_R0, PRACTICE_V0
+    return [M(r"\vec r_0 = (%s,\ %s,\ %s)\ \mathrm{km}" % tuple(f"{x:,.1f}".replace(",", "{,}") for x in r), size=40),
+            M(r"\vec v_0 = (%s,\ %s,\ %s)\ \mathrm{km/s}" % tuple(f"{x:.4f}" for x in v), size=40)]
+
+
+def your_turn(scene, cue, cid, prompt, *lines, head="YOUR TURN"):
+    """Spoken cue over a card (lines: mobjects or TeX strings), then the guide checkpoint, then the card clears."""
+    body = VGroup(T(head, 28, GOLD, weight=BOLD),
+                  *[E(x, size=44) if isinstance(x, str) else x for x in lines]).arrange(DOWN, buff=0.4)
+    box = SurroundingRectangle(body, buff=0.5, corner_radius=0.2, color=GOLD, stroke_width=2,
+                               fill_color=SURFACE, fill_opacity=1)
+    card = Group(FullScreenRectangle(stroke_width=0, fill_color=BG, fill_opacity=0.9), box, body)
+    card.set_z_index(90)
+    c, w, _ = scene._frame()
+    card.scale(w / config.frame_width).move_to(c)
+    scene.lint_on = False
+    scene.beat(cue, FadeIn(card, scale=0.97), *[Indicate(m, color=GOLD, scale_factor=1.05) for m in body[1:]])
+    scene.lint_on = True
+    scene.checkpoint(cid, prompt)
+    scene.play(FadeOut(card), run_time=0.4)

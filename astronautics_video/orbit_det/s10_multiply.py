@@ -49,7 +49,7 @@ def under_eq(m, ref_eq, y):
 
 
 class S10_Multiply(VScene):
-    budget = 126
+    budget = 139
 
     def construct(self):
         # ---- left column: the product and the matrix of entries
@@ -67,6 +67,9 @@ class S10_Multiply(VScene):
         self.beat("We don't need all nine entries. Start with the third row, which is h hat.",
                   [FadeIn(P), FadeIn(Mx), FadeIn(labs)], .15, Create(rowbox), Indicate(labs[2], color=LILAC),
                   w=(.45, .3, .25))
+
+        your_turn(self, "Your turn. Pause here and work checkpoint three point one in your guide.", "3.1", "Multiply out the third row of C P N",
+                  r"\text{row}_3\ \text{of}\ C_{PN} = (0,0,1)\,C_1(i)\,C_3(\Omega) = \ ?")
 
         # ---- third row
         L1 = left_at(E(r"\text{row}_3\,C_{PN}|=|(0,0,1)\,C_1(|i|)\,C_3(|\Omega|)", size=44), 2.5)

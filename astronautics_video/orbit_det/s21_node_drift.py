@@ -48,7 +48,7 @@ def mhat(Om, i):               # h-hat x n-hat: in-plane direction 90 deg past t
 
 
 class S21_Node_Drift(VScene):
-    budget = 150
+    budget = 163
 
     def construct(self):
         Om = ValueTracker(70.0)        # degrees
@@ -219,4 +219,6 @@ class S21_Node_Drift(VScene):
                       FadeIn(xl_o), run_time=0.15 * d)
             self.play(Create(m_a), Create(c_a), FadeIn(cap_a), run_time=0.3 * d, rate_func=linear)
             self.play(Create(m_o), Create(c_o), FadeIn(cap_o), FadeIn(note6), run_time=0.3 * d, rate_func=linear)
+        your_turn(self, "Your turn. Pause here and do checkpoint six point one in your guide.", "6.1", "Practice orbit: node drift, and a sun-synchronous tilt",
+                  r"\text{practice orbit: } a = 12{,}000\ \mathrm{km},\ e = 0.2,\ i = 50^\circ", T("Find its node drift in degrees per day,", 34, INK2), T("and the sun-synchronous inclination at 600 km", 34, INK2))
         self.wipe()

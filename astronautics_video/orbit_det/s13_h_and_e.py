@@ -72,7 +72,7 @@ def note(s):
 
 
 class S13_h_and_e(VScene):
-    budget = 135
+    budget = 155
 
     def construct(self):
         # el 25, azim -155 -> -140 (turn in beat 2): the orbit is seen ~60 deg off its normal, so it stays open
@@ -222,4 +222,6 @@ class S13_h_and_e(VScene):
                   [FadeOut(cb), FadeOut(n5), FadeIn(a_ln)], [Write(p1), Indicate(peri, color=ROSE)], FadeIn(p1n),
                   [Write(p2), FadeIn(apo), FadeIn(apo_lab)], FadeIn(p2n), .1,
                   w=(.1, .25, .12, .3, .13))
+        your_turn(self, "Your turn. Pause here and do checkpoint four point one in your guide: the same steps, for your practice orbit.", "4.1", "Practice orbit: find a, h and e",
+                  *practice_lines(), r"\text{find }|a|,\ |\vec h|,\ |\vec e|\text{ and }|e")
         self.wipe()

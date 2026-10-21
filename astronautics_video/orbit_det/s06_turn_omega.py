@@ -172,8 +172,8 @@ class S06_Turn_omega(VScene):
 
         # ---------------- predict: i greater than ninety
         self.drop(apo, apo_lab, peri_lab, moving, notes, mol_card)
-        self.predict("Inclination over ninety: which way at the node?",
-                     "Quick question before we move on.")
+        self.beat("Quick question before we move on.")
+        self.checkpoint("2.1", "Inclination over ninety: which way at the node?")
 
         # ---------------- i = 120 demo: still northbound, but westward
         def vel_dir():
