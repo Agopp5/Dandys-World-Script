@@ -62,7 +62,7 @@ class S22_Critical(VScene):
         elab = always_redraw(lambda: E(r"\vec e", size=40).next_to(evec.get_end(), UR, buff=0.1))
         warc = always_redraw(lambda: Arc(radius=1.2, start_angle=0, angle=max(wt.get_value(), 1e-3), arc_center=F,
                                          color=MINT, stroke_width=5))
-        perl = T("perigee turns within the plane", size=30, color=MUTED).to_edge(DOWN, buff=0.35)
+        perl = T("perigee turns\nwithin the plane", size=30, color=MUTED).move_to([5.0, -1.0, 0])
         self.beat("J two turns the ellipse inside its plane too. The perigee drifts at omega dot equals minus "
                   "three n J two R squared over two a squared, one minus e squared, squared, times five halves "
                   "sine squared i, minus two.",
@@ -91,7 +91,7 @@ class S22_Critical(VScene):
         xl = E(r"i", size=40).next_to(ax.c2p(180, 0), RIGHT, buff=0.25)
         yl = M(r"\tfrac{5}{2}\sin^2 i-2", size=36).next_to(ax.c2p(0, 0.5), UP, buff=0.15).shift(0.6 * RIGHT)
         tint(yl, [((7, 8), EMBER)])
-        flip = T("the minus sign in front flips it", size=30, color=GOLD).to_corner(DR, buff=0.4)
+        flip = T("the minus sign\nin front flips it", size=30, color=GOLD).move_to([4.6, 0.6, 0])
         self.beat("The sign depends on that last bracket. Here it is, plotted against inclination.",
                   [FadeOut(pic1), Indicate(brk, color=GOLD)],
                   [Create(ax), FadeIn(ticks), FadeIn(xl), FadeIn(yl)], Create(g), [FadeIn(pos), FadeIn(neg)],
@@ -120,8 +120,8 @@ class S22_Critical(VScene):
 
         # ---- beat 4: perigee frozen at 63.4, advancing at 50 -----------------------------------------
         self.drop(wdot, ax, ticks, xl, yl, g, pos, neg, lab_neg, lab_pos, steps, s5b, z1, z2, zl1, zl2, box)
-        vL = View(elev=20, azim=-60, scale=1.0, center=(-3.5, -0.6))
-        vR = View(elev=20, azim=-60, scale=1.0, center=(3.6, -0.6))
+        vL = View(elev=20, azim=-60, scale=0.9, center=(-3.5, -0.2))
+        vR = View(elev=20, azim=-60, scale=0.9, center=(3.6, -0.2))
         Om0, w0 = 50 * DEG, 30 * DEG
         t = ValueTracker(0)
         # i = 50: bracket < 0 so omega-dot > 0: perigee ADVANCES (omega grows, same sense as theta), sped up

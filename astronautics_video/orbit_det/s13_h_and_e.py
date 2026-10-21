@@ -127,27 +127,25 @@ class S13_h_and_e(VScene):
                   w=(.15, .12, .2, .3, .08, .07, .08))
         for k, slot in enumerate((3, 5, 7)):
             wk = work(comps[k])
-            self.play(LaggedStart(*[FadeIn(m, shift=.1 * DOWN) for m in wk], lag_ratio=.6), run_time=2.6)
-            self.wait(1.6)
-            self.play(TransformFromCopy(wk[3], hv[slot]), FadeOut(wk), run_time=1.0)
+            self.play(LaggedStart(*[FadeIn(m, shift=.1 * DOWN) for m in wk], lag_ratio=.6), run_time=2.2)
+            self.wait(1.2)
+            self.play(TransformFromCopy(wk[3], hv[slot]), FadeOut(wk), run_time=.8)
         hm = VGroup(M(r"h = |\vec h| = \sqrt{h_x^2 + h_y^2 + h_z^2}", size=40),
                     M(r"= \sqrt{35{,}432^2 + 50{,}602^2 + 30{,}934^2}", size=40),
                     M(r"= 69{,}086\ \mathrm{km^2/s}", size=40)).arrange(DOWN, aligned_edge=LEFT, buff=.3)
         fit(hm, CW, 3.0)
         hm.move_to([X, 0.6, 0])
-        self.play(LaggedStart(*[FadeIn(m, shift=.1 * DOWN) for m in hm], lag_ratio=.6), run_time=2.4)
-        self.wait(1.5)
         h3 = M(r"h = |\vec h| = 69{,}086\ \mathrm{km^2/s}", size=40).move_to([X, 1.55, 0])
-        self.play(FadeOut(hm[:2]), ReplacementTransform(hm[2], h3), run_time=1.0)
         hb = VGroup(h1, hv, h3)
 
         # ---- beat 2: the orbit plane is perpendicular to h
         n2 = note("h is perpendicular to the orbit plane:\nit fixes the plane's tilt")
-        n2.next_to(hb, DOWN, buff=.5)
+        n2.move_to([X, -1.9, 0])
         self.beat("h sticks straight out of the orbit plane, so it already pins down the plane's tilt. "
                   "We'll use that in a moment.",
-                  [FadeIn(plane), FadeIn(n2)], Indicate(h_lab, color=LILAC), view.turn(15), .1,
-                  w=(.3, .2, .4))
+                  [FadeIn(plane), FadeIn(n2), FadeIn(hm[0])], [view.turn(15), FadeIn(hm[1])], FadeIn(hm[2]), .1,
+                  [FadeOut(hm[:2]), ReplacementTransform(hm[2], h3), Indicate(h_lab, color=LILAC)],
+                  w=(.25, .3, .1, .25))
 
         # ---- beat 3: e vector, its two pieces first; fold h into one boxed result
         hbox_eq = E(r"\vec h| = (35{,}432,\ 50{,}602,\ 30{,}934)", size=40)

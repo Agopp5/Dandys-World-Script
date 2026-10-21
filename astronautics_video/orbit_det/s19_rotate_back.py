@@ -205,6 +205,7 @@ class S19_Rotate_Back(VScene):
             for g in (rx, ry, rz):
                 self.play(Write(g[0]), run_time=.09 * d)
                 self.play(Write(g[1]), run_time=.06 * d)
+            self.snap("r components")
             self.play(FadeOut(VGroup(eq1, rP_line)),
                       ReplacementTransform(VGroup(rx, ry, rz), rres), run_time=.06 * d)
             self.play(Write(veq), grow(vA), FadeIn(vL), run_time=.07 * d)
