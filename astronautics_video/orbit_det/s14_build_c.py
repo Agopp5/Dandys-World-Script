@@ -137,7 +137,7 @@ class S14_Build_C(VScene):
             r.move_to([0, y, 0]).align_to([LEFT_X, 0, 0], LEFT)
             comps.add(c)
             results.add(r)
-        w_q = T("q_z is zero up to rounding", size=26, color=MUTED).next_to(results[2], RIGHT, buff=.5)
+        w_q = T("zero up to rounding", size=26, color=MUTED).next_to(results[2], RIGHT, buff=.5)
         n_q = vec_line(r"\hat q", ROWS[1], LIME).move_to([XR, STACK_Y[2], 0])
         with self.say("And q hat completes the right handed set: h hat cross p hat.") as d:
             self.play(Write(d_q), grow(a_q), FadeIn(l_q), run_time=.25 * d)
