@@ -62,7 +62,7 @@ class S15_Omega(VScene):
 
         # ---------- beat 1: the bottom row of C_PN ----------
         mat = Matrix([["0.2568", "0.3668", "-0.8942"], ["-0.8192", "0.5736", "0"],
-                      ["0.5129", "0.7324", "0.4478"]], h_buff=2.3).scale(.9)
+                      ["0.5129", "0.7324", "0.4478"]], h_buff=2.0).scale(.86)
         mat.set_color(INK)
         lhs = M(r"C_{PN} =", size=44)
         grp = VGroup(lhs, mat).arrange(RIGHT, buff=.25)
@@ -70,7 +70,7 @@ class S15_Omega(VScene):
                         [(r"\hat p", ROSE), (r"\hat q", LIME), (r"\hat h", LILAC)]])
         for t, row in zip(tags, mat.get_rows()):
             t.next_to(mat, RIGHT, buff=.3).set_y(row.get_y())
-        block = VGroup(grp, tags).move_to([-3.5, 1.35, 0])
+        block = VGroup(grp, tags).move_to([-2.75, 1.35, 0])
         ent = mat.get_entries()
         row_box = SurroundingRectangle(mat.get_rows()[2], color=LILAC, buff=.12)
         row_eq = M(r"\text{row 3} = \big(\sin i\,\sin\Omega,\ \ {-\sin i}\,\cos\Omega,\ \ \cos i\big)", size=40)
@@ -115,7 +115,7 @@ class S15_Omega(VScene):
                   Write(atan), w=(.12, .18, .2, .2, .3))
 
         # ---------- beat 3: the textbook route, n = K x h, in 3D ----------
-        view = View(elev=18, azim=15, scale=.95, center=(-3.4, -1.5))
+        view = View(elev=18, azim=-25, scale=.95, center=(-3.4, -1.5))
         g = globe(view)
         axs = axes3(view, 2.4)
         eqd = disc3(view, IX, JY, 2.6, MUTED, .1)

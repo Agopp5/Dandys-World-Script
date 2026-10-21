@@ -52,7 +52,7 @@ class S05_Turn_i(VScene):
     budget = 147
 
     def construct(self):
-        view = View(azim=-15, scale=1.05, center=(-2.95, -0.25))
+        view = View(azim=-15, scale=1.0, center=(-2.95, -0.25))
         it = ValueTracker(0.0)              # inclination (rad)
         th = ValueTracker(-np.pi / 2)       # satellite true anomaly (rad)
 
@@ -108,10 +108,10 @@ class S05_Turn_i(VScene):
         asc = dot3(view, lambda: orb(0), SKY)
         dsc = dot3(view, lambda: orb(np.pi), dim_sky)
         # camera is still during beats 3-4, so these screen labels sit beside the dots
-        asc_lab = backed(T("ascending node", size=32, color=SKY).next_to(view.p(orb(0)), DR, buff=.15))
+        asc_lab = backed(T("ascending node", size=32, color=SKY).next_to(view.p(orb(0)), DOWN, buff=.4))
         dsc_t = T("descending node", size=32, color=dim_sky).next_to(view.p(orb(np.pi)), UP, buff=.25)
         if dsc_t.get_left()[0] < -6.9:
-            dsc_t.shift((-6.9 - dsc_t.get_left()[0]) * LEFT)
+            dsc_t.shift((-6.9 - dsc_t.get_left()[0]) * RIGHT)
         dsc_card = backed(dsc_t)
         nodes_col = VGroup(VGroup(T("ascending node:", size=34, color=SKY), T("crosses heading north", size=32)
                                   ).arrange(DOWN, aligned_edge=LEFT, buff=.12),
@@ -164,7 +164,10 @@ class S05_Turn_i(VScene):
         rows = VGroup(row(r"i|<|90^\circ", "prograde", "eastward, with Earth's spin"),
                       row(r"i|=|90^\circ", "polar", "over both poles"),
                       row(r"i|>|90^\circ", "retrograde", "westward")).arrange(DOWN, buff=.35, aligned_edge=LEFT)
-        rows.next_to(rd, DOWN, buff=.5)
+        # beat 6: the readout climbs to the top of the column to make room for the three rows
+        tot = rd.height + .45 + rows.height
+        rd_shift = (col2.get_y() + tot / 2 - rd.height / 2) - rd.get_y()
+        rows.next_to(rd.get_bottom() + rd_shift * UP, DOWN, buff=.45)
         rows.set_x(rd.get_x())
         motion = arrow3(view, lambda: orb(np.pi - .3), lambda: orb(np.pi + .3), ACCENT)
         spin = arrow3(view, -2.2 * NHAT + .45 * MHAT, -2.2 * NHAT - .45 * MHAT, INK2)
@@ -174,7 +177,8 @@ class S05_Turn_i(VScene):
                       "prograde orbit. At exactly ninety, it passes over both poles: a polar orbit. Above "
                       "ninety, it travels westward: retrograde.") as d:
             self.play(view.elev.animate.set_value(80), FadeOut(eq_cos), FadeOut(rng), FadeOut(dsc),
-                      FadeIn(motion), FadeIn(spin), FadeIn(spin_lab), FadeOut(kh_lab), run_time=.14 * d)
+                      FadeIn(motion), FadeIn(spin), FadeIn(spin_lab), FadeOut(kh_lab), rd_lab.animate.shift(rd_shift * UP),
+                      run_time=.14 * d)
             self.play(FadeIn(rows[0]), run_time=.1 * d)
             self.snap("prograde")
             self.wait(.22 * d)

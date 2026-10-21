@@ -30,7 +30,7 @@ def row(*parts):
 
 
 def card(n, *rows):
-    body = VGroup(*rows).arrange(DOWN, buff=.18, aligned_edge=LEFT)
+    body = VGroup(*rows).arrange(DOWN, buff=.14, aligned_edge=LEFT)
     return panel(VGroup(badge(n), body).arrange(RIGHT, buff=.35))
 
 
@@ -39,63 +39,68 @@ class S23_Recap(VScene):
 
     def construct(self):
         # 1. ECI frame
-        k1 = card(1, row("ECI frame:", r"$\hat I", "at the vernal equinox,", r"$\hat K", "at the North Pole,",
-                         "not spinning"))
+        k1 = card(1, row("ECI frame:", r"$\hat I", "at the vernal equinox,", r"$\hat K", "at the North Pole"),
+                  row("it does not spin with the Earth"))
         # 2. six elements
-        r2a = row("$a", "size,", "$e", "shape;", r"$\Omega", "about", r"$\hat K", ",", "$i", "about the node line,",
+        r2a = row("$a", "size,", "$e", "shape,", r"$\theta", "where the satellite is")
+        r2b = row("three turns:", r"$\Omega", "about", r"$\hat K", ",  ", "$i", "about the node line,",
                   r"$\omega", "about", r"$\hat h")
-        r2b = row(r"$\theta", "where the satellite is")
         k2 = card(2, r2a, r2b)
         # 3. C_PN and the angles back out
         cpn_eq = E(r"C_{PN}|=|C_3(|\omega|)\,C_1(|i|)\,C_3(|\Omega|)", size=40)
-        r3b = row(r"$i|=|\arccos C_{33}", r"$\Omega|=|\operatorname{atan2}(C_{31},-C_{32})",
-                  r"$\omega|=|\operatorname{atan2}(C_{13},C_{23})")
-        r3b.arrange(RIGHT, buff=.6)
-        k3 = card(3, row(cpn_eq), r3b)
+        acos = E(r"i|=|\arccos C_{33}", size=40)
+        at1 = E(r"\Omega|=|\operatorname{atan2}(C_{31},-C_{32})", size=40)
+        at2 = E(r"\omega|=|\operatorname{atan2}(C_{13},C_{23})", size=40)
+        k3 = card(3, VGroup(cpn_eq, acos).arrange(RIGHT, buff=.8), VGroup(at1, at2).arrange(RIGHT, buff=.8))
         # 4. from r and v
-        r4a = row("energy", r"$\mathcal{E}", "gives", "$a", ";", r"$\vec h|,\,|\vec e", "give", "$e",
+        r4a = row("energy", r"$\mathcal{E}", "gives", "$a", ";  ", r"$\vec h|,\,|\vec e", "give", "$e",
                   "and the frame", r"$\hat p|,\,|\hat q|,\,|\hat h")
-        r4b = row(r"$\vec r\cdot\vec v", "settles", r"$\theta", ";", "back with", r"$C_{PN}^{T}")
+        r4b = row(r"$\vec r\cdot\vec v", "settles", r"$\theta", ";  the transpose", r"$C_{PN}^{T}",
+                  "takes you back")
         k4 = card(4, r4a, r4b)
         # 5. J2
         dots = E(r"\dot\Omega|,\;|\dot\omega", size=40)
         paint(dots, {0: SKY, 2: MINT})
-        r5b = row("except at", r"$i|=|63.4^\circ", "where", r"$\dot\omega|=|0")
+        r5b = row("except at the critical inclination", r"$i|=|63.4^\circ", ", where", r"$\dot\omega|=|0")
         paint(r5b[3], {0: MINT})
         k5 = card(5, row("Earth's bulge slowly turns the node and the perigee", dots), r5b)
 
-        stack = VGroup(k1, k2, k3, k4, k5).arrange(DOWN, buff=.2, aligned_edge=LEFT)
-        fit(stack, 13.6, 7.7)
-        stack.move_to(ORIGIN)
         boxes = [k1, k2, k3, k4, k5]
+        stack = VGroup(*boxes).arrange(DOWN, buff=.14, aligned_edge=LEFT)
+        print("STACK", stack.width, stack.height)
+        fit(stack, 13.8, 7.8)
+        stack.move_to(ORIGIN)
 
         def add(k, j):
-            dim = [boxes[m].animate.set_opacity(.45) for m in range(j)]
+            dim = [boxes[m].animate.set_opacity(.5) for m in range(j)]
             return [FadeIn(k, shift=.2 * UP)] + dim
 
         self.beat("Let's recap. The E C I frame points I at the vernal equinox and K at the North Pole, "
                   "and it doesn't spin with the Earth.", add(k1, 0))
-        syms = [r2a[0], r2a[2], r2a[4], r2a[8], r2a[10], r2b[0]]
+        syms = [r2b[1], r2b[5], r2b[7]]
         self.beat("Six elements place any orbit: a and e for size and shape, three turns for orientation, "
                   "capital Omega about K, i about the node line, little omega about h, and theta for where "
-                  "the satellite is.", add(k2, 1), .05,
-                  LaggedStart(*[Indicate(s, scale_factor=1.3) for s in syms], lag_ratio=.4),
-                  w=(.2, .75))
+                  "the satellite is.", add(k2, 1), .05, Indicate(VGroup(r2a[0], r2a[2]), scale_factor=1.3),
+                  LaggedStart(*[Indicate(s, scale_factor=1.4) for s in syms], lag_ratio=.5),
+                  Indicate(r2a[4], scale_factor=1.4), w=(.15, .15, .5, .15))
         self.beat("Those three turns are the rows of C P N, C three of omega, C one of i, C three of Omega. "
                   "The angles come back out with an arc cosine and two atan twos.",
                   add(k3, 2), Circumscribe(cpn_eq, color=ACCENT), .1,
-                  LaggedStart(*[Indicate(m) for m in r3b], lag_ratio=.5), w=(.15, .3, .45))
+                  LaggedStart(*[Indicate(m) for m in (acos, at1, at2)], lag_ratio=.5), w=(.15, .3, .45))
         self.beat("From r and v: energy gives a, h and the eccentricity vector give e and the frame, "
                   "and r dot v settles theta. The transpose takes you back.",
-                  add(k4, 3), Indicate(r4a[1]), Indicate(r4a[5]), Indicate(r4b[0]), Indicate(r4b[5]),
+                  add(k4, 3), Indicate(r4a[1]), Indicate(r4a[5]), Indicate(r4b[0]), Indicate(r4b[4]),
                   w=(.15, .2, .25, .2, .2))
 
-        # the closing picture: the Molniya orbit, perigee frozen
-        view = View(elev=18, azim=-60, scale=1.0)
+        # the closing picture: the Molniya orbit (drawn a = 3, e = 0.6, not to scale), perigee frozen
+        view = View(elev=16, azim=20, scale=0.85, center=(-3.0, -1.9))
         earth = globe(view)
-        orb = curve(view, orbit(3.0, 0.6, M_OM, M_I, M_W), 0, 2 * np.pi, INK, width=5, R=1.0)
         f = orbit(3.0, 0.6, M_OM, M_I, M_W)
+        orb = curve(view, f, 0, 2 * np.pi, INK, width=5, R=1.0)
+        kax = arrow3(view, (0, 0, 0), (0, 0, 2.2), INK2)
+        klab = label3(view, r"\hat K", (0, 0, 2.5), INK2, 40)
         peri = dot3(view, f(0.0), ROSE)
+        plab = label3(view, r"\text{perigee}", f(0.0) * 1.9, ROSE, 36)
         side = VGroup(T("Molniya", size=40, weight=BOLD),
                       E(r"i|=|63.4^\circ", size=48),
                       VGroup(E(r"\dot\omega|\approx|0", size=44), T("perigee frozen", size=30, color=INK2))
@@ -106,7 +111,8 @@ class S23_Recap(VScene):
                       "inclination, where the perigee stands still.") as d:
             self.play(*add(k5, 4), run_time=.2 * d)
             self.play(Indicate(r5b[1]), run_time=.25 * d)
-            self.play(FadeOut(stack), FadeIn(earth), FadeIn(side), run_time=.2 * d)
-            self.play(grow(orb), FadeIn(peri), run_time=.3 * d)
+            self.play(FadeOut(stack), FadeIn(earth), FadeIn(side), FadeIn(kax), FadeIn(klab), run_time=.2 * d)
+            self.play(grow(orb), run_time=.25 * d)
+            self.play(FadeIn(peri), FadeIn(plab), run_time=.1 * d)
         self.wait(1.5)
         self.wipe()
