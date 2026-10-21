@@ -69,7 +69,7 @@ class S21_Node_Drift(VScene):
         om_lab = label3(view, r"\Omega", lambda: 1.95 * nhat(om() / 2), SKY, 40)
         i_arc = arc3(view, lambda: nhat(om()), lambda: np.cross(K3, nhat(om())), ii, 1.2, EMBER)
         i_lab = label3(view, "i", lambda: 1.5 * mhat(om(), ii() / 2), EMBER, 40)
-        scene3d = VGroup(earth, ax3, equator, plane, orb, node_line, node_dot, om_arc, om_lab, i_arc, i_lab)
+        scene3d = Group(earth, ax3, equator, plane, orb, node_line, node_dot, om_arc, om_lab, i_arc, i_lab)
 
         # live inclination readout (top left)
         i_num = DecimalNumber(51.6, num_decimal_places=1, unit=r"^{\circ}", font_size=44, color=EMBER)
@@ -128,3 +128,87 @@ class S21_Node_Drift(VScene):
             self.play(inc.animate.set_value(98.0), Om.animate(rate_func=rate_functions.ease_in_sine).set_value(40.0),
                       FadeIn(r3), run_time=0.3 * d)
             self.play(FadeIn(r3n), run_time=0.1 * d)
+
+        # ------------------------------------------------ beat 4: the Sun inset
+        S = np.array([-3.3, -0.25, 0.0])
+        RS, HALF, BETA = 2.6, 0.85, np.radians(55)
+        lam0 = -0.42 * PI
+        lam = ValueTracker(lam0)
+        epos = lambda: S + RS * np.array([np.cos(lam.get_value()), np.sin(lam.get_value()), 0.0])
+        udir = lambda ang: np.array([np.cos(ang), np.sin(ang), 0.0])
+        sun = Dot(S, radius=0.34, color=GOLD)
+        sun_g = glow(sun, GOLD)
+        sun_l = T("Sun", size=28, color=GOLD).next_to(sun, DOWN, buff=0.25)
+        path = DashedVMobject(Circle(radius=RS, color=MUTED, stroke_width=2).move_to(S), num_dashes=70)
+        sunline = always_redraw(lambda: DashedLine(epos(), epos() + 1.25 * (S - epos()) / RS, color=GOLD,
+                                                   stroke_width=3))
+        fixed = always_redraw(lambda: DashedLine(epos() - HALF * udir(lam0 + PI + BETA),
+                                                 epos() + HALF * udir(lam0 + PI + BETA), color=MUTED,
+                                                 stroke_width=4))
+        seg = always_redraw(lambda: Line(epos() - HALF * udir(lam.get_value() + PI + BETA),
+                                         epos() + HALF * udir(lam.get_value() + PI + BETA), color=INK,
+                                         stroke_width=7))
+        ang = always_redraw(lambda: Arc(radius=0.5, start_angle=lam.get_value() + PI, angle=BETA,
+                                        arc_center=epos(), color=GOLD, stroke_width=5))
+        edot = always_redraw(lambda: Dot(epos(), radius=0.15, color=INK2))
+        leg = VGroup(
+            VGroup(Line(ORIGIN, 0.6 * RIGHT, color=INK, stroke_width=7), T("orbit plane, node drifting", size=26)),
+            VGroup(DashedLine(ORIGIN, 0.6 * RIGHT, color=MUTED, stroke_width=4),
+                   T("plane with no drift", size=26, color=MUTED)),
+        )
+        for row in leg:
+            row.arrange(RIGHT, buff=0.25)
+        leg.arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_corner(UL, buff=0.35)
+        sun_scene = Group(path, sun_g, sun, sun_l, fixed, sunline, seg, ang, edot)
+
+        s1 = E(r"\dot\Omega|=|+\frac{360^\circ}{365.24\ \text{days}}", size=42)
+        paint(s1, {0: SKY})
+        s1.move_to([XR, 1.15, 0])
+        s2 = E(r"\approx|+0.9856^\circ\text{/day}", size=42).next_to(s1, DOWN, buff=0.45).align_to(s1[1], LEFT)
+        s2n = T("once per year, eastward", size=26, color=MUTED).next_to(s2, DOWN, buff=0.25)
+        old3 = [r2, r2n, r3, r3n, nline, nnote, i_read, ghost]
+        with self.say("Engineers use that eastward drift on purpose. If the node turns exactly once per year, about one degree per day, the orbit plane keeps the same angle to the Sun all year.") as d:
+            i_num.clear_updaters()
+            self.play(FadeOut(scene3d), *[FadeOut(m) for m in old3], run_time=0.1 * d)
+            self.play(FadeIn(path), FadeIn(sun_g), FadeIn(sun), FadeIn(sun_l), FadeIn(edot), FadeIn(sunline),
+                      FadeIn(fixed), FadeIn(seg), FadeIn(ang), FadeIn(leg), run_time=0.14 * d)
+            self.play(Write(s1), run_time=0.16 * d)
+            self.play(lam.animate.set_value(lam0 + TAU), FadeIn(s2, run_time=0.1 * d),
+                      FadeIn(s2n, run_time=0.1 * d), run_time=0.55 * d, rate_func=linear)
+
+        # ------------------------------------------------ beat 5: sun synchronous, 98.2 deg at 700 km
+        t5 = T("sun synchronous orbit", size=32, color=INK).move_to([XR, -1.45, 0])
+        e5 = E(r"700\ \text{km}:|\quad|i|\approx|98.2^\circ", size=44).next_to(t5, DOWN, buff=0.35)
+        paint(e5, {4: EMBER})
+        n5 = T("same lighting every pass", size=30, color=GOLD).next_to(e5, DOWN, buff=0.3)
+        with self.say("That's a sun synchronous orbit. At seven hundred kilometers, it needs an inclination of about ninety eight degrees.") as d:
+            self.play(FadeIn(t5, shift=0.2 * UP), lam.animate(rate_func=linear).set_value(lam0 + TAU + 0.5 * PI),
+                      run_time=0.3 * d)
+            self.play(Write(e5), lam.animate(rate_func=linear).set_value(lam0 + TAU + 1.1 * PI), run_time=0.35 * d)
+            g5 = glow(e5[4], EMBER)
+            self.play(FadeIn(g5), FadeIn(n5), lam.animate(rate_func=linear).set_value(lam0 + TAU + 1.6 * PI),
+                      run_time=0.3 * d)
+
+        # ------------------------------------------------ beat 6: a, e, i only wiggle
+        x_max = 6
+        ax_a = axes([0, x_max, 1], [-1, 1, 1], width=5.6, height=3.0, xlabel="t", ylabel="a")
+        ax_o = axes([0, x_max, 1], [-1, 1, 1], width=5.6, height=3.0, xlabel="t", ylabel=r"\Omega")
+        ax_a.move_to([-3.5, 0.25, 0])
+        ax_o.move_to([3.5, 0.25, 0])
+        f_a = lambda t: 0.22 * np.sin(4 * PI * t)                   # short-period wiggle, twice per orbit
+        f_o = lambda t: 0.7 - 0.25 * t + 0.16 * np.sin(4 * PI * t)  # same wiggle on a steady downward trend
+        c_a = ax_a.plot(f_a, x_range=[0, x_max, 0.02], color=INK, stroke_width=4)
+        c_o = ax_o.plot(f_o, x_range=[0, x_max, 0.02], color=SKY, stroke_width=4)
+        m_a = DashedLine(ax_a.c2p(0, 0), ax_a.c2p(x_max, 0), color=MUTED, stroke_width=3)
+        m_o = DashedLine(ax_o.c2p(0, 0.7), ax_o.c2p(x_max, 0.7 - 0.25 * x_max), color=MUTED, stroke_width=3)
+        head = T("a, e and i only wiggle", size=36).move_to([0, 3.3, 0])
+        cap_a = TX(r"$a$: wiggles, no trend", size=30).next_to(ax_a, DOWN, buff=0.45)
+        cap_o = TX(r"$\Omega$: wiggles plus a steady drift", size=30).next_to(ax_o, DOWN, buff=0.45)
+        note6 = T("schematic, t in orbits", size=26, color=MUTED).move_to([0, -3.55, 0])
+        old4 = [sun_scene, leg, fml, s1, s2, s2n, t5, e5, g5, n5]
+        with self.say("Meanwhile a, e and i don't drift. They only wiggle a little each orbit, like your notes sketch.") as d:
+            self.play(*[FadeOut(m) for m in old4], run_time=0.1 * d)
+            self.play(FadeIn(head), Create(ax_a), Create(ax_o), run_time=0.15 * d)
+            self.play(Create(m_a), Create(c_a), FadeIn(cap_a), run_time=0.3 * d, rate_func=linear)
+            self.play(Create(m_o), Create(c_o), FadeIn(cap_o), FadeIn(note6), run_time=0.3 * d, rate_func=linear)
+        self.wipe()

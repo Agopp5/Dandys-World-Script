@@ -60,9 +60,9 @@ class S14_Build_C(VScene):
 
         view = View(elev=22, azim=-15, scale=0.8, center=(-3.2, -1.6))
         earth = globe(view)
-        ax = axes3(view, 2.6)
+        ax = axes3(view, 3.0)
         orb = curve(view, orbit(3.0, 0.6, OM, INC, W), 0, 2 * np.pi, INK, width=3, R=1.0)
-        L = 2.2
+        L = 2.7
         a_p = arrow3(view, (0, 0, 0), L * P_HAT, ROSE)
         a_h = arrow3(view, (0, 0, 0), L * H_HAT, LILAC)
         a_q = arrow3(view, (0, 0, 0), L * Q_HAT, LIME)
@@ -96,14 +96,23 @@ class S14_Build_C(VScene):
                   morph(d_q, n_q, [(0, 0), (1, 1)]), FadeIn(w_q), w=(.25, .25, .3, .15))
 
         # ---- stack the rows into C_PN
-        mat = Matrix(ROWS, h_buff=1.75, v_buff=.85)
-        mat.scale(40 / 48)
-        for r, col in enumerate((ROSE, LIME, LILAC)):
-            mat.get_rows()[r].set_color(col)
+        # hand-built matrix: right-aligned columns so the minus signs never touch a neighbor
+        cells = VGroup(*[M(x, size=40, color=col) for row, col in zip(ROWS, (ROSE, LIME, LILAC)) for x in row])
+        cells.arrange_in_grid(rows=3, cols=3, buff=(.45, .38), col_alignments="rrr")
+        ent = [cells[3 * r:3 * r + 3] for r in range(3)]
+
+        def bracket(side):
+            hgt, tick = cells.height + .3, .14
+            x = cells.get_left()[0] - .2 if side < 0 else cells.get_right()[0] + .2
+            y0, y1 = cells.get_center()[1] - hgt / 2, cells.get_center()[1] + hgt / 2
+            pts = [[x - side * tick, y1, 0], [x, y1, 0], [x, y0, 0], [x - side * tick, y0, 0]]
+            return VMobject(stroke_color=INK, stroke_width=3).set_points_as_corners(pts)
+
+        brackets = VGroup(bracket(-1), bracket(1))
+        mat = VGroup(cells, brackets)
         lhs = M(r"C_{PN}", "=", size=44)
         grp = VGroup(lhs, mat).arrange(RIGHT, buff=.25)
-        grp.move_to([3.6, 1.5, 0])
-        ent = mat.get_rows()
+        grp.move_to([3.7, 1.5, 0])
         moves = []
         for line, r in ((n_p, 0), (n_q, 1), (n_h, 2)):
             for j, k in enumerate((3, 5, 7)):
@@ -112,7 +121,7 @@ class S14_Build_C(VScene):
             moves += [FadeOut(line[k]) for k in (1, 2, 4, 6, 8)]
         self.beat("Stack them as rows, and that's C P N, with real numbers in it.",
                   [FadeOut(w_p), FadeOut(w_h), FadeOut(w_q)], moves,
-                  [FadeIn(lhs), FadeIn(mat.get_brackets())], .2, w=(.15, .45, .2))
+                  [FadeIn(lhs), FadeIn(brackets)], .2, w=(.15, .45, .2))
 
         # ---- the corner entry and the inclination
         c33 = ent[2][2]

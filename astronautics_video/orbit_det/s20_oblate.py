@@ -63,11 +63,11 @@ class S20_Oblate(VScene):
                            fill_color=GOLD, fill_opacity=0.45, stroke_width=0)
         eq_line = Line(o0, o0 + rs * RIGHT, color=INK, stroke_width=5)
         po_line = Line(o0, o0 + rs * SQUASH * UP, color=INK, stroke_width=5)
-        eq_lab = backed(TX(r"equatorial $6{,}378$ km", size=28)).next_to(eq_line, DOWN, buff=0.25).shift(0.6 * RIGHT)
-        po_lab = backed(TX(r"polar $6{,}357$ km", size=28)).next_to(po_line.get_end(), UP, buff=0.2)
-        diff = VGroup(TX(r"difference $21$ km", size=34),
-                      T("(exaggerated here)", 28, INK2)).arrange(DOWN, buff=0.2)
-        bulge_tag = T("the bulge", 30, GOLD)
+        eq_lab = backed(T("equatorial 6,378 km", 30)).next_to(eq_line, DOWN, buff=0.25).shift(0.6 * RIGHT)
+        po_lab = backed(T("polar 6,357 km", 30)).next_to(po_line.get_end(), UP, buff=0.2)
+        diff = VGroup(T("difference 21 km", 36),
+                      T("(exaggerated here)", 30, INK2)).arrange(DOWN, buff=0.2)
+        bulge_tag = T("the bulge", 34, GOLD)
         right2 = VGroup(diff, bulge_tag).arrange(DOWN, buff=0.6)
         place(right2, "right")
         with self.say("Earth spins, so it bulges at the equator. It's about twenty one kilometers wider than it is tall.") as d:
@@ -82,12 +82,13 @@ class S20_Oblate(VScene):
         l1 = E(r"V|=|-\frac{\mu}{r}|\Big[\,1", size=46)
         l2 = E(r"-\,J_2|\Big(\frac{R}{r}\Big)^2|\frac{3\sin^2\phi-1}{2}\,\Big]", size=46)
         l2.next_to(l1, DOWN, buff=0.35).align_to(l1[2], LEFT).shift(0.4 * RIGHT)
-        n1 = T("a perfect sphere", 26, INK2).next_to(l1[2], UP, buff=0.25)
-        n2 = TX(r"bulge correction, $\phi$ = latitude", size=28).next_to(l2, DOWN, buff=0.3)
+        n1 = T("a perfect sphere", 28, INK2).next_to(l1[2], UP, buff=0.25)
+        n2 = VGroup(T("bulge correction,", 28, INK2), M(r"\phi", size=40), T("= latitude", 28, INK2)).arrange(RIGHT, buff=0.15).next_to(l2, DOWN, buff=0.3)
         jv = E(r"J_2|=|1.08263\times 10^{-3}", size=46)
         pot = VGroup(n1, l1, l2, n2, jv)
         jv.next_to(n2, DOWN, buff=0.6)
-        place(pot, "right")
+        pot.move_to((3.3, -0.2, 0))
+        fit(pot, 6.6, 6.8)
         with self.say("Your notes add one correction term to the gravity potential. Its size is set by a single number, J two, about one point oh eight times ten to the minus three.") as d:
             self.play(FadeOut(VGroup(diff, bulge_tag, eq_line, po_line, eq_lab, po_lab)), run_time=.1 * d)
             self.play(Write(l1), FadeIn(n1), run_time=.2 * d)
@@ -99,7 +100,7 @@ class S20_Oblate(VScene):
         self.drop(pot, jg)
 
         # ---- beat 4: the tilted orbit and the bulge's tug
-        S1 = 1.4
+        S1 = 1.22
         k = S1 / 2.3
         Om = ValueTracker(OM0)
         hh = lambda: kvec(Om.get_value())
@@ -111,16 +112,16 @@ class S20_Oblate(VScene):
         node = line3(view, lambda: -A_ORB * nn(), lambda: A_ORB * nn(), SKY, width=4)
         ndot = dot3(view, lambda: A_ORB * nn(), SKY, radius=0.09)
         harr = arrow3(view, lambda: 0.95 * hh(), lambda: 2.6 * hh(), LILAC)
-        hlab = label3(view, r"\hat h", lambda: 2.9 * hh(), LILAC, 40)
+        hlab = label3(view, r"\hat h", lambda: 2.75 * hh() + 0.45 * nn(), LILAC, 44)
         top, bot = ring(PI / 2), ring(3 * PI / 2)
         tug1 = arrow3(view, top, top - np.array([0, 0, 0.9]), EMBER, width=6)
         tug2 = arrow3(view, bot, bot + np.array([0, 0, 0.9]), EMBER, width=6)
         tipping = arc3(view, nhat(OM0), 2.6 * kvec(OM0), -np.radians(22), 2.6, EMBER)
-        n4a = T("the bulge pulls the orbit toward the equator", 28)
-        n4b = VGroup(T("it tries to shrink the tilt", 28), M("i", size=40, color=EMBER)).arrange(RIGHT, buff=0.2)
-        n4c = T("like a hand pushing on a spinning top", 28, INK2)
+        n4a = VGroup(T("the bulge pulls the orbit", 30), T("toward the equator", 30)).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        n4b = VGroup(T("it tries to shrink the tilt", 30), M("i", size=44, color=EMBER)).arrange(RIGHT, buff=0.2)
+        n4c = VGroup(T("like a hand pushing", 30, INK2), T("on a spinning top", 30, INK2)).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         txt4 = VGroup(n4a, n4b, n4c).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
-        place(txt4, "right")
+        fit(txt4, 6.2, 6.5).move_to((0.5, -0.2, 0), aligned_edge=LEFT)
         with self.say("The extra mass at the equator tugs a tilted orbit, trying to pull its plane down toward the equator. Like a hand pushing on a spinning top.") as d:
             self.play(view.scale.animate.set_value(S1), ref.animate.scale(k, about_point=o0),
                       bulge.animate.scale(k, about_point=o0), FadeIn(eqp), run_time=.18 * d)
@@ -135,11 +136,11 @@ class S20_Oblate(VScene):
         # ---- beat 5: precession, the node line swings west
         cone = curve(view, lambda t: 2.6 * kvec(np.degrees(t)), 0, TAU, LILAC, width=2)
         e5 = E(r"\dot\Omega|<|0", size=56, cmap={r"\dot\Omega": SKY})
-        n5a = T("the node line drifts west", 28, SKY)
-        n5b = VGroup(M(r"\hat h", size=40, color=LILAC), T("swings around the pole", 28)).arrange(RIGHT, buff=0.2)
-        n5c = VGroup(T("the tilt", 28), M("i", size=40, color=EMBER), T("stays the same", 28)).arrange(RIGHT, buff=0.2)
+        n5a = T("the node line drifts west", 30, SKY)
+        n5b = VGroup(M(r"\hat h", size=44, color=LILAC), T("swings around the pole", 30)).arrange(RIGHT, buff=0.2)
+        n5c = VGroup(T("the tilt", 30), M("i", size=44, color=EMBER), T("stays the same", 30)).arrange(RIGHT, buff=0.2)
         txt5 = VGroup(e5, n5a, n5b, n5c).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
-        place(txt5, "right")
+        fit(txt5, 6.2, 6.5).move_to((0.7, -0.2, 0), aligned_edge=LEFT)
         steps = np.linspace(OM0, OM1, 6)
         ghosts = VGroup()
         with self.say("And like a top, the orbit doesn't fall flat. It precesses: the whole orbit plane slowly swings around the pole.") as d:
@@ -147,7 +148,7 @@ class S20_Oblate(VScene):
             self.play(Create(cone), FadeIn(n5b), run_time=.12 * d)
             self.play(FadeIn(n5a), FadeIn(n5c), run_time=.08 * d)
             for a0, a1 in zip(steps[:-1], steps[1:]):
-                g = line3(view, -A_ORB * nhat(a0), A_ORB * nhat(a0), MUTED, width=3, dashed=True)
+                g = line3(view, -A_ORB * nhat(a0), A_ORB * nhat(a0), SKY, width=3).set_opacity(0.35)
                 ghosts.add(g)
                 self.add(g)
                 self.play(Om.animate.set_value(a1), run_time=.13 * d, rate_func=linear)

@@ -45,8 +45,8 @@ def rad(th):
     return DP / (1 + DE * np.cos(th))
 
 
-S2 = 0.9                                  # 2D plane: scene units per Earth radius
-F2 = np.array([-1.58, -0.3, 0])           # focus (Earth) in the 2D view
+S2 = 1.15                                 # 2D plane: scene units per Earth radius
+F2 = np.array([-1.0, -0.4, 0])           # focus (Earth) in the 2D view
 
 
 def p2(th, r=None):
@@ -72,7 +72,7 @@ class S17_theta0(VScene):
         self.section("Step six: where is the satellite?")
 
         # ---- 3D: e and r0 ----
-        view = View()
+        view = View(scale=0.62, center=(-3.4, -1.3))
         f = orbit(DA, DE, *ANG)
         C = cpn(*ANG)
         ph, hh = C[0], C[2]
@@ -83,7 +83,7 @@ class S17_theta0(VScene):
         e_arr = arrow3(view, o, 2.1 * ph, ROSE)
         e_lab = label3(view, r"\vec e", 2.35 * ph, ROSE, 40)
         r_arr = arrow3(view, o, pos, INK)
-        r_lab = label3(view, r"\vec r_0", 1.12 * pos, INK, 40)
+        r_lab = label3(view, r"\vec r_0", 1.45 * pos, INK, 40)
         ang = arc3(view, -hh, ph, np.radians(80), 0.75, GOLD)
         g3 = Group(earth, orb, e_arr, e_lab, r_arr, r_lab, ang)
 
@@ -94,9 +94,9 @@ class S17_theta0(VScene):
                   w=(.2, .2, .35, .25))
 
         # ---- 2D orbit plane: two candidates ----
-        earth2 = Circle(radius=0.45, color=SKY, fill_color=SKY, fill_opacity=.35, stroke_width=2).move_to(F2)
+        earth2 = Circle(radius=0.5, color=SKY, fill_color=SKY, fill_opacity=.35, stroke_width=2).move_to(F2)
         ell = ParametricFunction(lambda t: p2(t), t_range=[0, TAU], color=INK, stroke_width=4)
-        e2 = Arrow(F2, F2 + RIGHT * 2.0, buff=0, color=ROSE, stroke_width=5)
+        e2 = Arrow(F2, F2 + RIGHT * 2.3, buff=0, color=ROSE, stroke_width=5)
         e2l = M(r"\vec e", size=40, color=ROSE).next_to(e2.get_end(), UR, buff=.08)
         peri = Dot(p2(0), color=ROSE)
         peril = T("perigee", 26, ROSE).next_to(peri, DR, buff=.1)
@@ -105,10 +105,10 @@ class S17_theta0(VScene):
         ta, tb = np.radians(80), np.radians(-80)
         da, db = Dot(p2(ta), color=INK, radius=.1), Dot(p2(tb), color=INK, radius=.1)
         la, lb = DashedLine(F2, p2(ta), color=INK2), DashedLine(F2, p2(tb), color=INK2)
-        aa = Arc(radius=.8, start_angle=0, angle=ta, arc_center=F2, color=GOLD, stroke_width=5)
-        ab = Arc(radius=.8, start_angle=0, angle=tb, arc_center=F2, color=GOLD, stroke_width=5)
-        ta_l = TX(r"$80^\circ$ past perigee", size=28).next_to(da, RIGHT, buff=.15)
-        tb_l = TX(r"$80^\circ$ before perigee", size=28).next_to(db, RIGHT, buff=.15)
+        aa = Arc(radius=1.15, start_angle=0, angle=ta, arc_center=F2, color=GOLD, stroke_width=5)
+        ab = Arc(radius=1.15, start_angle=0, angle=tb, arc_center=F2, color=GOLD, stroke_width=5)
+        ta_l = TX(r"$80^\circ$ past perigee", size=30).next_to(da, LEFT, buff=.15)
+        tb_l = TX(r"$80^\circ$ before perigee", size=30).next_to(db, LEFT, buff=.15)
         candA = VGroup(la, aa, da, ta_l)
         candB = VGroup(lb, ab, db, tb_l)
 
@@ -129,8 +129,8 @@ class S17_theta0(VScene):
         vb = Arrow(p2(tb), p2(tb) + 1.1 * vdir(tb), buff=0, color=ACCENT, stroke_width=5)
         vbl = M(r"\vec v_0", size=40, color=ACCENT).next_to(vb.get_end(), RIGHT, buff=.1)
         rb = Arrow(F2, p2(tb), buff=0, color=INK, stroke_width=5)
-        a280 = Arc(radius=.6, start_angle=0, angle=np.radians(280), arc_center=F2, color=GOLD, stroke_width=6)
-        a280l = M(r"\theta_0", size=40, color=GOLD).move_to(F2 + 1.0 * np.array([np.cos(np.radians(160)), np.sin(np.radians(160)), 0]))
+        a280 = Arc(radius=.8, start_angle=0, angle=np.radians(280), arc_center=F2, color=GOLD, stroke_width=6)
+        a280l = M(r"\theta_0", size=40, color=GOLD).move_to(F2 + 1.2 * np.array([np.cos(np.radians(150)), np.sin(np.radians(150)), 0]))
         eq4 = col(E(r"\theta_0|=|360^\circ-80^\circ|=|280^\circ", size=44), -2.3)
         for m in (va, vb, vbl, rb, a280, a280l):
             m.set_z_index(2)
@@ -144,11 +144,11 @@ class S17_theta0(VScene):
         self.wipe()
 
         # ---- all six ----
-        sh = sheet(T("Six elements from one measurement", 34), [
+        sh = sheet(T("Six elements from one measurement", 40), [
             ("energy", INK2, [E(r"a|=|26{,}564\ \mathrm{km}", size=40)]),
-            ("h and e vector", ROSE, [E(r"e|=|0.7411", size=40)]),
-            ("the matrix C PN", ACCENT, [E(r"i|=|63.4^\circ|,\quad|\Omega|=|145.0^\circ|,\quad|\omega|=|270^\circ", size=40)]),
-            ("e dot r, r dot v check", GOLD, [E(r"\theta_0|=|280^\circ", size=40)]),
+            ("h, e vector", ROSE, [E(r"e|=|0.7411", size=50)]),
+            ("matrix C PN", ACCENT, [E(r"i|=|63.4^\circ|,\quad|\Omega|=|145.0^\circ|,\quad|\omega|=|270^\circ", size=50)]),
+            ("dot products", GOLD, [E(r"\theta_0|=|280^\circ", size=50)]),
         ])
         self.beat("And that's all six: a, e, i, capital Omega, little omega, and theta zero, from one measurement.",
                   FadeIn(sh.head), LaggedStart(*[FadeIn(r, shift=.2 * RIGHT) for r in sh.rows], lag_ratio=.35),
