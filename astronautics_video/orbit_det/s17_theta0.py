@@ -81,23 +81,23 @@ class S17_theta0(VScene):
         earth = globe(view)
         orb = curve(view, f, 0, TAU, INK, R=1.0)
         e_arr = arrow3(view, o, 2.1 * ph, ROSE)
-        e_lab = label3(view, r"\vec e", 2.35 * ph, ROSE, 36)
+        e_lab = label3(view, r"\vec e", 2.35 * ph, ROSE, 40)
         r_arr = arrow3(view, o, pos, INK)
-        r_lab = label3(view, r"\vec r_0", 1.12 * pos, INK, 36)
+        r_lab = label3(view, r"\vec r_0", 1.12 * pos, INK, 40)
         ang = arc3(view, -hh, ph, np.radians(80), 0.75, GOLD)
-        g3 = VGroup(earth, orb, e_arr, e_lab, r_arr, r_lab, ang)
+        g3 = Group(earth, orb, e_arr, e_lab, r_arr, r_lab, ang)
 
         eq1 = col(E(r"\cos|\theta_0|=|\frac{\vec e\cdot\vec r_0}{e\,r_0}|=|0.1736", size=44), 1.9)
         self.beat("Last, the true anomaly. Its cosine is e dot r over e times r, which comes out to zero point one seven three six.",
-                  [FadeIn(earth), FadeIn(orb)], [FadeIn(e_arr), FadeIn(e_lab), FadeIn(r_arr), FadeIn(r_lab)],
-                  Write(eq1[:4]), [Write(eq1[4:]), FadeIn(ang)],
+                  [FadeIn(earth), grow(orb)], [grow(e_arr), FadeIn(e_lab), grow(r_arr), FadeIn(r_lab)],
+                  Write(eq1[:4]), [Write(eq1[4:]), grow(ang)],
                   w=(.2, .2, .35, .25))
 
         # ---- 2D orbit plane: two candidates ----
         earth2 = Circle(radius=0.45, color=SKY, fill_color=SKY, fill_opacity=.35, stroke_width=2).move_to(F2)
         ell = ParametricFunction(lambda t: p2(t), t_range=[0, TAU], color=INK, stroke_width=4)
         e2 = Arrow(F2, F2 + RIGHT * 2.0, buff=0, color=ROSE, stroke_width=5)
-        e2l = M(r"\vec e", size=36, color=ROSE).next_to(e2.get_end(), UR, buff=.08)
+        e2l = M(r"\vec e", size=40, color=ROSE).next_to(e2.get_end(), UR, buff=.08)
         peri = Dot(p2(0), color=ROSE)
         peril = T("perigee", 26, ROSE).next_to(peri, DR, buff=.1)
         plane = VGroup(ell, earth2, e2, e2l, peri, peril)
@@ -127,10 +127,10 @@ class S17_theta0(VScene):
         fit(note, 4.7, .6).next_to(eq3, DOWN, buff=.2)
         va = Arrow(p2(ta), p2(ta) + 1.1 * vdir(ta), buff=0, color=ACCENT, stroke_width=5)
         vb = Arrow(p2(tb), p2(tb) + 1.1 * vdir(tb), buff=0, color=ACCENT, stroke_width=5)
-        vbl = M(r"\vec v_0", size=32, color=ACCENT).next_to(vb.get_end(), RIGHT, buff=.1)
+        vbl = M(r"\vec v_0", size=40, color=ACCENT).next_to(vb.get_end(), RIGHT, buff=.1)
         rb = Arrow(F2, p2(tb), buff=0, color=INK, stroke_width=5)
         a280 = Arc(radius=.6, start_angle=0, angle=np.radians(280), arc_center=F2, color=GOLD, stroke_width=6)
-        a280l = M(r"\theta_0", size=34, color=GOLD).move_to(F2 + 1.0 * np.array([np.cos(np.radians(160)), np.sin(np.radians(160)), 0]))
+        a280l = M(r"\theta_0", size=40, color=GOLD).move_to(F2 + 1.0 * np.array([np.cos(np.radians(160)), np.sin(np.radians(160)), 0]))
         eq4 = col(E(r"\theta_0|=|360^\circ-80^\circ|=|280^\circ", size=44), -2.3)
         for m in (va, vb, vbl, rb, a280, a280l):
             m.set_z_index(2)

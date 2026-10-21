@@ -91,7 +91,7 @@ class S18_Perifocal_rv(VScene):
         req = E(r"\vec r_P = \big(|r\cos|\theta|,\ r\sin|\theta|,\ 0\big)", size=44)
         rorb = E(r"r = p\,/\,\big(1+e\cos|\theta|\big)", size=44)
         rnote = T("orbit equation", size=26, color=MUTED)
-        fit(req, 6.4, 1.2)
+        fit(req, 6.6, 1.2)
         req.move_to([RX, 1.75, 0])
         rorb.move_to([RX, .75, 0])
         rnote.next_to(rorb, DOWN, buff=.18)
@@ -113,9 +113,55 @@ class S18_Perifocal_rv(VScene):
                                              + .3 * vel(th.get_value()) / np.linalg.norm(vel(th.get_value()))))
         veq = E(r"\vec v_P|=\frac{\mu}{h}\Big(|-\sin|\theta|,\ e+\cos|\theta|,\ 0\Big)", size=44,
                 cmap={r"\vec v_P": ACCENT})
-        fit(veq, 6.4, 1.4)
+        fit(veq, 6.6, 1.4)
         veq.move_to([RX, -.95, 0])
         vnote = T("hodograph result (last chapter)", size=26, color=MUTED).next_to(veq, DOWN, buff=.18)
         self.beat("The velocity is mu over h, times minus sine theta, e plus cosine theta, zero. That's the hodograph result from the last chapter.",
                   [FadeIn(vvec), FadeIn(vlab)], Write(veq), .1, FadeIn(vnote, shift=UP * .15), .1,
                   w=(.15, .4, .05, .15, .25))
+
+        # ---- beat 4: the Molniya numbers at theta = 280 deg ----
+        general = VGroup(req, veq)
+        box_target = VGroup(req.copy(), veq.copy()).arrange(DOWN, buff=.35).move_to([RX, 1.55, 0])
+        frame_box = SurroundingRectangle(box_target, color=HAIR, buff=.2, corner_radius=.12)
+        head = E(r"\text{Molniya at }|\theta|=280^\circ", size=40).move_to([RX, -.05, 0])
+        nums = VGroup(E(r"p = a(1-e^2) = 11{,}974\ \text{km}", size=40),
+                      E(r"h = \sqrt{\mu p} = 69{,}086\ \text{km}^2/\text{s}", size=40),
+                      E(r"r = p\,/\,\big(1+e\cos|\theta|\big) = 10{,}609\ \text{km}", size=40))
+        nums.arrange(DOWN, buff=.3, aligned_edge=LEFT)
+        fit(nums, 6.6, 2.6)
+        nums.next_to(head, DOWN, buff=.35)
+        with self.say("For the Molniya at theta equals two eighty: p is eleven thousand nine hundred seventy four kilometers, h is sixty nine thousand eighty six, and r is ten thousand six hundred nine.") as d:
+            self.play(FadeOut(rorb), FadeOut(rnote), FadeOut(vnote), FadeOut(projx), FadeOut(projy),
+                      run_time=.08 * d)
+            self.play(req.animate.move_to(box_target[0]), veq.animate.move_to(box_target[1]),
+                      Create(frame_box), run_time=.1 * d)
+            self.play(th.animate.set_value(TH_M), FadeIn(head), run_time=.2 * d)
+            self.play(FadeIn(nums[0], shift=UP * .15), run_time=.1 * d)
+            self.wait(.12 * d)
+            self.play(FadeIn(nums[1], shift=UP * .15), run_time=.1 * d)
+            self.wait(.1 * d)
+            self.play(FadeIn(nums[2], shift=UP * .15), run_time=.1 * d)
+            self.wait(.1 * d)
+
+        # ---- beat 5: the perifocal state vector ----
+        res_r = E(r"\vec r_P = (1{,}842,\ -10{,}448,\ 0)\ \text{km}", size=40)
+        res_v = E(r"\vec v_P| = (5.682,\ 5.278,\ 0)\ \text{km/s}", size=40, cmap={r"\vec v_P": ACCENT})
+        res = VGroup(res_r, res_v).arrange(DOWN, buff=.45, aligned_edge=LEFT)
+        fit(res, 6.6, 2.4)
+        res.move_to([RX, -1.6, 0])
+        rP_lab = M(r"\vec r_P", size=40).move_to(rlab)
+        vP_lab = M(r"\vec v_P", size=40, color=ACCENT).move_to(vlab)
+        rlab.clear_updaters()
+        vlab.clear_updaters()
+        with self.say("So the position is one thousand eight hundred forty two, minus ten thousand four hundred forty eight, zero kilometers, and the velocity is five point six eight two, five point two seven eight, zero kilometers per second.") as d:
+            self.play(FadeOut(nums), head.animate.move_to([RX, -.35, 0]), run_time=.1 * d)
+            self.play(FadeIn(res_r, shift=UP * .15), Transform(rlab, rP_lab), Indicate(rvec, color=INK2),
+                      run_time=.25 * d)
+            self.wait(.15 * d)
+            self.play(FadeIn(res_v, shift=UP * .15), Transform(vlab, vP_lab), Indicate(vvec, color=ACCENT),
+                      run_time=.25 * d)
+            self.play(FadeIn(glow(res, ACCENT)), run_time=.1 * d)
+            self.wait(.15 * d)
+        thlab.clear_updaters()
+        self.wipe()
