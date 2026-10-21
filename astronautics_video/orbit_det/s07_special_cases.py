@@ -120,15 +120,15 @@ class S07_Special_Cases(VScene):
         # beat 5: the summary
         self.drop(left, right, titleL, titleR, noP, noN, rL, uArc, uLab, uEq, pLine, vArc, vLab, vEq,
                   omArc, omLab, sLine, lArc, lLab, lEq, lGlow)
-        rows = VGroup(*[E(t, size=38) for t in (
+        rows = VGroup(*[E(t, size=48) for t in (
             r"a|:\ \text{size}",
             r"e|:\ \text{shape}",
             r"i|:\ \text{tilt},\ 0\text{ to }180^\circ",
             r"\Omega|:\ \text{node},\ 0\text{ to }360^\circ",
             r"\omega|:\ \text{node to periapsis},\ 0\text{ to }360^\circ",
             r"\theta_0|:\ \text{periapsis to satellite},\ 0\text{ to }360^\circ")])
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=.32)
-        head = T("THE SIX ELEMENTS", 30, ACCENT, weight=BOLD)
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=.38)
+        head = T("THE SIX ELEMENTS", 36, ACCENT, weight=BOLD)
         box = panel(VGroup(head, rows).arrange(DOWN, buff=.4), color=ACCENT)
         fit(box, 13, 7.2)
         box.move_to([0, 0, 0])

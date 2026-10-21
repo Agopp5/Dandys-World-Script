@@ -1,0 +1,121 @@
+"""S18: step one of the reverse problem, r and v in the perifocal frame (BRIEF.md S18)."""
+from orbit3d import *          # re-exports everything from mtk, plus the 3D orbit kit (Lato font set there)
+import mtk.core as core
+core.VOICE = "Achird"
+core.STYLE = "patient, friendly tutor explaining to a student seeing this for the first time; warm and clear; unhurried, moderate pace, with a short pause after each sentence"
+colors(**{r"\Omega": SKY, "i": EMBER, r"\omega": MINT, r"\theta": GOLD, r"\theta_0": GOLD, r"\vec h": LILAC,
+          r"\hat h": LILAC, r"\vec e": ROSE, r"\hat p": ROSE, r"\hat q": LIME, r"\vec n": LIME, "u": GOLD})
+
+# ---- facts (Kluever Example 3.1, Molniya, theta = 280 deg) ----
+MU = 3.986e5                      # km^3/s^2
+A_M, E_M = 26563.6, 0.7411        # km, -
+TH_M = np.radians(280)
+P_M = A_M * (1 - E_M ** 2)
+H_M = np.sqrt(MU * P_M)
+R_M = P_M / (1 + E_M * np.cos(TH_M))
+check(P_M, 11974)
+check(H_M, 69086)
+check(R_M, 10609)
+RP_M = R_M * np.array([np.cos(TH_M), np.sin(TH_M), 0])
+VP_M = MU / H_M * np.array([-np.sin(TH_M), E_M + np.cos(TH_M), 0])
+check(RP_M[0], 1842)
+check(RP_M[1], -10448)
+check(VP_M[0], 5.682)
+check(VP_M[1], 5.278)
+
+# ---- drawn orbit (not to scale): a = 3.0, e = 0.6 in Earth radii, flat in the p-q plane ----
+A_D, E_D = 3.0, 0.6
+P_D = A_D * (1 - E_D ** 2)
+S = 1.0                           # screen units per Earth radius
+F = np.array([-1.35, -0.6, 0])   # focus (Earth's center) on screen
+VS = 0.8                          # drawn mu/h (screen units), only sets the velocity arrow length
+
+
+def pt(th):
+    r = P_D / (1 + E_D * np.cos(th))
+    return F + S * r * np.array([np.cos(th), np.sin(th), 0])
+
+
+def vel(th):
+    return VS * np.array([-np.sin(th), E_D + np.cos(th), 0])
+
+
+class S18_Perifocal_rv(VScene):
+    budget = 145
+
+    def construct(self):
+        RX = 3.75                 # right column center
+        # ---- beat 1: the reverse problem ----
+        title = E(r"(a,\ e,\ |i|,\ |\Omega|,\ |\omega|,\ |\theta|)\;\longrightarrow\;(\vec r,\ \vec v)", size=46)
+        title.move_to([0, 3.25, 0])
+        steps = VGroup(T("step 1: perifocal frame", size=28, color=GOLD),
+                       T("step 2: rotate into ECI", size=28, color=MUTED)).arrange(RIGHT, buff=1.0)
+        steps.next_to(title, DOWN, buff=.3)
+        self.beat("Sometimes we need the reverse: start from the elements and find r and v in E C I. It takes two steps, and the first one is easy.",
+                  Write(title), .1, FadeIn(steps[0], shift=UP * .2), FadeIn(steps[1], shift=UP * .2), .2,
+                  Indicate(steps[0], color=GOLD), w=(.4, .05, .15, .15, .05, .2))
+
+        # ---- the orbit plane ----
+        th = ValueTracker(np.radians(50))
+        ell = ParametricFunction(pt, t_range=[0, TAU], color=INK, stroke_width=4)
+        earth = Circle(radius=S, stroke_color=AXIS, stroke_width=2, fill_color=SKY, fill_opacity=.35).move_to(F)
+        pax = Arrow(F, F + RIGHT * 1.65, buff=0, color=ROSE, stroke_width=4, max_tip_length_to_length_ratio=.1)
+        qax = Arrow(F, F + UP * 2.6, buff=0, color=LIME, stroke_width=4, max_tip_length_to_length_ratio=.08)
+        plab = M(r"\hat p", size=40, color=ROSE).next_to(pax.get_end(), DOWN, buff=.15)
+        qlab = M(r"\hat q", size=40, color=LIME).next_to(qax.get_end(), RIGHT, buff=.15)
+        peri = Dot(pt(0), color=ROSE, radius=.06)
+        plane = VGroup(earth, ell, pax, qax, plab, qlab, peri)
+
+        rvec = always_redraw(lambda: Arrow(F, pt(th.get_value()), buff=0, color=INK, stroke_width=5,
+                                           max_tip_length_to_length_ratio=.12))
+        sat = always_redraw(lambda: Dot(pt(th.get_value()), color=INK, radius=.08).set_z_index(3))
+        arc = always_redraw(lambda: Arc(radius=.5, start_angle=0, angle=th.get_value(), arc_center=F,
+                                        color=GOLD, stroke_width=4))
+        thlab = M(r"\theta", size=40, color=GOLD)
+        thlab.add_updater(lambda m: m.move_to(F + .85 * np.array([np.cos(th.get_value() / 2),
+                                                                  np.sin(th.get_value() / 2), 0])))
+        projx = always_redraw(lambda: DashedLine(pt(th.get_value()), [pt(th.get_value())[0], F[1], 0],
+                                                 color=MUTED, stroke_width=2))
+        projy = always_redraw(lambda: DashedLine(pt(th.get_value()), [F[0], pt(th.get_value())[1], 0],
+                                                 color=MUTED, stroke_width=2))
+
+        def rlab_pos(m):
+            t = th.get_value()
+            a, b = F, pt(t)
+            d = (b - a) / np.linalg.norm(b - a)
+            m.move_to(a + .55 * (b - a) + .35 * np.array([-d[1], d[0], 0]))
+        rlab = M(r"\vec r", size=40)
+        rlab.add_updater(rlab_pos)
+
+        # ---- beat 2: position ----
+        req = E(r"\vec r_P = \big(|r\cos|\theta|,\ r\sin|\theta|,\ 0\big)", size=44)
+        rorb = E(r"r = p\,/\,\big(1+e\cos|\theta|\big)", size=44)
+        rnote = T("orbit equation", size=26, color=MUTED)
+        fit(req, 6.4, 1.2)
+        req.move_to([RX, 1.75, 0])
+        rorb.move_to([RX, .75, 0])
+        rnote.next_to(rorb, DOWN, buff=.18)
+        with self.say("In the perifocal frame the orbit is flat. The position is r cosine theta, r sine theta, zero, where r comes from the orbit equation.") as d:
+            self.play(FadeOut(steps), FadeIn(earth), Create(ell), GrowArrow(pax), GrowArrow(qax),
+                      FadeIn(plab), FadeIn(qlab), FadeIn(peri), run_time=.22 * d)
+            self.play(FadeIn(rvec), FadeIn(sat), FadeIn(arc), FadeIn(thlab), FadeIn(rlab), run_time=.12 * d)
+            self.play(Write(req), run_time=.18 * d)
+            self.play(FadeIn(projx), FadeIn(projy), Indicate(req[1], color=INK2), run_time=.13 * d)
+            self.play(Indicate(req[3], color=INK2), run_time=.1 * d)
+            self.play(Write(rorb), FadeIn(rnote), run_time=.17 * d)
+            self.wait(.08 * d)
+
+        # ---- beat 3: velocity ----
+        vvec = always_redraw(lambda: Arrow(pt(th.get_value()), pt(th.get_value()) + vel(th.get_value()), buff=0,
+                                           color=ACCENT, stroke_width=5, max_tip_length_to_length_ratio=.2))
+        vlab = M(r"\vec v", size=40, color=ACCENT)
+        vlab.add_updater(lambda m: m.move_to(pt(th.get_value()) + vel(th.get_value())
+                                             + .3 * vel(th.get_value()) / np.linalg.norm(vel(th.get_value()))))
+        veq = E(r"\vec v_P|=\frac{\mu}{h}\Big(|-\sin|\theta|,\ e+\cos|\theta|,\ 0\Big)", size=44,
+                cmap={r"\vec v_P": ACCENT})
+        fit(veq, 6.4, 1.4)
+        veq.move_to([RX, -.95, 0])
+        vnote = T("hodograph result (last chapter)", size=26, color=MUTED).next_to(veq, DOWN, buff=.18)
+        self.beat("The velocity is mu over h, times minus sine theta, e plus cosine theta, zero. That's the hodograph result from the last chapter.",
+                  [FadeIn(vvec), FadeIn(vlab)], Write(veq), .1, FadeIn(vnote, shift=UP * .15), .1,
+                  w=(.15, .4, .05, .15, .25))
