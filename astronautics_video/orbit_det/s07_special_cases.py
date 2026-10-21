@@ -41,39 +41,39 @@ class S07_Special_Cases(VScene):
     budget = 120
 
     def construct(self):
-        vL = View(elev=24, azim=-55, scale=.85, center=(-3.6, .35))
-        vR = View(elev=32, azim=30, scale=.85, center=(3.6, .35))
+        vL = View(elev=24, azim=-55, scale=1.0, center=(-3.6, .15))
+        vR = View(elev=32, azim=30, scale=1.0, center=(3.6, .15))
 
         # left view
         gL = globe(vL)
-        axL = axes3(vL, 2.9)
+        axL = axes3(vL, 2.7)
         eqL = curve(vL, lambda t: (1.25 * np.cos(t), 1.25 * np.sin(t), 0), 0, TAU, MUTED, width=2, R=1)
         orbL = curve(vL, f_left, 0, TAU, INK, width=4, R=1)
         nodeL = line3(vL, -2.9 * N_HAT, 2.9 * N_HAT, SKY, dashed=True)
         nodeDot = dot3(vL, A_C * N_HAT, SKY)
         satL = dot3(vL, sat_L, INK)
-        titleL = T("circular, inclined", 28, INK2).move_to([-3.6, 3.5, 0])
+        titleL = T("circular, inclined", 28, INK2).move_to([-3.6, 3.65, 0])
         left = Group(eqL, gL, axL, orbL, nodeL, nodeDot, satL)
 
         # right view
         gR = globe(vR)
-        axR = axes3(vR, 2.9)
+        axR = axes3(vR, 2.7)
         orbR = curve(vR, f_right, 0, TAU, INK, width=4, R=1)
         periDot = dot3(vR, peri_R, ROSE)
         satR = dot3(vR, sat_R, INK)
-        titleR = T("elliptical, equatorial", 28, INK2).move_to([3.6, 3.5, 0])
+        titleR = T("elliptical, equatorial", 28, INK2).move_to([3.6, 3.65, 0])
         right = Group(gR, axR, orbR, periDot, satR)
 
         self.beat("Two kinds of orbit break these definitions.",
                   [FadeIn(left), FadeIn(titleL)], [FadeIn(right), FadeIn(titleR)], w=(.5, .5))
 
         # beat 2: argument of latitude on the left
-        noP = T("no periapsis", 26, MUTED).move_to([-6.0, -2.0, 0])
+        noP = T("no periapsis", 26, MUTED).move_to([-6.05, -2.75, 0])
         uArc = arc3(vL, H_L, N_HAT, U_SAT, 1.7, GOLD)
         mid = unit(np.cos(U_SAT / 2) * N_HAT + np.sin(U_SAT / 2) * Q_L)
         rL = line3(vL, (0, 0, 0), sat_L, INK2, dashed=True)
         uLab = label3(vL, "u", 2.05 * mid, GOLD, 36)
-        uEq = E(r"u|=|\omega|+|\theta", size=44).move_to([-3.6, -2.6, 0])
+        uEq = E(r"u|=|\omega|+|\theta", size=52).move_to([-3.6, -2.75, 0])
         uArc.k.set_value(0)
         self.add(uArc)
         self.beat("A circular orbit has no periapsis, so little omega and theta have nothing to measure from. "
@@ -83,13 +83,13 @@ class S07_Special_Cases(VScene):
                   Write(uEq), w=(.2, .15, .25, .1, .3))
 
         # beat 3: longitude of periapsis on the right
-        noN = T("no node", 26, MUTED).move_to([6.1, -2.0, 0])
+        noN = T("no node", 26, MUTED).move_to([6.15, -2.75, 0])
         pDir = unit(peri_R)
         pLine = line3(vR, (0, 0, 0), 2.3 * pDir, ROSE, dashed=True)
         vArc = arc3(vR, (0, 0, 1), (1, 0, 0), VARPI, 1.35, VARPI_C)
         vmid = (np.cos(VARPI / 2), np.sin(VARPI / 2), 0)
         vLab = label3(vR, r"\varpi", 1.95 * np.array(vmid), VARPI_C, 36)
-        vEq = E(r"\varpi|=|\Omega|+|\omega", size=44, cmap={r"\varpi": VARPI_C}).move_to([3.6, -2.6, 0])
+        vEq = E(r"\varpi|=|\Omega|+|\omega", size=52, cmap={r"\varpi": VARPI_C}).move_to([3.6, -2.75, 0])
         vArc.k.set_value(0)
         self.add(vArc)
         self.beat("An equatorial orbit never crosses the equator, so it has no ascending node, and capital "
@@ -106,7 +106,7 @@ class S07_Special_Cases(VScene):
         lArc = arc3(vR, (0, 0, 1), (1, 0, 0), VARPI + TH_R, 2.6, L_C)
         lmid = (np.cos(115 * D), np.sin(115 * D), 0)
         lLab = label3(vR, "l", 2.95 * np.array(lmid), L_C, 36)
-        lEq = E(r"l|=|\Omega|+|\omega|+|\theta", size=48, cmap={"l": L_C}).move_to([0, -3.45, 0])
+        lEq = E(r"l|=|\Omega|+|\omega|+|\theta", size=52, cmap={"l": L_C}).move_to([0, -3.55, 0])
         lGlow = glow(lEq, L_C)
         omArc.k.set_value(0)
         lArc.k.set_value(0)
@@ -120,15 +120,17 @@ class S07_Special_Cases(VScene):
         # beat 5: the summary
         self.drop(left, right, titleL, titleR, noP, noN, rL, uArc, uLab, uEq, pLine, vArc, vLab, vEq,
                   omArc, omLab, sLine, lArc, lLab, lEq, lGlow)
-        box = key_box(
-            r"a:\ \text{size}",
-            r"e:\ \text{shape}",
-            E(r"i|:\ \text{tilt},\ 0\text{ to }180^\circ", size=40),
-            E(r"\Omega|:\ \text{node},\ 0\text{ to }360^\circ", size=40),
-            E(r"\omega|:\ \text{node to periapsis},\ 0\text{ to }360^\circ", size=40),
-            E(r"\theta_0|:\ \text{periapsis to satellite},\ 0\text{ to }360^\circ", size=40),
-            label="THE SIX ELEMENTS")
-        fit(box, 12.5, 6.8)
-        box.move_to([0, -.3, 0])
+        rows = VGroup(*[E(t, size=38) for t in (
+            r"a|:\ \text{size}",
+            r"e|:\ \text{shape}",
+            r"i|:\ \text{tilt},\ 0\text{ to }180^\circ",
+            r"\Omega|:\ \text{node},\ 0\text{ to }360^\circ",
+            r"\omega|:\ \text{node to periapsis},\ 0\text{ to }360^\circ",
+            r"\theta_0|:\ \text{periapsis to satellite},\ 0\text{ to }360^\circ")])
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=.32)
+        head = T("THE SIX ELEMENTS", 30, ACCENT, weight=BOLD)
+        box = panel(VGroup(head, rows).arrange(DOWN, buff=.4), color=ACCENT)
+        fit(box, 13, 7.2)
+        box.move_to([0, 0, 0])
         self.beat("That's every orbital element and what it looks like.", FadeIn(box), .5)
         self.wipe()

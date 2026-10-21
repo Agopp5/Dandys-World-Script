@@ -30,18 +30,18 @@ N_HAT = np.array([np.cos(OM), np.sin(OM), 0.0])                   # node line, O
 assert np.isclose(N_HAT @ H_HAT, 0)
 assert np.isclose(np.degrees(np.arccos(H_HAT @ K_HAT)), 40)       # tilt i about the node line
 
-XR = 3.75                      # right-column center
+XR = 3.6                      # right-column center
 
 
 class S09_DCM(VScene):
     budget = 145
 
     def construct(self):
-        view = View(elev=22, azim=-110, scale=.95, center=(-3.6, -0.2))
+        view = View(elev=15, azim=-110, scale=1.45, center=(-3.9, 0.3))
         earth = globe(view)
-        ax = axes3(view, 2.3)
+        ax = axes3(view, 2.0)
         orb = curve(view, orbit(2.4, .5, OM, INC, W), 0, 2 * PI, INK, width=3, R=1.0)
-        L = 2.0
+        L = 1.8
         pa = arrow3(view, ORIGIN, L * P_HAT, ROSE)
         qa = arrow3(view, ORIGIN, L * Q_HAT, LIME)
         ha = arrow3(view, ORIGIN, L * H_HAT, LILAC)
@@ -59,12 +59,12 @@ class S09_DCM(VScene):
         mat = MobjectMatrix(ents, h_buff=1.75, v_buff=.85)
         lhs = E(r"C_{PN}|=", size=40)
         tags = VGroup(*[E(r"\leftarrow|" + v, size=40) for v in vecs])
-        mblock = VGroup(lhs, mat).arrange(RIGHT, buff=.2)
+        mblock = VGroup(lhs, mat).arrange(DOWN, buff=.3)
         for t, row in zip(tags, mat.get_rows()):
             t.next_to(mat, RIGHT, buff=.2).set_y(row.get_y())
         mgroup = VGroup(mblock, tags)
-        fit(mgroup, 6.2, 3.2)
-        mgroup.move_to([XR, .9, 0])
+        fit(mgroup, 6.6, 4.6)
+        mgroup.move_to([XR, 1.45, 0])
         rows = mat.get_rows()
 
         with self.say("That's exactly what a direction cosine matrix stores. Write p hat, q hat and h hat in their I, J, K components, and stack them as rows. That stack is C P N.") as d:
@@ -87,7 +87,7 @@ class S09_DCM(VScene):
         cosl = E(r"\hat p|\cdot|\hat I|=|\cos\alpha", size=40)
         cosl[4].set_color(ACCENT)
         val = M(r"\cos\alpha = %.3f" % (P_HAT @ I_HAT), size=32, color=MUTED)
-        VGroup(cosl, val).arrange(DOWN, buff=.25).move_to([XR, -1.75, 0])
+        VGroup(cosl, val).arrange(DOWN, buff=.25).move_to([XR, -2.3, 0])
         axis = np.cross(I_HAT, P_HAT)
         axis = axis / np.linalg.norm(axis)
         arc = arc3(view, axis, I_HAT, ALPHA, 1.35, ACCENT)
@@ -125,7 +125,7 @@ class S09_DCM(VScene):
         # beat 4: the product, read right to left
         prod = E(r"C_{PN}|=|C_3(|\omega|)\,|C_1(|i|)\,|C_3(|\Omega|)", size=46)
         fit(prod, 6.0, 1.0)
-        prod.move_to([XR, 2.6, 0])
+        prod.move_to([XR, 3.35, 0])
         fac = [VGroup(prod[2], prod[3], prod[4]), VGroup(prod[5], prod[6], prod[7]), VGroup(prod[8], prod[9], prod[10])]
         heads = [brows[k][0] for k in range(3)]
         words = VGroup(*[brows[k][1] for k in range(3)])
@@ -144,13 +144,13 @@ class S09_DCM(VScene):
             self.wait(.04 * d)
 
         # beat 5: the elementary rotations written out
-        c3m = E(r"C_3(x)|=|\begin{bmatrix} \cos x & \sin x & 0\\ -\sin x & \cos x & 0\\ 0 & 0 & 1 \end{bmatrix}", size=34)
-        c1m = E(r"C_1(x)|=|\begin{bmatrix} 1 & 0 & 0\\ 0 & \cos x & \sin x\\ 0 & -\sin x & \cos x \end{bmatrix}", size=34)
+        c3m = E(r"C_3(x)|=|\begin{bmatrix} \cos x & \sin x & 0\\ -\sin x & \cos x & 0\\ 0 & 0 & 1 \end{bmatrix}", size=38)
+        c1m = E(r"C_1(x)|=|\begin{bmatrix} 1 & 0 & 0\\ 0 & \cos x & \sin x\\ 0 & -\sin x & \cos x \end{bmatrix}", size=38)
         mats = VGroup(c3m, c1m).arrange(DOWN, buff=.35, aligned_edge=LEFT)
-        fit(mats, 5.6, 3.4)
-        mats.move_to([XR, -1.95, 0])
+        fit(mats, 6.6, 5.0)
+        mats.next_to([XR, 1.95, 0], DOWN, buff=0)
         with self.say("These are the same elementary rotations from the kinematics lessons. C three turns about the third axis. C one turns about the first.") as d:
-            self.play(FadeOut(rl_lab), run_time=.04 * d)
+            self.play(FadeOut(rl_lab), FadeOut(rl), run_time=.04 * d)
             self.play(Write(c3m), run_time=.2 * d)
             self.play(Write(c1m), run_time=.2 * d)
             self.wait(.06 * d)

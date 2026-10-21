@@ -52,7 +52,7 @@ class S05_Turn_i(VScene):
     budget = 147
 
     def construct(self):
-        view = View(scale=.92, center=(-2.9, -0.3))
+        view = View(azim=-15, scale=.92, center=(-2.9, -0.3))
         it = ValueTracker(0.0)              # inclination (rad)
         th = ValueTracker(-np.pi / 2)       # satellite true anomaly (rad)
 
@@ -73,7 +73,7 @@ class S05_Turn_i(VScene):
 
         # --- the Omega-turned orbit, still in the equator ---
         eq_disc = disc3(view, IX, np.array([0, 1.0, 0]), 3.9, MUTED, .12)
-        pl_disc = disc3(view, ph, qh, 3.9, INK, .07)
+        pl_disc = disc3(view, ph, qh, 3.7, INK, .09)
         earth = globe(view)
         ax = axes3(view, 2.8)
         node_line = line3(view, -4.3 * NHAT, 4.3 * NHAT, SKY, dashed=True)
@@ -108,16 +108,17 @@ class S05_Turn_i(VScene):
         asc = dot3(view, lambda: orb(0), SKY)
         dsc = dot3(view, lambda: orb(np.pi), dim_sky)
         asc_lab = label3(view, r"\text{ascending node}", 2.9 * NHAT + np.array([0, 0, -.4]), SKY, 28)
-        dsc_lab = label3(view, r"\text{descending node}", -2.9 * NHAT + np.array([0, 0, .55]), dim_sky, 28)
+        dsc_lab = label3(view, r"\text{descending node}", -3.6 * NHAT + np.array([0, 0, .95]), dim_sky, 28)
+        dsc_card = backed(dsc_lab)
         om_glow = VGroup(glow(om_arc, SKY), glow(om_lab, SKY))
         self.beat("Where it crosses heading north is the ascending node. Where it crosses heading south is "
                   "the descending node. Now you can see why Omega is measured to the ascending node.",
-                  [FadeIn(asc), FadeIn(asc_lab), FadeOut(col1)], .15, [FadeIn(dsc), FadeIn(dsc_lab)], .15,
+                  [FadeIn(asc), FadeIn(asc_lab), FadeOut(col1)], .15, [FadeIn(dsc), FadeIn(dsc_card)], .15,
                   FadeIn(om_glow), w=(.2, .2, .3))
 
         # --- i is also the angle between K and h ---
-        h_arr = arrow3(view, ORIGIN, lambda: 2.3 * hh(), LILAC)
-        h_lab = label3(view, r"\vec h", lambda: 2.65 * hh(), LILAC, 36)
+        h_arr = arrow3(view, ORIGIN, lambda: 2.6 * hh(), LILAC)
+        h_lab = label3(view, r"\vec h", lambda: 2.95 * hh(), LILAC, 36)
         kh_arc = arc3(view, NHAT, KZ, ii, 1.7, EMBER)
         kh_lab = label3(view, "i", lambda: rot(KZ, NHAT, ii() / 2) * 2.05, EMBER, 36)
         h_arr.k.set_value(0)
@@ -136,7 +137,7 @@ class S05_Turn_i(VScene):
 
         self.beat("The inclination is also the angle between K and the angular momentum vector h, which sticks "
                   "straight out of the orbit plane.",
-                  [FadeOut(om_glow), FadeOut(asc_lab), FadeOut(dsc_lab)],
+                  [FadeOut(om_glow), FadeOut(asc_lab), FadeOut(dsc_card)],
                   [FadeIn(h_arr), FadeIn(h_lab), h_arr.k.animate.set_value(1)],
                   [FadeIn(kh_arc), FadeIn(kh_lab), kh_arc.k.animate.set_value(1)], Write(eq_cos),
                   w=(.1, .3, .3, .3))
@@ -155,18 +156,20 @@ class S05_Turn_i(VScene):
         rows.next_to(rd, DOWN, buff=.6)
         rows.set_x(rd.get_x())
         motion = arrow3(view, lambda: orb(np.pi - .3), lambda: orb(np.pi + .3), ACCENT)
-        spin = arrow3(view, -1.55 * NHAT + .45 * MHAT, -1.55 * NHAT - .45 * MHAT, INK2)
-        spin_lab = label3(view, r"\text{Earth's spin}", -1.55 * NHAT + np.array([0, 0, -.45]), INK2, 26)
+        spin = arrow3(view, -2.2 * NHAT + .45 * MHAT, -2.2 * NHAT - .45 * MHAT, INK2)
+        spin_lab = label3(view, r"\text{Earth's spin}", -2.2 * NHAT + np.array([0, 0, -.45]), INK2, 26)
 
         with self.say("Below ninety, the satellite travels eastward, the same way the Earth spins. That's a "
                       "prograde orbit. At exactly ninety, it passes over both poles: a polar orbit. Above "
                       "ninety, it travels westward: retrograde.") as d:
             self.play(view.elev.animate.set_value(62), FadeOut(eq_cos), FadeOut(rng), FadeOut(dsc),
-                      FadeIn(motion), FadeIn(spin), FadeIn(spin_lab), run_time=.14 * d)
+                      FadeIn(motion), FadeIn(spin), FadeIn(spin_lab), FadeOut(kh_lab), run_time=.14 * d)
             self.play(FadeIn(rows[0]), run_time=.1 * d)
+            self.snap("prograde")
             self.wait(.22 * d)
             self.play(it.animate.set_value(np.pi / 2), run_time=.16 * d)
             self.play(FadeIn(rows[1]), run_time=.08 * d)
+            self.snap("polar")
             self.wait(.1 * d)
             self.play(it.animate.set_value(np.radians(150)), run_time=.12 * d)
             self.play(FadeIn(rows[2]), run_time=.06 * d)
@@ -180,7 +183,7 @@ class S05_Turn_i(VScene):
         summ.set_x(rd.get_x())
         self.beat("So i says how steeply the plane is tilted, and Omega says which way the tilt faces.",
                   [view.elev.animate.set_value(22), it.animate.set_value(I0), FadeOut(rows), FadeOut(motion),
-                   FadeOut(spin), FadeOut(spin_lab), FadeIn(dsc)],
+                   FadeOut(spin), FadeOut(spin_lab), FadeIn(dsc), FadeIn(kh_lab)],
                   FadeIn(summ[0]), FadeIn(summ[1]),
                   [FadeIn(glow(i_arc, EMBER)), FadeIn(glow(kh_arc, EMBER)), FadeIn(glow(om_arc, SKY)),
                    FadeIn(glow(om_lab, SKY))], w=(.3, .2, .2, .3))

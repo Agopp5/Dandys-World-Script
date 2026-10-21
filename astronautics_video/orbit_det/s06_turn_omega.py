@@ -153,7 +153,7 @@ class S06_Turn_omega(VScene):
         # ---------------- perigee far south, apogee half over the north
         apo = curve(view, lambda t: 1.1 * pos(t), R(90), R(270), GOLD, width=7, k=0.0)
         apo_lab = label3(view, r"\text{apogee half}", lambda: 1.18 * pos(np.pi) + 0.35 * K, GOLD, 30)
-        peri_lab = label3(view, r"\text{perigee}", lambda: pos(0.0) - 0.45 * K, ROSE, 30)
+        peri_lab = label3(view, r"\text{perigee}", lambda: pos(0.0) - 0.9 * K + 0.3 * nh(), ROSE, 30)
         self.add(apo)
         M = ValueTracker(0.0)
         moving = dot3(view, lambda: pos(kepler_theta(M.get_value(), Ecc.get_value())), GOLD, radius=0.1)
@@ -172,7 +172,7 @@ class S06_Turn_omega(VScene):
 
         # ---------------- predict: i greater than ninety
         self.drop(apo, apo_lab, peri_lab, moving, notes, mol_card)
-        self.predict("If the inclination were greater than ninety degrees, which way would the satellite cross the equator at the ascending node?",
+        self.predict("Inclination over ninety degrees: which way does it cross at the ascending node?",
                      "Quick question before we move on.")
 
         # ---------------- i = 120 demo: still northbound, but westward

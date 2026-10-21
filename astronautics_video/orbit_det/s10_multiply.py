@@ -28,7 +28,7 @@ XL = -1.9          # left edge of the right-hand algebra column
 
 def reason(tex_sentence, line):
     """Grey reason under the right end of a step."""
-    r = TX(tex_sentence, size=30).set_color(MUTED)
+    r = TX(tex_sentence, size=32).set_color(INK2)   # never scaled after this
     r.next_to(line, DOWN, buff=.12).align_to(line, RIGHT)
     return r
 
@@ -69,24 +69,24 @@ class S10_Multiply(VScene):
                   w=(.45, .3, .25))
 
         # ---- third row
-        L1 = left_at(E(r"\text{row}_3\,C_{PN}|=|(0,0,1)\,C_1(|i|)\,C_3(|\Omega|)", size=44), 2.3)
+        L1 = left_at(E(r"\text{row}_3\,C_{PN}|=|(0,0,1)\,C_1(|i|)\,C_3(|\Omega|)", size=44), 2.5)
         R1 = reason(r"row 3 of $C_3(\omega)$ is $(0,0,1)$", L1)
-        L2 = under_eq(E(r"=|(0,\,-\sin|i|,|\cos|i|)\,C_3(|\Omega|)", size=44), L1, 0.5)
+        L2 = under_eq(E(r"=|(0,\,-\sin|i|,|\cos|i|)\,C_3(|\Omega|)", size=44), L1, 0.4)
         R2 = reason(r"row 3 of $C_1(i)$", L2)
         self.beat("The third row of C three of omega is just zero, zero, one. So the third row of the whole product is the third row of C one of i, times C three of Omega.",
                   Indicate(P[2:5], color=MINT), [Write(L1), FadeIn(R1)], .1, [Write(L2), FadeIn(R2)],
                   w=(.2, .38, .42))
 
-        L3 = under_eq(E(r"=|(\sin|i|\sin|\Omega|,\ -\sin|i|\cos|\Omega|,|\cos|i|)", size=44), L1, -1.3)
+        L3 = under_eq(E(r"=|(\sin|i|\sin|\Omega|,\ -\sin|i|\cos|\Omega|,|\cos|i|)", size=44), L1, -1.7)
         R3 = reason("row times matrix", L3)
         box3 = SurroundingRectangle(L3[1:], color=LILAC, buff=.12)
         self.beat("Multiply that row into C three of Omega. The result is sine i sine Omega, minus sine i cosine Omega, and cosine i.",
                   Indicate(L2[-2:], color=SKY), [Write(L3), FadeIn(R3)], Create(box3), w=(.25, .55, .2))
 
         # ---- picture check: h-hat leans from K by i
-        view = View(elev=18, azim=-52, scale=1.6, center=(-4.3, -1.6))
+        view = View(elev=18, azim=-52, scale=1.85, center=(-4.4, -1.45))
         ax = axes3(view, 1.9)
-        eq_plane = disc3(view, [1, 0, 0], [0, 1, 0], 1.6, INK2, .08)
+        eq_plane = disc3(view, [1, 0, 0], [0, 1, 0], 1.35, INK2, .08)
         hvec = arrow3(view, [0, 0, 0], 1.8 * HH, LILAC)
         hlab = label3(view, r"\hat h", 2.05 * HH, LILAC, 34)
         axis = np.cross(_K, HH)
@@ -131,15 +131,15 @@ class S10_Multiply(VScene):
         heads = [r"C_{31}", r"C_{32}", r"C_{33}", r"C_{13}", r"C_{23}"]
         vals = [r"\sin|i|\sin|\Omega|", r"-\sin|i|\cos|\Omega|", r"\cos|i|", r"\sin|\omega|\sin|i|",
                 r"\cos|\omega|\sin|i|"]
-        cols = VGroup(*[VGroup(E(h, size=36).set_color(INK2), E(v, size=38)).arrange(DOWN, buff=.35)
-                        for h, v in zip(heads, vals)]).arrange(RIGHT, buff=.6)
+        cols = VGroup(*[VGroup(E(h, size=38).set_color(INK2), E(v, size=42)).arrange(DOWN, buff=.4)
+                        for h, v in zip(heads, vals)]).arrange(RIGHT, buff=.7)
         for c in cols:                                     # common baselines for both table rows
             c[0].set_y(cols[0][0].get_y())
             c[1].set_y(cols[0][1].get_y())
         rule = Line(cols.get_left() + LEFT * .2, cols.get_right() + RIGHT * .2, color=HAIR, stroke_width=2)
         rule.set_y((cols[0][0].get_bottom()[1] + cols[0][1].get_top()[1]) / 2)
         table = panel(VGroup(cols, rule))
-        fit(table, 13.8, 2.0).move_to([0, -2.85, 0])
+        fit(table, 13.8, 2.1).move_to([0, -2.85, 0])
         self.beat("That gives sine omega sine i, cosine omega sine i, and cosine i.",
                   [Write(L6), FadeIn(R6)], Create(box6), FadeIn(table, shift=UP * .2), w=(.45, .15, .4))
         self.wait(1.0)
