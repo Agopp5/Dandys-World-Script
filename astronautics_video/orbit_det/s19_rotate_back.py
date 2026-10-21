@@ -207,7 +207,7 @@ class S19_Rotate_Back(VScene):
         n0 = T("Kepler's equation", size=34)
         n2 = M(r"\vec r_P,\ \vec v_P", size=48)
         n3 = M(r"\vec r,\ \vec v", size=48)
-        chain = VGroup(n0, thr, n2, n3).arrange(DOWN, buff=.6)
+        chain = VGroup(n0, thr, n2, n3).arrange(DOWN, buff=.85)
         arrs = VGroup(*[Arrow(chain[k].get_bottom(), chain[k + 1].get_top(), buff=.1, color=MUTED,
                               stroke_width=4) for k in range(3)])
         cT = M(r"C_{PN}^T", size=42).next_to(arrs[2], RIGHT, buff=.2)

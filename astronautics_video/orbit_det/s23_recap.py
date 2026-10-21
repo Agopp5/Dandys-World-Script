@@ -23,7 +23,7 @@ def row(*parts):
     mobs = []
     for p in parts:
         if isinstance(p, str):
-            mobs.append(E(p[1:], size=44) if p.startswith("$") else T(p, size=36, color=INK2))
+            mobs.append(E(p[1:], size=48) if p.startswith("$") else T(p, size=40, color=INK2))
         else:
             mobs.append(p)
     return VGroup(*mobs).arrange(RIGHT, buff=.18)
@@ -31,7 +31,10 @@ def row(*parts):
 
 def card(n, *rows):
     body = VGroup(*rows).arrange(DOWN, buff=.14, aligned_edge=LEFT)
-    return panel(VGroup(badge(n).scale(1.3), body).arrange(RIGHT, buff=.35))
+    k = panel(VGroup(badge(n).scale(1.3), body).arrange(RIGHT, buff=.35))
+    k[0].stretch_to_fit_width(13.2)                      # every card spans the frame; content sits left
+    k[1].align_to(k[0], LEFT).shift(.35 * RIGHT)
+    return k
 
 
 class S23_Recap(VScene):
@@ -47,10 +50,10 @@ class S23_Recap(VScene):
         r2c = row(r"$\omega", "about", r"$\hat h")
         k2 = card(2, r2a, r2b, r2c)
         # 3. C_PN and the angles back out
-        cpn_eq = E(r"C_{PN}|=|C_3(|\omega|)\,C_1(|i|)\,C_3(|\Omega|)", size=44)
-        acos = E(r"i|=|\arccos C_{33}", size=44)
-        at1 = E(r"\Omega|=|\operatorname{atan2}(C_{31},-C_{32})", size=44)
-        at2 = E(r"\omega|=|\operatorname{atan2}(C_{13},C_{23})", size=44)
+        cpn_eq = E(r"C_{PN}|=|C_3(|\omega|)\,C_1(|i|)\,C_3(|\Omega|)", size=48)
+        acos = E(r"i|=|\arccos C_{33}", size=48)
+        at1 = E(r"\Omega|=|\operatorname{atan2}(C_{31},-C_{32})", size=48)
+        at2 = E(r"\omega|=|\operatorname{atan2}(C_{13},C_{23})", size=48)
         k3 = card(3, VGroup(cpn_eq, acos).arrange(RIGHT, buff=.9), VGroup(at1, at2).arrange(RIGHT, buff=.9))
         # 4. from r and v
         r4a = row("energy", r"$\mathcal{E}", "gives", "$a|;", r"$\vec h|,\,|\vec e", "give", "$e")
@@ -70,40 +73,41 @@ class S23_Recap(VScene):
         boxes = [k1, k2, k3, k4, k5]
         for k in boxes:
             fit(k, 13.4, 3.0)
-        VGroup(*boxes).arrange(DOWN, buff=.18, aligned_edge=LEFT)
-        VGroup(*boxes).set_x(0)
+        VGroup(*boxes).arrange(DOWN, buff=.15, aligned_edge=LEFT).set_x(0)
+        tops = [k.get_top()[1] for k in boxes]
+        bots = [k.get_bottom()[1] for k in boxes]
+        cur = [0.0]                                          # vertical offset applied so far
 
         def add(j):
-            """Bring in card j; keep only the latest three, centered (older ones scroll off the top)."""
-            vis = VGroup(*boxes[max(0, j - 2):j + 1])
-            s = -vis.get_center()[1] * UP
-            boxes[j].shift(s)
-            anims = [FadeIn(boxes[j], shift=.2 * UP)]
-            for m in range(j):
-                if m < j - 2:
-                    if m == j - 3:
-                        anims.append(FadeOut(boxes[m], shift=s))
-                    boxes[m].shift(s) if m < j - 3 else None
-                else:
-                    anims.append(boxes[m].animate.shift(s).set_opacity(.5))
-            return anims
+            """Card j joins; only the latest three stay, centered (older ones scroll off the top).
+            Returns (moves, fade-in) so the old cards make room before the new one appears."""
+            lo = max(0, j - 2)
+            new = -(tops[lo] + bots[j]) / 2
+            dv = (new - cur[0]) * UP
+            cur[0] = new
+            moves = [boxes[m].animate.shift(dv).set_opacity(.5) for m in range(lo, j)]
+            if lo >= 1:
+                moves.append(FadeOut(boxes[lo - 1], shift=dv))
+            for m in range(j, 5):
+                boxes[m].shift(dv)
+            return moves, FadeIn(boxes[j], shift=.2 * UP)
 
         self.beat("Let's recap. The E C I frame points I at the vernal equinox and K at the North Pole, "
-                  "and it doesn't spin with the Earth.", add(0))
+                  "and it doesn't spin with the Earth.", add(0)[1])
         syms = [r2b[1], r2b[4], r2c[0]]
         self.beat("Six elements place any orbit: a and e for size and shape, three turns for orientation, "
                   "capital Omega about K, i about the node line, little omega about h, and theta for where "
-                  "the satellite is.", add(1), .05, Indicate(VGroup(r2a[0], r2a[2]), scale_factor=1.3),
+                  "the satellite is.", *add(1), .05, Indicate(VGroup(r2a[0], r2a[2]), scale_factor=1.3),
                   LaggedStart(*[Indicate(s, scale_factor=1.4) for s in syms], lag_ratio=.5),
-                  Indicate(r2a[4], scale_factor=1.4), w=(.15, .15, .5, .15))
+                  Indicate(r2a[4], scale_factor=1.4), w=(.08, .08, .14, .55, .15))
         self.beat("Those three turns are the rows of C P N, C three of omega, C one of i, C three of Omega. "
                   "The angles come back out with an arc cosine and two atan twos.",
-                  add(2), Circumscribe(cpn_eq, color=ACCENT), .1,
-                  LaggedStart(*[Indicate(m) for m in (acos, at1, at2)], lag_ratio=.5), w=(.15, .3, .45))
+                  *add(2), Circumscribe(cpn_eq, color=ACCENT), .1,
+                  LaggedStart(*[Indicate(m) for m in (acos, at1, at2)], lag_ratio=.5), w=(.08, .08, .3, .44))
         self.beat("From r and v: energy gives a, h and the eccentricity vector give e and the frame, "
                   "and r dot v settles theta. The transpose takes you back.",
-                  add(3), Indicate(r4a[1]), Indicate(r4a[4]), Indicate(r4b[2]), Indicate(r4c[1]),
-                  w=(.15, .2, .25, .2, .2))
+                  *add(3), Indicate(r4a[1]), Indicate(r4a[4]), Indicate(r4b[2]), Indicate(r4c[1]),
+                  w=(.08, .08, .2, .24, .2, .2))
 
         # the closing picture: the Molniya orbit (drawn a = 3, e = 0.6, not to scale), perigee frozen
         view = View(elev=16, azim=20, scale=1.05, center=(-3.0, -1.75))
@@ -122,8 +126,10 @@ class S23_Recap(VScene):
         side.move_to(RIGHT * 4.3)
         with self.say("And Earth's bulge slowly turns the node and the perigee, except at the critical "
                       "inclination, where the perigee stands still.") as d:
-            self.play(*add(4), run_time=.2 * d)
-            self.play(Indicate(r5c[1]), run_time=.25 * d)
+            moves, fade = add(4)
+            self.play(*moves, run_time=.1 * d)
+            self.play(fade, run_time=.1 * d)
+            self.play(Indicate(r5c[1]), run_time=.22 * d)
             self.snap("key line 5")
             self.play(FadeOut(VGroup(*boxes[2:])), FadeIn(earth), FadeIn(side), FadeIn(kax), FadeIn(klab),
                       run_time=.2 * d)
