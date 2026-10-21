@@ -6,22 +6,22 @@ Your notes describe the orbit's orientation with a frame that rides on the orbit
 00:00:05.362 --> 00:00:07.480
 It's called the perifocal frame.
 
-00:00:07.767 --> 00:00:13.751
+00:00:07.755 --> 00:00:13.739
 p hat points from the focus to the periapsis, the same direction as the eccentricity vector.
 
-00:00:13.751 --> 00:00:19.215
+00:00:13.739 --> 00:00:19.203
 q hat is ninety degrees ahead of it, in the orbit plane, in the direction of motion.
 
-00:00:19.215 --> 00:00:22.727
+00:00:19.203 --> 00:00:22.715
 And h hat sticks out of the plane, completing the set.
 
-00:00:23.000 --> 00:00:25.465
+00:00:22.989 --> 00:00:25.454
 In this frame the orbit is simple.
 
-00:00:25.465 --> 00:00:33.440
+00:00:25.454 --> 00:00:33.429
 The satellite sits at r cosine theta along p hat, and r sine theta along q hat, with nothing out of the plane.
 
-00:00:33.733 --> 00:00:42.613
+00:00:33.722 --> 00:00:42.602
 So all of the three dimensional information lives in one question: how are p hat, q hat and h hat pointed in the E C I frame?
 
 00:00:43.600 --> 00:00:47.427
@@ -33,25 +33,25 @@ Write p hat, q hat and h hat in their I, J, K components, and stack them as rows
 00:00:53.276 --> 00:00:54.720
 That stack is C P N.
 
-00:00:55.200 --> 00:01:03.200
+00:00:55.168 --> 00:01:03.168
 Each entry is a dot product, the cosine of the angle between one perifocal axis and one E C I axis.
 
-00:01:04.333 --> 00:01:15.493
+00:01:04.301 --> 00:01:15.461
 Because we built the orientation with three turns, Omega about K, then i about the node line, then omega about h, the matrix is a product of three simple rotations.
 
-00:01:15.767 --> 00:01:25.127
+00:01:15.734 --> 00:01:25.094
 C P N equals C three of little omega, times C one of i, times C three of capital Omega.
 
-00:01:25.127 --> 00:01:34.487
+00:01:25.094 --> 00:01:34.454
 Read it right to left: first the Omega turn, then the tilt, then the spin in the plane.
 
-00:01:34.867 --> 00:01:39.892
+00:01:34.834 --> 00:01:39.859
 These are the same elementary rotations from the kinematics lessons.
 
-00:01:39.892 --> 00:01:42.478
+00:01:39.859 --> 00:01:42.445
 C three turns about the third axis.
 
-00:01:42.478 --> 00:01:44.547
+00:01:42.445 --> 00:01:44.514
 C one turns about the first.
 
 00:01:45.500 --> 00:01:47.601
@@ -60,80 +60,86 @@ We don't need all nine entries.
 00:01:47.601 --> 00:01:50.380
 Start with the third row, which is h hat.
 
-00:01:51.400 --> 00:01:56.424
+00:01:51.412 --> 00:01:52.049
+Your turn.
+
+00:01:52.049 --> 00:01:55.932
+Pause here and work checkpoint three point one in your guide.
+
+00:01:59.545 --> 00:02:04.569
 The third row of C three of omega is just zero, zero, one.
 
-00:01:56.424 --> 00:02:04.480
+00:02:04.569 --> 00:02:12.625
 So the third row of the whole product is the third row of C one of i, times C three of Omega.
 
-00:02:06.133 --> 00:02:09.545
+00:02:14.279 --> 00:02:17.691
 Multiply that row into C three of Omega.
 
-00:02:09.545 --> 00:02:15.773
+00:02:17.691 --> 00:02:23.919
 The result is sine i sine Omega, minus sine i cosine Omega, and cosine i.
 
-00:02:16.133 --> 00:02:18.460
+00:02:24.279 --> 00:02:26.606
 Check it with the picture.
 
-00:02:18.460 --> 00:02:24.813
+00:02:26.606 --> 00:02:32.959
 h hat leans away from K by the angle i, so its K component is cosine i.
 
-00:02:25.300 --> 00:02:26.854
+00:02:33.445 --> 00:02:34.999
 Now the third column.
 
-00:02:26.854 --> 00:02:31.740
+00:02:34.999 --> 00:02:39.885
 Multiply C P N by the unit vector along K, working from the right.
 
-00:02:32.100 --> 00:02:38.260
+00:02:40.245 --> 00:02:46.405
 That gives sine omega sine i, cosine omega sine i, and cosine i.
 
-00:02:40.700 --> 00:02:42.041
+00:02:48.833 --> 00:02:50.174
 Now reverse it.
 
-00:02:42.041 --> 00:02:45.884
+00:02:50.174 --> 00:02:54.018
 The corner entry C three three is cosine i.
 
-00:02:45.884 --> 00:02:49.460
+00:02:54.018 --> 00:02:57.593
 So i is the arc cosine of C three three.
 
-00:02:49.800 --> 00:02:54.800
+00:02:57.893 --> 00:03:02.893
 Arc cosine always returns an angle from zero to one hundred eighty degrees.
 
-00:02:54.800 --> 00:02:59.400
+00:03:02.893 --> 00:03:07.493
 That's exactly the range of inclination, so no extra check is needed.
 
-00:02:59.733 --> 00:03:00.658
+00:03:07.793 --> 00:03:08.719
 Next, Omega.
 
-00:03:00.658 --> 00:03:06.750
+00:03:08.719 --> 00:03:14.810
 C three one is sine i sine Omega, and minus C three two is sine i cosine Omega.
 
-00:03:06.750 --> 00:03:12.533
+00:03:14.810 --> 00:03:20.593
 Since sine i is never negative, this pair points in the direction of Omega.
 
-00:03:13.000 --> 00:03:20.800
+00:03:20.893 --> 00:03:28.693
 So Omega is atan two of C three one and minus C three two.
 
-00:03:21.167 --> 00:03:23.487
+00:03:28.993 --> 00:03:31.314
 Why atan two and not arc cosine?
 
-00:03:23.487 --> 00:03:26.678
+00:03:31.314 --> 00:03:34.504
 Arc cosine can only give zero to one eighty.
 
-00:03:26.678 --> 00:03:31.174
+00:03:34.504 --> 00:03:39.000
 It can't tell one forty five degrees from two hundred fifteen.
 
-00:03:31.174 --> 00:03:37.047
+00:03:39.000 --> 00:03:44.873
 atan two looks at the signs of both entries, so it lands in the correct quadrant.
 
-00:03:37.500 --> 00:03:45.980
+00:03:45.173 --> 00:03:53.653
 The same reasoning for the third column gives little omega equals atan two of C one three and C two three.
 
-00:03:46.367 --> 00:03:48.043
+00:03:53.953 --> 00:03:55.629
 Two practical notes.
 
-00:03:48.043 --> 00:03:55.501
+00:03:55.629 --> 00:04:03.088
 atan two returns minus one eighty to one eighty, so add three sixty to a negative answer.
 
-00:03:55.501 --> 00:04:03.127
+00:04:03.088 --> 00:04:10.713
 And if i is zero, both pairs are zero over zero: that's the equatorial orbit, with no node.

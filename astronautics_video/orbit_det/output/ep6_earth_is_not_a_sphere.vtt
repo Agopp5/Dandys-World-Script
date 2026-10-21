@@ -9,125 +9,137 @@ But that's only exactly true if the Earth is a perfect sphere.
 00:00:07.753 --> 00:00:08.480
 It isn't.
 
-00:00:09.700 --> 00:00:12.536
+00:00:09.628 --> 00:00:12.464
 Earth spins, so it bulges at the equator.
 
-00:00:12.536 --> 00:00:16.340
+00:00:12.464 --> 00:00:16.268
 It's about twenty one kilometers wider than it is tall.
 
-00:00:16.667 --> 00:00:20.886
+00:00:16.601 --> 00:00:20.820
 Your notes add one correction term to the gravity potential.
 
-00:00:20.886 --> 00:00:27.707
+00:00:20.820 --> 00:00:27.641
 Its size is set by a single number, J two, about one point oh eight times ten to the minus three.
 
-00:00:28.700 --> 00:00:34.961
+00:00:28.575 --> 00:00:34.836
 The extra mass at the equator tugs a tilted orbit, trying to pull its plane down toward the equator.
 
-00:00:34.961 --> 00:00:37.340
+00:00:34.836 --> 00:00:37.215
 Like a hand pushing on a spinning top.
 
-00:00:37.667 --> 00:00:41.299
+00:00:37.541 --> 00:00:41.173
 And like a top, the orbit doesn't fall flat.
 
-00:00:41.299 --> 00:00:46.747
+00:00:41.173 --> 00:00:46.621
 It precesses: the whole orbit plane slowly swings around the pole.
 
-00:00:47.767 --> 00:00:59.967
+00:00:47.800 --> 00:01:00.000
 The drift rate of the node is Omega dot equals minus three n J two R squared, over two a squared, times one minus e squared, squared, times cosine i.
 
-00:01:00.267 --> 00:01:01.565
+00:01:00.284 --> 00:01:01.583
 Read the cosine i.
 
-00:01:01.565 --> 00:01:08.419
+00:01:01.583 --> 00:01:08.437
 For a prograde orbit, cosine i is positive, so Omega dot is negative: the node slides westward.
 
-00:01:08.419 --> 00:01:12.027
+00:01:08.437 --> 00:01:12.044
 For the space station, about five degrees per day.
 
-00:01:12.300 --> 00:01:17.780
+00:01:12.328 --> 00:01:17.809
 For a polar orbit, cosine i is zero, and the node doesn't drift at all.
 
-00:01:17.780 --> 00:01:21.100
+00:01:17.809 --> 00:01:21.128
 For a retrograde orbit, it drifts eastward.
 
-00:01:21.367 --> 00:01:24.349
+00:01:21.395 --> 00:01:24.377
 Engineers use that eastward drift on purpose.
 
-00:01:24.349 --> 00:01:32.567
+00:01:24.377 --> 00:01:32.595
 If the node turns exactly once per year, about one degree per day, the orbit plane keeps the same angle to the Sun all year.
 
-00:01:32.867 --> 00:01:35.020
+00:01:32.881 --> 00:01:35.035
 That's a sun synchronous orbit.
 
-00:01:35.020 --> 00:01:40.787
+00:01:35.035 --> 00:01:40.801
 At seven hundred kilometers, it needs an inclination of about ninety eight degrees.
 
-00:01:41.067 --> 00:01:43.875
+00:01:41.072 --> 00:01:43.881
 Meanwhile a, e and i don't drift.
 
-00:01:43.875 --> 00:01:49.067
+00:01:43.881 --> 00:01:49.072
 They only wiggle a little each orbit, like your notes sketch.
 
-00:01:49.966 --> 00:01:54.094
+00:01:49.372 --> 00:01:50.059
+Your turn.
+
+00:01:50.059 --> 00:01:53.972
+Pause here and do checkpoint six point one in your guide.
+
+00:01:58.399 --> 00:02:02.527
 J two turns the ellipse inside its plane too.
 
-00:01:54.094 --> 00:02:09.046
+00:02:02.527 --> 00:02:17.479
 The perigee drifts at omega dot equals minus three n J two R squared over two a squared, one minus e squared, squared, times five halves sine squared i, minus two.
 
-00:02:09.399 --> 00:02:12.400
+00:02:17.779 --> 00:02:20.780
 The sign depends on that last bracket.
 
-00:02:12.400 --> 00:02:15.559
+00:02:20.780 --> 00:02:23.939
 Here it is, plotted against inclination.
 
-00:02:15.933 --> 00:02:19.923
+00:02:24.272 --> 00:02:25.054
+Your turn.
+
+00:02:25.054 --> 00:02:31.312
+Pause here and do checkpoint six point two: find where the bracket crosses zero.
+
+00:02:34.939 --> 00:02:38.929
 It crosses zero when five halves sine squared i equals two.
 
-00:02:19.923 --> 00:02:25.333
+00:02:38.929 --> 00:02:44.339
 So sine squared i is four fifths, and i is sixty three point four three degrees.
 
-00:02:26.333 --> 00:02:30.369
+00:02:45.339 --> 00:02:49.374
 At that inclination, the perigee simply stops turning.
 
-00:02:30.369 --> 00:02:33.133
+00:02:49.374 --> 00:02:52.139
 It's called the critical inclination.
 
-00:02:34.066 --> 00:02:35.957
+00:02:53.072 --> 00:02:54.963
 Now look back at the hook.
 
-00:02:35.957 --> 00:02:40.685
+00:02:54.963 --> 00:02:59.690
 The Molniya orbit was inclined at sixty three point four degrees.
 
-00:02:40.685 --> 00:02:42.066
+00:02:59.690 --> 00:03:01.072
 That's no accident.
 
-00:02:42.999 --> 00:02:53.652
+00:03:02.006 --> 00:03:12.659
 At that inclination, the perigee stays parked over the south, so the long, slow apogee stays over Russia, year after year, with no fuel spent.
 
-00:02:53.652 --> 00:03:01.679
+00:03:12.659 --> 00:03:20.686
 Its node still drifts a little, about point one five degrees per day, but that doesn't matter for coverage.
 
-00:03:02.666 --> 00:03:03.590
+00:03:21.799 --> 00:03:22.723
 Let's recap.
 
-00:03:03.590 --> 00:03:11.826
+00:03:22.723 --> 00:03:30.959
 The E C I frame points I at the vernal equinox and K at the North Pole, and it doesn't spin with the Earth.
 
-00:03:12.133 --> 00:03:26.413
+00:03:31.259 --> 00:03:45.539
 Six elements place any orbit: a and e for size and shape, three turns for orientation, capital Omega about K, i about the node line, little omega about h, and theta for where the satellite is.
 
-00:03:27.499 --> 00:03:34.704
+00:03:46.553 --> 00:03:53.757
 Those three turns are the rows of C P N, C three of omega, C one of i, C three of Omega.
 
-00:03:34.704 --> 00:03:39.779
+00:03:53.757 --> 00:03:58.833
 The angles come back out with an arc cosine and two atan twos.
 
-00:03:40.133 --> 00:03:48.048
+00:03:59.166 --> 00:04:07.081
 From r and v: energy gives a, h and the eccentricity vector give e and the frame, and r dot v settles theta.
 
-00:03:48.048 --> 00:03:50.173
+00:04:07.081 --> 00:04:09.206
 The transpose takes you back.
 
-00:03:50.633 --> 00:03:59.913
+00:04:09.666 --> 00:04:18.946
 And Earth's bulge slowly turns the node and the perigee, except at the critical inclination, where the perigee stands still.
