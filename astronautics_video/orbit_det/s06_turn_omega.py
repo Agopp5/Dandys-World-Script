@@ -119,8 +119,7 @@ class S06_Turn_omega(VScene):
         self.add(th_arc)
         th_ray = line3(view, lambda: np.zeros(3), lambda: 2.0 * pos(R(TH0)) / np.linalg.norm(pos(R(TH0))), GOLD)
         sat = dot3(view, lambda: pos(R(TH0)), GOLD, radius=0.1)
-        th_lab = label3(view, r"\theta_0", lambda: 1.95 * (np.cos(R(TH0 / 2)) * ph()
-                                                         + np.sin(R(TH0 / 2)) * np.cross(hh(), ph())), GOLD, 36)
+        th_lab = label3(view, r"\theta_0", lambda: 2.4 * pos(R(TH0)) / np.linalg.norm(pos(R(TH0))), GOLD, 36)
         th_eq = E(r"\theta_0|=|40^\circ", size=48)
         th_eq.next_to(w_eq, DOWN, buff=.5).align_to(w_eq, LEFT)
         self.beat("The ellipse is now completely placed. The last number, the true anomaly at epoch theta zero, is the angle from periapsis to the satellite at the moment of the measurement.",
@@ -200,7 +199,7 @@ class S06_Turn_omega(VScene):
         with self.say("Still northward. The ascending node is always the northbound crossing. What changes is that the motion over the Earth runs westward instead of east.") as d:
             self.play(Om.animate.set_value(50.0), Inc.animate.set_value(120.0), W.animate.set_value(90.0),
                       A.animate.set_value(2.4), Ecc.animate.set_value(0.5), view.scale.animate.set_value(0.85),
-                      FadeIn(i_eq), run_time=.3 * d)
+                      FadeIn(i_eq), FadeOut(ax[0:4]), run_time=.3 * d)
             self.add(v_arr)
             self.play(Flash(node_dot, color=SKY), v_arr.k.animate.set_value(1.0), FadeIn(tips[:2]), run_time=.3 * d)
             self.add(west)

@@ -131,7 +131,7 @@ class S01_Hook(VScene):
             self.play(Write(vcol), v_arr.k.animate.set_value(1), FadeIn(v_lab), run_time=0.3 * d)
 
         qs = VGroup(*[T("?", size=80, color=ACCENT, weight=BOLD) for _ in range(3)])
-        for q, p in zip(qs, [(-6.0, 2.4, 0), (-0.9, 2.2, 0), (-5.4, -2.8, 0)]):
+        for q, p in zip(qs, [(-6.0, 2.4, 0), (-0.9, 2.2, 0), (-1.0, -2.9, 0)]):
             q.move_to(p)
         self.beat("Here they are. Can you tell what this orbit looks like? Is it round or stretched? Tilted or flat? Where is the satellite in its loop?",
                   Indicate(VGroup(rcol.nums, vcol.nums), color=ACCENT, scale_factor=1.08), .1,

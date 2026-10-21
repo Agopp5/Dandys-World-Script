@@ -21,7 +21,7 @@ class S03_Six_Numbers(VScene):
     budget = 113
 
     def construct(self):
-        view = View(elev=22, azim=-55, scale=0.9)
+        view = View(elev=22, azim=50, scale=0.9)   # r0 seen broadside; turned in beat 3
         earth = globe(view)
 
         # ---- beat 1: the state vector -------------------------------------------------

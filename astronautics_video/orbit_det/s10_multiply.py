@@ -28,7 +28,7 @@ XL = -1.9          # left edge of the right-hand algebra column
 
 def reason(tex_sentence, line):
     """Grey reason under the right end of a step."""
-    r = TX(tex_sentence, size=28).set_color(MUTED)
+    r = TX(tex_sentence, size=30).set_color(MUTED)
     r.next_to(line, DOWN, buff=.12).align_to(line, RIGHT)
     return r
 
@@ -55,10 +55,10 @@ class S10_Multiply(VScene):
         # ---- left column: the product and the matrix of entries
         P = E(r"C_{PN}|=|C_3(|\omega|)\,C_1(|i|)\,C_3(|\Omega|)", size=40)
         fit(P, 4.6, 1).move_to([-4.45, 3.1, 0])
-        Mx = Matrix([[f"C_{{{r}{c}}}" for c in (1, 2, 3)] for r in (1, 2, 3)], h_buff=1.35, v_buff=1.0,
+        Mx = Matrix([[f"C_{{{r}{c}}}" for c in (1, 2, 3)] for r in (1, 2, 3)], h_buff=1.15, v_buff=1.0,
                     element_to_mobject_config={"font_size": 42})
-        Mx.set_color(INK).move_to([-4.2, 0.2, 0])
-        fit(Mx, 4.3, 3.6)
+        Mx.set_color(INK).move_to([-4.55, 0.2, 0])
+        fit(Mx, 4.0, 3.6)
         rows = Mx.get_rows()
         labs = VGroup(*[E(t, size=40).move_to([Mx.get_left()[0] - .45, rows[k].get_y(), 0])
                         for k, t in enumerate([r"\hat p", r"\hat q", r"\hat h"])])
@@ -108,12 +108,12 @@ class S10_Multiply(VScene):
 
         # ---- third column
         L3f = left_at(E(r"\text{row}_3\,C_{PN}|=|(\sin|i|\sin|\Omega|,\ -\sin|i|\cos|\Omega|,|\cos|i|)",
-                        size=44), 2.75)
+                        size=44), 2.95)
         box3f = SurroundingRectangle(L3f[2:], color=LILAC, buff=.12)
         colbox = SurroundingRectangle(Mx.get_columns()[2], color=INK2, buff=.12)
-        L4 = left_at(E(r"C_{PN}\,\hat K|=|C_3(|\omega|)\,C_1(|i|)\,(0,0,1)^{T}", size=44), 1.45)
+        L4 = left_at(E(r"C_{PN}\,\hat K|=|C_3(|\omega|)\,C_1(|i|)\,(0,0,1)^{T}", size=44), 1.7)
         R4 = reason(r"$\hat K$ picks out column 3", L4)
-        L5 = under_eq(E(r"=|C_3(|\omega|)\,(0,|\sin|i|,|\cos|i|)^{T}", size=44), L4, 0.15)
+        L5 = under_eq(E(r"=|C_3(|\omega|)\,(0,|\sin|i|,|\cos|i|)^{T}", size=44), L4, 0.45)
         R5 = reason(r"column 3 of $C_1(i)$", L5)
         with self.say("Now the third column. Multiply C P N by the unit vector along K, working from the right.") as d:
             self.play(FadeOut(pic), FadeOut(L1), FadeOut(R1), FadeOut(L2), FadeOut(R2), FadeOut(R3),
@@ -124,7 +124,7 @@ class S10_Multiply(VScene):
             self.play(Write(L5), FadeIn(R5), run_time=.25 * d)
             self.wait(.05 * d)
 
-        L6 = under_eq(E(r"=|(\sin|\omega|\sin|i|,\ \cos|\omega|\sin|i|,|\cos|i|)^{T}", size=44), L4, -1.15)
+        L6 = under_eq(E(r"=|(\sin|\omega|\sin|i|,\ \cos|\omega|\sin|i|,|\cos|i|)^{T}", size=44), L4, -0.8)
         R6 = reason("matrix times column", L6)
         box6 = SurroundingRectangle(L6[1:], color=INK2, buff=.12)
 
@@ -139,7 +139,7 @@ class S10_Multiply(VScene):
         rule = Line(cols.get_left() + LEFT * .2, cols.get_right() + RIGHT * .2, color=HAIR, stroke_width=2)
         rule.set_y((cols[0][0].get_bottom()[1] + cols[0][1].get_top()[1]) / 2)
         table = panel(VGroup(cols, rule))
-        fit(table, 13.8, 1.9).move_to([0, -3.0, 0])
+        fit(table, 13.8, 2.0).move_to([0, -2.85, 0])
         self.beat("That gives sine omega sine i, cosine omega sine i, and cosine i.",
                   [Write(L6), FadeIn(R6)], Create(box6), FadeIn(table, shift=UP * .2), w=(.45, .15, .4))
         self.wait(1.0)

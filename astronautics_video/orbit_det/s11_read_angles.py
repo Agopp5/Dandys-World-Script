@@ -161,18 +161,18 @@ class S11_Read_Angles(VScene):
                   w=(.1, .2, .25, .3, .15))
 
         # 7: two practical notes
-        n1 = VGroup(badge(1).scale(1.5), VGroup(
-            TX(r"atan2 returns $-180^\circ$ to $180^\circ$.", size=44),
-            TX(r"Negative? Add $360^\circ$.", size=44),
-            TX(r"$-90^\circ \to 270^\circ$", size=44)
+        n1 = VGroup(badge(1).scale(1.9), VGroup(
+            TX(r"atan2 gives $-180^\circ$ to $180^\circ$.", size=58),
+            TX(r"Negative? Add $360^\circ$.", size=58),
+            TX(r"$-90^\circ \to 270^\circ$", size=58)
         ).arrange(DOWN, aligned_edge=LEFT, buff=.15)).arrange(RIGHT, buff=.3)
-        n2 = VGroup(badge(2).scale(1.5), VGroup(
-            TX(r"If $i = 0$, both pairs are $0/0$:", size=44),
-            TX(r"Equatorial orbit: no node.", size=44)
+        n2 = VGroup(badge(2).scale(1.9), VGroup(
+            TX(r"If $i = 0$, both pairs are $0/0$:", size=58),
+            TX(r"Equatorial orbit: no node.", size=58)
         ).arrange(DOWN, aligned_edge=LEFT, buff=.15)).arrange(RIGHT, buff=.3)
         notes = VGroup(panel(n1), panel(n2)).arrange(DOWN, aligned_edge=LEFT, buff=.35)
-        fit(notes, 6.6, 6.2)
-        notes.move_to([RX, .1, 0])
+        fit(notes, 6.9, 6.4)
+        notes.move_to([3.55, .0, 0])
         with self.say("Two practical notes. atan two returns minus one eighty to one eighty, so add three sixty to a negative answer. And if i is zero, both pairs are zero over zero: that's the equatorial orbit, with no node.") as d:
             self.play(slot(w_grp, 2), FadeOut(sup), run_time=.12 * d)
             self.play(FadeIn(notes[0], shift=.2 * UP), run_time=.15 * d)
