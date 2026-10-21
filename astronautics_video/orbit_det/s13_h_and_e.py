@@ -123,12 +123,13 @@ class S13_h_and_e(VScene):
 
         self.beat("Next, the angular momentum: h equals r cross v.",
                   [FadeIn(earth), FadeIn(ax), FadeIn(orb)], [FadeIn(r_arr), FadeIn(v_arr), FadeIn(r_lab), FadeIn(v_lab)],
-                  Write(h1), [grow(h_arr), FadeIn(h_lab)], FadeIn(hv[0:3]), FadeIn(hv[4]), FadeIn(hv[6:]),
+                  Write(h1), [grow(h_arr), FadeIn(h_lab)], FadeIn(hv[0:3]), FadeIn(hv[4]), FadeIn(VGroup(hv[6], hv[8])),
                   w=(.15, .12, .2, .3, .08, .07, .08))
         for k, slot in enumerate((3, 5, 7)):
             wk = work(comps[k])
             self.play(LaggedStart(*[FadeIn(m, shift=.1 * DOWN) for m in wk], lag_ratio=.6), run_time=2.2)
             self.wait(1.2)
+            self.snap("h component %d" % (k + 1))
             self.play(TransformFromCopy(wk[3], hv[slot]), FadeOut(wk), run_time=.8)
         hm = VGroup(M(r"h = |\vec h| = \sqrt{h_x^2 + h_y^2 + h_z^2}", size=40),
                     M(r"= \sqrt{35{,}432^2 + 50{,}602^2 + 30{,}934^2}", size=40),
@@ -148,9 +149,6 @@ class S13_h_and_e(VScene):
                   w=(.25, .3, .1, .25))
 
         # ---- beat 3: e vector, its two pieces first; fold h into one boxed result
-        hbox_eq = E(r"\vec h| = (35{,}432,\ 50{,}602,\ 30{,}934)", size=40)
-        hbox = panel(hbox_eq, color=LILAC)
-        hbox.move_to([X, 3.4, 0])
         e1 = E(r"\vec e|=|\frac{\vec v_0 \times \vec h}{\mu}|-|\frac{\vec r_0}{r_0}", size=48)
         pa = VGroup(M(r"\frac{\vec v_0 \times \vec h}{\mu}", size=40),
                     M(r"= (1.0416,\ -0.2293,\ -0.8179)", size=40)).arrange(DOWN, aligned_edge=LEFT, buff=.2)
@@ -159,14 +157,15 @@ class S13_h_and_e(VScene):
         e2 = E(r"\vec e|=|(0.1903,\ 0.2718,\ -0.6627)", size=40)
         en = note("difference of the two pieces")
         eb = VGroup(e1, pa, pb_, VGroup(e2, en).arrange(DOWN, buff=.15)).arrange(DOWN, buff=.32)
-        fit(eb, CW, 6.3)
-        eb.next_to(hbox, DOWN, buff=.3).set_x(X)
+        fit(eb, CW, 7.4)
+        eb.move_to([X, 0, 0])
         self.beat("Now the eccentricity vector, from the last chapter: v cross h over mu, minus the unit vector along r.",
-                  [FadeOut(n2), ReplacementTransform(hb, hbox)], Write(e1), FadeIn(pa), FadeIn(pb_),
+                  [FadeOut(n2), FadeOut(hb)], Write(e1), FadeIn(pa), FadeIn(pb_),
                   [FadeIn(e2), FadeIn(en), grow(e_arr), FadeIn(e_lab)],
                   w=(.12, .2, .2, .2, .28))
         self.wait(2.5)
-        e2_top = e2.copy().next_to(hbox, DOWN, buff=.45).set_x(X)
+        self.snap("e pieces")
+        e2_top = e2.copy().move_to([X, 3.2, 0])
         self.play(FadeOut(e1), FadeOut(pa), FadeOut(pb_), FadeOut(en), e2.animate.move_to(e2_top), run_time=1.0)
 
         # ---- beat 4: e = |e| = sqrt(...) = 0.7411, points to perigee
@@ -176,11 +175,12 @@ class S13_h_and_e(VScene):
         paint(e3[0], {0: ROSE})
         fit(e3, CW, 3.0)
         e3.next_to(e2, DOWN, buff=.45).set_x(X)
+        eglow = glow(e3[2], ROSE)
         n4 = note("points from the focus to the perigee")
         n4.next_to(e3, DOWN, buff=.35)
         self.beat("Its length is the eccentricity: zero point seven four one one. "
                   "And it points from the focus straight to the perigee.",
-                  FadeIn(e3[0]), FadeIn(e3[1]), [Write(e3[2]), FadeIn(glow(e3[2], ROSE))],
+                  FadeIn(e3[0]), FadeIn(e3[1]), [Write(e3[2]), FadeIn(eglow)],
                   [Create(e_ext), FadeIn(peri), FadeIn(peri_lab), FadeIn(n4)],
                   Indicate(peri, color=ROSE),
                   w=(.12, .18, .2, .3, .2))
@@ -199,7 +199,7 @@ class S13_h_and_e(VScene):
         n5.next_to(cb, DOWN, buff=.3)
         self.beat("Your notes give a second way to get the same number, from energy and h alone: "
                   "e equals the square root of one plus two E h squared over mu squared. It agrees.",
-                  [FadeOut(hbox), FadeOut(e2), FadeOut(e3[:2]), FadeOut(n4), ReplacementTransform(e3[2], ebox)],
+                  [FadeOut(e2), FadeOut(e3[:2]), FadeOut(n4), FadeOut(eglow), ReplacementTransform(e3[2], ebox)],
                   [Write(c1), FadeIn(n5)], FadeIn(c2), [FadeIn(c3), FadeIn(tick)], Circumscribe(c3, color=GOOD),
                   w=(.15, .3, .25, .15, .15))
 

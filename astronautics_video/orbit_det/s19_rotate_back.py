@@ -190,9 +190,9 @@ class S19_Rotate_Back(VScene):
 
         rres = M(r"\vec r_N=\begin{bmatrix}9031\\-5317\\-1647\end{bmatrix}\,\mathrm{km}", size=42)
         veq = M(r"\vec v_N=C_{PN}^T\,\vec v_P,\qquad \vec v_P=(5.682,\ 5.278,\ 0)", size=40)
-        vx = comp(r"x:\ ", ("5.682", "(0.2568)"), ("+5.278", "(-0.8192)"), r"=1.459-4.324\approx -2.864")
-        vy = comp(r"y:\ ", ("5.682", "(0.3668)"), ("+5.278", "(0.5736)"), r"=2.084+3.027\approx 5.111")
-        vz = comp(r"z:\ ", ("5.682", "(-0.8942)"), ("+5.278", "(0)"), r"=-5.081\ \ \mathrm{km/s}")
+        vx = comp(r"x:\ ", ("5.682", "(0.2568)"), ("5.278", "(-0.8192)"), r"=1.459-4.324\approx -2.864")
+        vy = comp(r"y:\ ", ("5.682", "(0.3668)"), ("5.278", "(0.5736)"), r"=2.084+3.027\approx 5.111")
+        vz = comp(r"z:\ ", ("5.682", "(-0.8942)"), ("5.278", "(0)"), r"=-5.081\ \ \mathrm{km/s}")
         col3b = VGroup(rres, veq, vx, vy, vz)
         for g in (vx, vy, vz):
             g.arrange(DOWN, aligned_edge=LEFT, buff=.2)
