@@ -23,7 +23,7 @@ HH = np.array([np.sin(I_G) * np.sin(OM_G), -np.sin(I_G) * np.cos(OM_G), np.cos(I
 assert np.isclose(np.linalg.norm(HH), 1) and np.isclose(HH @ _K, np.cos(I_G))
 assert np.isclose(np.degrees(np.arccos(HH @ _K)), 40)
 
-XL = -1.6          # left edge of the right-hand algebra column
+XL = -1.9          # left edge of the right-hand algebra column
 
 
 def reason(tex_sentence, line):
@@ -54,11 +54,13 @@ class S10_Multiply(VScene):
     def construct(self):
         # ---- left column: the product and the matrix of entries
         P = E(r"C_{PN}|=|C_3(|\omega|)\,C_1(|i|)\,C_3(|\Omega|)", size=40)
-        fit(P, 4.8, 1).move_to([-4.4, 2.5, 0])
-        Mx = Matrix([[f"C_{{{r}{c}}}" for c in (1, 2, 3)] for r in (1, 2, 3)], h_buff=1.25)
-        Mx.set_color(INK).scale_to_fit_height(2.3).move_to([-4.2, 0.35, 0])
+        fit(P, 4.6, 1).move_to([-4.45, 3.1, 0])
+        Mx = Matrix([[f"C_{{{r}{c}}}" for c in (1, 2, 3)] for r in (1, 2, 3)], h_buff=1.35, v_buff=1.0,
+                    element_to_mobject_config={"font_size": 42})
+        Mx.set_color(INK).move_to([-4.2, 0.2, 0])
+        fit(Mx, 4.3, 3.6)
         rows = Mx.get_rows()
-        labs = VGroup(*[E(t, size=36).move_to([Mx.get_left()[0] - .4, rows[k].get_y(), 0])
+        labs = VGroup(*[E(t, size=40).move_to([Mx.get_left()[0] - .45, rows[k].get_y(), 0])
                         for k, t in enumerate([r"\hat p", r"\hat q", r"\hat h"])])
         rowbox = SurroundingRectangle(rows[2], color=LILAC, buff=.12)
 
@@ -67,15 +69,15 @@ class S10_Multiply(VScene):
                   w=(.45, .3, .25))
 
         # ---- third row
-        L1 = left_at(E(r"\text{row}_3\,C_{PN}|=|(0,0,1)\,C_1(|i|)\,C_3(|\Omega|)", size=40), 2.5)
+        L1 = left_at(E(r"\text{row}_3\,C_{PN}|=|(0,0,1)\,C_1(|i|)\,C_3(|\Omega|)", size=44), 2.3)
         R1 = reason(r"row 3 of $C_3(\omega)$ is $(0,0,1)$", L1)
-        L2 = under_eq(E(r"=|(0,\,-\sin|i|,|\cos|i|)\,C_3(|\Omega|)", size=40), L1, 1.25)
+        L2 = under_eq(E(r"=|(0,\,-\sin|i|,|\cos|i|)\,C_3(|\Omega|)", size=44), L1, 0.5)
         R2 = reason(r"row 3 of $C_1(i)$", L2)
         self.beat("The third row of C three of omega is just zero, zero, one. So the third row of the whole product is the third row of C one of i, times C three of Omega.",
                   Indicate(P[2:5], color=MINT), [Write(L1), FadeIn(R1)], .1, [Write(L2), FadeIn(R2)],
                   w=(.2, .38, .42))
 
-        L3 = under_eq(E(r"=|(\sin|i|\sin|\Omega|,\ -\sin|i|\cos|\Omega|,|\cos|i|)", size=40), L1, 0.0)
+        L3 = under_eq(E(r"=|(\sin|i|\sin|\Omega|,\ -\sin|i|\cos|\Omega|,|\cos|i|)", size=44), L1, -1.3)
         R3 = reason("row times matrix", L3)
         box3 = SurroundingRectangle(L3[1:], color=LILAC, buff=.12)
         self.beat("Multiply that row into C three of Omega. The result is sine i sine Omega, minus sine i cosine Omega, and cosine i.",
@@ -106,12 +108,12 @@ class S10_Multiply(VScene):
 
         # ---- third column
         L3f = left_at(E(r"\text{row}_3\,C_{PN}|=|(\sin|i|\sin|\Omega|,\ -\sin|i|\cos|\Omega|,|\cos|i|)",
-                        size=40), 2.5)
+                        size=44), 2.75)
         box3f = SurroundingRectangle(L3f[2:], color=LILAC, buff=.12)
         colbox = SurroundingRectangle(Mx.get_columns()[2], color=INK2, buff=.12)
-        L4 = left_at(E(r"C_{PN}\,\hat K|=|C_3(|\omega|)\,C_1(|i|)\,(0,0,1)^{T}", size=40), 1.25)
+        L4 = left_at(E(r"C_{PN}\,\hat K|=|C_3(|\omega|)\,C_1(|i|)\,(0,0,1)^{T}", size=44), 1.45)
         R4 = reason(r"$\hat K$ picks out column 3", L4)
-        L5 = under_eq(E(r"=|C_3(|\omega|)\,(0,|\sin|i|,|\cos|i|)^{T}", size=40), L4, 0.0)
+        L5 = under_eq(E(r"=|C_3(|\omega|)\,(0,|\sin|i|,|\cos|i|)^{T}", size=44), L4, 0.15)
         R5 = reason(r"column 3 of $C_1(i)$", L5)
         with self.say("Now the third column. Multiply C P N by the unit vector along K, working from the right.") as d:
             self.play(FadeOut(pic), FadeOut(L1), FadeOut(R1), FadeOut(L2), FadeOut(R2), FadeOut(R3),
@@ -122,22 +124,22 @@ class S10_Multiply(VScene):
             self.play(Write(L5), FadeIn(R5), run_time=.25 * d)
             self.wait(.05 * d)
 
-        L6 = under_eq(E(r"=|(\sin|\omega|\sin|i|,\ \cos|\omega|\sin|i|,|\cos|i|)^{T}", size=40), L4, -1.25)
+        L6 = under_eq(E(r"=|(\sin|\omega|\sin|i|,\ \cos|\omega|\sin|i|,|\cos|i|)^{T}", size=44), L4, -1.15)
         R6 = reason("matrix times column", L6)
         box6 = SurroundingRectangle(L6[1:], color=INK2, buff=.12)
 
         heads = [r"C_{31}", r"C_{32}", r"C_{33}", r"C_{13}", r"C_{23}"]
         vals = [r"\sin|i|\sin|\Omega|", r"-\sin|i|\cos|\Omega|", r"\cos|i|", r"\sin|\omega|\sin|i|",
                 r"\cos|\omega|\sin|i|"]
-        cols = VGroup(*[VGroup(E(h, size=32).set_color(INK2), E(v, size=34)).arrange(DOWN, buff=.35)
-                        for h, v in zip(heads, vals)]).arrange(RIGHT, buff=.75)
+        cols = VGroup(*[VGroup(E(h, size=36).set_color(INK2), E(v, size=38)).arrange(DOWN, buff=.35)
+                        for h, v in zip(heads, vals)]).arrange(RIGHT, buff=.6)
         for c in cols:                                     # common baselines for both table rows
             c[0].set_y(cols[0][0].get_y())
             c[1].set_y(cols[0][1].get_y())
         rule = Line(cols.get_left() + LEFT * .2, cols.get_right() + RIGHT * .2, color=HAIR, stroke_width=2)
         rule.set_y((cols[0][0].get_bottom()[1] + cols[0][1].get_top()[1]) / 2)
         table = panel(VGroup(cols, rule))
-        fit(table, 13, 1.6).move_to([0, -2.95, 0])
+        fit(table, 13.8, 1.9).move_to([0, -3.0, 0])
         self.beat("That gives sine omega sine i, cosine omega sine i, and cosine i.",
                   [Write(L6), FadeIn(R6)], Create(box6), FadeIn(table, shift=UP * .2), w=(.45, .15, .4))
         self.wait(1.0)

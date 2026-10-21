@@ -46,7 +46,7 @@ class S03_Six_Numbers(VScene):
         br_lab = T("state vector, all six change", size=26, color=INK2).next_to(br, DOWN, buff=.15)
         state = place(VGroup(cols, br, br_lab), "right")
 
-        self.add(earth)
+        self.add(earth, r_arr, v_arr)
         self.beat("Position and velocity together are called the state vector. Those six numbers completely determine the orbit.",
                   [r_arr.k.animate.set_value(1), FadeIn(sat), FadeIn(rcol)],
                   [v_arr.k.animate.set_value(1), FadeIn(r_lab), FadeIn(v_lab), FadeIn(vcol)],
@@ -109,7 +109,7 @@ class S03_Six_Numbers(VScene):
 
         # ---- beat 4: orientation, the ellipse lifts into 3D --------------------------------
         ax = axes3(view, 2.2)
-        plane = disc3(view, lambda: Cm()[0], lambda: Cm()[1], 3.0, LILAC, .12)
+        plane = disc3(view, lambda: Cm()[0], lambda: Cm()[1], 3.6, LILAC, .12)
         with self.say("Three describe orientation: how steeply the orbit plane is tilted, which way that tilt "
                       "faces, and how the ellipse is turned within its plane.") as d:
             self.play(FadeOut(VGroup(a_line, a_dot, a_lab)), *focus(1), run_time=.12 * d)
@@ -127,12 +127,13 @@ class S03_Six_Numbers(VScene):
         sat_dot = dot3(view, lambda: f(TH0), GOLD)
         th_arc = arc3(view, lambda: Cm()[2], lambda: Cm()[0], TH0, 1.7, GOLD)
         th_arc.k.set_value(0)
+        self.add(th_arc)
         th_lab = label3(view, r"\theta_0", lambda: 2.05 * (np.cos(TH0 / 2) * Cm()[0] + np.sin(TH0 / 2) * Cm()[1]),
                         GOLD, 40)
         g3_glow = glow(g3[1], GOLD)
         self.beat("And one says where the satellite is at the moment of the measurement: "
                   "the true anomaly at epoch, theta zero.",
-                  [*focus(2), FadeOut(e_read), view.elev.animate.set_value(48)], [FadeIn(peri_line), FadeIn(peri_dot)],
+                  [*focus(2), FadeOut(e_read), FadeOut(ax), view.elev.animate.set_value(48)], [FadeIn(peri_line), FadeIn(peri_dot)],
                   [FadeIn(sat_line), FadeIn(sat_dot, scale=1.6)],
                   [th_arc.k.animate.set_value(1), FadeIn(th_lab)], FadeIn(g3_glow),
                   w=(.15, .15, .2, .25, .25))

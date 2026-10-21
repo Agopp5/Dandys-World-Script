@@ -54,7 +54,7 @@ class S12_Energy_a(VScene):
     budget = 107
 
     def construct(self):
-        view = View(elev=55, azim=-110, scale=1.5, center=(-3.6, -0.9))
+        view = View(elev=60, azim=10, scale=1.5, center=(-3.6, -0.9))
         earth = globe(view)
         ax = axes3(view, 1.8)
         ar = arrow3(view, (0, 0, 0), tuple(RD), INK)
@@ -135,7 +135,7 @@ class S12_Energy_a(VScene):
         la = label3(view, "a", tuple((CEN + APO) / 2 + np.array([.5, 0, 0])), INK2, 40)
         self.add(mol, semi)
         with self.say("That's about four Earth radii, and a period of almost exactly twelve hours.") as d:
-            self.play(view.scale.animate.set_value(.42), view.elev.animate.set_value(25),
+            self.play(view.scale.animate.set_value(.62), view.elev.animate.set_value(30),
                       FadeIn(s1, shift=UP * .2), run_time=.25 * d)
             self.play(mol.k.animate.set_value(1), run_time=.2 * d)
             self.play(semi.k.animate.set_value(1), FadeIn(la), Indicate(s1, color=INK), run_time=.2 * d)

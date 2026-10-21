@@ -70,6 +70,7 @@ class S09_DCM(VScene):
         with self.say("That's exactly what a direction cosine matrix stores. Write p hat, q hat and h hat in their I, J, K components, and stack them as rows. That stack is C P N.") as d:
             gl = glow(lhs[0], ACCENT)
             self.play(FadeIn(earth), FadeIn(ax), Create(orb), run_time=.12 * d)
+            self.add(pa, qa, ha)
             self.play(pa.k.animate.set_value(1), qa.k.animate.set_value(1), ha.k.animate.set_value(1),
                       FadeIn(VGroup(pl, ql, hl)), run_time=.12 * d)
             self.play(FadeIn(lhs), FadeIn(mat.get_brackets()), run_time=.08 * d)
@@ -91,15 +92,16 @@ class S09_DCM(VScene):
         axis = axis / np.linalg.norm(axis)
         arc = arc3(view, axis, I_HAT, ALPHA, 1.35, ACCENT)
         arc.k.set_value(0)
+        self.add(arc)
         mid = np.cos(ALPHA / 2) * I_HAT + np.sin(ALPHA / 2) * np.cross(axis, I_HAT)
         al = label3(view, r"\alpha", 1.65 * mid, ACCENT, 34)
         others = VGroup(qa, ha, ql, hl, orb)
         self.beat("Each entry is a dot product, the cosine of the angle between one perifocal axis and one E C I axis.",
-                  Create(box), [others.animate.set_opacity(.25), Indicate(ax[0], color=ACCENT)],
+                  Create(box), [FadeOut(others), Indicate(ax[0], color=ACCENT)],
                   [arc.k.animate.set_value(1), FadeIn(al)], Write(cosl), FadeIn(val), w=(.12, .2, .25, .28, .15))
 
         # beat 3: three turns, three badges
-        self.play(FadeOut(VGroup(mgroup, gl, box, cosl, val, arc, al)), others.animate.set_opacity(1), run_time=.8)
+        self.play(FadeOut(VGroup(mgroup, gl, box, cosl, val, arc, al)), FadeIn(others), run_time=.8)
         node = line3(view, -2.2 * N_HAT, 2.2 * N_HAT, SKY, dashed=True)
         specs = [(1, r"\Omega", SKY, "about K"), (2, "i", EMBER, "about the node line"),
                  (3, r"\omega", MINT, r"about h")]

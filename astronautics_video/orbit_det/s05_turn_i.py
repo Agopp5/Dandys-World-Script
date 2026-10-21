@@ -52,7 +52,7 @@ class S05_Turn_i(VScene):
     budget = 147
 
     def construct(self):
-        view = View()
+        view = View(scale=.92, center=(-2.9, -0.3))
         it = ValueTracker(0.0)              # inclination (rad)
         th = ValueTracker(-np.pi / 2)       # satellite true anomaly (rad)
 
@@ -79,7 +79,7 @@ class S05_Turn_i(VScene):
         node_line = line3(view, -4.3 * NHAT, 4.3 * NHAT, SKY, dashed=True)
         om_arc = arc3(view, KZ, IX, OM, 1.2, SKY)
         om_lab = label3(view, r"\Omega", rot(IX, KZ, OM / 2) * 1.55, SKY, 34)
-        path = curve(view, orb, 0, TAU, INK, R=1.0)
+        path = always_redraw(lambda: curve(view, orbit(A, ECC, OM, it.get_value(), 0), 0, TAU, INK, R=1.0))
         sat = dot3(view, lambda: orb(th.get_value()), INK)
         i_arc = arc3(view, NHAT, MHAT, ii, 2.0, EMBER)
         i_lab = label3(view, "i", lambda: rot(MHAT, NHAT, ii() / 2) * 2.35, EMBER, 36)
@@ -107,8 +107,8 @@ class S05_Turn_i(VScene):
         dim_sky = interpolate_color(ManimColor(SKY), ManimColor(BG), .5).to_hex()
         asc = dot3(view, lambda: orb(0), SKY)
         dsc = dot3(view, lambda: orb(np.pi), dim_sky)
-        asc_lab = label3(view, r"\text{ascending node}", 1.2 * NHAT + np.array([0, 0, -.55]), SKY, 28)
-        dsc_lab = label3(view, r"\text{descending node}", -3.6 * NHAT + np.array([0, 0, .5]), dim_sky, 28)
+        asc_lab = label3(view, r"\text{ascending node}", 2.9 * NHAT + np.array([0, 0, -.4]), SKY, 28)
+        dsc_lab = label3(view, r"\text{descending node}", -2.9 * NHAT + np.array([0, 0, .55]), dim_sky, 28)
         om_glow = VGroup(glow(om_arc, SKY), glow(om_lab, SKY))
         self.beat("Where it crosses heading north is the ascending node. Where it crosses heading south is "
                   "the descending node. Now you can see why Omega is measured to the ascending node.",
@@ -118,8 +118,8 @@ class S05_Turn_i(VScene):
         # --- i is also the angle between K and h ---
         h_arr = arrow3(view, ORIGIN, lambda: 2.3 * hh(), LILAC)
         h_lab = label3(view, r"\vec h", lambda: 2.65 * hh(), LILAC, 36)
-        kh_arc = arc3(view, NHAT, KZ, ii, 1.5, EMBER)
-        kh_lab = label3(view, "i", lambda: rot(KZ, NHAT, ii() / 2) * 1.8, EMBER, 36)
+        kh_arc = arc3(view, NHAT, KZ, ii, 1.7, EMBER)
+        kh_lab = label3(view, "i", lambda: rot(KZ, NHAT, ii() / 2) * 2.05, EMBER, 36)
         h_arr.k.set_value(0)
         kh_arc.k.set_value(0)
 
@@ -154,7 +154,7 @@ class S05_Turn_i(VScene):
         fit(rows, 5.6, 3.0)
         rows.next_to(rd, DOWN, buff=.6)
         rows.set_x(rd.get_x())
-        motion = arrow3(view, lambda: orb(np.pi - .16), lambda: orb(np.pi + .16), ACCENT)
+        motion = arrow3(view, lambda: orb(np.pi - .3), lambda: orb(np.pi + .3), ACCENT)
         spin = arrow3(view, -1.55 * NHAT + .45 * MHAT, -1.55 * NHAT - .45 * MHAT, INK2)
         spin_lab = label3(view, r"\text{Earth's spin}", -1.55 * NHAT + np.array([0, 0, -.45]), INK2, 26)
 

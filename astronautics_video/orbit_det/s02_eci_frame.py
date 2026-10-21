@@ -60,25 +60,26 @@ class S02_ECI_Frame(VScene):
         sun_c = np.array([2.0, 0, 0])
         ecl = curve(v2, lambda t: sun_c + 2.0 * np.array([np.cos(t), np.sin(t), 0]), 0, TAU, MUTED, width=3)
         sun = Dot(v2.p(sun_c), radius=.16, color=GOLD)
-        sun_lab = T("Sun", size=26, color=INK2).next_to(sun, DOWN, buff=.15)
+        sun_lab = T("Sun", size=26, color=INK2).next_to(sun, RIGHT, buff=.15)
         mini = globe(v2, R=.32)
-        ecl_disc = disc3(v2, (1, 0, 0), (0, 1, 0), .75, MUTED, .18)
-        equ = curve(v2, lambda t: .75 * (np.cos(t) * I_ + np.sin(t) * N_EQ), 0, TAU, INK2, width=3)
-        tilt = arc3(v2, (1, 0, 0), (0, 1, 0), EPS, .62, ACCENT)
-        tilt_lab = label3(v2, r"23.4^\circ", (0, .95, .45), ACCENT, 30)
+        ecl_disc = disc3(v2, (1, 0, 0), (0, 1, 0), 1.0, MUTED, .18)
+        equ = curve(v2, lambda t: 1.0 * (np.cos(t) * I_ + np.sin(t) * N_EQ), 0, TAU, INK2, width=3)
+        tilt = arc3(v2, (1, 0, 0), (0, 1, 0), EPS, .85, ACCENT)
+        rays = VGroup(line3(v2, (0, 0, 0), 1.15 * J_, MUTED), line3(v2, (0, 0, 0), 1.15 * N_EQ, INK2))
+        tilt_lab = label3(v2, r"23.4^\circ", (0, 1.0, .75), ACCENT, 32)
         ecl_lab = T("ecliptic", size=26, color=MUTED).move_to(v2.p(sun_c + 2.0 * np.array([0, 1, 0])) + UP * .3)
-        equ_lab = T("equator", size=26, color=INK2).next_to(v2.p(-.75 * N_EQ), LEFT, buff=.15)
+        equ_lab = T("equator", size=26, color=INK2).next_to(v2.p(-1.0 * N_EQ), DOWN, buff=.12)
         frame = RoundedRectangle(width=6.6, height=5.4, corner_radius=.15, stroke_color=HAIR, stroke_width=2) \
             .move_to((3.55, -.5, 0))
-        inset = Group(frame, ecl, sun, sun_lab, ecl_lab, mini, ecl_disc, equ, equ_lab, tilt, tilt_lab)
+        inset = Group(frame, ecl, sun, sun_lab, ecl_lab, mini, ecl_disc, equ, equ_lab, rays, tilt, tilt_lab)
         self.beat("Picture Earth going around the Sun. Earth's equator is tilted about twenty three and a half degrees to the plane of its orbit, the ecliptic.",
                   FadeOut(q), [Create(frame), FadeIn(sun), FadeIn(sun_lab)], [grow(ecl), FadeIn(mini), FadeIn(ecl_lab)],
-                  .1, [FadeIn(ecl_disc), FadeIn(equ), FadeIn(equ_lab)], [grow(tilt), FadeIn(tilt_lab)],
+                  .1, [FadeIn(ecl_disc), FadeIn(equ), FadeIn(equ_lab)], [FadeIn(rays), grow(tilt), FadeIn(tilt_lab)],
                   w=(.05, .2, .25, .25, .25))
 
-        node = line3(v2, (-.9, 0, 0), (.9, 0, 0), ACCENT)
+        node = line3(v2, (-1.2, 0, 0), (1.2, 0, 0), ACCENT)
         halo = glow(node, ACCENT)
-        vern = arrow3(v2, (.35, 0, 0), (1.65, 0, 0), INK2)
+        vern = arrow3(v2, (.4, 0, 0), (1.7, 0, 0), INK2)
         vern_lab = T("vernal equinox", size=26, color=INK2).next_to(v2.p((1.0, 0, 0)), DOWN, buff=.3)
         with self.say("The two planes cross along one line. On the March equinox, that line points from the Earth straight at the Sun. That is the vernal equinox direction, and I points along it.") as d:
             self.play(FadeIn(node), FadeIn(halo), run_time=.15 * d)

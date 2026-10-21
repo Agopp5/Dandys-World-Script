@@ -71,6 +71,7 @@ class S07_Special_Cases(VScene):
         noP = T("no periapsis", 26, MUTED).move_to([-6.0, -2.0, 0])
         uArc = arc3(vL, H_L, N_HAT, U_SAT, 1.7, GOLD)
         mid = unit(np.cos(U_SAT / 2) * N_HAT + np.sin(U_SAT / 2) * Q_L)
+        rL = line3(vL, (0, 0, 0), sat_L, INK2, dashed=True)
         uLab = label3(vL, "u", 2.05 * mid, GOLD, 36)
         uEq = E(r"u|=|\omega|+|\theta", size=44).move_to([-3.6, -2.6, 0])
         uArc.k.set_value(0)
@@ -78,16 +79,16 @@ class S07_Special_Cases(VScene):
         self.beat("A circular orbit has no periapsis, so little omega and theta have nothing to measure from. "
                   "Instead we use the argument of latitude, u, measured from the ascending node straight to "
                   "the satellite. For any orbit, u equals little omega plus theta.",
-                  FadeIn(noP), Indicate(nodeDot, color=SKY), uArc.k.animate.set_value(1), FadeIn(uLab),
+                  FadeIn(noP), [Indicate(nodeDot, color=SKY), Create(rL)], uArc.k.animate.set_value(1), FadeIn(uLab),
                   Write(uEq), w=(.2, .15, .25, .1, .3))
 
         # beat 3: longitude of periapsis on the right
         noN = T("no node", 26, MUTED).move_to([6.1, -2.0, 0])
         pDir = unit(peri_R)
         pLine = line3(vR, (0, 0, 0), 2.3 * pDir, ROSE, dashed=True)
-        vArc = arc3(vR, (0, 0, 1), (1, 0, 0), VARPI, 1.55, VARPI_C)
+        vArc = arc3(vR, (0, 0, 1), (1, 0, 0), VARPI, 1.35, VARPI_C)
         vmid = (np.cos(VARPI / 2), np.sin(VARPI / 2), 0)
-        vLab = label3(vR, r"\varpi", 1.95 * np.array(vmid), VARPI_C, 36)
+        vLab = label3(vR, r"\varpi", 1.78 * np.array(vmid), VARPI_C, 36)
         vEq = E(r"\varpi|=|\Omega|+|\omega", size=44, cmap={r"\varpi": VARPI_C}).move_to([3.6, -2.6, 0])
         vArc.k.set_value(0)
         self.add(vArc)
@@ -101,10 +102,10 @@ class S07_Special_Cases(VScene):
         omArc = arc3(vL, (0, 0, 1), (1, 0, 0), OM_L, 1.35, SKY)
         omLab = label3(vL, r"\Omega", 1.75 * np.array([np.cos(OM_L / 2), np.sin(OM_L / 2), 0]), SKY, 32)
         sDir = unit(sat_R)
-        sLine = line3(vR, (0, 0, 0), 2.3 * sDir, MUTED, dashed=True)
-        lArc = arc3(vR, (0, 0, 1), (1, 0, 0), VARPI + TH_R, 2.15, L_C)
-        lmid = (np.cos((VARPI + TH_R) * .62), np.sin((VARPI + TH_R) * .62), 0)
-        lLab = label3(vR, "l", 2.5 * np.array(lmid), L_C, 36)
+        sLine = line3(vR, (0, 0, 0), 2.5 * sDir, MUTED, dashed=True)
+        lArc = arc3(vR, (0, 0, 1), (1, 0, 0), VARPI + TH_R, 2.3, L_C)
+        lmid = (np.cos(115 * D), np.sin(115 * D), 0)
+        lLab = label3(vR, "l", 2.7 * np.array(lmid), L_C, 36)
         lEq = E(r"l|=|\Omega|+|\omega|+|\theta", size=48, cmap={"l": L_C}).move_to([0, -3.45, 0])
         lGlow = glow(lEq, L_C)
         omArc.k.set_value(0)
@@ -117,7 +118,7 @@ class S07_Special_Cases(VScene):
                   w=(.3, .25, .25, .2))
 
         # beat 5: the summary
-        self.drop(left, right, titleL, titleR, noP, noN, uArc, uLab, uEq, pLine, vArc, vLab, vEq,
+        self.drop(left, right, titleL, titleR, noP, noN, rL, uArc, uLab, uEq, pLine, vArc, vLab, vEq,
                   omArc, omLab, sLine, lArc, lLab, lEq, lGlow)
         box = key_box(
             r"a:\ \text{size}",

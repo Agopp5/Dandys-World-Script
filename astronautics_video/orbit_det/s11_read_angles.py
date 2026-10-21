@@ -47,12 +47,12 @@ class S11_Read_Angles(VScene):
                  r"C_{23}|=|\cos|\omega|\sin|i"]
         rows = VGroup(*[E(s, size=44) for s in specs]).arrange(DOWN, aligned_edge=LEFT, buff=.3)
         card = panel(rows)
-        card.move_to([-4.0, .75, 0])
+        card.move_to([-4.0, 1.0, 0])
         r33, r31, r32, r13, r23 = rows
 
         def slot(m, k):
             m.generate_target()
-            m.target.scale(.72).move_to([0, card.get_bottom()[1] - .5 - .68 * k, 0])
+            m.target.scale(.82).move_to([0, card.get_bottom()[1] - .5 - .8 * k, 0])
             m.target.align_to(card, LEFT).shift(.2 * RIGHT)
             return MoveToTarget(m)
 
@@ -163,15 +163,16 @@ class S11_Read_Angles(VScene):
         # 7: two practical notes
         n1 = VGroup(badge(1).scale(1.5), VGroup(
             TX(r"atan2 returns $-180^\circ$ to $180^\circ$.", size=44),
-            TX(r"Negative? Add $360^\circ$: \ $-90^\circ \to 270^\circ$", size=44)
+            TX(r"Negative? Add $360^\circ$.", size=44),
+            TX(r"$-90^\circ \to 270^\circ$", size=44)
         ).arrange(DOWN, aligned_edge=LEFT, buff=.15)).arrange(RIGHT, buff=.3)
         n2 = VGroup(badge(2).scale(1.5), VGroup(
-            TX(r"If $i = 0$: both pairs are $0/0$.", size=44),
+            TX(r"If $i = 0$, both pairs are $0/0$:", size=44),
             TX(r"Equatorial orbit: no node.", size=44)
         ).arrange(DOWN, aligned_edge=LEFT, buff=.15)).arrange(RIGHT, buff=.3)
         notes = VGroup(panel(n1), panel(n2)).arrange(DOWN, aligned_edge=LEFT, buff=.35)
-        fit(notes, 6.8, 4.5)
-        notes.move_to([RX - .1, .6, 0])
+        fit(notes, 6.6, 6.2)
+        notes.move_to([RX, .1, 0])
         with self.say("Two practical notes. atan two returns minus one eighty to one eighty, so add three sixty to a negative answer. And if i is zero, both pairs are zero over zero: that's the equatorial orbit, with no node.") as d:
             self.play(slot(w_grp, 2), FadeOut(sup), run_time=.12 * d)
             self.play(FadeIn(notes[0], shift=.2 * UP), run_time=.15 * d)
