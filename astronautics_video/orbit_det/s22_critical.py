@@ -74,7 +74,7 @@ class S22_Critical(VScene):
         s3 = E(r"i|=|63.43^\circ", size=48)
         s3b = T("(or 116.57°)", size=28, color=MUTED)
         steps = VGroup(s1, s2, s3).arrange(DOWN, buff=0.55, aligned_edge=LEFT)
-        steps.next_to(ax, RIGHT, buff=0.7).shift(0.3 * UP)
+        steps.next_to(ax, RIGHT, buff=1.0).shift(0.3 * UP)
         s3b.next_to(s3, DOWN, buff=0.25, aligned_edge=LEFT)
         z1, z2 = Dot(ax.c2p(I_CRIT, 0), color=GOLD, radius=0.11), Dot(ax.c2p(180 - I_CRIT, 0), color=GOLD, radius=0.11)
         zl1 = M(r"63.43^\circ", size=30, color=GOLD).next_to(z1, UP, buff=0.2).shift(0.45 * LEFT)
@@ -87,8 +87,8 @@ class S22_Critical(VScene):
 
         # ---- beat 4: perigee frozen at 63.4, drifting at 50 ------------------------------------------
         self.drop(wdot, ax, ticks, xl, yl, g, pos, neg, plus, minus, steps, s3b, z1, z2, zl1, zl2, box)
-        vL = View(elev=20, azim=-60, scale=0.95, center=(-3.6, -0.7))
-        vR = View(elev=20, azim=-60, scale=0.95, center=(3.6, -0.7))
+        vL = View(elev=20, azim=-60, scale=0.8, center=(-3.5, -0.5))
+        vR = View(elev=20, azim=-60, scale=0.8, center=(3.6, -0.5))
         Om0, w0 = 50 * DEG, 60 * DEG
         t = ValueTracker(0)
         wL = lambda: w0 - 75 * DEG * t.get_value()           # perigee regresses (bracket < 0), sped up
@@ -149,8 +149,8 @@ class S22_Critical(VScene):
         apo = dot3(v, lambda: fM()(PI), GOLD)
         peri.set_z_index(5)
         apo.set_z_index(5)
-        plab = always_redraw(lambda: T("perigee (south)", size=28, color=ROSE).next_to(peri, DOWN, buff=0.2))
-        alab = always_redraw(lambda: T("apogee (north)", size=28, color=GOLD).next_to(apo, RIGHT, buff=0.3))
+        plab = always_redraw(lambda: T("perigee (south)", size=28, color=ROSE).next_to(v.p(fM()(0)), DOWN, buff=0.25))
+        alab = always_redraw(lambda: T("apogee (north)", size=28, color=GOLD).next_to(v.p(fM()(PI)), RIGHT, buff=0.3))
         r1 = E(r"\dot{\omega}|=|0", size=48)
         r1[0].set_color(MINT)
         r2 = E(r"\dot{\Omega}|=|-0.15^\circ/\text{day}", size=48)
