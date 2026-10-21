@@ -175,13 +175,14 @@ class S18_Perifocal_rv(VScene):
         v3 = E(r"= (5.682,\ 5.278,\ 0)\ \text{km/s}", size=40)
         res_v = E(r"\vec v_P| = (5.682,\ 5.278,\ 0)\ \text{km/s}", size=40, cmap=g)
         rchain = VGroup(r1, r2, r3).arrange(DOWN, buff=.3)
+        x_eq = r1.get_left()[0] + M(r"\vec r_P", size=40).width + .13   # line up the = signs
         for m in (r2, r3):
-            m.align_to(r1[1], LEFT).shift(LEFT * M(r"=", size=40).width * 1.6)
+            m.set_x(x_eq + m.width / 2)
         rchain.move_to([RX, .9, 0])
         res_r.move_to([RX, 1.55, 0])
         vchain = VGroup(v1, v2, v3).arrange(DOWN, buff=.3)
         for m in (v2, v3):
-            m.align_to(v1[1], LEFT)
+            m.set_x(v1[0].get_right()[0] + .13 + m.width / 2)
         vchain.next_to(res_r, DOWN, buff=.45)
         vchain.set_x(RX)
         res_v.next_to(res_r, DOWN, buff=.45)
@@ -196,12 +197,13 @@ class S18_Perifocal_rv(VScene):
             self.play(FadeIn(r2, shift=UP * .15), run_time=.07 * d)
             self.play(FadeIn(r3, shift=UP * .15), Transform(rlab, rP_lab), Indicate(rvec, color=INK2),
                       run_time=.1 * d)
+            self.snap("position chain")
             self.play(FadeOut(r1), FadeOut(r2), ReplacementTransform(r3, res_r), run_time=.07 * d)
-            self.snap("position done")
             self.play(FadeIn(v1, shift=UP * .15), run_time=.1 * d)
             self.play(FadeIn(v2, shift=UP * .15), run_time=.1 * d)
             self.play(FadeIn(v3, shift=UP * .15), Transform(vlab, vP_lab), Indicate(vvec, color=ACCENT),
                       run_time=.12 * d)
+            self.snap("velocity chain")
             self.play(FadeOut(v1), FadeOut(v2), ReplacementTransform(v3, res_v), run_time=.08 * d)
             self.play(FadeIn(glow(VGroup(res_r, res_v), ACCENT)), run_time=.08 * d)
             self.wait(.15 * d)

@@ -70,7 +70,7 @@ class S19_Rotate_Back(VScene):
     budget = 148
 
     def construct(self):
-        view = View(elev=80, azim=25, scale=1.0, center=(-3.6, -1.9))
+        view = View(elev=65, azim=25, scale=1.0, center=(-3.6, -1.9))
         s = ValueTracker(0.0)        # 0: perifocal page lying flat, 1: rotated into place
         Mt = ValueTracker(M0)        # mean anomaly drives the satellite
 
@@ -101,7 +101,7 @@ class S19_Rotate_Back(VScene):
             return sat() + k * (vx * C[0] + vy * C[1])
 
         earth = globe(view)
-        ax = axes3(view, 2.0)
+        ax = axes3(view, 1.8)
         plane = disc3(view, lambda: Cs()[0], lambda: Cs()[1], 2.3, MUTED, 0.14)
         orb = curve(view, P3, 0, TAU, INK, width=4, R=1.0)
         pA = arrow3(view, O3, lambda: 1.5 * Cs()[0], ROSE)
@@ -198,27 +198,25 @@ class S19_Rotate_Back(VScene):
         # ---- beat 5: propagate with frozen elements ----
         frozen = VGroup(
             T("frozen", size=28, color=MUTED),
-            E(r"a|=26{,}564\ \mathrm{km}\qquad|e|=0.741", size=36),
-            E(r"i|=63.4^\circ\quad|\Omega|=145^\circ\quad|\omega|=270^\circ", size=36),
+            E(r"a|=26{,}564\ \mathrm{km}\qquad|e|=0.741", size=38),
+            E(r"i|=63.4^\circ\quad|\Omega|=145^\circ\quad|\omega|=270^\circ", size=38),
         ).arrange(DOWN, buff=.22)
         card = panel(frozen)
         thr = readout(r"\theta =", lambda: np.degrees(th()) % 360, digits=1)
-        thr.set_color(GOLD)
-        n0 = T("Kepler's equation", size=30)
-        n2 = M(r"\vec r_P,\ \vec v_P", size=42)
-        n3 = M(r"\vec r,\ \vec v", size=42)
+        thr.set_color(GOLD).scale(1.3)
+        n0 = T("Kepler's equation", size=34)
+        n2 = M(r"\vec r_P,\ \vec v_P", size=48)
+        n3 = M(r"\vec r,\ \vec v", size=48)
         chain = VGroup(n0, thr, n2, n3).arrange(DOWN, buff=.6)
         arrs = VGroup(*[Arrow(chain[k].get_bottom(), chain[k + 1].get_top(), buff=.1, color=MUTED,
                               stroke_width=4) for k in range(3)])
-        cT = M(r"C_{PN}^T", size=36).next_to(arrs[2], RIGHT, buff=.2)
+        cT = M(r"C_{PN}^T", size=42).next_to(arrs[2], RIGHT, buff=.2)
         flow = VGroup(chain, arrs, cT)
         col5 = VGroup(card, flow).arrange(DOWN, buff=.4)
-        h5 = col5.height
         col(col5)
-        print("S19 col5 shrink", col5.height / h5)
         thr.clear_updaters()
         thr_live = readout(r"\theta =", lambda: np.degrees(th()) % 360, digits=1)
-        thr_live.set_color(GOLD).move_to(thr)
+        thr_live.set_color(GOLD).scale(1.3).move_to(thr)
         thr_live.add_updater(lambda m: m.move_to(thr))
         with self.say("And here's why elements are worth the trouble. To move the satellite forward in time, five numbers stay frozen. Only theta advances, using Kepler's equation. Then one rotation gives r and v again.") as d:
             self.play(FadeOut(grid), FadeOut(VGroup(rL, vL)), FadeIn(card), run_time=.12 * d)

@@ -119,7 +119,7 @@ class S16_omega(VScene):
         # ---- e_Z decides ----
         drop_pt = np.array([PERI[0], PERI[1], 0.0])
         e_arrow = arrow3(view, (0, 0, 0), PERI, ROSE)
-        e_lbl = label3(view, r"\vec e", PERI - 0.6 * NHAT + np.array([0, 0, 0.2]), ROSE, 44)
+        e_lbl = backed(label3(view, r"\vec e", 0.55 * PERI + 0.4 * NHAT, ROSE, 44))
         drop = line3(view, PERI, drop_pt, ROSE, dashed=True)
         foot = dot3(view, drop_pt, MUTED, radius=0.05)
         p_lbl = label3(view, r"\text{perigee}", PERI - 1.1 * NHAT + np.array([0, 0, -0.75]), ROSE, 36)

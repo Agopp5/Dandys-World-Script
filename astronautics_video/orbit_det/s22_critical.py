@@ -150,7 +150,7 @@ class S22_Critical(VScene):
         peri.set_z_index(5)
         apo.set_z_index(5)
         plab = always_redraw(lambda: T("perigee (south)", size=28, color=ROSE).next_to(v.p(fM()(0)), DOWN, buff=0.25))
-        alab = always_redraw(lambda: T("apogee (north)", size=28, color=GOLD).next_to(v.p(fM()(PI)), RIGHT, buff=0.3))
+        alab = always_redraw(lambda: T("apogee (north)", size=28, color=GOLD).next_to(v.p(fM()(PI)), RIGHT, buff=0.5))
         r1 = E(r"\dot{\omega}|=|0", size=48)
         r1[0].set_color(MINT)
         r2 = E(r"\dot{\Omega}|=|-0.15^\circ/\text{day}", size=48)
