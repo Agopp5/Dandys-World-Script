@@ -1,0 +1,472 @@
+<title>Orbital Elements Explorer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: the 3D view fills the left, a control rail of element cards on the right; stacked on phones.
+   One deliberate dark "night sky" look (the orbit reads best on black), colors match the video series. */
+:root {
+  --bg: #0b0d12; --panel: #12151c; --raise: #1a1e27; --hair: #2a2f3b;
+  --ink: #eef0f4; --ink2: #b8bdca; --muted: #8a90a0;
+  --sky: #4a95ff; --ember: #ff7a3d; --mint: #22c58b; --gold: #ffd27a; --lilac: #a497ff; --rose: #f06ea0;
+  --chalk: #e8e4d8; --warn: #ffb44a;
+  --display: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "Barlow", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.45 var(--body); }
+.app { display: grid; grid-template-columns: minmax(0, 1fr) 400px; height: 100%; }
+.view { position: relative; min-width: 0; min-height: 0; overflow: hidden; background: radial-gradient(ellipse at 50% 40%, #121826 0%, var(--bg) 70%); }
+.view canvas { display: block; touch-action: none; }
+.labels { position: absolute; inset: 0; pointer-events: none; }
+.lbl { font: 600 17px/1 var(--body); padding: 3px 7px; border-radius: 5px; background: rgba(11, 13, 18, .72); white-space: nowrap; }
+.lbl.big { font: 700 22px/1 var(--display); }
+.hud { position: absolute; left: max(14px, env(safe-area-inset-left, 0px)); bottom: 12px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.hint { color: var(--muted); font-size: 14px; }
+.rail { background: var(--panel); border-left: 1px solid var(--hair); overflow-y: auto; min-width: 0;
+  padding-block: 18px 28px; padding-left: 18px; padding-right: max(18px, env(safe-area-inset-right, 0px)); display: grid; gap: 16px; align-content: start; }
+h1 { margin: 0; font: 700 30px/1.05 var(--display); letter-spacing: .01em; text-wrap: balance; }
+.sub { margin: 4px 0 0; color: var(--ink2); font-size: 15px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; }
+button { font: 600 15px/1 var(--body); color: var(--ink); background: var(--raise); border: 1px solid var(--hair); border-radius: 7px; padding: 9px 12px; cursor: pointer; }
+button:hover { border-color: var(--muted); }
+button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.label { margin: 0; font: 600 12px/1 var(--body); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.el { display: grid; gap: 6px; padding: 12px; border: 1px solid var(--hair); border-radius: 10px; background: var(--bg); }
+.el.off { opacity: .55; }
+.el .top { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+.el input[type="checkbox"] { width: 20px; height: 20px; margin: 0; accent-color: var(--c); cursor: pointer; }
+.sym { font: 700 26px/1 var(--display); color: var(--c); min-width: 1.2em; text-align: center; }
+.name { font: 600 16px/1.2 var(--body); min-width: 0; }
+.val { font: 600 16px/1 var(--mono); color: var(--c); font-variant-numeric: tabular-nums; }
+.el input[type="range"] { width: 100%; accent-color: var(--c); margin: 2px 0; }
+.what { margin: 0; color: var(--ink2); font-size: 14.5px; }
+.helpers { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; }
+.helpers label { display: flex; gap: 8px; align-items: center; font-size: 15px; color: var(--ink2); cursor: pointer; }
+.helpers input { width: 18px; height: 18px; margin: 0; accent-color: var(--chalk); }
+.facts { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; font: 400 14.5px/1.4 var(--mono); color: var(--ink2); font-variant-numeric: tabular-nums; margin: 0; }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; }
+.warn { color: var(--warn); font-size: 14.5px; margin: 0; }
+@media (max-width: 860px) {
+  html, body { height: auto; }
+  .app { grid-template-columns: minmax(0, 1fr); height: auto; }
+  .view { height: 62vh; min-height: 340px; }
+  .rail { border-left: 0; border-top: 1px solid var(--hair); overflow: visible; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="app">
+  <div class="view" id="view">
+    <div class="labels" id="labels"></div>
+    <div class="hud">
+      <button type="button" id="play" aria-pressed="false">▶ Fly the orbit</button>
+      <button type="button" id="reset">Reset view</button>
+      <span class="hint">Drag to rotate · scroll or pinch to zoom · right-drag to pan</span>
+    </div>
+  </div>
+
+  <aside class="rail">
+    <header>
+      <h1>Orbital Elements Explorer</h1>
+      <p class="sub">Six numbers place any orbit. Toggle each one to see what it measures, and drag its slider to see what it changes.</p>
+    </header>
+
+    <section class="row" aria-label="Presets">
+      <button type="button" data-preset="generic">Generic</button>
+      <button type="button" data-preset="molniya">Molniya</button>
+      <button type="button" data-preset="iss">Space station</button>
+      <button type="button" data-preset="sso">Sun-synchronous</button>
+      <button type="button" data-preset="retro">Retrograde</button>
+    </section>
+
+    <section class="row" aria-label="Show or hide all">
+      <button type="button" id="all-on">Show all elements</button>
+      <button type="button" id="all-off">Hide all</button>
+    </section>
+
+    <p class="label">Size and shape</p>
+    <div id="els-shape" style="display:grid;gap:10px"></div>
+    <p class="label">Orientation: three turns</p>
+    <div id="els-orient" style="display:grid;gap:10px"></div>
+    <p class="label">Where the satellite is</p>
+    <div id="els-where" style="display:grid;gap:10px"></div>
+
+    <p class="warn" id="warn" hidden></p>
+
+    <p class="label">Reference pieces</p>
+    <div class="helpers" id="helpers"></div>
+
+    <p class="label">This orbit</p>
+    <dl class="facts" id="facts"></dl>
+  </aside>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS2DRenderer.js"></script>
+<script>
+const RE = 6378.137, MU = 398600.4418;
+const COL = { sky: 0x4a95ff, ember: 0xff7a3d, mint: 0x22c58b, gold: 0xffd27a, lilac: 0xa497ff, rose: 0xf06ea0, chalk: 0xe8e4d8, axis: 0xb8bdca, accent: 0x95a2ff };
+const CSSC = { sky: '#4a95ff', ember: '#ff7a3d', mint: '#22c58b', gold: '#ffd27a', lilac: '#a497ff', rose: '#f06ea0', chalk: '#e8e4d8', accent: '#95a2ff', axis: '#b8bdca' };
+const D = Math.PI / 180;
+
+/* ---------------- state ---------------- */
+const ELS = [
+  { k: 'a', sym: 'a', name: 'Semi-major axis', c: 'accent', grp: 'shape', min: 1.05, max: 7, step: .01,
+    fmt: v => `${v.toFixed(2)} R⊕`, what: 'Half the long axis of the ellipse. Sets the orbit\'s size, its energy and its period.' },
+  { k: 'e', sym: 'e', name: 'Eccentricity', c: 'rose', grp: 'shape', min: 0, max: .9, step: .001,
+    fmt: v => v.toFixed(3), what: 'How stretched the ellipse is (0 = circle). Earth sits at a focus, a distance a·e from the center.' },
+  { k: 'O', sym: 'Ω', name: 'RAAN (capital omega)', c: 'sky', grp: 'orient', min: 0, max: 360, step: 1,
+    fmt: v => `${v.toFixed(0)}°`, what: 'Turn 1, about K̂. Measured in the EQUATOR, from Î to the ascending node. Says which way the tilt faces.' },
+  { k: 'i', sym: 'i', name: 'Inclination', c: 'ember', grp: 'orient', min: 0, max: 180, step: .1,
+    fmt: v => `${v.toFixed(1)}°`, what: 'Turn 2, about the node line. The tilt between the equator and the orbit plane, also the angle from K̂ to ĥ.' },
+  { k: 'w', sym: 'ω', name: 'Argument of periapsis (little omega)', c: 'mint', grp: 'orient', min: 0, max: 360, step: 1,
+    fmt: v => `${v.toFixed(0)}°`, what: 'Turn 3, about ĥ. Measured in the ORBIT PLANE, from the ascending node to periapsis.' },
+  { k: 't', sym: 'θ', name: 'True anomaly', c: 'gold', grp: 'where', min: 0, max: 360, step: 1,
+    fmt: v => `${v.toFixed(0)}°`, what: 'Measured in the orbit plane, from periapsis to the satellite. The only element that changes as it flies.' },
+];
+const HELPERS = [
+  { k: 'axes', label: 'ECI axes Î Ĵ K̂', on: true },
+  { k: 'eq', label: 'Equatorial plane', on: true },
+  { k: 'plane', label: 'Orbit plane', on: true },
+  { k: 'nodes', label: 'Line of nodes', on: true },
+  { k: 'h', label: 'Angular momentum ĥ', on: false },
+  { k: 'pq', label: 'Perifocal p̂ q̂', on: false },
+];
+const PRESETS = {
+  generic: { a: 2.4, e: .5, O: 50, i: 40, w: 60, t: 40 },
+  molniya: { a: 26563.6 / RE, e: .741, O: 145, i: 63.4, w: 270, t: 280 },
+  iss: { a: (RE + 420) / RE, e: .0005, O: 60, i: 51.6, w: 90, t: 30 },
+  sso: { a: (RE + 700) / RE, e: .001, O: 80, i: 98.2, w: 90, t: 30 },
+  retro: { a: 3, e: .45, O: 300, i: 140, w: 40, t: 120 },
+};
+const S = Object.assign({}, PRESETS.generic);
+const ON = { a: true, e: true, O: true, i: true, w: true, t: true };
+const HON = Object.fromEntries(HELPERS.map(h => [h.k, h.on]));
+function sget(k, d) { try { const x = localStorage.getItem('oe:' + k); return x == null ? d : JSON.parse(x); } catch (e) { return d; } }
+function sset(k, v) { try { localStorage.setItem('oe:' + k, JSON.stringify(v)); } catch (e) { } }
+Object.assign(ON, sget('on', {})); Object.assign(HON, sget('hon', {}));
+
+/* ---------------- orbit math (course convention: rows of C_PN are p, q, h in ECI) ---------------- */
+function frame() {
+  const O = S.O * D, i = S.i * D, w = S.w * D;
+  const cO = Math.cos(O), sO = Math.sin(O), ci = Math.cos(i), si = Math.sin(i), cw = Math.cos(w), sw = Math.sin(w);
+  const p = [cw * cO - sw * ci * sO, cw * sO + sw * ci * cO, sw * si];
+  const q = [-sw * cO - cw * ci * sO, -sw * sO + cw * ci * cO, cw * si];
+  const h = [si * sO, -si * cO, ci];
+  const n = [cO, sO, 0];
+  return { p, q, h, n };
+}
+const add = (a, b) => a.map((x, k) => x + b[k]);
+const mul = (a, s) => a.map(x => x * s);
+const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+const norm = a => Math.hypot(...a);
+const unit = a => mul(a, 1 / norm(a));
+// ECI (X, Y, Z) -> three.js (x, y-up, z): X -> x, Z -> y, Y -> -z keeps the frame right-handed
+const V = a => new THREE.Vector3(a[0], a[2], -a[1]);
+const radius = th => S.a * (1 - S.e * S.e) / (1 + S.e * Math.cos(th));
+function onOrbit(F, th) { const r = radius(th); return add(mul(F.p, r * Math.cos(th)), mul(F.q, r * Math.sin(th))); }
+
+/* ---------------- three.js scene ---------------- */
+const view = document.getElementById('view');
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+view.prepend(renderer.domElement);
+const labelR = new THREE.CSS2DRenderer();
+labelR.domElement.style.position = 'absolute'; labelR.domElement.style.inset = '0'; labelR.domElement.style.pointerEvents = 'none';
+document.getElementById('labels').appendChild(labelR.domElement);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(40, 1, .05, 500);
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.dampingFactor = .08;
+scene.add(new THREE.AmbientLight(0xffffff, .55));
+const sun = new THREE.DirectionalLight(0xffffff, .85); sun.position.set(5, 6, 4); scene.add(sun);
+
+// Earth with a latitude/longitude grid
+const earth = new THREE.Group();
+earth.add(new THREE.Mesh(new THREE.SphereGeometry(1, 64, 48), new THREE.MeshPhongMaterial({ color: 0x2b6cb0, shininess: 12 })));
+const gridMat = new THREE.LineBasicMaterial({ color: 0x9cc3ff, transparent: true, opacity: .35 });
+for (let lat = -60; lat <= 60; lat += 30) {
+  const pts = []; for (let k = 0; k <= 96; k++) { const l = k / 96 * 2 * Math.PI; pts.push(V([Math.cos(lat * D) * Math.cos(l) * 1.003, Math.cos(lat * D) * Math.sin(l) * 1.003, Math.sin(lat * D) * 1.003])); }
+  earth.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), gridMat));
+}
+for (let lon = 0; lon < 180; lon += 30) {
+  const pts = []; for (let k = 0; k <= 96; k++) { const b = k / 96 * 2 * Math.PI; pts.push(V([Math.cos(b) * Math.cos(lon * D) * 1.003, Math.cos(b) * Math.sin(lon * D) * 1.003, Math.sin(b) * 1.003])); }
+  earth.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), gridMat));
+}
+scene.add(earth);
+
+const G = new THREE.Group(); scene.add(G);   // everything that depends on the elements
+const GT = new THREE.Group(); scene.add(GT); // everything that depends on theta (rebuilt while flying)
+
+function clear(g) {
+  while (g.children.length) {
+    const o = g.children[g.children.length - 1];
+    o.traverse(x => { if (x.geometry) x.geometry.dispose(); if (x.material) x.material.dispose(); if (x.element && x.element.parentNode) x.element.parentNode.removeChild(x.element); });
+    g.remove(o);
+  }
+}
+function tube(pts, color, r = .025, opts = {}) {
+  if (pts.length < 2) return new THREE.Group();
+  const curve = new THREE.CatmullRomCurve3(pts.map(V), !!opts.closed);
+  return new THREE.Mesh(new THREE.TubeGeometry(curve, Math.max(8, pts.length * 2), r, 10, !!opts.closed),
+    new THREE.MeshPhongMaterial({ color, shininess: 30, transparent: !!opts.opacity, opacity: opts.opacity || 1 }));
+}
+function arrow(from, to, color, r = .03) {
+  const g = new THREE.Group();
+  const a = V(from), b = V(to), dir = b.clone().sub(a), len = dir.length();
+  if (len < 1e-6) return g;
+  const head = Math.min(.28, len * .35);
+  const shaft = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len - head, 12), new THREE.MeshPhongMaterial({ color }));
+  const cone = new THREE.Mesh(new THREE.ConeGeometry(r * 3.2, head, 16), new THREE.MeshPhongMaterial({ color }));
+  const up = new THREE.Vector3(0, 1, 0), q = new THREE.Quaternion().setFromUnitVectors(up, dir.clone().normalize());
+  shaft.quaternion.copy(q); cone.quaternion.copy(q);
+  shaft.position.copy(a.clone().add(dir.clone().multiplyScalar((len - head) / 2 / len)));
+  cone.position.copy(a.clone().add(dir.clone().multiplyScalar((len - head / 2) / len)));
+  g.add(shaft, cone); return g;
+}
+function dot(at, color, r = .07, hollow = false) {
+  const m = new THREE.Mesh(new THREE.SphereGeometry(r, 20, 14), new THREE.MeshPhongMaterial({ color, transparent: hollow, opacity: hollow ? .35 : 1 }));
+  m.position.copy(V(at)); return m;
+}
+function label(text, at, css, big = false) {
+  const el = document.createElement('div'); el.className = 'lbl' + (big ? ' big' : ''); el.textContent = text; el.style.color = css;
+  const o = new THREE.CSS2DObject(el); o.position.copy(V(at)); return o;
+}
+function arcPts(u, v, r, t0, t1, center = [0, 0, 0], n = 64) {
+  const pts = []; for (let k = 0; k <= n; k++) { const t = t0 + (t1 - t0) * k / n; pts.push(add(center, add(mul(u, r * Math.cos(t)), mul(v, r * Math.sin(t))))); }
+  return pts;
+}
+function dashed(a, b, color, opacity = .9) {
+  const g = new THREE.BufferGeometry().setFromPoints([V(a), V(b)]);
+  const l = new THREE.Line(g, new THREE.LineDashedMaterial({ color, dashSize: .12, gapSize: .08, transparent: true, opacity }));
+  l.computeLineDistances(); return l;
+}
+function disc(pts, color, opacity, center) {
+  const pos = []; const c = V(center);
+  for (let k = 0; k < pts.length - 1; k++) { const a = V(pts[k]), b = V(pts[k + 1]); pos.push(c.x, c.y, c.z, a.x, a.y, a.z, b.x, b.y, b.z); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  return new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color, transparent: true, opacity, side: THREE.DoubleSide, depthWrite: false }));
+}
+
+/* ---------------- build ---------------- */
+let F = frame();
+function build() {
+  clear(G); F = frame();
+  const { p, q, h, n } = F;
+  const apo = S.a * (1 + S.e), peri = S.a * (1 - S.e);
+  const scale = Math.max(2.6, apo * 1.15);
+  const eqPlane = S.i < .05 || S.i > 179.95;   // no ascending node
+  const circ = S.e < .002;                      // no periapsis
+
+  if (HON.axes) {
+    const L = scale * 1.05;
+    G.add(arrow([0, 0, 0], [L, 0, 0], COL.axis, .018), arrow([0, 0, 0], [0, L, 0], COL.axis, .018), arrow([0, 0, 0], [0, 0, L * .75], COL.axis, .018));
+    G.add(label('Î  (vernal equinox)', [L * 1.06, 0, 0], CSSC.axis), label('Ĵ', [0, L * 1.06, 0], CSSC.axis), label('K̂  (North Pole)', [0, 0, L * .8], CSSC.axis));
+  }
+  if (HON.eq) {
+    const R = scale * 1.02;
+    G.add(disc(arcPts([1, 0, 0], [0, 1, 0], R, 0, 2 * Math.PI, [0, 0, 0], 96), 0x6b8fd6, .10, [0, 0, 0]));
+    G.add(tube(arcPts([1, 0, 0], [0, 1, 0], R, 0, 2 * Math.PI, [0, 0, 0], 120), 0x6b8fd6, .006, { opacity: .5 }));
+  }
+  // the orbit itself
+  const orb = []; for (let k = 0; k <= 240; k++) orb.push(onOrbit(F, k / 240 * 2 * Math.PI));
+  G.add(tube(orb, COL.chalk, .022));
+  if (HON.plane) G.add(disc(orb, 0xe8e4d8, .08, [0, 0, 0]));
+
+  // nodes and the line of nodes
+  if (!eqPlane && (HON.nodes || ON.O || ON.w || ON.i)) {
+    const an = onOrbit(F, -S.w * D), dn = onOrbit(F, Math.PI - S.w * D);
+    G.add(dot(an, COL.sky, .08), dot(dn, COL.sky, .07, true));
+    G.add(label('ascending node ↑', add(an, mul(n, .35)), CSSC.sky));
+    if (HON.nodes) {
+      G.add(dashed(mul(n, -scale), mul(n, scale), COL.sky));
+      G.add(label('descending node', add(dn, mul(n, -.35)), CSSC.sky));
+    }
+  }
+  if (HON.h) {
+    G.add(arrow([0, 0, 0], mul(h, scale * .75), COL.lilac, .028));
+    G.add(label('ĥ', mul(h, scale * .82), CSSC.lilac, true));
+  }
+  if (HON.pq) {
+    G.add(arrow([0, 0, 0], mul(p, 1.9), COL.rose, .022), arrow([0, 0, 0], mul(q, 1.9), COL.lime || 0xa3e635, .022));
+    G.add(label('p̂', mul(p, 2.1), CSSC.rose, true), label('q̂', mul(q, 2.1), '#a3e635', true));
+  }
+
+  // a: the major axis, with a marked from the center to periapsis
+  const center = mul(p, -S.a * S.e);
+  const pPt = mul(p, peri), aPt = mul(p, -apo);
+  if (ON.a) {
+    G.add(tube([aPt, pPt], COL.accent, .02, { opacity: .6 }));
+    G.add(tube([center, pPt], COL.accent, .034));
+    G.add(dot(center, COL.accent, .06));
+    G.add(label('a', add(mul(add(center, pPt), .5), mul(q, .3)), CSSC.accent, true));
+    G.add(label('center', add(center, mul(q, -.3)), CSSC.accent));
+  }
+  // e: Earth at the focus, a*e from the center; periapsis
+  if (ON.e) {
+    if (!circ) {
+      G.add(tube([center, [0, 0, 0]], COL.rose, .034));
+      G.add(label('a·e', add(mul(center, .5), mul(q, -.32)), CSSC.rose, true));
+      G.add(dot(pPt, COL.rose, .09));
+      G.add(label('periapsis', add(pPt, mul(p, .45)), CSSC.rose));
+      G.add(dot(aPt, COL.rose, .07, true));
+      G.add(label('apoapsis', add(aPt, mul(p, -.45)), CSSC.rose));
+    } else G.add(label('e = 0: a circle, no periapsis', mul(q, S.a * 1.1), CSSC.rose));
+  }
+  // Omega: in the equator, from I to the ascending node
+  if (ON.O) {
+    if (!eqPlane) {
+      const r = Math.min(1.7, S.a * (1 - S.e) * .9 + .3);
+      const rr = Math.max(1.35, r);
+      G.add(tube(arcPts([1, 0, 0], [0, 1, 0], rr, 0, S.O * D, [0, 0, 0], 72), COL.sky, .04));
+      G.add(tube([[0, 0, 0], mul(n, rr * 1.15)], COL.sky, .02));
+      const m = (S.O / 2) * D;
+      G.add(label('Ω', [Math.cos(m) * (rr + .35), Math.sin(m) * (rr + .35), 0], CSSC.sky, true));
+    } else G.add(label('i = 0: no ascending node, Ω undefined', [scale * .6, -scale * .5, 0], CSSC.sky));
+  }
+  // i: at the ascending node, between the equator and the orbit plane; and K to h
+  if (ON.i) {
+    if (!eqPlane) {
+      const an = onOrbit(F, -S.w * D);
+      const u = cross([0, 0, 1], n), v = [0, 0, 1];
+      G.add(tube(arcPts(u, v, .9, 0, S.i * D, an, 48), COL.ember, .035));
+      G.add(tube([an, add(an, mul(u, 1.15))], COL.ember, .014, { opacity: .7 }));
+      G.add(tube([an, add(an, mul(cross(h, n), 1.15))], COL.ember, .014, { opacity: .7 }));
+      const m = S.i / 2 * D;
+      G.add(label('i', add(an, add(mul(u, 1.2 * Math.cos(m)), mul(v, 1.2 * Math.sin(m)))), CSSC.ember, true));
+      // K to h
+      const hp = unit(add(h, mul([0, 0, 1], -h[2])));
+      G.add(tube(arcPts([0, 0, 1], hp, 1.45, 0, S.i * D, [0, 0, 0], 48), COL.ember, .025, { opacity: .75 }));
+      if (!HON.h) { G.add(arrow([0, 0, 0], mul(h, scale * .62), COL.lilac, .024)); G.add(label('ĥ', mul(h, scale * .7), CSSC.lilac, true)); }
+    } else G.add(label(`i = ${S.i.toFixed(0)}°: orbit lies in the equator`, [scale * .6, -scale * .65, 0], CSSC.ember));
+  }
+  // omega: in the orbit plane, from the ascending node to periapsis
+  if (ON.w) {
+    if (!eqPlane && !circ) {
+      const r = Math.max(1.25, Math.min(1.8, peri * .8));
+      const v = cross(h, n);
+      G.add(tube(arcPts(n, v, r, 0, S.w * D, [0, 0, 0], 72), COL.mint, .04));
+      G.add(tube([[0, 0, 0], mul(p, r * 1.15)], COL.mint, .02));
+      const m = S.w / 2 * D;
+      G.add(label('ω', add(mul(n, (r + .35) * Math.cos(m)), mul(v, (r + .35) * Math.sin(m))), CSSC.mint, true));
+      if (!ON.e) { G.add(dot(pPt, COL.rose, .08)); G.add(label('periapsis', add(pPt, mul(p, .45)), CSSC.rose)); }
+    } else G.add(label(circ ? 'e = 0: no periapsis, ω undefined' : 'no node: ω undefined', mul(q, -S.a * 1.1), CSSC.mint));
+  }
+
+  // fit the camera on preset changes
+  controls.maxDistance = scale * 8; controls.minDistance = 1.5;
+  buildTheta();
+  facts();
+}
+function buildTheta() {
+  clear(GT);
+  const th = S.t * D, sat = onOrbit(F, th);
+  GT.add(dot(sat, COL.gold, .11));
+  GT.add(label('satellite', add(sat, mul(unit(sat), .45)), CSSC.gold));
+  if (ON.t) {
+    if (S.e >= .002) {
+      const r = Math.max(1.2, Math.min(1.6, S.a * (1 - S.e) * .7));
+      GT.add(tube(arcPts(F.p, F.q, r, 0, th, [0, 0, 0], Math.max(8, Math.round(S.t / 4))), COL.gold, .036));
+      GT.add(tube([[0, 0, 0], sat], COL.gold, .018, { opacity: .8 }));
+      const m = th / 2;
+      GT.add(label('θ', add(mul(F.p, (r + .35) * Math.cos(m)), mul(F.q, (r + .35) * Math.sin(m))), CSSC.gold, true));
+    } else {
+      GT.add(tube([[0, 0, 0], sat], COL.gold, .018, { opacity: .8 }));
+      GT.add(label('θ undefined (circle): use u from the node', add(sat, mul(unit(sat), 1.1)), CSSC.gold));
+    }
+  }
+}
+function facts() {
+  const a = S.a * RE, rp = a * (1 - S.e), ra = a * (1 + S.e), T = 2 * Math.PI * Math.sqrt(a ** 3 / MU) / 3600;
+  const kind = S.i < 90 ? 'prograde (moves east)' : S.i > 90 ? 'retrograde (moves west)' : 'polar';
+  const f = (x, d = 0) => x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
+  document.getElementById('facts').innerHTML =
+    `<dt>a</dt><dd>${f(a)} km</dd><dt>periapsis</dt><dd>${f(rp)} km (alt ${f(rp - RE)})</dd>` +
+    `<dt>apoapsis</dt><dd>${f(ra)} km (alt ${f(ra - RE)})</dd><dt>period</dt><dd>${f(T, 2)} h</dd><dt>motion</dt><dd>${kind}</dd>`;
+  const w = document.getElementById('warn');
+  w.hidden = rp >= RE;
+  w.textContent = 'Periapsis is inside the Earth: raise a or lower e.';
+}
+
+/* ---------------- controls ---------------- */
+const lime = '#a3e635';
+function card(el) {
+  const d = document.createElement('div');
+  d.className = 'el'; d.style.setProperty('--c', CSSC[el.c]);
+  d.innerHTML = `<div class="top"><input type="checkbox" id="on-${el.k}" aria-label="Show ${el.name}">
+    <span class="sym">${el.sym}</span><label class="name" for="on-${el.k}">${el.name}</label><span class="val" id="val-${el.k}"></span></div>
+    <input type="range" id="sl-${el.k}" min="${el.min}" max="${el.max}" step="${el.step}" aria-label="${el.name}">
+    <p class="what">${el.what}</p>`;
+  return d;
+}
+ELS.forEach(el => document.getElementById('els-' + el.grp).appendChild(card(el)));
+function syncUI() {
+  ELS.forEach(el => {
+    document.getElementById('sl-' + el.k).value = S[el.k];
+    document.getElementById('val-' + el.k).textContent = el.fmt(S[el.k]);
+    document.getElementById('on-' + el.k).checked = ON[el.k];
+    document.getElementById('on-' + el.k).closest('.el').classList.toggle('off', !ON[el.k]);
+  });
+}
+ELS.forEach(el => {
+  document.getElementById('sl-' + el.k).addEventListener('input', ev => {
+    S[el.k] = +ev.target.value; document.getElementById('val-' + el.k).textContent = el.fmt(S[el.k]);
+    if (el.k === 't') { buildTheta(); } else build();
+  });
+  document.getElementById('on-' + el.k).addEventListener('change', ev => {
+    ON[el.k] = ev.target.checked; sset('on', ON); syncUI(); build();
+  });
+});
+const hbox = document.getElementById('helpers');
+HELPERS.forEach(hh => {
+  const l = document.createElement('label');
+  l.innerHTML = `<input type="checkbox" id="h-${hh.k}"${HON[hh.k] ? ' checked' : ''}> ${hh.label}`;
+  hbox.appendChild(l);
+  l.querySelector('input').addEventListener('change', ev => { HON[hh.k] = ev.target.checked; sset('hon', HON); build(); });
+});
+document.getElementById('all-on').addEventListener('click', () => { ELS.forEach(e => ON[e.k] = true); sset('on', ON); syncUI(); build(); });
+document.getElementById('all-off').addEventListener('click', () => { ELS.forEach(e => ON[e.k] = false); sset('on', ON); syncUI(); build(); });
+function fit() {
+  const apo = S.a * (1 + S.e), d = Math.max(7, apo * 3.1);
+  camera.position.copy(V([d * .62, -d * .62, d * .42])); controls.target.set(0, 0, 0); controls.update();
+}
+document.querySelectorAll('[data-preset]').forEach(b => b.addEventListener('click', () => {
+  Object.assign(S, PRESETS[b.dataset.preset]); syncUI(); build(); fit();
+}));
+document.getElementById('reset').addEventListener('click', fit);
+
+// fly the orbit: theta advances by Kepler's equation (equal areas, fast at periapsis)
+let flying = false, last = 0;
+const playBtn = document.getElementById('play');
+playBtn.addEventListener('click', () => {
+  flying = !flying; playBtn.setAttribute('aria-pressed', String(flying)); playBtn.textContent = flying ? '❚❚ Pause' : '▶ Fly the orbit'; last = 0;
+});
+function step(dt) {
+  const e = Math.min(S.e, .95), th = S.t * D;
+  let E = 2 * Math.atan(Math.sqrt((1 - e) / (1 + e)) * Math.tan(th / 2));
+  let M = E - e * Math.sin(E) + dt * 2 * Math.PI / 9;   // one orbit in about nine seconds
+  E = M; for (let k = 0; k < 12; k++) E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+  let t = 2 * Math.atan(Math.sqrt((1 + e) / (1 - e)) * Math.tan(E / 2)) / D;
+  S.t = ((t % 360) + 360) % 360;
+  document.getElementById('sl-t').value = S.t; document.getElementById('val-t').textContent = ELS[5].fmt(S.t);
+  buildTheta();
+}
+
+function resize() {
+  const w = view.clientWidth, h = view.clientHeight;
+  renderer.setSize(w, h); labelR.setSize(w, h); camera.aspect = w / Math.max(1, h); camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(view);
+function loop(ts) {
+  if (flying) { if (last) step(Math.min(.05, (ts - last) / 1000)); last = ts; }
+  controls.update(); renderer.render(scene, camera); labelR.render(scene, camera);
+  requestAnimationFrame(loop);
+}
+syncUI(); resize(); build(); fit(); requestAnimationFrame(loop);
+</script>
