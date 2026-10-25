@@ -1,0 +1,160 @@
+% Study guide for the structural-idealization / multi-cell torsion series. Build: `mtk guide guide.tex`
+% (after `mtk episodes`). Every number here is computed and asserted in check_guide.py.
+\documentclass[11pt]{article}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{mtkguide}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.4em}
+\newcommand{\mm}{\ \mathrm{mm}}
+\newcommand{\Nmm}{\ \mathrm{N/mm}}
+
+\begin{document}
+{\LARGE\bfseries Booms, Shear Flow and Multi-Cell Torsion}\par{\large Practice Guide}\par
+{\color{mtkmuted} AERSP 301, HW 5 topics \textperiodcentered{} a guide to work through with the video}\par\medskip
+
+\textbf{How to use it.} The video pauses at each checkpoint. Work it here, on paper or a tablet, before you press
+play. Checkpoints 1.1, 2.1 and 4.1 are answered by the video as soon as you resume. Checkpoints 3.1 and 5.1 are
+fresh practice problems that the video never solves: they repeat the homework's steps with new numbers, so check
+them against the full solutions on page~\pageref{solutions}. Stuck for five minutes? Read the hint on
+page~\pageref{hints}.
+
+\section*{Episode 1: Why Booms?}
+
+\checkpoint[2.5cm]{1.1}{A web in bending}{%
+A vertical web $300\mm$ deep and $10\mm$ thick is symmetric about the neutral axis of a beam in pure bending, and
+carries direct stress. When the section is idealized, how much area does this web add to the boom at each of its
+ends? Use $B_1 = \dfrac{t_D b}{6}\left(2 + \dfrac{\sigma_2}{\sigma_1}\right)$.}
+
+\section*{Episode 2: Shear Flow With Booms}
+
+\checkpoint[3.5cm]{2.1}{Finish the channel}{%
+The channel has four booms of $300\mm^2$ at $y = \pm 200\mm$, and $S_y/I_{xx} = 10^{-4}\ \mathrm{N/mm^4}$. Starting
+from $q = 0$ at the free edge, the flow in the top flange is $q_{12} = -6\Nmm$. Using
+$q_2 - q_1 = -\dfrac{S_y}{I_{xx}}B_r y_r$, find $q_{23}$ (the web), $q_{34}$ (the bottom flange) and the flow just
+past boom 4. What should the last one be, and why?}
+
+\section*{Episode 3: Homework Problem 1}
+
+\checkpoint[9cm]{3.1}{Practice box: booms, then the shear centre}{%
+A box section is $600\mm$ wide and $240\mm$ deep (centreline dimensions). Top and bottom skins are $8\mm$ thick, the
+left web $6\mm$, the right web $5\mm$. The left corners carry $50\times50\times6\mm$ angles and the right corners
+$40\times30\times5\mm$ angles. One material throughout.
+(a) Idealize it into four corner booms (skins and webs carry direct stress: use the ratio $+1$ for the skins and
+$-1$ for the webs in bending). (b) Find $I_{xx}$. (c) Cut the top wall and find the basic shear flow $q_b$ in each wall
+for a vertical load $S_y$. (d) Use zero twist to find $q_{s,0}$, then find the shear centre's distance $\xi$ from the
+left web.}
+
+\section*{Episode 4: Torsion of Multi-Cell Sections}
+
+\checkpoint[4cm]{4.1}{Twist rate of one cell}{%
+A two-cell box carries shear flows $q_I$ and $q_{II}$. Cell I has area $A_I$; the wall it shares with cell II
+has $\delta_{12} = \int ds/t$, and all of cell I's walls together (shared wall included) have $\delta_I$. Write
+$d\theta/dz$ for cell I in terms of $q_I$, $q_{II}$, $\delta_I$, $\delta_{12}$, $A_I$ and $G$.}
+
+\section*{Episode 5: Homework Problem 2}
+
+\checkpoint[9cm]{5.1}{Practice two-cell box: $T = 15$ kN m}{%
+A two-cell box is $250\mm$ deep. Cell I is $500\mm$ wide and cell II is $600\mm$ wide (rectangular cells; the
+spar between them is shared). Walls: left web $2.0\mm$, spar $2.5\mm$, right web $1.6\mm$, all with
+$G = 27\,000\ \mathrm{N/mm^2}$; cell I's top and bottom skins $1.0\mm$ and cell II's top and bottom skins $0.8\mm$, all
+with $G = 24\,000\ \mathrm{N/mm^2}$. It carries a counter-clockwise torque $T = 15\ \mathrm{kN\,m}$.
+Using $G_{REF} = 27\,000\ \mathrm{N/mm^2}$, find (a) $t^*$ and $\delta$ for each wall, (b) $q_I$, $q_{II}$ and the
+spar's shear flow, (c) the shear stress in each wall, and (d) the rate of twist in degrees per metre.}
+
+\clearpage
+\section*{Hints}\label{hints}
+\hintfor{1.1} In pure bending, what are the stresses at the top and bottom of a web that is symmetric about the
+neutral axis? That gives $\sigma_2/\sigma_1$.
+\hintfor{2.1} Boom 3 is below the axis: its $y_r$ is negative. A free edge has nothing to pass shear flow on to.
+\hintfor{3.1} An angle's area is (leg + leg $-$ thickness) $\times$ thickness. Only the two webs have a basic flow;
+the cut wall and the opposite skin come out zero. For $\xi$, the web forces must add up to $S_y$.
+\hintfor{4.1} Go around cell I: which walls carry $q_I$, and which one carries $q_I - q_{II}$? Collect the $q_I$ terms.
+\hintfor{5.1} Scale only the skins: $t^* = (G/G_{REF})t$. Set cell I's twist rate equal to cell II's, then use
+$T = 2A_Iq_I + 2A_{II}q_{II}$ (with $T$ in N\,mm).
+
+\clearpage
+\section*{Solutions}\label{solutions}
+
+\solutionfor{1.1}{A web in bending}
+In pure bending the web's two ends sit equal distances above and below the neutral axis, so their stresses are equal
+and opposite: $\sigma_2/\sigma_1 = -1$.
+\[ B = \frac{10\times300}{6}\,(2 - 1) = 500\mm^2 \text{ to each boom.} \]
+Check: a skin with the same stress at both edges ($\sigma_2/\sigma_1 = +1$) would give $t_Db/2 = 1500\mm^2$, three
+times as much; the web gives less because half of it is in tension and half in compression.
+
+\solutionfor{2.1}{Finish the channel}
+Each boom changes the flow by $-10^{-4}\times300\times y_r$:
+\begin{align*}
+q_{23} &= -6 - 10^{-4}(300)(200) = -6 - 6 = -12\Nmm\\
+q_{34} &= -12 - 10^{-4}(300)(-200) = -12 + 6 = -6\Nmm\\
+\text{past boom 4} &= -6 - 10^{-4}(300)(-200) = -6 + 6 = 0
+\end{align*}
+The last one must be zero: the edge beyond boom 4 is free, so it carries no shear. Getting zero there is the check that
+every step was right. The minus signs mean the flow runs opposite to the direction $s$.
+
+\solutionfor{3.1}{Practice box: booms, then the shear centre}
+(a) Angles: left $(50+50-6)\times6 = 564\mm^2$, right $(40+30-5)\times5 = 325\mm^2$.
+Skins (ratio $+1$): $\dfrac{8\times600}{6}(2+1) = 2400\mm^2$ to each corner.
+Webs (ratio $-1$): left $\dfrac{6\times240}{6}(1) = 240$, right $\dfrac{5\times240}{6}(1) = 200\mm^2$.
+\[ B_{left} = 564 + 2400 + 240 = 3204\mm^2, \qquad B_{right} = 325 + 2400 + 200 = 2925\mm^2 . \]
+(b) Symmetric about the horizontal axis, so $I_{xy} = 0$ and
+$I_{xx} = 2(3204 + 2925)(120)^2 = 176.5\times10^6\mm^4$.
+
+(c) Booms 1 (top left), 2 (top right), 3 (bottom right), 4 (bottom left); cut wall 12 and go $1\to2\to3\to4\to1$:
+\begin{align*}
+q_{b,12} &= 0\\
+q_{b,23} &= -\frac{S_y}{I_{xx}}(2925)(120) = -1.989\times10^{-3}\,S_y\\
+q_{b,34} &= q_{b,23} - \frac{S_y}{I_{xx}}(2925)(-120) = 0\\
+q_{b,41} &= 0 - \frac{S_y}{I_{xx}}(3204)(-120) = +2.178\times10^{-3}\,S_y
+\end{align*}
+(d) At the shear centre the section does not twist: $\oint (q_b + q_{s,0})\,ds/t = 0$, with $ds/t$ = top
+$600/8 = 75$, right $240/5 = 48$, bottom $75$, left $240/6 = 40$ (total $238$):
+\begin{align*}
+&(-1.989\times10^{-3})(48) + (2.178\times10^{-3})(40) + 238\,q_{s,0} = 0\\
+&-95.45\times10^{-3} + 87.13\times10^{-3} + 238\,q_{s,0} = 0
+\;\Rightarrow\; q_{s,0} = 3.50\times10^{-5}\,S_y .
+\end{align*}
+Totals: $q_{23} = -1.954\times10^{-3}S_y$ and $q_{41} = 2.213\times10^{-3}S_y$ (both webs flow upward). Web forces:
+$1.954\times10^{-3}\times240 = 0.469\,S_y$ and $2.213\times10^{-3}\times240 = 0.531\,S_y$; together $1.000\,S_y$. \checkmark
+
+Moments about the left web: the right web gives $0.469\,S_y\times600 = 281.3\,S_y$; the skins' small flows form an
+opposite couple $3.50\times10^{-5}S_y\times600\times240 = 5.0\,S_y$. So
+\[ S_y\,\xi = 281.3\,S_y - 5.0\,S_y \;\Rightarrow\; \xi = 276.3\mm \text{ from the left web,} \]
+left of the middle ($300\mm$) because the left booms are heavier, as in the homework.
+
+\solutionfor{4.1}{Twist rate of one cell}
+Around cell I every wall carries $q_I$ except the shared wall, which carries $q_I - q_{II}$:
+\begin{align*}
+\frac{d\theta}{dz} &= \frac{1}{2A_IG}\oint q\,\frac{ds}{t}
+= \frac{1}{2A_IG}\Big[q_I(\delta_I - \delta_{12}) + (q_I - q_{II})\delta_{12}\Big]\\
+&= \frac{1}{2A_IG}\big(q_I\delta_I - q_{II}\delta_{12}\big).
+\end{align*}
+
+\solutionfor{5.1}{Practice two-cell box: $T = 15$ kN m}
+(a) Webs and spar keep their thickness. Skins get $t^* = (24\,000/27\,000)\,t = 0.8889\,t$, so $0.889\mm$ (cell I)
+and $0.711\mm$ (cell II). Then $\delta = L/t^*$:
+\begin{align*}
+&\text{left web } 250/2.0 = 125, \quad \text{spar } 250/2.5 = 100, \quad \text{right web } 250/1.6 = 156.3,\\
+&\text{each cell-I skin } 500/0.889 = 562.5, \quad \text{each cell-II skin } 600/0.711 = 843.8 .
+\end{align*}
+\[ \delta_I = 125 + 2(562.5) + 100 = 1350, \qquad \delta_{II} = 156.25 + 2(843.75) + 100 = 1943.75 . \]
+(b) Areas $A_I = 500\times250 = 125\,000\mm^2$, $A_{II} = 600\times250 = 150\,000\mm^2$. Equal twist:
+\begin{align*}
+&\frac{1350\,q_I - 100\,q_{II}}{2(125\,000)} = \frac{-100\,q_I + 1943.75\,q_{II}}{2(150\,000)}\\
+&\Rightarrow\; 150\,000(1350q_I - 100q_{II}) = 125\,000(-100q_I + 1943.75q_{II})
+\end{align*}
+\[ \Rightarrow\; 215.0\times10^6\,q_I = 258.0\times10^6\,q_{II} \;\Rightarrow\; q_I = 1.200\,q_{II} . \]
+Torque, with $T = 15\times10^6$ N\,mm:
+$15\times10^6 = 2(125\,000)(1.200\,q_{II}) + 2(150\,000)\,q_{II} = 600\,000\,q_{II}$, so
+\[ q_{II} = 25.0\Nmm, \qquad q_I = 30.0\Nmm, \qquad q_{spar} = q_I - q_{II} = 5.0\Nmm . \]
+Both cells flow counter-clockwise, with the torque; in the spar the net flow follows cell I.
+
+(c) $\tau = q/t$ with the real thickness: left web $30.0/2.0 = 15.0$; cell-I skins $30.0/1.0 = 30.0$; spar
+$5.0/2.5 = 2.0$; cell-II skins $25.0/0.8 = 31.3$; right web $25.0/1.6 = 15.6\ \mathrm{N/mm^2}$.
+
+(d) \[ G_{REF}\,\frac{d\theta}{dz} = \frac{30.0(1350) - 25.0(100)}{2(125\,000)} = \frac{40\,500 - 2\,500}{250\,000} = 0.152, \]
+so $\dfrac{d\theta}{dz} = \dfrac{0.152}{27\,000} = 5.63\times10^{-6}\ \mathrm{rad/mm} = 0.32^\circ/\mathrm{m}$. Check with cell II:
+$\dfrac{-30.0(100) + 25.0(1943.75)}{2(150\,000)} = \dfrac{45\,594}{300\,000} = 0.152$. \checkmark
+\end{document}
