@@ -37,7 +37,7 @@ class S14_P1_Close(VScene):
     budget = 180
 
     def construct(self):
-        sec = hw_box(width=6.6, center=(-3.5, 0.55))
+        sec = hw_box(width=6.3, center=(-3.3, 0.35))
         walls = sec.draw()
         booms = sec.booms({1: B1, 2: B2, 3: B2, 4: B1})
         names = sec.names(size=34)
@@ -69,7 +69,7 @@ class S14_P1_Close(VScene):
         fit(tw_why, 6.4, 1)
         tw_why.next_to(tw, DOWN, buff=0.25)
         head = E(r"\oint|\big(|q_b|+|q_{s,0}|\big)|\,\frac{ds}{t}|=|0", size=48).move_to([X, 0.75, 0])
-        head_why = T("one material: G is the same everywhere, so it drops out", size=30, color=MUTED)
+        head_why = T("one material: G drops out", size=30, color=MUTED)
         fit(head_why, 6.4, 1)
         head_why.next_to(head, DOWN, buff=0.25)
 
@@ -160,6 +160,7 @@ class S14_P1_Close(VScene):
         paint(res, {2: MINT})
         res.move_to([X, -1.0, 0])
         res_box = SurroundingRectangle(res, color=MINT, buff=0.2)
+        rglow = glow(res, MINT)
         cen = (sec.p(1) + sec.p(3)) / 2
         cf = cell_flow(cen, radius=0.65, color=MINT, ccw=False)
         cfl = M(r"q_{s,0}", size=40, color=MINT).move_to(cen)
@@ -169,12 +170,12 @@ class S14_P1_Close(VScene):
         self.beat("The first two terms add up to minus five point eight nine times ten to the minus three. So q s zero is three point five two times ten to the minus five, S y. A small correction, all the way around.",
                   [FadeOut(VGroup(note3, L3)), ReplacementTransform(VGroup(L1, L2), L4)],
                   FadeIn(note4), .1,
-                  [Write(res), Create(res_box), FadeIn(glow(res, MINT))], .1,
+                  [Write(res), Create(res_box), FadeIn(rglow)], .1,
                   [Create(cf), FadeIn(cfl), FadeIn(res_why)], .16,
                   w=(.2, .08, .2, .16))
 
         # ---- beat 6: the final shear flows ----
-        res_top = VGroup(res, res_box)
+        res_top = VGroup(rglow, res, res_box)
         hdr = E(r"q|=|q_b|+|q_{s,0}", size=46)
         tots = VGroup(
             E(r"q_{12}=q_{34}|=|3.52\times10^{-5}|\,|S_y", size=44),
