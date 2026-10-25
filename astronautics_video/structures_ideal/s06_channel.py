@@ -29,7 +29,7 @@ class S06_Channel(VScene):
     budget = 137
 
     def construct(self):
-        sec = channel(width=2.6, center=(-4.3, -0.2))
+        sec = channel(width=2.6, center=(-3.8, -0.2))
         walls = sec.draw()
         booms = sec.booms({n: B for n in (1, 2, 3, 4)})
         names = sec.names(size=30)
@@ -38,14 +38,14 @@ class S06_Channel(VScene):
         sy_arr = Arrow([xs, -1.3, 0], [xs, 0.9, 0], buff=0, color=ROSE, stroke_width=6)
         sy_lab = VGroup(M("S_y", size=40, color=ROSE), M(r"4.8\ \text{kN}", size=32, color=ROSE)).arrange(DOWN, buff=0.12)
         sy_lab.next_to(sy_arr, DOWN, buff=0.15)
-        b_lab = E(r"B|=|300\ \text{mm}^2", size=40).move_to(sec.mid(2, 3)).shift(1.4 * RIGHT)
+        b_lab = E(r"B|=|300\ \text{mm}^2", size=40).move_to(sec.mid(3, 4)).set_y(-3.6)
 
         # staircase plot of q along s (bottom right)
-        ax = axes((-100, 900, 200), (-14, 2, 2), width=8.2, height=2.5, xlabel="s", ylabel="q").to_corner(DR, buff=0.4)
-        ax.shift(0.15 * UP)
+        ax = axes((-100, 900, 200), (-14, 2, 2), width=7.0, height=2.5, xlabel="s", ylabel="q").to_corner(DR, buff=0.4)
+        ax.shift(0.35 * UP)
         bl = VGroup(*[DashedLine(ax.c2p(s, 1.5), ax.c2p(s, -13.5), color=EMBER, stroke_width=2, dash_length=0.08)
                       for s in S_POS])
-        bnum = VGroup(*[T(str(i + 1), 26, EMBER).next_to(bl[i], UP, buff=0.05) for i in range(4)])
+        bnum = VGroup(*[T(str(i + 1), 26, EMBER).next_to(bl[i], DOWN, buff=0.05) for i in range(4)])
         lvl = [-4, -9, -3]                           # shape only: arbitrary step heights
         gpts = [(-100, 0), (0, 0), (0, lvl[0]), (200, lvl[0]), (200, lvl[1]), (600, lvl[1]),
                 (600, lvl[2]), (800, lvl[2]), (800, 0), (900, 0)]
@@ -68,11 +68,11 @@ class S06_Channel(VScene):
         paint(ix, {3: EMBER})
         ix_note = TX(r"four booms of $300\ \text{mm}^2$, each at $y=\pm 200$ mm", size=26).set_color(MUTED)
         k = E(r"S_y|/|I_{xx}|=|4.8\times 10^3|/|48\times 10^6|=|10^{-4}\ \text{N/mm}^4", size=40)
-        paint(k, {3: ROSE})
+        paint(k, {4: ROSE})
         alg = VGroup(ix, ix_note, k).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
         alg[2].shift(0.2 * DOWN)
         alg.to_corner(UR, buff=0.5).shift(0.1 * DOWN)
-        g_k = glow(k[6], GOLD)
+        g_k = glow(k[8], GOLD)
         self.beat("For this channel, I x x is four times three hundred times two hundred squared: forty eight million. So S y over I x x is ten to the minus four.",
                   [FadeOut(ghost), FadeOut(flats), FadeOut(jumps), FadeOut(shape_note)], Write(ix), FadeIn(ix_note), .1,
                   Write(k), FadeIn(g_k), w=(.1, .3, .1, .33, .12))
@@ -80,16 +80,16 @@ class S06_Channel(VScene):
         # beat 3: fold, the jump rule, first boom
         kbox = VGroup(E(r"S_y|/|I_{xx}|=|10^{-4}", size=40))
         kbox = panel(kbox[0], color=GOLD)
-        rule = E(r"q_2|-|q_1|=|-\,|S_y|/|I_{xx}|\,B_r|\,y_r", size=40)
-        paint(rule, {6: EMBER})
-        top = VGroup(rule, kbox).arrange(RIGHT, buff=0.5)
-        top.to_corner(UR, buff=0.45)
+        kbox[1].set_z_index(3)
+        rule = E(r"q_2|-|q_1|=|-|S_y|/|I_{xx}|B_r|y_r", size=40)
+        kbox.to_corner(UR, buff=0.35)
+        rule.next_to(kbox, DOWN, buff=0.35).to_edge(RIGHT, buff=0.5)
         rule_note = T("the jump at each boom", 26, MUTED).next_to(rule, DOWN, buff=0.12).align_to(rule, LEFT)
         l1 = E(r"q_{12}|=|0|-|10^{-4}|(300)|(200)|=|-6\ \text{N/mm}", size=40)
         paint(l1, {0: SKY, 5: EMBER, 8: SKY})
         l1_note = T("boom 1", 26, EMBER)
         row1 = VGroup(l1_note, l1).arrange(RIGHT, buff=0.35)
-        row1.next_to(rule_note, DOWN, buff=0.4).align_to(rule, LEFT)
+        row1.next_to(rule_note, DOWN, buff=0.4).to_edge(RIGHT, buff=0.5)
         f12 = flow(sec, 1, 2, q12, label="-6")
         st0 = Line(ax.c2p(-100, 0), ax.c2p(0, 0), color=SKY, stroke_width=6)
         st1 = VMobject(color=SKY, stroke_width=6).set_points_as_corners(
@@ -117,7 +117,7 @@ class S06_Channel(VScene):
         r3 = row("boom 3", r"q_{34}|=|-12|-|10^{-4}|(300)|(-200)|=|-6", {0: SKY, 2: SKY, 5: EMBER, 8: SKY})
         r4 = row("boom 4", r"q_{\text{end}}|=|-6|-|10^{-4}|(300)|(-200)|=|0", {0: SKY, 2: SKY, 5: EMBER, 8: SKY})
         rows = VGroup(r2, r3, r4).arrange(DOWN, buff=0.38, aligned_edge=LEFT)
-        rows.next_to(rule_note, DOWN, buff=0.45).align_to(rule, LEFT)
+        rows.next_to(rule_note, DOWN, buff=0.45).to_edge(RIGHT, buff=0.5)
         for r in rows:                          # line the equals signs up
             r[1].shift((rows[0][1][1].get_x() - r[1][1].get_x()) * RIGHT)
         f23 = flow(sec, 2, 3, q23, label="-12")

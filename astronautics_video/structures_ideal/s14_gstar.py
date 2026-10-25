@@ -46,7 +46,7 @@ class S14_Gstar(VScene):
         self.beat("Skins and spars are often different materials. Then G is different on each wall, and it moves inside the integral.",
                   [Create(walls), FadeIn(g_sk), FadeIn(g_sp)], [Write(old), FadeIn(n1)], .1,
                   morph(old, new, [(0, 0), (1, 1), (3, 3), (4, 4)]) + [FadeOut(n1)], [FadeIn(n2), Circumscribe(new[5], color=ACCENT)],
-                  w=(.25, .2, .05, .3, .2))
+                  w=(.25, .2, .3, .2))
 
         # beat 2: modulus-weighted thickness
         tstar = E(r"t^*|=|\frac{G}{G_{\text{ref}}}|\,t", size=48).move_to([3.6, .3, 0])
@@ -58,11 +58,11 @@ class S14_Gstar(VScene):
         thin = [sk.animate.set_stroke(width=sk.get_stroke_width() * G_SKIN / G_REF) for sk in skins]
         self.beat("The trick: pick a reference G, and scale each wall's thickness by its G over the reference. That's the modulus weighted thickness, t star.",
                   [Write(tstar)], thin + [Indicate(g_sk, color=ACCENT)], [FadeIn(n3), FadeIn(glow(tstar[0], ACCENT))],
-                  [Write(delta)], [FadeOut(n2)] + morph(new, twist, [(1, 1), (2, 2), (3, 3), (4, 4)]),
+                  [Write(delta), FadeIn(n4)], [FadeOut(n2)] + morph(new, twist, [(1, 1), (2, 2), (3, 3), (4, 4)]),
                   w=(.2, .2, .15, .2, .25))
 
         # beat 3: the notes' three-cell result
-        self.drop(tstar, n3, delta, twist, g_sk, g_sp)
+        self.drop(tstar, n3, delta, n4, g_sk, g_sp)
         cells = [("a", "b", "f", "e"), ("b", "c", "g", "f"), ("c", "d", "h", "g")]
         cols = [MINT, LIME, SKY]
         tex = [r"q_I", r"q_{II}", r"q_{III}"]
@@ -72,18 +72,15 @@ class S14_Gstar(VScene):
             cen = np.mean([sec.p(n) for n in cell], axis=0)
             flows.add(cell_flow(cen, radius=.5, color=cols[k], ccw=True))
             labs.add(M(tex[k], size=44, color=cols[k]).move_to(cen))
-        tq = torque(sec.p("e") + UP * .2 + LEFT * .1, radius=.45).set_opacity(0)
         rows = VGroup(*[M(tex[k] + r"\;=\;" + str(vals[k]) + r"\ \text{N/mm}", size=48)
                         for k in range(3)]).arrange(DOWN, buff=.5, aligned_edge=LEFT)
-        for k in range(3):
-            rows[k][0][:len(tex[k]) - (2 if k else 0) - (1 if k == 2 else 0)]
         for k, r in enumerate(rows):
             r[0][0:k + 2].set_color(cols[k])
-        head = T("your notes' three-cell box, T = 11.3 kNm", size=28, color=MUTED)
+        head = TX(r"your notes' three-cell box, $T = 11.3$ kNm", size=30, color=MUTED)
         card = panel(VGroup(head, rows).arrange(DOWN, buff=.45))
-        card.move_to([3.6, -.3, 0])
+        card.move_to([3.6, -1.2, 0])
         self.beat("Everything else stays the same. Your notes' three cell example works out to seven point one, eight point nine and four point two newtons per millimeter.",
-                  [FadeIn(skins), Write(new.copy().set_opacity(0))], [Create(flows), FadeIn(labs)], [FadeIn(card[0]), FadeIn(head)],
+                  [Circumscribe(twist, color=ACCENT)], [Create(flows), FadeIn(labs)], [FadeIn(card[0]), FadeIn(head)],
                   FadeIn(rows[0]), FadeIn(rows[1]), FadeIn(rows[2]), .1, FadeIn(glow(rows[1], LIME)),
-                  w=(.05, .25, .1, .13, .13, .14, .05, .15))
+                  w=(.1, .25, .1, .13, .13, .14, .15))
         self.wipe()

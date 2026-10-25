@@ -31,6 +31,13 @@ def angle_L(c, ax, ay, lh, lv, t, s):
     return Polygon(*pts, color=EMBER, fill_color=EMBER, fill_opacity=.85, stroke_width=1.5).set_z_index(3)
 
 
+def col(g, y, x0=.85):
+    """Algebra column: left edge at x0, vertical centre y; asserts it stays inside the frame."""
+    g.move_to([RX, y, 0]).align_to(np.array([x0, 0, 0]), LEFT)
+    assert g.get_right()[0] < 6.95, g.get_right()
+    return g
+
+
 def row(eq, note=None):
     g = VGroup(eq)
     if note is not None:
@@ -83,32 +90,33 @@ class S08_P1_Booms(VScene):
             return M(txt, size=30, color=EMBER).move_to(slot(k, i))
 
         # beat 2: angle areas
-        r1 = row(E(r"A_{\rm left}|=|(60+50-10)\times 10|=|1000\ \mathrm{mm^2}", size=40),
+        r1 = row(E(r"A_L|=|(60+50-10)\times 10|=|1000", size=40),
                  T("legs minus the overlap, times thickness", size=26, color=MUTED))
-        r2 = E(r"A_{\rm right}|=|(50+40-8)\times 8|=|656\ \mathrm{mm^2}", size=40)
-        paint(r1[0], {4: EMBER}); paint(r2, {4: EMBER})
-        alg2 = VGroup(r1, r2).arrange(DOWN, buff=.6, aligned_edge=LEFT)
-        fit(alg2, 6.3, 5).move_to([RX, .6, 0])
+        r2 = row(E(r"A_R|=|(50+40-8)\times 8|=|656", size=40),
+                 T("areas in square millimeters", size=26, color=MUTED))
+        paint(r1[0], {4: EMBER}); paint(r2[0], {4: EMBER})
+        alg2 = VGroup(r1, r2).arrange(DOWN, buff=.7, aligned_edge=LEFT)
+        col(alg2, .3)
         c_ang = {k: chip_at(r"1000" if k in (1, 4) else r"656", k, 0) for k in (1, 2, 3, 4)}
         self.beat("An angle's area is the sum of its legs minus the overlap, times thickness. Left: one thousand square millimeters. Right: six hundred fifty six.",
                   [Write(r1[0]), FadeIn(r1[1])], .05,
                   [Indicate(lab_L), Indicate(angles[1]), Indicate(angles[4])],
                   [TransformFromCopy(r1[0][4], c_ang[1]), TransformFromCopy(r1[0][4], c_ang[4])],
-                  Write(r2),
-                  [Indicate(lab_R), TransformFromCopy(r2[4], c_ang[2]), TransformFromCopy(r2[4], c_ang[3])],
+                  [Write(r2[0]), FadeIn(r2[1])],
+                  [Indicate(lab_R), TransformFromCopy(r2[0][4], c_ang[2]), TransformFromCopy(r2[0][4], c_ang[3])],
                   w=(.25, .12, .15, .25, .2))
 
         # beat 3: skins, ratio one
         f3 = row(E(r"B|=|\frac{t_D\, b}{6}\Big(2+|\frac{\sigma_2}{\sigma_1}|\Big)", size=44),
-                 T("top and bottom skins: same stress at both edges", size=26, color=MUTED))
+                 T("skins: same stress at both edges", size=26, color=MUTED))
         paint(f3[0], {3: GOLD})
         n3 = E(r"\frac{\sigma_2}{\sigma_1}=1:|\quad B|=|\frac{10\times 500}{6}(2+1)", size=40)
         paint(n3, {0: GOLD})
-        n3b = E(r"=|\frac{10\times 500}{2}|=|2500\ \mathrm{mm^2}", size=40)
+        n3b = E(r"=|\frac{10\times 500}{2}|=|2500", size=40)
         paint(n3b, {3: EMBER})
         alg3 = VGroup(f3, n3, n3b).arrange(DOWN, buff=.55, aligned_edge=LEFT)
         n3b.align_to(n3[1], LEFT)
-        fit(alg3, 6.3, 5.4).move_to([RX, .2, 0])
+        col(alg3, .2)
         skins = [sec.walls_m[(1, 2)], sec.walls_m[(3, 4)]]
         src_top = M(r"2500", size=30, color=EMBER).move_to(sec.mid(1, 2) + .9 * DOWN)
         src_bot = M(r"2500", size=30, color=EMBER).move_to(sec.mid(3, 4) + .9 * UP)
@@ -130,15 +138,17 @@ class S08_P1_Booms(VScene):
         n4r = E(r"\text{right: }|\frac{8\times 300}{6}|=|400\ \mathrm{mm^2}", size=40)
         paint(n4l, {3: EMBER}); paint(n4r, {3: EMBER})
         alg4 = VGroup(f4, n4l, n4r).arrange(DOWN, buff=.55, aligned_edge=LEFT)
-        fit(alg4, 6.3, 5.4).move_to([RX, .2, 0])
+        col(alg4, .2)
         webs = [sec.walls_m[(4, 1)], sec.walls_m[(2, 3)]]
         c_wb = {k: chip_at(r"+500" if k in (1, 4) else r"+400", k, 2) for k in (1, 2, 3, 4)}
-        t1 = E(r"B_1|=|B_4|=|1000+2500+500|=|4000\ \mathrm{mm^2}", size=40)
-        t2 = E(r"B_2|=|B_3|=|656+2500+400|=|3556\ \mathrm{mm^2}", size=40)
-        paint(t1, {2: EMBER, 6: EMBER}); paint(t2, {2: EMBER, 6: EMBER})
-        tot = VGroup(T("booms: everything at a corner", size=26, color=MUTED), t1, t2).arrange(
-            DOWN, buff=.5, aligned_edge=LEFT)
-        fit(tot, 6.3, 5).move_to([RX, .2, 0])
+        t1 = E(r"B_1|=|1000+2500+500|=|4000", size=40)
+        t2 = E(r"B_2|=|656+2500+400|=|3556", size=40)
+        paint(t1, {4: EMBER}); paint(t2, {4: EMBER})
+        n1 = T("angle plus skin plus web, in square millimeters", size=26, color=MUTED)
+        n2 = T("by symmetry, boom 4 matches boom 1, boom 3 matches boom 2", size=26, color=MUTED)
+        tot = VGroup(t1, n1, t2, n2).arrange(DOWN, buff=.3, aligned_edge=LEFT)
+        n1.shift(.1 * UP); t2.shift(.25 * DOWN); n2.shift(.15 * DOWN)
+        col(tot, .2)
         dots = sec.booms({1: B1, 2: B2, 3: B2, 4: B1})
         names = sec.names()
         totc = {k: M(r"4000" if k in (1, 4) else r"3556", size=34, color=EMBER).move_to(slot(k, 1))
@@ -151,11 +161,12 @@ class S08_P1_Booms(VScene):
                       run_time=.17 * d)
             self.play(Write(n4r), TransformFromCopy(n4r[3], c_wb[2]), TransformFromCopy(n4r[3], c_wb[3]),
                       run_time=.17 * d)
+            self.snap("webs")
             self.play(FadeOut(alg4), FadeIn(tot), FadeOut(lab_L), FadeOut(lab_R), FadeOut(d300),
                       run_time=.14 * d)
             self.play(*[ReplacementTransform(stacks[k], totc[k]) for k in (1, 2, 3, 4)],
                       *[ReplacementTransform(angles[k], sec.boom_m[k]) for k in (1, 2, 3, 4)],
                       FadeIn(names), run_time=.2 * d)
-            self.play(FadeIn(glow(t1[6], EMBER)), FadeIn(glow(t2[6], EMBER)), run_time=.1 * d)
+            self.play(FadeIn(glow(t1[4], EMBER)), FadeIn(glow(t2[4], EMBER)), run_time=.1 * d)
         self.wait(.6)
         self.wipe()

@@ -115,11 +115,11 @@ class S03_Skin_Area(VScene):
         mt = Dot(np.array([xt_, Y0, 0]), radius=.09, color=INK).set_z_index(4)
         lr = DashedLine(np.array([xr_, YB + H2 / 2, 0]), np.array([xr_, Y0, 0]), color=INK, stroke_width=2)
         lt = DashedLine(np.array([xt_, YB + H2 + (H1 - H2) / 3, 0]), np.array([xt_, Y0, 0]), color=INK, stroke_width=2)
-        sr = span(np.array([xr_, Y0 - 1.45, 0]), np.array([XR, Y0 - 1.45, 0]), r"\frac{b}{2}", off=0.0, size=36)
-        st = span(np.array([xt_, Y0 - 2.25, 0]), np.array([XR, Y0 - 2.25, 0]), r"\frac{2}{3}b", off=0.0, size=36)
+        sr = span(np.array([xr_, Y0 - 1.45, 0]), np.array([XR, Y0 - 1.45, 0]), r"b/2", off=0.0, size=38)
+        st = span(np.array([xt_, Y0 - 2.25, 0]), np.array([XR, Y0 - 2.25, 0]), r"2b/3", off=0.0, size=38)
 
-        r1 = row(E(r"\sigma_2|\,t_D b|\cdot|\tfrac{b}{2}", size=44), "rectangle: force times arm")
-        r2 = row(E(r"+|\tfrac{1}{2}(|\sigma_1|-|\sigma_2|)\,t_D b|\cdot|\tfrac{2}{3}b", size=44),
+        r1 = row(E(r"\sigma_2|\,t_D b|\cdot|\frac{b}{2}", size=44), "rectangle: force times arm")
+        r2 = row(E(r"+|\frac{1}{2}(|\sigma_1|-|\sigma_2|)\,t_D b|\cdot|\frac{2}{3}b", size=44),
                  "triangle: force times arm")
         r3 = row(E(r"=|\sigma_1|B_1|\,b", size=44), "boom 1's force times its arm b")
         r4 = row(E(r"B_1|=|\frac{t_D b}{2}|\,\frac{\sigma_2}{\sigma_1}|+|\frac{t_D b}{3}\Big(1-\frac{\sigma_2}{\sigma_1}\Big)",

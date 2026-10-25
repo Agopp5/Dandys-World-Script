@@ -29,8 +29,9 @@ RX = 0.4                        # left edge of the algebra column
 
 def col(*rows, top=2.7, buff=0.3):
     """Stack rows down the right column, left-aligned at RX."""
+    for r in rows:
+        fit(r, 7.0 - RX, 6.6)
     g = VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=buff)
-    fit(g, 7.0 - RX, 6.6)
     g.next_to([RX, top, 0], DOWN, buff=0, aligned_edge=LEFT)
     g.align_to([RX, 0, 0], LEFT)
     return g
@@ -57,8 +58,8 @@ class S09_P1_Basic(VScene):
         booms = sec.booms({1: B1, 2: B2, 3: B2, 4: B1})
         names = sec.names()
         c = (sec.p(1) + sec.p(3)) / 2
-        axis = DashedLine(c + 3.6 * LEFT, c + 3.6 * RIGHT, color=MUTED, stroke_width=2, dash_length=0.12)
-        axl = M("x", size=30, color=MUTED).next_to(axis, RIGHT, buff=0.1)
+        axis = DashedLine(c + 3.4 * LEFT, c + 3.4 * RIGHT, color=MUTED, stroke_width=2, dash_length=0.12)
+        axl = M("x", size=30, color=MUTED).next_to(axis.get_end(), UP + LEFT, buff=0.1)
         # boom-area labels, tucked diagonally inside each corner
         blab = VGroup()
         for n, b in ((1, B1), (2, B2), (3, B2), (4, B1)):
@@ -117,14 +118,14 @@ class S09_P1_Basic(VScene):
         nrule = note("jump crossing boom r")
         a = E(r"q_{b,12}|=|0", size=44, cmap=QC)
         na = note("the cut makes wall 12 start at zero")
-        b = E(r"q_{b,23}|=|0|-|(|S_y|/I_{xx})|(3556)|(150)", size=44, cmap=QC)
+        b = E(r"q_{b,23}|=|0|-|(|S_y|/I_{xx})|(3556)|(150)", size=42, cmap=QC)
         cc = E(r"=|-1.569\times 10^{-3}|\,S_y", size=44)
         nb = note("crossing boom 2: B = 3556, y = +150")
         g3 = col(VGroup(rule, nrule).arrange(DOWN, aligned_edge=LEFT, buff=0.12),
-                 VGroup(a, na).arrange(DOWN, aligned_edge=LEFT, buff=0.12), b, top=1.8, buff=0.4)
+                 VGroup(a, na).arrange(DOWN, aligned_edge=LEFT, buff=0.12), b, top=1.15, buff=0.4)
         eq_under(cc, b)
         nb.next_to(cc, DOWN, buff=0.25).align_to(b, LEFT)
-        z12 = M(r"q_{b,12}=0", size=34, color=SKY).next_to([sec.mid(1, 2)[0] - 1.7, top_y, 0], DOWN, buff=0.35)
+        z12 = M(r"q_{b,12}=0", size=34, color=SKY).next_to([sec.mid(1, 2)[0] - 1.15, top_y, 0], DOWN, buff=0.5)
         f23 = flow(sec, 2, 3, q23, label=r"q_{b,23}", size=34)
         b2 = sec.boom_m[2]
         self.beat("Wall one two: zero. Crossing boom two: minus S y over I x x, times three five five six, times one fifty. That's minus one point five six nine times ten to the minus three, S y.",
@@ -151,7 +152,7 @@ class S09_P1_Basic(VScene):
         e1.next_to(nd, DOWN, buff=0.45).align_to(d1, LEFT)
         eq_under(e2, e1)
         ne.next_to(e2, DOWN, buff=0.2).align_to(e1, LEFT)
-        z34 = M(r"q_{b,34}=0", size=34, color=SKY).next_to([sec.mid(3, 4)[0] - 1.7, sec.p(3)[1], 0], UP, buff=0.35)
+        z34 = M(r"q_{b,34}=0", size=34, color=SKY).next_to([sec.mid(3, 4)[0] + 0.95, sec.p(3)[1], 0], UP, buff=0.75)
         f41 = flow(sec, 4, 1, q41, label=r"q_{b,41}", size=34)
         with self.say("Boom three is at minus one fifty, so it cancels that: wall three four is zero. Boom four brings the left web to plus one point seven six five times ten to the minus three.") as d:
             self.play(FadeOut(VGroup(rule, nrule, a, na, b, nb, cc[0])), ReplacementTransform(cc[1:], q23box[2:]),

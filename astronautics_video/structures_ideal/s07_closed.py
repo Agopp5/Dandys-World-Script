@@ -77,11 +77,11 @@ class S07_Closed(VScene):
         pic.target.scale(.85, about_point=walls.get_center()).shift((-3.05 - walls.get_x()) * RIGHT)
         head = VGroup(eq, g)
         c1 = cond(E(r"S_y\,|\xi|=|\oint p\,|q_s|\,ds", size=48, cmap=CMAP),
-                  T("moment balance, p = lever arm", size=32, color=MUTED))
+                  VGroup(T("moment balance", size=30, color=MUTED), T("p = lever arm", size=30, color=MUTED)).arrange(DOWN, buff=.12))
         c2 = cond(E(r"\oint|q_s|\,\frac{ds}{|G|\,t}|=|0", size=48, cmap=CMAP),
                   T("shear center: no twist", size=32, color=MUTED))
         stack = VGroup(c1, c2).arrange(DOWN, buff=.4)
-        stack.move_to(RIGHT * 3.95 + DOWN * .75)
+        stack.move_to(RIGHT * 4.1 + DOWN * .8)
         self.beat("To find q s zero, use moments. If the load passes through the shear center, there's another "
                   "condition: the section must not twist. The integral of q d s over G t around the cell is zero.",
                   [MoveToTarget(pic), head.animate.move_to(RIGHT * 3.95 + UP * 3.25)],
