@@ -171,7 +171,7 @@ class S02_Anatomy(VScene):
         # shear force
         sbox = Rectangle(width=2.2, height=1.3).set_stroke(INK2, 7).move_to([cx[1], yb, 0])
         s_arr = Arrow([cx[1], yb - 1.35, 0], [cx[1], yb + 1.35, 0], buff=0, color=ROSE, stroke_width=9)
-        s_lbl = E("S_y", size=50).next_to(s_arr.get_end(), RIGHT, buff=.2).shift(DOWN * .25)
+        s_lbl = E("S_y", size=50).next_to(s_arr.get_end(), RIGHT, buff=.3).shift(DOWN * .25)
         t_shear = T("shear force", 36, INK).move_to([cx[1], yl_, 0])
         # twisting
         tref = DashedVMobject(Rectangle(width=2.2, height=1.3), num_dashes=28).set_stroke(MUTED, 3).move_to([cx[2], yb, 0])
@@ -182,11 +182,11 @@ class S02_Anatomy(VScene):
                   [FadeOut(VGroup(fs_lbl, fs_arr, rs_lbl, rs_arr, sk_lbl, sk_arr))],
                   [LaggedStart(*[GrowArrow(a) for a in lift], lag_ratio=.12), FadeIn(lift_lbl)],
                   wing.animate.shift(UP * .3), .05,
-                  wing.animate.scale(.45).to_edge(UP, buff=.3),
+                  [FadeOut(wb_lbl), FadeOut(lift_lbl), VGroup(nose, tail, box, lift).animate.scale(.45).to_edge(UP, buff=.3)],
                   [FadeIn(i_bend), FadeIn(t_bend)], ReplacementTransform(straight, bent), .04,
                   [FadeIn(sbox), GrowArrow(s_arr), FadeIn(s_lbl), FadeIn(t_shear)], .06,
-                  [FadeIn(tref), FadeIn(tbox), FadeIn(tq), Rotate(tbox, 14 * DEGREES), FadeIn(t_twist)], .17,
-                  w=(.04, .1, .06, .13, .07, .08, .1, .1))
+                  [FadeIn(tref), FadeIn(tbox), FadeIn(t_twist)], [FadeIn(tq), Rotate(tbox, 14 * DEGREES)], .17,
+                  w=(.04, .1, .06, .13, .07, .08, .1, .04, .06))
 
         # ---------------- beat 5: the two kinds of stress
         K = 1.5
@@ -223,7 +223,7 @@ class S02_Anatomy(VScene):
         tau_grp.next_to(sig_grp, DOWN, buff=.8, aligned_edge=LEFT)
         self.beat("Bending makes stresses along the span, into the screen. Shear forces and twisting make stresses that run around the section, in the skin and the webs.",
                   [FadeOut(VGroup(i_bend, bent, t_bend, sbox, s_arr, s_lbl, t_shear, tref, tbox, tq, t_twist,
-                                  nose, tail, wb_lbl, lift, lift_lbl))],
+                                  nose, tail, lift))],
                   Transform(box, tgt), .02,
                   [LaggedStart(*[GrowFromCenter(c) for c in crosses], lag_ratio=.08), FadeIn(sig_grp)], .07,
                   [crosses.animate.set_opacity(.45), sig_grp.animate.set_opacity(.5)],

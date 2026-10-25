@@ -79,7 +79,7 @@ class S14_P1_Close(VScene):
                   .06,
                   [Write(tw), FadeIn(tw_why, shift=UP * .1)], .1,
                   [Write(head), FadeIn(head_why, shift=UP * .1)], .16,
-                  w=(.12, .12, .06, .22, .1, .22, .16))
+                  w=(.12, .12, .22, .22))
 
         # ---- beats 2-3: the table of ds/t ----
         head_top = head.copy().scale(46 / 48).move_to([X, 3.15, 0])
@@ -113,13 +113,13 @@ class S14_P1_Close(VScene):
         self.beat("d s over t is each wall's length over its thickness. Top: five hundred over ten, fifty. Right: three hundred over eight, thirty seven and a half.",
                   [FadeOut(VGroup(tw, tw_why, head_why)), ReplacementTransform(head, head_top)],
                   FadeIn(th), .08, row_step(0), .1, row_step(1), .14,
-                  w=(.12, .18, .08, .22, .1, .22, .14))
+                  w=(.12, .18, .22, .22))
 
         tglow = glow(total[3], ACCENT)
         self.beat("Bottom: fifty again. Left: three hundred over ten, thirty. In total, one hundred sixty seven and a half.",
                   row_step(2), .08, row_step(3), .08, [Create(rule), Write(total)],
                   [Indicate(total[3], color=ACCENT), FadeIn(tglow)], .14,
-                  w=(.18, .08, .22, .08, .2, .1, .14))
+                  w=(.18, .22, .2, .1))
 
         # ---- beat 4: substitute ----
         tot_small = E(r"\oint|\,\frac{ds}{t}|=|167.5", size=44)
@@ -148,7 +148,7 @@ class S14_P1_Close(VScene):
                   [Write(L1), Indicate(l23, scale_factor=1.3), Indicate(wall(2, 3), color=ACCENT, scale_factor=1.0)], .04,
                   [Write(L2), Indicate(l41, scale_factor=1.3), Indicate(wall(4, 1), color=ACCENT, scale_factor=1.0)], .04,
                   [Write(L3), Indicate(tot_small[3], color=ACCENT)], .12,
-                  w=(.1, .1, .05, .2, .04, .2, .04, .15, .12))
+                  w=(.1, .1, .2, .2, .15))
 
         # ---- beat 5: combine, solve for q_s0 ----
         L4 = E(r"-5.89\times10^{-3}|+|167.5|\,|q_{s,0}|=|0", size=46)
@@ -171,7 +171,7 @@ class S14_P1_Close(VScene):
                   FadeIn(note4), .1,
                   [Write(res), Create(res_box), FadeIn(glow(res, MINT))], .1,
                   [Create(cf), FadeIn(cfl), FadeIn(res_why)], .16,
-                  w=(.2, .08, .1, .2, .1, .16, .16))
+                  w=(.2, .08, .2, .16))
 
         # ---- beat 6: the final shear flows ----
         res_top = VGroup(res, res_box)
@@ -200,6 +200,6 @@ class S14_P1_Close(VScene):
                   [FadeIn(f12), FadeIn(f34), ReplacementTransform(l12, n12), ReplacementTransform(l34, n34),
                    ReplacementTransform(l23, n23), ReplacementTransform(l41, n41),
                    FadeIn(tots, lag_ratio=0.3)],
-                  .2, w=(.15, .15, .4, .3))
+                  .2, w=(.15, .15, .4))
         self.wait(1.0)
         self.wipe()
