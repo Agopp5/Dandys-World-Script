@@ -1,0 +1,109 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.699
+Here's a slice through a real wing.
+
+00:00:02.699 --> 00:00:10.720
+It's called a cross section: imagine cutting the wing like a loaf of bread, and looking at the cut face.
+
+00:00:11.000 --> 00:00:19.960
+It has a thin outer skin, two spars that run along the wing, and a row of small stiffeners called stringers along the top and the bottom.
+
+00:00:22.533 --> 00:00:30.448
+To find the stresses in it, you'd need the area and position of every one of these little shapes.
+
+00:00:30.448 --> 00:00:32.733
+That's a lot of bookkeeping.
+
+00:00:33.100 --> 00:00:42.260
+So in this lesson, we'll learn a way to simplify the section, and then use it to solve both of your homework problems.
+
+00:00:46.367 --> 00:00:48.887
+Let's name the parts properly.
+
+00:00:48.887 --> 00:00:52.919
+A spar is like an I beam running along the wing.
+
+00:00:52.919 --> 00:00:57.287
+The tall thin sheet in the middle is called the web.
+
+00:00:57.600 --> 00:01:02.753
+The thick strips at the top and bottom of the web are called flanges.
+
+00:01:02.753 --> 00:01:06.040
+They're where the spar connects to the skin.
+
+00:01:06.367 --> 00:01:10.708
+The box made by the two spars and the skin between them is called the wing box.
+
+00:01:10.708 --> 00:01:12.687
+It does most of the structural work.
+
+00:01:13.000 --> 00:01:15.097
+Lift pushes the wing up.
+
+00:01:15.097 --> 00:01:24.360
+That does three things to the wing box: it bends it, it pushes on it with a shear force, and it twists it.
+
+00:01:24.767 --> 00:01:28.281
+Bending makes stresses along the span, into the screen.
+
+00:01:28.281 --> 00:01:34.287
+Shear forces and twisting make stresses that run around the section, in the skin and the webs.
+
+00:01:36.698 --> 00:01:41.378
+Bending produces direct stress: stress that points along the span.
+
+00:01:41.378 --> 00:01:42.938
+We'll call it sigma z.
+
+00:01:44.831 --> 00:01:52.282
+Above the neutral axis the material is stretched, and below it the material is squeezed.
+
+00:01:52.282 --> 00:01:56.431
+The farther from the axis, the bigger the stress.
+
+00:01:58.565 --> 00:02:09.818
+The formula, for bending about the horizontal axis, is sigma z equals M x over I x x, times y.
+
+00:02:09.818 --> 00:02:15.085
+Here y is the height above the neutral axis.
+
+00:02:16.098 --> 00:02:20.968
+I x x measures how much area sits far from the axis.
+
+00:02:20.968 --> 00:02:28.178
+For small pieces, it's just each area times its height squared, all added up.
+
+00:02:31.865 --> 00:02:37.353
+Shear forces and twisting create shear stress in the thin walls.
+
+00:02:37.353 --> 00:02:38.897
+We'll call it tau.
+
+00:02:38.897 --> 00:02:42.585
+It acts along the wall, around the section.
+
+00:02:46.165 --> 00:02:52.383
+The walls are so thin that tau is nearly constant through the thickness.
+
+00:02:52.383 --> 00:02:57.565
+So instead of tau, we usually track tau times the thickness.
+
+00:03:02.432 --> 00:03:04.921
+That product is called the shear flow, q.
+
+00:03:04.921 --> 00:03:09.232
+It's a force per unit length along the wall, in newtons per millimeter.
+
+00:03:12.598 --> 00:03:13.517
+Why bother?
+
+00:03:13.517 --> 00:03:19.702
+Where walls meet, the shear flows add up like water flowing through pipes.
+
+00:03:19.702 --> 00:03:22.878
+That makes them easy to keep track of.
+
+00:03:26.898 --> 00:03:34.338
+To get back to stress at the end, just divide by the thickness: tau equals q over t.

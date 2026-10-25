@@ -1,0 +1,193 @@
+WEBVTT
+
+00:00:00.500 --> 00:00:03.103
+Here's homework problem one.
+
+00:00:03.103 --> 00:00:08.681
+A box, five hundred millimeters wide and three hundred tall.
+
+00:00:08.681 --> 00:00:15.002
+The top and bottom skins and the left web are ten millimeters thick.
+
+00:00:15.002 --> 00:00:17.140
+The right web is eight.
+
+00:00:20.033 --> 00:00:25.632
+Each corner has an angle, a little L shaped stiffener.
+
+00:00:25.632 --> 00:00:29.157
+Sixty by fifty by ten on the left.
+
+00:00:29.157 --> 00:00:32.993
+Fifty by forty by eight on the right.
+
+00:00:35.267 --> 00:00:41.533
+The problem asks us to replace all this with four corner booms, so let's add up what goes into each boom.
+
+00:00:41.533 --> 00:00:42.547
+First the angles.
+
+00:00:44.000 --> 00:00:49.302
+An angle's area is the two leg lengths, minus the overlap, times the thickness.
+
+00:00:49.302 --> 00:00:55.880
+Sixty plus fifty minus ten is one hundred, times ten: one thousand square millimeters on the left.
+
+00:00:59.200 --> 00:01:05.720
+Fifty plus forty minus eight is eighty two, times eight: six hundred fifty six on the right.
+
+00:01:06.467 --> 00:01:07.441
+Next the skins.
+
+00:01:07.441 --> 00:01:12.377
+Top and bottom skins have the same stress at both ends, so the ratio is one.
+
+00:01:12.377 --> 00:01:17.507
+Each gives ten times five hundred over two: twenty five hundred to each corner.
+
+00:01:17.867 --> 00:01:19.248
+Last, the webs.
+
+00:01:19.248 --> 00:01:24.314
+They cross the neutral axis, so the ratio is minus one.
+
+00:01:24.314 --> 00:01:30.392
+The left web gives ten times three hundred over six: five hundred.
+
+00:01:30.392 --> 00:01:36.747
+The right web gives eight times three hundred over six: four hundred.
+
+00:01:37.033 --> 00:01:48.593
+Adding it all up: each left boom is four thousand square millimeters, and each right boom is three thousand five hundred fifty six.
+
+00:01:51.967 --> 00:01:57.098
+Number the booms: one at the top left, then clockwise: two, three, four.
+
+00:01:57.098 --> 00:02:02.087
+Every boom is one hundred fifty millimeters above or below the middle.
+
+00:02:02.534 --> 00:02:08.033
+The box is symmetric top to bottom, so I x y is zero.
+
+00:02:08.033 --> 00:02:23.702
+I x x is each boom area times one fifty squared, added up: two times four thousand plus three thousand five hundred fifty six, times one fifty squared.
+
+00:02:23.702 --> 00:02:27.334
+That's three hundred forty million.
+
+00:02:27.767 --> 00:02:29.558
+We want the shear centre.
+
+00:02:29.558 --> 00:02:34.647
+So put a vertical load S y at an unknown distance xi from the left web.
+
+00:02:35.000 --> 00:02:36.323
+Cut the top wall.
+
+00:02:36.323 --> 00:02:39.983
+Then go around in order: one, two, three, four.
+
+00:02:39.983 --> 00:02:43.720
+Wall one two starts at zero, because of the cut.
+
+00:02:44.034 --> 00:02:54.910
+Crossing boom two: minus S y over I x x, times three five five six, times one fifty.
+
+00:02:54.910 --> 00:03:06.434
+That's minus one point five six nine times ten to the minus three, S y, in the right web.
+
+00:03:06.767 --> 00:03:16.167
+Boom three is one fifty below the middle, so it cancels that exactly: the bottom wall is zero.
+
+00:03:16.534 --> 00:03:29.574
+Boom four is also below the middle, and bigger: the left web gets plus one point seven six five times ten to the minus three, S y.
+
+00:03:31.999 --> 00:03:34.774
+Now close the cut with a constant q s zero.
+
+00:03:34.774 --> 00:03:38.840
+Because the load is at the shear centre, the box doesn't twist.
+
+00:03:38.840 --> 00:03:44.519
+With one material, that means the integral of q d s over t, all the way around, is zero.
+
+00:03:44.866 --> 00:03:48.415
+d s over t is each wall's length over its thickness.
+
+00:03:48.415 --> 00:03:50.736
+Top: five hundred over ten, fifty.
+
+00:03:50.736 --> 00:03:54.626
+Right: three hundred over eight, thirty seven and a half.
+
+00:03:55.532 --> 00:03:57.250
+Bottom: fifty again.
+
+00:03:57.250 --> 00:04:00.428
+Left: three hundred over ten, thirty.
+
+00:04:00.428 --> 00:04:04.292
+In total, one hundred sixty seven and a half.
+
+00:04:04.632 --> 00:04:08.411
+Only the two webs have basic flow.
+
+00:04:08.411 --> 00:04:27.192
+So: minus one point five six nine times thirty seven and a half, plus one point seven six five times thirty, plus one sixty seven and a half times q s zero, equals zero.
+
+00:04:27.532 --> 00:04:33.707
+The first two terms add up to minus five point eight nine times ten to the minus three.
+
+00:04:33.707 --> 00:04:38.604
+So q s zero is three point five two times ten to the minus five, S y.
+
+00:04:38.604 --> 00:04:41.372
+A small correction, all the way around.
+
+00:04:41.732 --> 00:04:45.252
+Add it to every wall to get the final shear flows.
+
+00:04:47.632 --> 00:04:49.833
+Both webs now carry shear flow upward.
+
+00:04:49.833 --> 00:04:53.712
+Multiply by their height, three hundred millimeters, to get forces.
+
+00:04:54.032 --> 00:05:03.357
+The right web carries zero point four six S y, and the left web zero point five four S y.
+
+00:05:03.357 --> 00:05:05.663
+Together, exactly S y.
+
+00:05:05.663 --> 00:05:08.072
+Good, that's our check.
+
+00:05:08.999 --> 00:05:11.439
+Now take moments about the left web.
+
+00:05:11.439 --> 00:05:16.927
+The right web's force, zero point four six S y, is five hundred millimeters away.
+
+00:05:16.927 --> 00:05:18.959
+That's two hundred thirty S y.
+
+00:05:19.699 --> 00:05:28.219
+The small flows in the top and bottom skins point opposite ways, so they make a small couple, the other way: about five point three S y.
+
+00:05:28.499 --> 00:05:37.024
+So S y times xi equals two thirty point zero four, minus five point two seven.
+
+00:05:37.024 --> 00:05:44.892
+xi is two hundred twenty four point eight millimeters from the left web.
+
+00:05:44.892 --> 00:05:46.859
+That's the answer.
+
+00:05:47.665 --> 00:05:55.505
+It sits left of the middle, because the left booms are heavier and carry more of the load.
+
+00:05:55.965 --> 00:05:56.827
+Your turn.
+
+00:05:56.827 --> 00:06:03.805
+Pause here and do checkpoint four point one: the same steps for the practice box.

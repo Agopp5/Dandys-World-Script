@@ -1,0 +1,160 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.331
+Now let's see how shear flow behaves when booms carry the direct stress.
+
+00:00:04.331 --> 00:00:07.760
+Cut out one boom, with a short length d z along the span.
+
+00:00:08.067 --> 00:00:13.411
+The skin on one side pulls along the boom with shear flow q one.
+
+00:00:13.411 --> 00:00:16.667
+The skin on the other side, with q two.
+
+00:00:17.000 --> 00:00:26.351
+Along the boom, the bending stress changes a little, from sigma z to sigma z plus d sigma z.
+
+00:00:26.351 --> 00:00:29.400
+So the boom force changes too.
+
+00:00:29.700 --> 00:00:32.473
+Add up the forces along the boom.
+
+00:00:32.473 --> 00:00:34.910
+The sigma z B r terms cancel.
+
+00:00:34.910 --> 00:00:43.060
+Divide by d z, and you're left with q two minus q one equals minus d sigma z over d z, times B r.
+
+00:00:44.567 --> 00:00:48.398
+Bending stress is M x over I x x, times y.
+
+00:00:48.398 --> 00:00:56.607
+And the moment changes along the span at the rate of the shear force: d M x by d z is S y.
+
+00:00:57.000 --> 00:01:04.439
+So d sigma z by d z is S y over I x x, times y.
+
+00:01:04.439 --> 00:01:15.360
+And the jump at a boom is minus S y over I x x, times B r, times y r.
+
+00:01:17.833 --> 00:01:23.332
+Between booms the skin carries no direct stress, so the shear flow can't change there.
+
+00:01:23.332 --> 00:01:26.913
+It's constant, and it only jumps when it crosses a boom.
+
+00:01:27.233 --> 00:01:35.073
+Here's the channel from your slides: four booms of three hundred square millimeters, two hundred millimeters above and below the axis.
+
+00:01:35.433 --> 00:01:42.088
+I x x is four times three hundred times two hundred squared.
+
+00:01:42.088 --> 00:01:45.082
+That's forty eight million.
+
+00:01:45.082 --> 00:01:54.953
+So S y over I x x is forty eight hundred over forty eight million: ten to the minus four.
+
+00:01:55.300 --> 00:01:59.677
+Start at the free edge, where the shear flow is zero.
+
+00:01:59.677 --> 00:02:07.357
+Crossing boom one: zero, minus ten to the minus four, times three hundred, times two hundred.
+
+00:02:07.357 --> 00:02:10.660
+That's minus six newtons per millimeter.
+
+00:02:11.033 --> 00:02:11.625
+Your turn.
+
+00:02:11.625 --> 00:02:15.113
+Pause here and do checkpoint three point one in your guide.
+
+00:02:18.333 --> 00:02:21.320
+Boom two adds another minus six.
+
+00:02:21.320 --> 00:02:24.213
+That's minus twelve in the web.
+
+00:02:24.533 --> 00:02:29.813
+Boom three is two hundred below the axis, so its jump is plus six.
+
+00:02:29.813 --> 00:02:31.253
+Back to minus six.
+
+00:02:31.253 --> 00:02:36.533
+And boom four brings it to zero at the free edge, just as it must.
+
+00:02:37.567 --> 00:02:41.258
+We said the load acts through the shear centre.
+
+00:02:41.258 --> 00:02:42.278
+What is that?
+
+00:02:42.278 --> 00:02:48.247
+It's the one point where a shear load bends the section without twisting it.
+
+00:02:49.534 --> 00:02:51.480
+Look at the forces in the walls.
+
+00:02:51.480 --> 00:02:55.495
+Each flange carries six times two hundred: twelve hundred newtons.
+
+00:02:55.495 --> 00:02:59.814
+The web carries twelve times four hundred: forty eight hundred newtons.
+
+00:03:00.100 --> 00:03:03.387
+The web's force equals the load, good.
+
+00:03:03.387 --> 00:03:18.180
+But the two flange forces point opposite ways, so together they make a couple: twelve hundred times four hundred, which is four hundred eighty thousand newton millimeters.
+
+00:03:19.467 --> 00:03:24.077
+For no twist, the load has to balance that couple.
+
+00:03:24.077 --> 00:03:29.979
+Forty eight hundred times e equals four hundred eighty thousand.
+
+00:03:29.979 --> 00:03:34.867
+So e is one hundred millimeters, outside the channel.
+
+00:03:37.934 --> 00:03:43.096
+Notice that the shear centre doesn't have to be inside the material.
+
+00:03:43.096 --> 00:03:49.854
+For a wing, we want to know where it is, because lift that misses it will twist the wing.
+
+00:03:50.733 --> 00:03:52.865
+A box is a closed section.
+
+00:03:52.865 --> 00:04:00.573
+Its walls go all the way around, so there's no free edge where we know the shear flow is zero.
+
+00:04:00.900 --> 00:04:01.881
+So we make one.
+
+00:04:01.881 --> 00:04:03.516
+Imagine cutting any wall.
+
+00:04:03.516 --> 00:04:07.700
+Now it's an open section, and the shear flow is zero at the cut.
+
+00:04:08.033 --> 00:04:13.471
+March around from the cut, jumping at each boom, exactly as for the channel.
+
+00:04:13.471 --> 00:04:16.833
+The result is called the basic shear flow, q b.
+
+00:04:17.266 --> 00:04:19.714
+Of course, the real box isn't cut.
+
+00:04:19.714 --> 00:04:25.546
+Closing the cut adds one extra constant shear flow, q s zero, all the way around.
+
+00:04:25.866 --> 00:04:33.243
+To find q s zero, use moments: the shear flows must make the same moment as the load.
+
+00:04:33.243 --> 00:04:41.226
+And if the load is at the shear centre, there's a simpler condition: the box must not twist.
