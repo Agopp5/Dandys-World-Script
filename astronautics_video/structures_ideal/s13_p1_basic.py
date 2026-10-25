@@ -69,7 +69,7 @@ class S13_P1_Basic(VScene):
 
     def construct(self):
         head = self.section("I xx and the basic shear flow")
-        sec = hw_box(width=6.6, center=(-3.45, -0.25))
+        sec = hw_box(width=5.9, center=(-3.7, -0.25))
         walls = sec.draw()
         booms = sec.booms({1: B1, 2: B2, 3: B2, 4: B1})
         names = sec.names(size=36)
@@ -78,8 +78,8 @@ class S13_P1_Basic(VScene):
         left_x, right_x = sec.p(1)[0], sec.p(2)[0]
         axis = DashedLine([left_x - 0.25, c[1], 0], [right_x + 0.25, c[1], 0], color=MUTED, stroke_width=2,
                           dash_length=0.12)
-        axl = T("middle", size=30, color=MUTED).next_to([left_x + 0.15, c[1], 0], UP + RIGHT, buff=0.08)
-        sx = left_x + 0.62 * (right_x - left_x)
+        axl = T("middle", size=30, color=MUTED).next_to([left_x + 0.66 * (right_x - left_x), c[1], 0], UP + RIGHT, buff=0.08)
+        sx = left_x + 0.25 * (right_x - left_x)
         yup = span([sx, c[1], 0], [sx, top_y, 0], r"y=+150", side=RIGHT, off=0.25, color=INK2, size=34)
         ydn = span([sx, bot_y, 0], [sx, c[1], 0], r"y=-150", side=RIGHT, off=0.25, color=INK2, size=34)
 
@@ -108,7 +108,7 @@ class S13_P1_Basic(VScene):
         nxy = note("symmetric top to bottom")
         g0 = at_top(VGroup(lxy, nxy).arrange(RIGHT, buff=0.45))
         l1 = below(E(r"I_{xx}|=|\sum|B_r|\,y_r^2", size=48), g0, buff=0.55)
-        n1 = note("each boom: area times (150) squared").next_to(l1, DOWN, buff=0.2).align_to(l1, LEFT)
+        n1 = note("y is 150 for every boom").next_to(l1, DOWN, buff=0.2).align_to(l1, LEFT)
         l2 = eq_under(E(r"=|2\,\big(|4000|+|3556|\big)|\,(150)^2", size=48, cmap=QC), l1, buff=0.85)
         l3 = eq_under(E(r"=|340.0\times 10^{6}\ \text{mm}^4", size=48), l2, buff=0.35)
         with self.say("The box is symmetric top to bottom, so I x y is zero. I x x is each boom area times one fifty squared, added up: two times four thousand plus three thousand five hundred fifty six, times one fifty squared. That's three hundred forty million.") as d:
@@ -147,7 +147,7 @@ class S13_P1_Basic(VScene):
             self.wait(.28 * d)
 
         # beat 4: cut wall 12, direction s, q_b12 = 0
-        cx = sec.mid(1, 2)[0] + 0.9
+        cx = sec.mid(1, 2)[0] + 0.2
         gap = Rectangle(width=0.18, height=0.32, fill_color=BG, fill_opacity=1, stroke_width=0).move_to([cx, top_y, 0])
         cut = VGroup(gap, *[Line([cx + dx - 0.1, top_y - 0.3, 0], [cx + dx + 0.1, top_y + 0.3, 0],
                                  color=INK, stroke_width=4) for dx in (-0.08, 0.08)])
@@ -158,7 +158,7 @@ class S13_P1_Basic(VScene):
         loop = VMobject().set_points_as_corners([[cx + 0.1, top_y, 0], sec.p(2), sec.p(3), sec.p(4), sec.p(1),
                                                  [cx - 0.1, top_y, 0]])
         runner = Dot([cx + 0.1, top_y, 0], radius=0.11, color=SKY)
-        z12 = M(r"q_{b,12}=0", size=40, color=SKY).next_to([sec.mid(1, 2)[0] - 1.0, top_y, 0], DOWN, buff=0.4)
+        z12 = M(r"q_{b,12}=0", size=40, color=SKY).next_to([left_x + 1.2, top_y, 0], DOWN, buff=0.4)
         r12 = E(r"q_{b,12}|=|0", size=44, cmap=QC)
         n12 = note("the flow starts at zero at the cut")
         g12 = below(VGroup(r12, n12).arrange(RIGHT, buff=0.4), ixxg, buff=0.6)
@@ -200,7 +200,7 @@ class S13_P1_Basic(VScene):
         q23b = below(boxed(q23q), grule6, buff=0.35)
         d1 = below(jump(r"q_{b,34}|=|q_{b,23}|-|\frac{S_y}{I_{xx}}|(3556)|(-150)"), q23b, buff=0.45)
         d2 = eq_under(E(r"=|0", size=44), d1, buff=0.3)
-        nd = note("boom 3: y = -150, so it cancels").next_to(d2, RIGHT, buff=0.5)
+        nd = note("boom 3: y = -150, so it cancels").next_to(d2, DOWN, buff=0.22).align_to(d1, LEFT)
         z34 = M(r"q_{b,34}=0", size=40, color=SKY).next_to([sec.mid(3, 4)[0] + 1.0, bot_y, 0], UP, buff=0.4)
         with self.say("Boom three is one fifty below the middle, so it cancels that exactly: the bottom wall is zero.") as d:
             self.play(FadeOut(VGroup(ixxg, b, nb, cc[0], gcc)),

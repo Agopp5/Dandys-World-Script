@@ -59,7 +59,7 @@ class S14_P1_Close(VScene):
         bottom_y = sec.p(3)[1]
         legend = VGroup(T("flows in units of", size=30, color=MUTED),
                         M(r"10^{-3}\,S_y\ \text{N/mm}", size=38, color=MUTED)).arrange(RIGHT, buff=0.15)
-        legend.move_to([sec.mid(3, 4)[0], bottom_y - 0.85, 0])
+        legend.move_to([sec.mid(3, 4)[0], bottom_y - 0.72, 0])
 
         # ---- beat 1: zero twist -> the condition ----
         X = 3.7
@@ -124,7 +124,7 @@ class S14_P1_Close(VScene):
         # ---- beat 4: substitute ----
         tot_small = E(r"\oint|\,\frac{ds}{t}|=|167.5", size=44)
         paint(tot_small, {3: ACCENT})
-        tot_small.move_to([sec.mid(3, 4)[0], -3.2, 0])
+        tot_small.move_to([sec.mid(3, 4)[0], -3.3, 0])
         tot_box = SurroundingRectangle(tot_small, color=HAIR, buff=0.15)
 
         note3 = T("top and bottom: no basic flow", size=30, color=MUTED)

@@ -35,7 +35,7 @@ class S15_P1_Centre(VScene):
 
     def construct(self):
         self.section("Where the shear centre is")
-        sec = hw_box(width=6.9, center=(-3.3, -0.3))
+        sec = hw_box(width=6.3, center=(-3.15, -0.3))
         walls = sec.draw()
         booms = sec.booms({1: 4000, 2: 3556, 3: 3556, 4: 4000})
         names = sec.names(size=34)
@@ -46,12 +46,13 @@ class S15_P1_Centre(VScene):
         fRa = flow(sec, 2, 3, -1.534)
         fLa = flow(sec, 4, 1, 1.800)
         qR = M(r"1.534\times10^{-3}\,S_y", size=34, color=SKY).next_to(fRa, LEFT, buff=0.15)
-        qL = M(r"1.800\times10^{-3}\,S_y", size=34, color=SKY).next_to(fLa, RIGHT, buff=0.15).shift(UP * 1.05)
+        qL = M(r"1.800\times10^{-3}\,S_y", size=34, color=SKY).next_to(fLa, RIGHT, buff=0.15).shift(UP * 1.3)
         FRl = M(r"0.460\,S_y", size=38, color=ROSE).move_to(qR).align_to(qR, RIGHT)
         FLl = M(r"0.540\,S_y", size=38, color=ROSE).move_to(qL).align_to(qL, LEFT)
-        hspan = span(sec.p(2) + RIGHT * 0.25, sec.p(3) + RIGHT * 0.25, r"300", side=RIGHT)
+        xh = sec.p(1)[0] + 0.62 * (sec.p(2)[0] - sec.p(1)[0])
+        hspan = span([xh, sec.p(3)[1] + 0.1, 0], [xh, sec.p(2)[1] - 0.1, 0], r"300\text{ mm}", side=LEFT)
 
-        X0 = 3.75   # centre of the algebra column
+        X0 = 3.7   # centre of the algebra column
 
         # ---------------- beat 1: flow times height
         n1 = T("force = flow x web height", size=30, color=MUTED)
@@ -64,7 +65,7 @@ class S15_P1_Centre(VScene):
         for m in (l1b, l2b):
             m.shift(RIGHT * 1.2)
         l3.shift(DOWN * 0.15)
-        fit(g1, 6.3, 6.6)
+        fit(g1, 6.2, 6.6)
         g1.move_to([X0, -0.35, 0])
         self.beat("Both webs now carry shear flow upward. Multiply by their height, three hundred millimeters, to get forces.",
                   [GrowFromCenter(fRa), GrowFromCenter(fLa)], [FadeIn(qR), FadeIn(qL)], .1,
@@ -88,10 +89,10 @@ class S15_P1_Centre(VScene):
         arc.add_tip(tip_length=0.22)
         m1 = E(r"M_R|=|0.460\,|S_y|\times 500", size=44)
         m1b = E(r"=|230.0\,|S_y", size=44)
-        nm1 = T("counterclockwise (about the left web)", size=30, color=MUTED)
+        nm1 = T("counterclockwise", size=30, color=MUTED)
         g2 = VGroup(m1, m1b, nm1).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
         m1b.shift(RIGHT * 1.2)
-        fit(g2, 6.3, 3)
+        fit(g2, 6.2, 3)
         g2.move_to([X0, 1.65, 0]).align_to(g1, LEFT)
         self.beat("Now take moments about the left web. The right web's force, zero point four six S y, is five hundred millimeters away. That's two hundred thirty S y.",
                   [FadeOut(g1), FadeOut(chk), FadeOut(gl3), FadeOut(hspan)],
@@ -102,19 +103,24 @@ class S15_P1_Centre(VScene):
         # ---------------- beat 4: the skins' small couple (top flows right, bottom flows left: clockwise)
         top = flow(sec, 1, 2, 0.6, color=SKY)
         bot = flow(sec, 3, 4, 0.6, color=SKY)
-        topl = M(r"3.52\times10^{-5}\,S_y", size=34, color=SKY).next_to(top, DOWN, buff=0.12)
+        topl = M(r"3.52\times10^{-5}\,S_y", size=34, color=SKY).next_to(sec.walls_m[(1, 2)], UP, buff=0.15)
         botl = M(r"3.52\times10^{-5}\,S_y", size=34, color=SKY).next_to(bot, UP, buff=0.12)
-        s1 = E(r"M_{sk}|=|3.52\times10^{-5}\,|S_y|\,(500)(300)", size=44)
+        r2 = E(r"M_R|=|230.0\,|S_y", size=44)
+        res2 = panel(VGroup(r2, T("counterclockwise", size=30, color=MUTED)).arrange(RIGHT, buff=0.35), color=HAIR)
+        res2.move_to([X0, 2.35, 0])
+        s0 = E(r"F_{sk}|=|3.52\times10^{-5}\,|S_y|\times 500", size=44)
+        n0 = T("force in each skin; 300 mm apart", size=30, color=MUTED)
+        s1 = E(r"M_{sk}|=|F_{sk}\times 300", size=44)
         s1b = E(r"=|5.27\,|S_y", size=44)
         ns1 = T("a couple: clockwise, the other way", size=30, color=MUTED)
-        g3 = VGroup(s1, s1b, ns1).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
+        g3 = VGroup(s0, n0, s1, s1b, ns1).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
         s1b.shift(RIGHT * 1.2)
-        fit(g3, 6.3, 3)
-        g3.next_to(g2, DOWN, buff=0.6).align_to(g2, LEFT)
+        fit(g3, 6.2, 4.6)
+        g3.next_to(res2, DOWN, buff=0.45).set_x(X0)
         self.beat("The small flows in the top and bottom skins point opposite ways, so they make a small couple, the other way: about five point three S y.",
-                  [GrowFromCenter(top), GrowFromCenter(bot)], [FadeIn(topl), FadeIn(botl)], .08,
-                  Write(s1), .06, FadeIn(s1b), FadeIn(ns1), .15,
-                  w=(.17, .13, .24, .12, .09))
+                  [ReplacementTransform(g2, res2), GrowFromCenter(top), GrowFromCenter(bot)], [FadeIn(topl), FadeIn(botl)], .06,
+                  [Write(s0), FadeIn(n0)], Write(s1), FadeIn(s1b), FadeIn(ns1), .12,
+                  w=(.17, .1, .2, .14, .1, .08))
 
         # ---------------- beat 5: xi
         e1 = E(r"S_y|\,|\xi|=|230.0\,|S_y|-|5.3\,|S_y", size=48)
@@ -123,19 +129,19 @@ class S15_P1_Centre(VScene):
         g4 = VGroup(e1, e2, ne2).arrange(DOWN, buff=0.45, aligned_edge=LEFT)
         e2.shift(RIGHT * 0.6)
         ne2.align_to(e2, LEFT)
-        fit(g4, 6.3, 4)
+        fit(g4, 6.2, 4)
         g4.move_to([X0, 1.2, 0])
         xs = sec.p(4)[0] + (sec.p(3)[0] - sec.p(4)[0]) * 224.8 / 500
         xm = sec.p(4)[0] + (sec.p(3)[0] - sec.p(4)[0]) * 0.5
         ytop, ybot = sec.p(1)[1] + 0.35, sec.p(4)[1] - 0.8
         sc = DashedLine([xs, ybot, 0], [xs, ytop, 0], color=ROSE, stroke_width=5, dash_length=0.14)
         sy = Arrow([xs, -1.1, 0], [xs, 0.5, 0], buff=0, color=ROSE, stroke_width=7)
-        syl = M(r"S_y", size=44, color=ROSE).next_to(sy, RIGHT, buff=0.12).shift(DOWN * 0.3)
+        syl = M(r"S_y", size=44, color=ROSE).next_to(sy, LEFT, buff=0.12).shift(DOWN * 0.3)
         xi_span = span([sec.p(4)[0], ybot + 0.15, 0], [xs, ybot + 0.15, 0], "", side=DOWN)
         xil = M(r"\xi", size=48, color=ROSE).next_to(xi_span, LEFT, buff=0.2).shift(RIGHT * 0)
         xil.move_to([(sec.p(4)[0] + xs) / 2, ybot - 0.35, 0])
         self.beat("So S y times xi equals two thirty minus five point three. xi is two hundred twenty four point eight millimeters from the left web. That's the answer.",
-                  [FadeOut(g2), FadeOut(g3), FadeOut(arc), FadeOut(arm), FadeOut(topl), FadeOut(botl), FadeOut(pivot)],
+                  [FadeOut(res2), FadeOut(g3), FadeOut(arc), FadeOut(arm), FadeOut(topl), FadeOut(botl), FadeOut(pivot)],
                   Write(e1), .1, Write(e2), [FadeIn(glow(e2, ROSE)), FadeIn(ne2), Create(sc), GrowArrow(sy), FadeIn(syl)],
                   [FadeIn(xi_span), FadeIn(xil)], .18,
                   w=(.08, .2, .14, .2, .12))
@@ -143,8 +149,8 @@ class S15_P1_Centre(VScene):
         # ---------------- beat 6: left of the middle
         mid = DashedLine([xm, ybot, 0], [xm, ytop, 0], color=MUTED, stroke_width=3, dash_length=0.1)
         midl = M(r"\text{middle: }250\text{ mm}", size=34, color=MUTED).next_to(mid, UP, buff=0.1).shift(RIGHT * 0.9)
-        ne = VGroup(T("left of the middle:", size=30, color=MUTED),
-                    TX(r"left booms $4000$ vs right $3556\text{ mm}^2$", size=30, color=MUTED)).arrange(DOWN, buff=0.15, aligned_edge=LEFT)
+        ne = VGroup(T("left booms are heavier (mm squared):", size=30, color=MUTED),
+                    E(r"B_1|=|4000\;>\;3556|=|B_2", size=44)).arrange(DOWN, buff=0.15, aligned_edge=LEFT)
         ne.next_to(g4, DOWN, buff=0.6).align_to(g4, LEFT)
         self.beat("It sits left of the middle, because the left booms are heavier and carry more of the load.",
                   [Create(mid), FadeIn(midl)], .08, FadeIn(ne),

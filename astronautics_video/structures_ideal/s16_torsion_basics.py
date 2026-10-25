@@ -34,10 +34,10 @@ class S16_Torsion_Basics(VScene):
     budget = 134
 
     def construct(self):
-        sec = Section(PTS, WALLS, width=6.6, center=(-3.4, -0.45))
-        walls = sec.draw(t_scale=2.0)
+        sec = Section(PTS, WALLS, width=6.4, center=(-2.95, -0.3))
+        walls = sec.draw(t_scale=2.5)
         O = (sec.p(1) + sec.p(3)) / 2
-        tq = torque(O, radius=0.75, ccw=True, label="T", size=44)
+        tq = torque(O + DOWN * .3, radius=0.7, ccw=True, label="T", size=44)
 
         # ---- beat 1: the cell and the torque
         self.beat("Now a different load: a pure twist. A torque T is applied to the wing box, and nothing else.",
@@ -79,7 +79,7 @@ class S16_Torsion_Basics(VScene):
         ext = DashedLine(foot, b, color=MUTED, stroke_width=2)   # the wall's line of action, out to ds
         with self.say("Each little piece of wall carries a force q d s. "
                       "Its moment about the middle is that force times its lever arm.") as d:
-            self.play(flows.animate.set_opacity(.25), tq.animate.set_opacity(.2), run_time=.08 * d)
+            self.play(flows.animate.set_opacity(.25), FadeOut(tq), run_time=.08 * d)
             self.play(Create(piece), FadeIn(ds_lab), run_time=.1 * d)
             self.play(GrowArrow(f_arr), FadeIn(f_lab), run_time=.12 * d)
             self.wait(.1 * d)
@@ -111,17 +111,24 @@ class S16_Torsion_Basics(VScene):
                       LaggedStart(*[FadeIn(t) for t in tris], lag_ratio=.12), run_time=.25 * d)
             self.play(Write(r3[0][:4]), run_time=.12 * d)
             self.play(Write(r3[0][4:]), FadeIn(r3[1]), run_time=.12 * d)
-            self.play(Create(box), FadeIn(glow(r3[0][5:])), run_time=.08 * d)
+            g3 = glow(r3[0][5:])
+            self.play(Create(box), FadeIn(g3), run_time=.08 * d)
 
         # ---- beat 5: the numbers
-        self.play(FadeOut(VGroup(tris, tri0, piece, ds_lab, o_dot, o_lab, lever, p_lab, r0, r1, r2)),
-                  flows.animate.set_opacity(1), tq.animate.set_opacity(1),
-                  r3.animate.scale(.85).to_edge(UP, buff=1.1).align_to(rows, LEFT),
-                  box.animate.set_opacity(0), run_time=1.2)
-        self.remove(box)
-        sp_w = span(sec.p(4), sec.p(3), r"500\ \text{mm}", side=DOWN)
-        sp_h = span(sec.p(4), sec.p(1), r"250\ \text{mm}", side=LEFT)
-        t_lab = TX(r"all walls $t = 2$ mm", size=34).next_to(sec.p(4), DOWN, buff=1.05).align_to(walls, LEFT)
+        self.play(FadeOut(VGroup(tris, tri0, piece, ds_lab, o_dot, o_lab, lever, p_lab, r0, r1, r2, r3, box, g3)),
+                  flows.animate.set_opacity(1), FadeIn(tq), run_time=1.2)
+        p1, p3, p4 = sec.p(1), sec.p(3), sec.p(4)
+        y_d = p4[1] - .45
+        dim_w = VGroup(DoubleArrow([p4[0], y_d, 0], [p3[0], y_d, 0], buff=0, color=MUTED, stroke_width=3,
+                                   tip_length=.2),
+                       M(r"500\ \text{mm}", size=36, color=INK2))
+        dim_w[1].next_to(dim_w[0], DOWN, buff=.1)
+        x_d = p4[0] - .3
+        dim_h = VGroup(DoubleArrow([x_d, p4[1], 0], [x_d, p1[1], 0], buff=0, color=MUTED, stroke_width=3,
+                                   tip_length=.2),
+                       M(r"250\ \text{mm}", size=36, color=INK2).rotate(PI / 2))
+        dim_h[1].next_to(dim_h[0], LEFT, buff=.1)
+        t_lab = TX(r"all walls $t = 2$ mm", size=34).next_to(dim_w, DOWN, buff=.25)
         nA = row(E(r"A|=|500 \times 250|=|125\,000\ \text{mm}^2", size=46), note("width times height of the cell"))
         nq1 = E(r"q|=|\frac{T}{2A}", size=48)
         nq2 = E(r"=|\frac{10 \times 10^{6}}{2 \times 125\,000}|=|40\ \text{N/mm}", size=46)
@@ -130,22 +137,21 @@ class S16_Torsion_Basics(VScene):
         nq2.shift(RIGHT * .45)
         nt = row(E(r"\tau|=|\frac{q}{t}|=|\frac{40}{2}|=|20\ \text{N/mm}^2", size=46),
                  note("shear stress in the 2 mm wall"))
-        nums = VGroup(nA, nq, nt).arrange(DOWN, buff=.4, aligned_edge=LEFT)
-        nums.next_to(r3, DOWN, buff=.45, aligned_edge=LEFT)
-        fit(nums, 6.8, 8 - 1.1 - r3.height - 1.2)
-        nums.next_to(r3, DOWN, buff=.45, aligned_edge=LEFT)
+        nums = VGroup(nA, nq, nt).arrange(DOWN, buff=.42, aligned_edge=LEFT)
+        place(nums, "right")
         flows40 = VGroup(*[flow(sec, a_, b_, 1, label=r"40", size=36, frac=.5) for a_, b_ in CCW])
         with self.say("For a five hundred by two fifty cell, A is one hundred twenty five thousand square "
                       "millimeters. Under ten kilonewton meters, q is ten million over two hundred fifty "
                       "thousand: forty newtons per millimeter.") as d:
-            self.play(FadeIn(sp_w), FadeIn(sp_h), run_time=.08 * d)
-            self.play(Write(nA[0]), FadeIn(nA[1]), run_time=.16 * d)
-            self.wait(.08 * d)
+            self.play(FadeIn(dim_w), FadeIn(dim_h), run_time=.06 * d)
+            self.play(Write(nA[0]), FadeIn(nA[1]), run_time=.14 * d)
+            self.wait(.06 * d)
             self.play(Write(nq1), FadeIn(nq[2]), run_time=.1 * d)
-            self.play(Write(nq2[:2]), run_time=.14 * d)
+            self.play(Write(nq2[:2]), run_time=.12 * d)
             self.play(Write(nq2[2:]), FadeIn(glow(nq2[3])), ReplacementTransform(flows, flows40),
-                      run_time=.12 * d)
-        self.play(FadeIn(t_lab), Write(nt[0]), FadeIn(nt[1]), run_time=2.2)
-        self.play(FadeIn(glow(nt[0][-1])), run_time=.6)
-        self.wait(2.0)
+                      run_time=.1 * d)
+            self.wait(.06 * d)
+            self.play(FadeIn(t_lab), Write(nt[0]), FadeIn(nt[1]), run_time=.14 * d)
+            self.play(FadeIn(glow(nt[0][-1])), run_time=.04 * d)
+        self.wait(1.2)
         self.wipe()

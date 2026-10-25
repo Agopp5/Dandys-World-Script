@@ -33,8 +33,8 @@ class S09_Channel(VScene):
 
     def construct(self):
         # ---------- the staircase plot (built at its final spot, shown big first) ----------
-        ax = axes((-200, 900, 100), (-14, 2, 2), width=6.8, height=2.4, xlabel="s", ylabel="q")
-        ax.move_to([3.15, -2.3, 0])
+        ax = axes((-200, 900, 100), (-14, 2, 2), width=6.8, height=2.3, xlabel="s", ylabel="q")
+        ax.move_to([3.15, -1.95, 0])
         bl = VGroup(*[DashedLine(ax.c2p(s, 2), ax.c2p(s, -14), color=EMBER, stroke_width=2, dash_length=0.08)
                       for s in S_POS])
         bnum = VGroup(*[T(str(i + 1), 34, EMBER).next_to(bl[i], DOWN, buff=0.06) for i in range(4)])
@@ -50,7 +50,7 @@ class S09_Channel(VScene):
         bots = lvl + [0]
         jumps = VGroup(*[Line(ax.c2p(s, tops[i]), ax.c2p(s, bots[i]), color=EMBER, stroke_width=7)
                          for i, s in enumerate(S_POS)])
-        n_flat = T("flat between booms", 30, INK2).next_to(bnum, DOWN, buff=0.3).align_to(ax, LEFT).align_to(ax, LEFT).shift(0.6 * RIGHT)
+        n_flat = T("flat between booms", 30, INK2).next_to(bnum, DOWN, buff=0.3).align_to(ax, LEFT).shift(0.6 * RIGHT)
         n_jump = T("jumps at the booms", 30, EMBER).next_to(n_flat, RIGHT, buff=0.8)
         n_shape = T("shape only", 30, MUTED).next_to(ax, UP, buff=0.25).align_to(ax, RIGHT)
 
