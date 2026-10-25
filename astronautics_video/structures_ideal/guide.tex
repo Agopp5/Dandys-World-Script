@@ -30,7 +30,7 @@ ends? Use $B_1 = \dfrac{t_D b}{6}\left(2 + \dfrac{\sigma_2}{\sigma_1}\right)$.}
 \section*{Episode 2: Shear Flow With Booms}
 
 \checkpoint[3.5cm]{2.1}{Finish the channel}{%
-The channel has four booms of $300\mm^2$ at $y = \pm 200\mm$, and $S_y/I_{xx} = 10^{-4}\ \mathrm{N/mm^4}$. Starting
+The channel has four booms of $300\mm^2$: booms 1 and 2 at $y = +200\mm$ (top flange), booms 3 and 4 at $y = -200\mm$ (bottom flange), and $S_y/I_{xx} = 10^{-4}\ \mathrm{N/mm^4}$. Starting
 from $q = 0$ at the free edge, the flow in the top flange is $q_{12} = -6\Nmm$. Using
 $q_2 - q_1 = -\dfrac{S_y}{I_{xx}}B_r y_r$, find $q_{23}$ (the web), $q_{34}$ (the bottom flange) and the flow just
 past boom 4. What should the last one be, and why?}
@@ -42,26 +42,27 @@ A box section is $600\mm$ wide and $240\mm$ deep (centreline dimensions). Top an
 left web $6\mm$, the right web $5\mm$. The left corners carry $50\times50\times6\mm$ angles and the right corners
 $40\times30\times5\mm$ angles. One material throughout.
 (a) Idealize it into four corner booms (skins and webs carry direct stress: use the ratio $+1$ for the skins and
-$-1$ for the webs in bending). (b) Find $I_{xx}$. (c) Cut the top wall and find the basic shear flow $q_b$ in each wall
-for a vertical load $S_y$. (d) Use zero twist to find $q_{s,0}$, then find the shear centre's distance $\xi$ from the
+$-1$ for the webs in bending). (b) Find $I_{xx}$. (c) Number the booms as in the video (1 top left, 2 top right, 3 bottom right, 4 bottom left), cut the top wall,
+go $1\to2\to3\to4\to1$, and find the basic shear flow $q_b$ in each wall for an upward load $S_y$. (d) Use zero twist to find $q_{s,0}$, then find the shear centre's distance $\xi$ from the
 left web.}
 
 \section*{Episode 4: Torsion of Multi-Cell Sections}
 
 \checkpoint[4cm]{4.1}{Twist rate of one cell}{%
-A two-cell box carries shear flows $q_I$ and $q_{II}$. Cell I has area $A_I$; the wall it shares with cell II
+A two-cell box carries shear flows $q_I$ and $q_{II}$, both taken counter-clockwise. Cell I has area $A_I$; the wall it shares with cell II
 has $\delta_{12} = \int ds/t$, and all of cell I's walls together (shared wall included) have $\delta_I$. Write
 $d\theta/dz$ for cell I in terms of $q_I$, $q_{II}$, $\delta_I$, $\delta_{12}$, $A_I$ and $G$.}
 
 \section*{Episode 5: Homework Problem 2}
 
 \checkpoint[9cm]{5.1}{Practice two-cell box: $T = 15$ kN m}{%
-A two-cell box is $250\mm$ deep. Cell I is $500\mm$ wide and cell II is $600\mm$ wide (rectangular cells; the
-spar between them is shared). Walls: left web $2.0\mm$, spar $2.5\mm$, right web $1.6\mm$, all with
+A two-cell box is $250\mm$ deep. Cell I (on the left, with the left web) is $500\mm$ wide and cell II is $600\mm$ wide
+(rectangular cells, centreline dimensions; the spar between them is shared). Walls: left web $2.0\mm$, spar $2.5\mm$, right web $1.6\mm$, all with
 $G = 27\,000\ \mathrm{N/mm^2}$; cell I's top and bottom skins $1.0\mm$ and cell II's top and bottom skins $0.8\mm$, all
 with $G = 24\,000\ \mathrm{N/mm^2}$. It carries a counter-clockwise torque $T = 15\ \mathrm{kN\,m}$.
 Using $G_{REF} = 27\,000\ \mathrm{N/mm^2}$, find (a) $t^*$ and $\delta$ for each wall, (b) $q_I$, $q_{II}$ and the
-spar's shear flow, (c) the shear stress in each wall, and (d) the rate of twist in degrees per metre.}
+spar's shear flow, (c) the shear stress in each wall, $\tau = q/t$ with the real thickness, and (d) the rate of twist from
+$G_{REF}\,d\theta/dz = \frac{1}{2A_I}(q_I\delta_I - q_{II}\delta_{spar})$, in degrees per metre.}
 
 \clearpage
 \section*{Hints}\label{hints}
