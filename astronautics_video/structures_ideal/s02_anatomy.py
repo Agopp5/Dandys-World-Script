@@ -174,7 +174,7 @@ class S02_Anatomy(VScene):
         s_lbl = E("S_y", size=50).next_to(s_arr.get_end(), RIGHT, buff=.2).shift(DOWN * .25)
         t_shear = T("shear force", 36, INK).move_to([cx[1], yl_, 0])
         # twisting
-        tref = DashedRectangle(width=2.2, height=1.3, dash_length=.12).set_stroke(MUTED, 3).move_to([cx[2], yb, 0])
+        tref = DashedVMobject(Rectangle(width=2.2, height=1.3), num_dashes=28).set_stroke(MUTED, 3).move_to([cx[2], yb, 0])
         tbox = Rectangle(width=2.2, height=1.3).set_stroke(INK2, 7).move_to([cx[2], yb, 0])
         tq = torque(np.array([cx[2], yb, 0]), radius=1.35, color=LILAC, ccw=True, label="T")
         t_twist = T("twisting", 36, INK).move_to([cx[2], yl_, 0])

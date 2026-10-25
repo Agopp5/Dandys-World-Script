@@ -35,7 +35,7 @@ assert abs(156.3 + 2 * 806.4 + 199.8 - 1969.0) < .15 and np.isclose(165.6 + 2 * 
 assert np.isclose(254 / 1.625, 156.3, atol=.05)
 
 X4 = [-6.0, -4.0, -1.85, 0.3]          # four table columns
-ROWS_Y = [-0.35, -1.05, -1.75, -2.45, -3.15, -3.85]
+ROWS_Y = [-0.5, -1.12, -1.74, -2.36, -2.98, -3.6]
 BOOMS = {1: 1290, 6: 1290, 2: 1936, 5: 1936, 3: 645, 4: 645}   # HW P2 boom areas, mm^2 (irrelevant in torsion)
 assert BOOMS[1] == 1290 and BOOMS[2] == 1936 and BOOMS[3] == 645
 DCM = {r"\delta_I": ACCENT, r"\delta_{II}": ACCENT, r"\delta_{25}": ACCENT, r"\delta_{16}": ACCENT,
@@ -55,7 +55,7 @@ class S21_P2_Setup(VScene):
 
         # ---- the section, top of the frame
         sec = hw_twocell()
-        sec = Section(sec.pts, sec.walls, width=8.4, center=(-1.7, 1.75))
+        sec = Section(sec.pts, sec.walls, width=8.4, center=(-1.7, 1.95))
         walls = sec.draw()
         booms = sec.booms(BOOMS)
         names = sec.names(size=34)
@@ -102,19 +102,19 @@ class S21_P2_Setup(VScene):
         h_ts = at(E(r"t^*|\ (\mathrm{mm})", size=HEAD), 3, 0)
         h_L = at(M(r"L\ (\mathrm{mm})", size=HEAD), 1, 0)
         h_d = at(E(r"\delta", size=HEAD + 8), 3, 0)
-        rule = Line([-7.0, ROWS_Y[0] - .36, 0], [1.2, ROWS_Y[0] - .36, 0], color=HAIR, stroke_width=2)
+        rule = Line([-7.0, ROWS_Y[0] - .3, 0], [1.2, ROWS_Y[0] - .3, 0], color=HAIR, stroke_width=2)
         Gcol = col("G")
 
         # ---- reference G; webs keep t
         g1 = E(r"G_{\mathrm{ref}}|=|27\,600", size=48, cmap=DCM)
-        gn = T("webs: t* = t", size=34, color=MUTED)
+        gn = TX(r"webs: $t^* = t$", size=34, color=MUTED)
         t1 = E(r"t^*|=|\frac{24\,200}{27\,600}\,t", size=48, cmap=DCM)
         t2 = E(r"=|0.8768\,t", size=48)
         tn = T("skins 12, 56, 23, 45", size=34, color=MUTED)
         alg = VGroup(g1, gn, t1, t2, tn).arrange(DOWN, buff=.28)
         t2.align_to(t1[1], LEFT)
         fit(alg, 5.0, 4.3)
-        alg.move_to([4.6, -2.05, 0])
+        alg.move_to([4.6, -2.1, 0])
         webs = VGroup(*[sec.walls_m[k] for k in [(6, 1), (2, 5), (3, 4)]])
         skins = VGroup(*[sec.walls_m[k] for k in [(1, 2), (5, 6), (2, 3), (4, 5)]])
         web_ts = VGroup(*[cells["ts", r] for r in range(3)])
@@ -137,7 +137,7 @@ class S21_P2_Setup(VScene):
         dl2 = E(r"\delta_{16}|=|\frac{254}{1.625}|=|156.3", size=48, cmap=DCM)
         dalg = VGroup(dl1, dl2).arrange(DOWN, buff=.6)
         fit(dalg, 5.2, 3.8)
-        dalg.move_to([4.6, -2.05, 0])
+        dalg.move_to([4.6, -2.1, 0])
         ts_move = VGroup(h_ts, col("ts"))
         self.play(FadeOut(alg), FadeOut(VGroup(h_t, h_G, col("t"), col("G"))),
                   ts_move.animate.shift(LEFT * (X4[3] - X4[2])), run_time=1.0)
@@ -149,7 +149,7 @@ class S21_P2_Setup(VScene):
         # ---- cell sums: keep wall + delta columns, sums on the right
         dcol = [cells["d", r] for r in range(5)]
         keep_d = VGroup(h_d, *dcol)
-        rule2 = Line([-7.0, ROWS_Y[0] - .36, 0], [-3.1, ROWS_Y[0] - .36, 0], color=HAIR, stroke_width=2)
+        rule2 = Line([-7.0, ROWS_Y[0] - .3, 0], [-3.1, ROWS_Y[0] - .3, 0], color=HAIR, stroke_width=2)
         cI_w = VGroup(*[sec.walls_m[k] for k in [(6, 1), (1, 2), (5, 6)]])
         cII_w = VGroup(*[sec.walls_m[k] for k in [(3, 4), (2, 3), (4, 5)]])
         spar = sec.walls_m[(2, 5)]

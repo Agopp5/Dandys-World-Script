@@ -80,7 +80,7 @@ class S20_Gstar(VScene):
         flows, labs = VGroup(), VGroup()
         for k, cell in enumerate(cells):
             cen = np.mean([sec.p(n) for n in cell], axis=0)
-            flows.add(cell_flow(cen, radius=.66, color=cols[k], ccw=True))
+            flows.add(cell_flow(cen, radius=.58, color=cols[k], ccw=True))
             labs.add(M(tex[k], size=44, color=cols[k]).move_to(cen))
         rows = VGroup(*[M(tex[k] + r"\;=\;" + str(vals[k]) + r"\ \text{N/mm}", size=50)
                         for k in range(3)]).arrange(DOWN, buff=.5, aligned_edge=LEFT)

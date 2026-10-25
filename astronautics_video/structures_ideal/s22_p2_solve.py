@@ -30,14 +30,14 @@ assert np.isclose(qI * 1e6, 1.26, atol=5e-3) and np.isclose(qII * 1e6, 0.80, ato
 assert np.isclose((qI - qII) * 1e6, 0.46, atol=5e-3) and np.isclose(1.26 - 0.80, 0.46)
 
 
-def frac(num, den, size=48):
+def frac(num, den, size=52):
     """A fraction built from two E()'s, so the colored q's survive."""
     n, d = E(num, size=size), E(den, size=size)
     bar = Line(LEFT, RIGHT, stroke_width=3, color=INK).set_width(max(n.width, d.width) + 0.2)
     return VGroup(n, bar, d).arrange(DOWN, buff=0.16)
 
 
-def note(s, size=30):
+def note(s, size=34):
     return TX(s, size=size, color=MUTED)
 
 
@@ -74,7 +74,7 @@ class S22_P2_Solve(VScene):
         # ---- beat 1: cell one's rate of twist ----
         f1 = frac(r"1969.0\,|q_I|-|199.8\,|q_{II}", r"2\,(232\,000)")
         f2 = frac(r"-199.8\,|q_I|+|3527.8\,|q_{II}", r"2\,(258\,000)")
-        eqs = E("=", size=48)
+        eqs = E("=", size=52)
         eq1 = VGroup(f1, eqs, f2).arrange(RIGHT, buff=0.35).move_to([0, -0.2, 0])
         tagI = T("cell I's twist rate", size=34, color=MINT).next_to(f1, DOWN, buff=0.4)
         tagII = T("cell II's twist rate", size=34, color=LIME).next_to(f2, DOWN, buff=0.4)
@@ -92,14 +92,14 @@ class S22_P2_Solve(VScene):
                   w=(.1, .2, .2, .2, .1))
 
         # ---- beat 3: cross multiply and collect ----
-        lA = E(r"258\,000\,(1969.0\,|q_I|-|199.8\,|q_{II}|)|=|232\,000\,(-199.8\,|q_I|+|3527.8\,|q_{II}|)",
-               size=44)
-        fit(lA, 13.4, 1)
+        lA = VGroup(E(r"258\,000\,(1969.0\,|q_I|-|199.8\,|q_{II}|)", size=46),
+                    E(r"=|232\,000\,(-199.8\,|q_I|+|3527.8\,|q_{II}|)", size=46)).arrange(DOWN, buff=0.22)
+        lA[1].shift(RIGHT * 0.7)
         lA.move_to([0, 1.2, 0])
         nA = note(r"cross multiply: each side times the other cell's area (the 2s cancel)").next_to(lA, DOWN, buff=0.25)
-        lC = E(r"554.4\times 10^{6}\,|q_I|=|870.0\times 10^{6}\,|q_{II}", size=50).move_to([0, -0.75, 0])
+        lC = E(r"554.4\times 10^{6}\,|q_I|=|870.0\times 10^{6}\,|q_{II}", size=50).move_to([0, -1.05, 0])
         nC = note(r"collect: every $q_I$ term to the left, every $q_{II}$ term to the right").next_to(lC, DOWN, buff=0.25)
-        lD = boxed(E(r"q_I|=|1.569\,|q_{II}", size=54), MINT).move_to([0, -2.85, 0])
+        lD = boxed(E(r"q_I|=|1.569\,|q_{II}", size=54), MINT).move_to([0, -3.15, 0])
         self.beat("Cross multiply and collect. Five hundred fifty four million q one equals eight hundred seventy million q two. So q one is one point five seven times q two.",
                   [FadeOut(tagI), FadeOut(tagII), FadeOut(n1), FadeTransform(eq1, lA)], FadeIn(nA), .06,
                   [Write(lC), FadeIn(nC)], .1, Write(lD[0]), Create(lD[1]), .18,
@@ -132,7 +132,7 @@ class S22_P2_Solve(VScene):
         res = VGroup(q2, q1).arrange(DOWN, buff=0.45).move_to([0, -0.85, 0])
         nq = note(r"$T$ in N mm, so each $q$ comes out in N/mm").next_to(res, DOWN, buff=0.3)
         self.beat("So q two is zero point eight zero four times ten to the minus six, T. And q one is one point two six one times ten to the minus six, T, with T in newton millimeters.",
-                  [FadeOut(t1), FadeOut(t2), FadeOut(lD), FadeOut(nDt), FadeOut(t3)],
+                  [FadeOut(t1), FadeOut(t2), FadeOut(nt2), FadeOut(lD), FadeOut(nDt), FadeOut(t3)],
                   Write(q2[0]), Create(q2[1]), .1, Write(q1[0]), Create(q1[1]), FadeIn(nq), .15,
                   w=(.08, .26, .06, .26, .06, .08))
 
