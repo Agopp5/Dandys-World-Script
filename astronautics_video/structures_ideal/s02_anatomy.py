@@ -161,3 +161,80 @@ class S02_Anatomy(VScene):
                   [LaggedStart(*[GrowArrow(a) for a in lift], lag_ratio=.12), FadeIn(lift_lbl)],
                   VGroup(nose, tail, box, wb_lbl, lift, lift_lbl).animate.shift(UP * .3), .2,
                   w=(.1, .4, .3))
+
+        # three icons: bending, shear force, twisting
+        cx = [-4.6, 0.0, 4.6]
+        yb, yl_ = -0.7, -2.9
+        # bending: a beam clamped at the root, bending up
+        wall = Line([-1.6, -1.0, 0], [-1.6, 1.0, 0]).set_stroke(INK2, 7)
+        hatch = VGroup(*[Line([-1.6, y, 0], [-1.85, y - .22, 0]).set_stroke(INK2, 3)
+                         for y in np.linspace(-.85, .95, 7)])
+        straight = Line([-1.6, -.45, 0], [1.6, -.45, 0]).set_stroke(INK2, 11)
+        ref = DashedLine([-1.6, -.45, 0], [1.6, -.45, 0], dash_length=.12).set_stroke(MUTED, 3)
+        bent = poly([(x, -.45 + 1.35 * ((x + 1.6) / 3.2) ** 2) for x in np.linspace(-1.6, 1.6, 40)], INK2, 11)
+        i_bend = VGroup(wall, hatch, ref, straight).shift([cx[0], yb, 0])
+        bent.shift([cx[0], yb, 0])
+        t_bend = T("bending", 36, INK).move_to([cx[0], yl_, 0])
+        # shear force
+        sbox = Rectangle(width=2.2, height=1.3).set_stroke(INK2, 7).move_to([cx[1], yb, 0])
+        s_arr = Arrow([cx[1], yb - 1.35, 0], [cx[1], yb + 1.35, 0], buff=0, color=ROSE, stroke_width=9)
+        s_lbl = E("S_y", size=50).next_to(s_arr.get_end(), RIGHT, buff=.2).shift(DOWN * .25)
+        t_shear = T("shear force", 36, INK).move_to([cx[1], yl_, 0])
+        # twisting
+        tref = DashedRectangle(width=2.2, height=1.3, dash_length=.12).set_stroke(MUTED, 3).move_to([cx[2], yb, 0])
+        tbox = Rectangle(width=2.2, height=1.3).set_stroke(INK2, 7).move_to([cx[2], yb, 0])
+        tq = torque(np.array([cx[2], yb, 0]), radius=1.35, color=LILAC, ccw=True, label="T")
+        t_twist = T("twisting", 36, INK).move_to([cx[2], yl_, 0])
+        self.beat("That does three things to the wing box: it bends it, it pushes on it with a shear force, and it twists it.",
+                  wing.animate.scale(.45).to_edge(UP, buff=.3),
+                  [FadeIn(i_bend), FadeIn(t_bend)], ReplacementTransform(straight, bent), .06,
+                  [FadeIn(sbox), GrowArrow(s_arr), FadeIn(s_lbl), FadeIn(t_shear)], .08,
+                  [FadeIn(tref), FadeIn(tbox), FadeIn(tq), Rotate(tbox, 14 * DEGREES), FadeIn(t_twist)], .2,
+                  w=(.18, .1, .12, .13, .13))
+
+        # ---------------- beat 5: the two kinds of stress
+        K = 1.5
+        tgt = box_orig.copy().scale(K, about_point=ORIGIN)
+        off = np.array([-2.5, -0.15, 0]) - tgt.get_center()
+        tgt.shift(off)
+
+        def mp(x, y):
+            return K * np.array([x, y, 0.0]) + off
+
+        pts = ([(x, yu(x) - .09) for x in ST_X] + [(x, yl(x) + .09) for x in ST_X] +
+               [(XF, yu(XF) - .12), (XR, yu(XR) - .12), (XF, yl(XF) + .12), (XR, yl(XR) + .12)])
+        crosses = VGroup(*[cross(mp(x, y)) for x, y in pts])
+        sig = E(r"\sigma_z", size=58)
+        sig_key = cross(ORIGIN, r=.2)
+        sig_row = VGroup(sig_key, sig).arrange(RIGHT, buff=.3)
+        sig_note = VGroup(T("bending: along the span,", 30, INK2),
+                          T("into the screen", 30, INK2)).arrange(DOWN, buff=.12, aligned_edge=LEFT)
+        sig_grp = VGroup(sig_row, sig_note).arrange(DOWN, buff=.3, aligned_edge=LEFT).move_to([4.5, 1.7, 0])
+        self.beat("Bending makes stresses along the span, into the screen.",
+                  [FadeOut(VGroup(i_bend, bent, t_bend, sbox, s_arr, s_lbl, t_shear, tref, tbox, tq, t_twist,
+                                  nose, tail, wb_lbl, lift, lift_lbl))],
+                  Transform(box, tgt), .05,
+                  [LaggedStart(*[GrowFromCenter(c) for c in crosses], lag_ratio=.08), FadeIn(sig_grp)], .25,
+                  w=(.15, .2, .35))
+
+        dx, dy = .58, .42
+        legs = [((XF + dx, yu(XF + dx) - dy), (XR - dx, yu(XR - dx) - dy)),     # top skin, toward the rear
+                ((XR - .32, yu(XR) - .62), (XR - .32, yl(XR) + .62)),           # rear web, down
+                ((XR - dx, yl(XR - dx) + dy), (XF + dx, yl(XF + dx) + dy)),     # bottom skin, forward
+                ((XF + .32, yl(XF) + .62), (XF + .32, yu(XF) - .62))]           # front web, up
+        flows = VGroup(*[Arrow(mp(*a), mp(*b), buff=0, color=SKY, stroke_width=8,
+                               max_tip_length_to_length_ratio=.12) for a, b in legs])
+        tau = E(r"\tau", size=58)
+        tau_key = Arrow(LEFT * .35, RIGHT * .35, buff=0, color=SKY, stroke_width=8)
+        tau_row = VGroup(tau_key, tau).arrange(RIGHT, buff=.3)
+        tau_note = VGroup(T("shear and twisting:", 30, INK2), T("around the section,", 30, INK2),
+                          T("in the skin and webs", 30, INK2)).arrange(DOWN, buff=.12, aligned_edge=LEFT)
+        tau_grp = VGroup(tau_row, tau_note).arrange(DOWN, buff=.3, aligned_edge=LEFT)
+        tau_grp.next_to(sig_grp, DOWN, buff=.8, aligned_edge=LEFT)
+        self.beat("Shear forces and twisting make stresses that run around the section, in the skin and the webs.",
+                  [crosses.animate.set_opacity(.45), sig_grp.animate.set_opacity(.5)],
+                  [LaggedStart(*[GrowArrow(f) for f in flows], lag_ratio=.35), FadeIn(tau_grp)], .12,
+                  [crosses.animate.set_opacity(1), sig_grp.animate.set_opacity(1)], .2,
+                  w=(.1, .45, .13))
+        self.wait(1.0)
+        self.wipe()

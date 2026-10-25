@@ -51,7 +51,7 @@ class S20_Gstar(VScene):
                   [Create(walls)], [FadeIn(g_sk), FadeIn(g_sp)], [Write(old), FadeIn(n1)], .12,
                   morph(old, new, [(0, 0), (1, 1), (3, 3), (4, 4)]) + [FadeOut(n1)],
                   [FadeIn(n2), Circumscribe(new[5], color=ACCENT)], .15,
-                  w=(.14, .12, .16, .12, .2, .12, .14))
+                  w=(.18, .14, .2, .26, .22))
 
         # beat 2: modulus-weighted thickness
         tstar = E(r"t^*|=|\frac{G}{G_{\text{ref}}}|\,t", size=52).move_to([RX, .55, 0])
@@ -60,7 +60,7 @@ class S20_Gstar(VScene):
         self.beat("Here's the trick. Pick one reference G. Then scale each wall's thickness by its own G over the reference G. That's called the modulus weighted thickness, t star.",
                   .1, [Write(tstar[0:2])], [Write(tstar[2:])], thin + [Indicate(g_sk, color=ACCENT)],
                   [FadeIn(n3), FadeIn(glow(tstar[0], ACCENT))], .15,
-                  w=(.1, .15, .25, .15, .2, .15))
+                  w=(.2, .3, .25, .25))
 
         # beat 3: same formulas, t* in place of t
         delta = E(r"\delta|=|\int|\frac{ds}{t^*}", size=52).move_to([RX, -1.55, 0])
@@ -69,7 +69,7 @@ class S20_Gstar(VScene):
         self.beat("Now use t star wherever you had t. Delta becomes the integral of d s over t star. Everything else stays the same.",
                   [Write(delta)], .12, [FadeOut(n2)] + morph(new, twist, [(1, 1), (2, 2), (3, 3), (4, 4)]),
                   [FadeIn(n4), Circumscribe(twist[5], color=ACCENT)], .15,
-                  w=(.25, .12, .28, .2, .15))
+                  w=(.35, .4, .25))
 
         # beat 4: the slides' three-cell result
         self.drop(tstar, n3, delta, n4, g_sk, g_sp)
@@ -92,6 +92,6 @@ class S20_Gstar(VScene):
         self.beat("Your slides' three cell example, worked this way, gives seven point one, eight point nine, and four point two newtons per millimeter.",
                   [Create(flows), FadeIn(labs)], [FadeIn(card[0]), FadeIn(head)],
                   FadeIn(rows[0]), FadeIn(rows[1]), FadeIn(rows[2]), .15,
-                  w=(.2, .1, .15, .15, .15, .25))
+                  w=(.3, .1, .2, .2, .2))
         self.wait(1.0)
         self.wipe()

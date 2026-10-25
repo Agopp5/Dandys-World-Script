@@ -32,9 +32,9 @@ assert np.isclose(24_200 / 27_600, 0.8768, rtol=1e-3)   # t* = (G/G_REF) t for t
 
 def card(n, heading, rows, buff=1.0):
     """One recap card: numbered heading on top, formula rows under it, on a SURFACE panel."""
-    head = VGroup(badge(n), T(heading, size=36, color=INK)).arrange(RIGHT, buff=.3)
-    body = VGroup(*[VGroup(*r).arrange(RIGHT, buff=buff) for r in rows]).arrange(DOWN, buff=.3, aligned_edge=LEFT)
-    inner = VGroup(head, body).arrange(DOWN, buff=.25, aligned_edge=LEFT)
+    head = VGroup(badge(n), T(heading, size=34, color=INK)).arrange(RIGHT, buff=.3)
+    body = VGroup(*[VGroup(*r).arrange(RIGHT, buff=buff) for r in rows]).arrange(DOWN, buff=.2, aligned_edge=LEFT)
+    inner = VGroup(head, body).arrange(DOWN, buff=.18, aligned_edge=LEFT)
     body.shift(RIGHT * .55)
     return panel(inner), head, body
 
@@ -73,11 +73,11 @@ class S23_Recap(VScene):
         w = max(c.width for c in cards)
         for c in cards:      # equal-width rows, left-aligned content
             c[0].stretch_to_fit_width(w)
-        cards.arrange(DOWN, buff=.15)
+        cards.arrange(DOWN, buff=.1)
         w0, h0 = cards.width, cards.height
         fit(cards, 13.8, 7.8)
         s = min(cards.width / w0, cards.height / h0)
-        print("DBG", w0, h0, [c.width for c in (m1, m2, m3)]); assert s > .86, s    # math stays >= 44, notes >= 27.5
+        assert s > .86, s    # math stays >= 44, notes >= 27.5
         cards.move_to(ORIGIN)
         for c, inner in ((c1, VGroup(h1, m1)), (c2, VGroup(h2, m2)), (c3, VGroup(h3, m3))):
             inner.align_to(c[0], LEFT).shift(RIGHT * .35)
