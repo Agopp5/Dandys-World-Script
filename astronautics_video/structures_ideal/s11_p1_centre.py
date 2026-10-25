@@ -121,7 +121,7 @@ class S11_P1_Centre(VScene):
         syl = M(r"S_y", size=40, color=ROSE).next_to(sy, LEFT, buff=0.12)
         xil = M(r"\xi", size=44, color=ROSE)
         xi_span = span([sec.p(4)[0], ybot + 0.12, 0], [xs, ybot + 0.12, 0], "", side=DOWN)
-        xil.next_to(xi_span, DOWN, buff=0.08)
+        xil.next_to(xi_span, RIGHT, buff=0.22)
         midl = T("middle", size=26, color=MUTED).next_to(mid, UP, buff=0.08).shift(RIGHT * 0.45)
         self.beat("So S y times xi equals two thirty minus five point three, and xi is two hundred twenty four point eight millimeters from the left web. Left of the middle, because the left booms are heavier.",
                   [FadeOut(g2), FadeOut(g3), FadeOut(arc), FadeOut(arm), FadeOut(topl)],

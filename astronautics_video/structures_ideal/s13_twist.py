@@ -67,7 +67,8 @@ class S13_Twist(VScene):
             self.play(Write(same), FadeIn(same_n), run_time=.2 * d)
             self.play(Rotate(fig, angle=-7 * DEGREES, about_point=pivot), FadeOut(ghost),
                       FadeOut(twI), FadeOut(twII), run_time=.15 * d)
-            self.wait(.13 * d)
+            self.play(shared.animate.set_stroke(color=GOLD), run_time=.05 * d)
+            self.wait(.08 * d)
 
         # ---- beat 2: the twist rate of one cell
         rate = E(r"\frac{d\theta}{dz}|=|\frac{1}{2A_R\,G}|\oint|q|\frac{ds}{t}", size=52)
@@ -84,16 +85,15 @@ class S13_Twist(VScene):
         self.checkpoint("4.1", "Write the twist rate for cell I of a two-cell box")
 
         # ---- beat 4: build cell I's integral wall by wall
-        top = E(r"\frac{d\theta}{dz}|=|\frac{1}{2A_R\,G}|\oint|q|\frac{ds}{t}", size=40)
         dl = E(r"\delta|=|\int|\frac{ds}{t}", size=44)
         dn = note("along one wall (or a whole cell)")
         l2 = E(r"\oint q\,\frac{ds}{t}|=|q_I|\Big(|\delta_I|-|\delta_{12}|\Big)|+|\Big(|q_I|-|q_{II}|\Big)|\delta_{12}",
                size=42, cmap=DCM)
         n2 = note("outer walls of cell I  +  the shared wall")
         l3 = E(r"=|q_I|\delta_I|-|q_{II}|\delta_{12}", size=44, cmap=DCM)
-        col = VGroup(top, VGroup(dl, dn).arrange(RIGHT, buff=.45), VGroup(l2, n2).arrange(DOWN, buff=.25),
+        col = VGroup(VGroup(dl, dn).arrange(RIGHT, buff=.45), VGroup(l2, n2).arrange(DOWN, buff=.25),
                      l3).arrange(DOWN, buff=.55)
-        fit(col, 8.4, 6.4)
+        fit(col, 8.2, 6.4)
         col.move_to([RX, -.3, 0])
         l3.shift(RIGHT * (l2[1].get_center()[0] - l3[0].get_center()[0]))
         # walls of cell I and their flows
@@ -101,15 +101,17 @@ class S13_Twist(VScene):
         fI = VGroup(flow(sec, "A", "B", 1, color=MINT, label="q_I", size=36),
                     flow(sec, "E", "F", 1, color=MINT, label="q_I", size=36),
                     flow(sec, "F", "A", 1, color=MINT, label="q_I", size=36))
-        fS = flow(sec, "B", "E", 1, color=GOLD, label=r"q_I - q_{II}", size=36)
-        fII = cell_flow(cII + RIGHT * .35 + DOWN * .9, radius=.55, color=LIME, ccw=True, label="q_{II}")
+        fS = VGroup(flow(sec, "B", "E", 1, color=GOLD),
+                    backed(E(r"q_I|-|q_{II}", size=36)).next_to(sec.mid("B", "E"), RIGHT, buff=.5).shift(UP * .5))
+        cf = cell_flow(cII + RIGHT * .3 + DOWN * 1.2, radius=.5, color=LIME, ccw=True)
+        fII = VGroup(cf, M(r"q_{II}", size=36, color=LIME).move_to(cf))
         final = E(r"\frac{d\theta}{dz}\Big\vert_{\mathrm{I}}|=|\frac{1}{2A_{\mathrm{I}}\,G}|\Big(|q_I|\delta_I|-|q_{II}|\delta_{12}|\Big)",
                   size=48, cmap=DCM)
         final.move_to([RX, -.3, 0])
         frame_f = SurroundingRectangle(final, color=ACCENT, buff=.3)
         with self.say("Around cell one, every wall carries q one, except the shared wall, which carries q one minus q two. "
                       "Call delta the integral of d s over t. Then it's q one delta one, minus q two delta one two.") as d:
-            self.play(ReplacementTransform(rate, top), FadeOut(rnotes), run_time=.07 * d)
+            self.play(FadeOut(rate), FadeOut(rnotes), run_time=.07 * d)
             self.play(outer.animate.set_color(MINT), LaggedStart(*[FadeIn(f) for f in fI], lag_ratio=.4),
                       FadeIn(fII), run_time=.17 * d)
             self.play(FadeIn(fS), Indicate(shared, color=GOLD), run_time=.12 * d)
@@ -120,7 +122,7 @@ class S13_Twist(VScene):
             gl = glow(VGroup(l3[1], l3[2], l3[3], l3[4]), MINT)
             self.play(FadeIn(gl), run_time=.05 * d)
             self.snap("built from the walls")
-            self.play(FadeOut(VGroup(dl, dn, l2, n2, l3, top, gl)), run_time=.06 * d)
+            self.play(FadeOut(VGroup(dl, dn, l2, n2, l3, gl)), run_time=.06 * d)
             self.play(Write(final), Create(frame_f), run_time=.1 * d)
 
         # ---- beat 5: the two equations
