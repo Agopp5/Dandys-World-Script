@@ -10,7 +10,7 @@ colors(**{"B": EMBER, "B_r": EMBER, "B_1": EMBER, "B_2": EMBER, r"\sigma_1": GOL
 # ---- facts (HW P2, per unit torque, T in N mm) ----
 A_I, A_II = 232_000, 258_000
 d_I, d_II, d_25 = 1969.0, 3527.8, 199.8
-assert np.isclose(156.3 + 2 * 806.4 + 199.8, d_I, atol=0.05)
+assert np.isclose(156.3 + 2 * 806.4 + 199.8, d_I, atol=0.15)  # brief deltas are rounded
 assert np.isclose(165.6 + 2 * 1581.2 + 199.8, d_II, atol=0.05)
 # cross multiply: A_II (d_I q_I - d_25 q_II) = A_I (-d_25 q_I + d_II q_II)
 cI = A_II * d_I + A_I * d_25            # coefficient of q_I

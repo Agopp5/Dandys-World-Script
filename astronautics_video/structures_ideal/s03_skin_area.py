@@ -156,6 +156,7 @@ class S03_Skin_Area(VScene):
             self.play(Write(VGroup(*be[12:16])), FadeIn(bal[1]), Indicate(f1lab, color=EMBER), run_time=.12 * d)
             self.play(Write(r4), run_time=.2 * d)
             self.play(Write(r4b), run_time=.18 * d)
+            self.snap("balance, divide, denominator")
             self.play(FadeOut(bal), FadeOut(r4), r4b.animate.move_to(stage_c[0]), run_time=.08 * d)
             self.play(Write(r5), Create(box1), run_time=.2 * d)
             g5 = glow(r5[0], EMBER)

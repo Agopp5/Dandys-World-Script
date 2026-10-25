@@ -34,7 +34,7 @@ class S10_P1_Close(VScene):
     budget = 124
 
     def construct(self):
-        sec = hw_box(width=6.5, center=(-3.45, 0.45))
+        sec = hw_box(width=6.5, center=(-3.25, 0.45))
         walls = sec.draw()
         booms = sec.booms({1: B1, 2: B2, 3: B2, 4: B1})
         names = sec.names()
@@ -54,7 +54,8 @@ class S10_P1_Close(VScene):
         l23 = wl(2, 3, "-1.569", d=1.0)
         l41 = wl(4, 1, "+1.765", d=1.0)
         bottom_y = sec.p(3)[1]
-        legend = TX(r"flows in units of $10^{-3}\,S_y$ N/mm", size=32, color=MUTED)
+        legend = VGroup(T("flows in units of", size=28, color=MUTED),
+                        M(r"10^{-3}\,S_y\ \text{N/mm}", size=36, color=MUTED)).arrange(RIGHT, buff=0.15)
         legend.move_to([sec.mid(3, 4)[0], bottom_y - 0.75, 0])
 
         # ---- right column: the zero-twist condition ----
@@ -113,12 +114,12 @@ class S10_P1_Close(VScene):
         L3.move_to([X, -0.75, 0])
         L2.align_to(L1, LEFT)
         L3.align_to(L1, LEFT)
-        note3 = TX(r"top and bottom: $q_b = 0$, they drop out", size=32, color=MUTED)
+        note3 = T("top and bottom carry no basic flow", size=28, color=MUTED)
         note3.next_to(L1, UP, buff=0.3).set_x(X)
         L4 = E(r"-5.89\times10^{-3}|+|167.5|\,|q_{s,0}|=|0", size=44)
         paint(L4, {2: ACCENT})
         L4.move_to([X, -2.0, 0])
-        note4 = TX(r"$-58.83\times10^{-3} + 52.94\times10^{-3}$", size=32, color=MUTED)
+        note4 = M(r"-58.83\times10^{-3} + 52.94\times10^{-3}", size=34, color=MUTED)
         note4.next_to(L4, DOWN, buff=0.2)
 
         self.beat("Only the two webs have basic flow. Minus one point five six nine times thirty seven and a half, plus one point seven six five times thirty, plus one sixty seven and a half q s zero, equals zero.",
@@ -142,13 +143,14 @@ class S10_P1_Close(VScene):
         for t in tots:
             paint(t, {0: SKY})
         tots.arrange(DOWN, buff=0.4, aligned_edge=LEFT)
-        tlab = TX(r"totals: $q = q_b + q_{s,0}$", size=32, color=MUTED)
+        tlab = VGroup(T("totals:", size=30, color=MUTED), E(r"q|=|q_b|+|q_{s,0}", size=38)).arrange(RIGHT, buff=0.2)
         card = VGroup(tlab, tots).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
         card_p = panel(card)
         fit(card_p, 6.5, 3.6)
         card_p.move_to([X, -1.35, 0])
 
-        cf = cell_flow((sec.p(1) + sec.p(3)) / 2, radius=0.5, color=MINT, ccw=False, label=r"q_{s,0}")
+        cf = cell_flow((sec.p(1) + sec.p(3)) / 2, radius=0.6, color=MINT, ccw=False)
+        cfl = M(r"q_{s,0}", size=34, color=MINT).move_to((sec.p(1) + sec.p(3)) / 2)
         f12 = flow(sec, 1, 2, qs0)
         f34 = flow(sec, 3, 4, qs0)
         n12 = wl(1, 2, "+0.035", d=0.6)
@@ -159,7 +161,7 @@ class S10_P1_Close(VScene):
         self.beat("So q s zero is three point five two times ten to the minus five, S y. A small correction, all the way around.",
                   [FadeOut(VGroup(L1, L2, L3, L4, note3, note4, head))],
                   [Write(res), Create(res_box), FadeIn(glow(res, MINT))],
-                  [Create(cf)],
+                  [Create(cf), FadeIn(cfl)],
                   [FadeIn(f12), FadeIn(f34), ReplacementTransform(l12, n12), ReplacementTransform(l34, n34),
                    ReplacementTransform(l23, n23), ReplacementTransform(l41, n41), FadeIn(card_p)],
                   .25, w=(.08, .22, .15, .3))

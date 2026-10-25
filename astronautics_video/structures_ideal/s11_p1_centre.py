@@ -44,7 +44,7 @@ class S11_P1_Centre(VScene):
         fRa = flow(sec, 2, 3, -1.534)
         fLa = flow(sec, 4, 1, 1.800)
         fR = VGroup(fRa, M(r"0.460\,S_y", size=34, color=ROSE).next_to(fRa, LEFT, buff=0.15))
-        fL = VGroup(fLa, M(r"0.540\,S_y", size=34, color=ROSE).next_to(fLa, RIGHT, buff=0.15))
+        fL = VGroup(fLa, M(r"0.540\,S_y", size=34, color=ROSE).next_to(fLa, RIGHT, buff=0.15).shift(UP * 1.0))
 
         X0 = 3.95   # centre of the algebra column
 
@@ -75,9 +75,9 @@ class S11_P1_Centre(VScene):
         res1.move_to([X0, 2.25, 0])
 
         # ---------------- beat 2: moment of the right web about the left web
-        pivot = Dot(sec.mid(4, 1), radius=0.1, color=ACCENT)
+        pivot = Dot(sec.mid(4, 1), radius=0.1, color=ACCENT).set_z_index(6)
         arm = span(sec.p(4) + DOWN * 0.15, sec.p(3) + DOWN * 0.15, r"500\text{ mm}", side=DOWN)
-        arc = Arc(radius=1.0, start_angle=-PI * 0.4, angle=PI * 0.8, color=INK, stroke_width=5).move_arc_center_to(sec.mid(4, 1))
+        arc = Arc(radius=0.75, start_angle=-PI * 0.4, angle=PI * 0.8, color=INK, stroke_width=5).move_arc_center_to(sec.mid(4, 1))
         arc.add_tip(tip_length=0.22)
         m1 = E(r"M_R|=|0.460\,|S_y|\times 500", size=44)
         m1b = E(r"=|230.0\,|S_y", size=44)
@@ -114,14 +114,14 @@ class S11_P1_Centre(VScene):
         g4.move_to([X0, -0.2, 0])
         xs = sec.p(4)[0] + (sec.p(3)[0] - sec.p(4)[0]) * 224.8 / 500
         xm = sec.p(4)[0] + (sec.p(3)[0] - sec.p(4)[0]) * 0.5
-        ytop, ybot = sec.p(1)[1] + 0.55, sec.p(4)[1] - 0.25
+        ytop, ybot = sec.p(1)[1] + 0.3, sec.p(4)[1] - 0.75
         sc = DashedLine([xs, ybot, 0], [xs, ytop, 0], color=ROSE, stroke_width=5, dash_length=0.14)
         mid = DashedLine([xm, ybot, 0], [xm, ytop, 0], color=MUTED, stroke_width=3, dash_length=0.1)
         sy = Arrow([xs, -0.9, 0], [xs, 0.5, 0], buff=0, color=ROSE, stroke_width=7)
         syl = M(r"S_y", size=40, color=ROSE).next_to(sy, LEFT, buff=0.12)
         xil = M(r"\xi", size=44, color=ROSE)
-        xi_span = span([sec.p(4)[0], ytop, 0], [xs, ytop, 0], "", side=UP)
-        xil.next_to(xi_span, UP, buff=0.1)
+        xi_span = span([sec.p(4)[0], ybot + 0.12, 0], [xs, ybot + 0.12, 0], "", side=DOWN)
+        xil.next_to(xi_span, DOWN, buff=0.08)
         midl = T("middle", size=26, color=MUTED).next_to(mid, UP, buff=0.08).shift(RIGHT * 0.45)
         self.beat("So S y times xi equals two thirty minus five point three, and xi is two hundred twenty four point eight millimeters from the left web. Left of the middle, because the left booms are heavier.",
                   [FadeOut(g2), FadeOut(g3), FadeOut(arc), FadeOut(arm), FadeOut(topl)],

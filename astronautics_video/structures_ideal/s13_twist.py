@@ -36,7 +36,7 @@ class S13_Twist(VScene):
         pts = {"A": (0, 0), "B": (240, 0), "C": (500, 50), "D": (500, 550), "E": (240, 600), "F": (0, 600)}
         walls = [("A", "B", 1.0), ("B", "C", 1.0), ("C", "D", 1.6), ("D", "E", 1.0),
                  ("E", "F", 1.0), ("F", "A", 1.6), ("B", "E", 2.0)]
-        sec = Section(pts, walls, width=4.4, center=(-4.0, -0.4))
+        sec = Section(pts, walls, width=4.8, center=(-3.9, -0.4))
         box = sec.draw()
         shared = sec.walls_m[("B", "E")]
         shared.set_color(GOLD)
@@ -45,7 +45,7 @@ class S13_Twist(VScene):
         labI = T("Cell I", size=30, color=MINT).move_to(cI + UP * 1.4)
         labII = T("Cell II", size=30, color=LIME).move_to(cII + UP * 1.4)
         pivot = (cI + cII) / 2
-        RX = 2.6                                           # right column centre
+        RX = 2.8                                           # right column centre
 
         # ---- beat 1: the whole section rotates as one piece
         ghost = box.copy().set_stroke(color=MUTED, opacity=.45)
@@ -63,6 +63,7 @@ class S13_Twist(VScene):
             self.add(ghost)
             self.play(Rotate(fig, angle=7 * DEGREES, about_point=pivot), run_time=.2 * d)
             self.play(FadeIn(twI), FadeIn(twII), run_time=.12 * d)
+            self.snap("rotated together")
             self.play(Write(same), FadeIn(same_n), run_time=.2 * d)
             self.play(Rotate(fig, angle=-7 * DEGREES, about_point=pivot), FadeOut(ghost),
                       FadeOut(twI), FadeOut(twII), run_time=.15 * d)
@@ -71,7 +72,7 @@ class S13_Twist(VScene):
         # ---- beat 2: the twist rate of one cell
         rate = E(r"\frac{d\theta}{dz}|=|\frac{1}{2A_R\,G}|\oint|q|\frac{ds}{t}", size=52)
         rate.move_to([RX, .7, 0])
-        rn1 = TX(r"$A_R$: the area enclosed by cell $R$", size=28).set_color(MUTED)
+        rn1 = VGroup(M(r"A_R", size=40), note(": the area enclosed by cell R")).arrange(RIGHT, buff=.15)
         rn2 = note("the integral runs once around that cell's walls")
         rnotes = VGroup(rn1, rn2).arrange(DOWN, buff=.3).next_to(rate, DOWN, buff=.55)
         self.beat("For one cell, the rate of twist is one over two A G, times the integral of q d s over t around that cell.",
@@ -79,8 +80,8 @@ class S13_Twist(VScene):
                   w=(.12, .38, .2, .3))
 
         # ---- beat 3: checkpoint
-        with self.say("Your turn. Pause here and do checkpoint four point one in your guide.") as d:
-            self.checkpoint("4.1", "Write the twist rate for cell I of a two-cell box")
+        self.beat("Your turn. Pause here and do checkpoint four point one in your guide.")
+        self.checkpoint("4.1", "Write the twist rate for cell I of a two-cell box")
 
         # ---- beat 4: build cell I's integral wall by wall
         top = E(r"\frac{d\theta}{dz}|=|\frac{1}{2A_R\,G}|\oint|q|\frac{ds}{t}", size=40)
@@ -97,11 +98,11 @@ class S13_Twist(VScene):
         l3.shift(RIGHT * (l2[1].get_center()[0] - l3[0].get_center()[0]))
         # walls of cell I and their flows
         outer = VGroup(*[sec.walls_m[k] for k in [("A", "B"), ("E", "F"), ("F", "A")]])
-        fI = VGroup(flow(sec, "A", "B", 1, color=MINT, label="q_I"),
-                    flow(sec, "E", "F", 1, color=MINT, label="q_I"),
-                    flow(sec, "F", "A", 1, color=MINT, label="q_I"))
-        fS = flow(sec, "B", "E", 1, color=GOLD, label=r"q_I - q_{II}")
-        fII = cell_flow(cII + DOWN * .3, radius=.55, color=LIME, ccw=True, label="q_{II}")
+        fI = VGroup(flow(sec, "A", "B", 1, color=MINT, label="q_I", size=36),
+                    flow(sec, "E", "F", 1, color=MINT, label="q_I", size=36),
+                    flow(sec, "F", "A", 1, color=MINT, label="q_I", size=36))
+        fS = flow(sec, "B", "E", 1, color=GOLD, label=r"q_I - q_{II}", size=36)
+        fII = cell_flow(cII + RIGHT * .35 + DOWN * .9, radius=.55, color=LIME, ccw=True, label="q_{II}")
         final = E(r"\frac{d\theta}{dz}\Big\vert_{\mathrm{I}}|=|\frac{1}{2A_{\mathrm{I}}\,G}|\Big(|q_I|\delta_I|-|q_{II}|\delta_{12}|\Big)",
                   size=48, cmap=DCM)
         final.move_to([RX, -.3, 0])
@@ -116,8 +117,10 @@ class S13_Twist(VScene):
             self.play(Write(dl), FadeIn(dn), run_time=.13 * d)
             self.play(Write(l2), FadeIn(n2), run_time=.16 * d)
             self.play(Write(l3), run_time=.1 * d)
-            self.play(FadeIn(glow(VGroup(l3[1], l3[2], l3[3], l3[4]), MINT)), run_time=.05 * d)
-            self.play(FadeOut(VGroup(dl, dn, l2, n2, l3, top)), run_time=.06 * d)
+            gl = glow(VGroup(l3[1], l3[2], l3[3], l3[4]), MINT)
+            self.play(FadeIn(gl), run_time=.05 * d)
+            self.snap("built from the walls")
+            self.play(FadeOut(VGroup(dl, dn, l2, n2, l3, top, gl)), run_time=.06 * d)
             self.play(Write(final), Create(frame_f), run_time=.1 * d)
 
         # ---- beat 5: the two equations
@@ -133,7 +136,7 @@ class S13_Twist(VScene):
         stack.move_to(DOWN * .2)
         rA = SurroundingRectangle(eqA, color=ACCENT, buff=.25)
         rB = SurroundingRectangle(eqB, color=LILAC, buff=.25)
-        tally = VGroup(T("two equations, two unknowns:", size=32), E(r"q_I|,\;|q_{II}", size=44)).arrange(RIGHT, buff=.3)
+        tally = VGroup(T("two equations, two unknowns:", size=32), E(r"q_I|,\;|q_{II}", size=48)).arrange(RIGHT, buff=.3)
         tally.next_to(stack, DOWN, buff=.45)
         with self.say("Set cell one's rate equal to cell two's. With the torque equation, that's two equations for two unknowns.") as d:
             self.play(FadeOut(VGroup(box, labI, labII, fI, fS, fII, frame_f, final)), run_time=.12 * d)

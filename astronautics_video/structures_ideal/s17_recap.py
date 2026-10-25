@@ -30,9 +30,9 @@ assert np.isclose(24_200 / 27_600, 0.8768, rtol=1e-3)   # t* = (G/G_REF) t for t
 
 def card(n, heading, maths, buff=1.0):
     """One recap row: numbered heading on top, the formulas in a line under it, on a SURFACE panel."""
-    head = VGroup(badge(n), T(heading, size=38, color=INK)).arrange(RIGHT, buff=.3)
+    head = VGroup(badge(n), T(heading, size=34, color=INK)).arrange(RIGHT, buff=.3)
     body = VGroup(*maths).arrange(RIGHT, buff=buff, aligned_edge=DOWN)
-    inner = VGroup(head, body).arrange(DOWN, buff=.35, aligned_edge=LEFT)
+    inner = VGroup(head, body).arrange(DOWN, buff=.2, aligned_edge=LEFT)
     body.shift(RIGHT * .55)
     return panel(inner), head, body
 
@@ -42,15 +42,15 @@ class S17_Recap(VScene):
 
     def construct(self):
         # card 1: idealization
-        b1 = E(r"B_1|=|\frac{t_D\,b}{6}|\Big(2+|\frac{\sigma_2}{\sigma_1}|\Big)", size=56)
+        b1 = E(r"B_1|=|\frac{t_D\,b}{6}|\Big(2+|\frac{\sigma_2}{\sigma_1}|\Big)", size=50)
         paint(b1, {4: GOLD})
         n1 = T("skin's direct stress, lumped into the booms", size=30, color=MUTED)
         c1, h1, m1 = card(1, "Booms carry the direct stress; the skin carries shear",
                           [b1, n1], buff=.7)
 
         # card 2: boom jumps and closing a section
-        jump = E(r"q_2|-|q_1|=|-\Big(|S_y|/I_{xx}\Big)|B_r|y_r", size=56)
-        close = E(r"q_s|=|q_b|+|q_{s,0}", size=56)
+        jump = E(r"q_2|-|q_1|=|-\Big(|S_y|/I_{xx}\Big)|B_r|y_r", size=50)
+        close = E(r"q_s|=|q_b|+|q_{s,0}", size=50)
         paint(close, {0: SKY})
         n2 = T("cut, march, close", size=30, color=MUTED)
         closeg = VGroup(close, n2).arrange(DOWN, buff=.15)
@@ -58,11 +58,11 @@ class S17_Recap(VScene):
                           [jump, closeg], buff=1.2)
 
         # card 3: multi-cell torsion
-        tq = E(r"T|=|\sum_R 2A_R|\,q_R", size=56)
+        tq = E(r"T|=|\sum_R 2A_R|\,q_R", size=50)
         paint(tq, {3: SKY})
-        twist = VGroup(M(r"\frac{d\theta}{dz}", size=56), T("equal in every cell", size=34, color=INK2)
+        twist = VGroup(M(r"\frac{d\theta}{dz}", size=50), T("equal in every cell", size=34, color=INK2)
                        ).arrange(RIGHT, buff=.25)
-        ts = E(r"t^*|=|\frac{G}{G_{\mathrm{ref}}}|\,t", size=56)
+        ts = E(r"t^*|=|\frac{G}{G_{\mathrm{ref}}}|\,t", size=50)
         paint(ts, {2: ACCENT})
         c3, h3, m3 = card(3, "Pure torsion: one constant shear flow per cell",
                           [tq, twist, ts], buff=.9)
@@ -71,8 +71,10 @@ class S17_Recap(VScene):
         w = max(c.width for c in cards)
         for c in cards:      # equal-width rows, left-aligned content
             c[0].stretch_to_fit_width(w)
-        cards.arrange(DOWN, buff=.3)
-        assert False, [(len(c), [(type(s).__name__, round(s.width, 2), round(s.height, 2)) for s in c]) for c in cards] + [(h1.width, m1.width, m3.width, h3.height, m2.height)]
+        cards.arrange(DOWN, buff=.15)
+        w0 = cards.width
+        fit(cards, 13.8, 7.8)
+        assert cards.width / w0 > .92, cards.width / w0   # math stays >= 46, notes >= 27
         cards.move_to(ORIGIN)
         for c, inner in ((c1, VGroup(h1, m1)), (c2, VGroup(h2, m2)), (c3, VGroup(h3, m3))):
             inner.align_to(c[0], LEFT).shift(RIGHT * .35)
