@@ -64,7 +64,7 @@ class S03_Skin_Area(VScene):
         n1 = T("1", size=30, color=INK2).next_to(bm1, DOWN, buff=.18)
         n2 = T("2", size=30, color=INK2).next_to(bm2, DOWN, buff=.18)
         tlab = M(r"t_D", size=40).next_to(bm2, RIGHT, buff=.2)
-        bspan = span(np.array([XL, Y0 - .7, 0]), np.array([XR, Y0 - .7, 0]), r"b", off=0.0, size=40)
+        bspan = span(np.array([XL, Y0 - .9, 0]), np.array([XR, Y0 - .9, 0]), r"b", off=0.0, size=40)
 
         block = Polygon(np.array([XL, YB, 0]), np.array([XL, YB + H1, 0]),
                         np.array([XR, YB + H2, 0]), np.array([XR, YB, 0]),
@@ -116,8 +116,8 @@ class S03_Skin_Area(VScene):
         mt = Dot(np.array([xt_, Y0, 0]), radius=.09, color=INK).set_z_index(4)
         lr = DashedLine(np.array([xr_, YB + H2 / 2, 0]), np.array([xr_, Y0, 0]), color=INK, stroke_width=2)
         lt = DashedLine(np.array([xt_, YB + H2 + (H1 - H2) / 3, 0]), np.array([xt_, Y0, 0]), color=INK, stroke_width=2)
-        sr = span(np.array([xr_, Y0 - 1.35, 0]), np.array([XR, Y0 - 1.35, 0]), r"b/2", off=0.0, size=38)
-        st = span(np.array([xt_, Y0 - 2.0, 0]), np.array([XR, Y0 - 2.0, 0]), r"2b/3", off=0.0, size=38)
+        sr = span(np.array([xr_, Y0 - 1.5, 0]), np.array([XR, Y0 - 1.5, 0]), r"b/2", off=0.0, size=38)
+        st = span(np.array([xt_, Y0 - 2.15, 0]), np.array([XR, Y0 - 2.15, 0]), r"2b/3", off=0.0, size=38)
 
         r1 = row(E(r"\sigma_2|\,t_D b|\cdot|\frac{b}{2}", size=44), "rectangle: force times arm")
         r2 = row(E(r"+|\frac{1}{2}(|\sigma_1|-|\sigma_2|)\,t_D b|\cdot|\frac{2}{3}b", size=44),
