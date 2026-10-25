@@ -24,7 +24,7 @@ check(q41, 1.765e-3)
 QC = {"q_{b,12}": SKY, "q_{b,23}": SKY, "q_{b,34}": SKY, "q_{b,41}": SKY, "I_{xx}": INK,
       "4000": EMBER, "3556": EMBER, "(3556)": EMBER, "(4000)": EMBER}
 
-RX = 0.55                        # left edge of the algebra column
+RX = 0.4                        # left edge of the algebra column
 
 
 def col(*rows, top=2.7, buff=0.3):
@@ -52,7 +52,7 @@ class S09_P1_Basic(VScene):
 
     def construct(self):
         head = self.section("The basic shear flow")
-        sec = hw_box(width=6.4, center=(-3.6, -0.5))
+        sec = hw_box(width=6.2, center=(-3.35, -0.4))
         walls = sec.draw()
         booms = sec.booms({1: B1, 2: B2, 3: B2, 4: B1})
         names = sec.names()
@@ -64,7 +64,7 @@ class S09_P1_Basic(VScene):
         for n, b in ((1, B1), (2, B2), (3, B2), (4, B1)):
             p = sec.p(n)
             d = (c - p) / np.linalg.norm(c - p)
-            blab.add(M(str(int(b)), size=30, color=EMBER).move_to(p + 0.62 * d + 0.35 * (RIGHT if d[0] > 0 else LEFT)))
+            blab.add(M(str(int(b)), size=32, color=EMBER).move_to(p + 0.62 * d + 0.35 * (RIGHT if d[0] > 0 else LEFT)))
         self.add(walls, booms, names)
 
         # beat 1: I_xy = 0, then I_xx = sum B y^2
@@ -106,7 +106,7 @@ class S09_P1_Basic(VScene):
                      max_tip_length_to_length_ratio=0.3)
         s_l = M("s", size=36).next_to(s_ar, UP, buff=0.06)
         self.beat("Put a vertical load S y somewhere, at a distance xi from the left web. Cut the top wall, and go around: one, two, three, four.",
-                  [FadeOut(VGroup(lxy, nxy, l1, l2, l3, n1)), FadeIn(ixxg)],
+                  [FadeOut(VGroup(lxy, nxy, l1, l2, l3, n1, axis, axl)), FadeIn(ixxg)],
                   [GrowArrow(sy), FadeIn(syl)], [GrowFromCenter(xi), FadeIn(xq)], .05,
                   [FadeIn(cut), FadeIn(cutl)], [GrowArrow(s_ar), FadeIn(s_l)],
                   *[Indicate(names[i], color=SKY, scale_factor=1.5) for i in range(4)],
@@ -124,8 +124,8 @@ class S09_P1_Basic(VScene):
                  VGroup(a, na).arrange(DOWN, aligned_edge=LEFT, buff=0.12), b, top=1.8, buff=0.4)
         eq_under(cc, b)
         nb.next_to(cc, DOWN, buff=0.25).align_to(b, LEFT)
-        z12 = M(r"q_{b,12}=0", size=32, color=SKY).next_to([sec.mid(1, 2)[0] + 1.3, top_y, 0], DOWN, buff=0.35)
-        f23 = flow(sec, 2, 3, q23, label=r"q_{b,23}")
+        z12 = M(r"q_{b,12}=0", size=34, color=SKY).next_to([sec.mid(1, 2)[0] - 1.7, top_y, 0], DOWN, buff=0.35)
+        f23 = flow(sec, 2, 3, q23, label=r"q_{b,23}", size=34)
         b2 = sec.boom_m[2]
         self.beat("Wall one two: zero. Crossing boom two: minus S y over I x x, times three five five six, times one fifty. That's minus one point five six nine times ten to the minus three, S y.",
                   [FadeOut(VGroup(cutl, xq)), FadeIn(rule), FadeIn(nrule)], [Write(a), FadeIn(na), FadeIn(z12)],
@@ -137,10 +137,10 @@ class S09_P1_Basic(VScene):
         q23box = E(r"q_{b,23}|=|-1.569\times 10^{-3}|\,S_y", size=40, cmap=QC)
         q23b = VGroup(SurroundingRectangle(q23box, color=HAIR, buff=0.16, corner_radius=0.1), q23box)
         q23b.next_to(ixxg, DOWN, buff=0.3).align_to(ixxg, LEFT)
-        d1 = E(r"q_{b,34}|=|q_{b,23}|-|(|S_y|/I_{xx})|(3556)|(-150)", size=44, cmap=QC)
+        d1 = E(r"q_{b,34}|=|q_{b,23}|-|(|S_y|/I_{xx})|(3556)|(-150)", size=40, cmap=QC)
         d2 = E(r"=|0", size=44)
         nd = note("boom 3 sits at y = -150: the jump cancels")
-        e1 = E(r"q_{b,41}|=|0|-|(|S_y|/I_{xx})|(4000)|(-150)", size=44, cmap=QC)
+        e1 = E(r"q_{b,41}|=|0|-|(|S_y|/I_{xx})|(4000)|(-150)", size=40, cmap=QC)
         e2 = E(r"=|+1.765\times 10^{-3}|\,S_y", size=44)
         ne = note("crossing boom 4: B = 4000, y = -150")
         for m in (d1, e1):
@@ -151,8 +151,8 @@ class S09_P1_Basic(VScene):
         e1.next_to(nd, DOWN, buff=0.45).align_to(d1, LEFT)
         eq_under(e2, e1)
         ne.next_to(e2, DOWN, buff=0.2).align_to(e1, LEFT)
-        z34 = M(r"q_{b,34}=0", size=32, color=SKY).next_to([sec.mid(3, 4)[0] + 1.3, sec.p(3)[1], 0], UP, buff=0.35)
-        f41 = flow(sec, 4, 1, q41, label=r"q_{b,41}")
+        z34 = M(r"q_{b,34}=0", size=34, color=SKY).next_to([sec.mid(3, 4)[0] - 1.7, sec.p(3)[1], 0], UP, buff=0.35)
+        f41 = flow(sec, 4, 1, q41, label=r"q_{b,41}", size=34)
         with self.say("Boom three is at minus one fifty, so it cancels that: wall three four is zero. Boom four brings the left web to plus one point seven six five times ten to the minus three.") as d:
             self.play(FadeOut(VGroup(rule, nrule, a, na, b, nb, cc[0])), ReplacementTransform(cc[1:], q23box[2:]),
                       FadeIn(q23b[0]), FadeIn(q23box[:2]), run_time=.1 * d)

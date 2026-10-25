@@ -31,10 +31,10 @@ class S07_Closed(VScene):
     budget = 96
 
     def construct(self):
-        sec = hw_box(width=7.0, center=(-2.95, -0.3))
+        sec = hw_box(width=8.0, center=(0, -0.5))
         walls = sec.draw()
         booms = sec.booms({1: B_L, 2: B_R, 3: B_R, 4: B_L})
-        names = sec.names()
+        names = sec.names(size=38)
 
         # the cut: a gap in the top wall with two short ticks
         cp = sec.p(1) + .3 * (sec.p(2) - sec.p(1))
@@ -42,18 +42,18 @@ class S07_Closed(VScene):
         ticks = VGroup(*[Line(cp + dx * RIGHT + .28 * UP, cp + dx * RIGHT + .28 * DOWN, color=ACCENT, stroke_width=5)
                          for dx in (-.1, .1)])
         cut = VGroup(gap, ticks).set_z_index(3)
-        cut_lbl = T("cut", size=30, color=ACCENT).next_to(ticks, UP, buff=.2)
+        cut_lbl = T("cut", size=34, color=ACCENT).next_to(ticks, UP, buff=.2)
 
         self.beat("In a closed section there is no free edge to start from. So we make one: cut any wall.",
                   Create(walls), [FadeIn(booms), FadeIn(names)], .1, [FadeIn(cut), FadeIn(cut_lbl)],
                   w=(.4, .25, .35))
 
         # basic open flow, wall by wall from the cut
-        f12 = T("0", size=40, color=SKY).move_to(sec.mid(1, 2) + .55 * RIGHT + .4 * DOWN)
-        f23 = flow(sec, 2, 3, QB23, label="q_b", size=40)
-        f34 = T("0", size=40, color=SKY).move_to(sec.mid(3, 4) + .4 * UP)
-        f41 = flow(sec, 4, 1, QB41, label="q_b", size=40)
-        s_lbl = T("start at the cut: zero", size=26, color=MUTED).next_to(walls, DOWN, buff=.7)
+        f12 = T("0", size=48, color=SKY).move_to(sec.mid(1, 2) + .7 * RIGHT + .5 * DOWN)
+        f23 = flow(sec, 2, 3, QB23, label="q_b", size=48)
+        f34 = T("0", size=48, color=SKY).move_to(sec.mid(3, 4) + .5 * UP)
+        f41 = flow(sec, 4, 1, QB41, label="q_b", size=48)
+        s_lbl = T("start at the cut: zero", size=30, color=MUTED).next_to(walls, DOWN, buff=.45)
         self.beat("With the cut, it's an open section. March around from the cut, jumping at each boom. "
                   "That's the basic shear flow, q b.",
                   [FadeIn(f12), FadeIn(s_lbl)], Indicate(sec.boom_m[2], color=EMBER), FadeIn(f23),
@@ -62,24 +62,29 @@ class S07_Closed(VScene):
                   w=(.12, .12, .14, .12, .12, .12, .26))
 
         # close the cut: one constant flow round the cell
-        ring = cell_flow(walls.get_center(), radius=.95, color=MINT, ccw=True, label=r"q_{s,0}", size=40)
-        eq = E(r"q_s|=|q_b|+|q_{s,0}", size=52, cmap=CMAP)
-        eq.move_to(RIGHT * 4.0 + UP * 2.8)
+        ring = cell_flow(walls.get_center(), radius=1.1, color=MINT, ccw=True, label=r"q_{s,0}", size=48)
+        eq = E(r"q_s|=|q_b|+|q_{s,0}", size=56, cmap=CMAP)
+        eq.move_to(UP * 3.25)
         g = glow(eq[4], MINT)
         self.beat("Closing the cut adds one constant shear flow, q s zero, all the way around the cell.",
                   [FadeOut(cut), FadeOut(cut_lbl), FadeOut(s_lbl)], Create(ring), Write(eq), FadeIn(g),
                   w=(.15, .35, .35, .15))
 
         # two ways to pin down q_s0
-        c1 = cond(E(r"S_y\,|\xi|=|\oint p\,|q_s|\,ds", size=46, cmap=CMAP),
-                  T("moment balance, p = lever arm", size=28, color=MUTED))
-        c2 = cond(E(r"\oint|q_s|\,\frac{ds}{|G|\,t}|=|0", size=46, cmap=CMAP),
-                  T("shear center: no twist", size=28, color=MUTED))
-        stack = VGroup(c1, c2).arrange(DOWN, buff=.45)
-        fit(stack, 5.7, 5.3)
-        stack.next_to(eq, DOWN, buff=.55).set_x(4.0)
+        # slide the picture left (scaled .85: 48 -> 41 labels, 38 -> 32 boom numbers) to make room
+        pic = VGroup(walls, booms, names, f12, f23, f34, f41, ring)
+        pic.generate_target()
+        pic.target.scale(.85, about_point=walls.get_center()).shift((-3.05 - walls.get_x()) * RIGHT)
+        head = VGroup(eq, g)
+        c1 = cond(E(r"S_y\,|\xi|=|\oint p\,|q_s|\,ds", size=48, cmap=CMAP),
+                  T("moment balance, p = lever arm", size=32, color=MUTED))
+        c2 = cond(E(r"\oint|q_s|\,\frac{ds}{|G|\,t}|=|0", size=48, cmap=CMAP),
+                  T("shear center: no twist", size=32, color=MUTED))
+        stack = VGroup(c1, c2).arrange(DOWN, buff=.4)
+        stack.move_to(RIGHT * 3.95 + DOWN * .75)
         self.beat("To find q s zero, use moments. If the load passes through the shear center, there's another "
                   "condition: the section must not twist. The integral of q d s over G t around the cell is zero.",
-                  FadeIn(c1, shift=UP * .2), .15, FadeIn(c2, shift=UP * .2), Circumscribe(c2, color=ACCENT),
-                  w=(.3, .4, .3))
+                  [MoveToTarget(pic), head.animate.move_to(RIGHT * 3.95 + UP * 3.25)],
+                  FadeIn(c1, shift=UP * .2), .1, FadeIn(c2, shift=UP * .2), Circumscribe(c2, color=ACCENT),
+                  w=(.12, .2, .38, .3))
         self.wipe()

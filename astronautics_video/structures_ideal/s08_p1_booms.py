@@ -20,7 +20,7 @@ B1 = A_L + B_skin + B_wl
 B2 = A_R + B_skin + B_wr
 assert np.isclose(B1, 4000) and np.isclose(B2, 3556)
 
-RX = 3.7          # centre x of the algebra column
+RX = 3.85         # centre x of the algebra column
 
 
 def angle_L(c, ax, ay, lh, lv, t, s):
@@ -44,7 +44,7 @@ class S08_P1_Booms(VScene):
     def construct(self):
         self.section("Idealize the box")
         sec = hw_box()
-        sec = Section(sec.pts, sec.walls, width=5.8, center=(-3.1, -0.4))
+        sec = Section(sec.pts, sec.walls, width=6.6, center=(-3.0, -0.4))
         s = sec.s
         walls = sec.draw()
         P = {k: sec.p(k) for k in (1, 2, 3, 4)}
@@ -62,7 +62,11 @@ class S08_P1_Booms(VScene):
         lab_L = M(r"60\times 50\times 10", size=30, color=EMBER).next_to(P[1], UP, buff=.3).shift(.9 * RIGHT)
         lab_R = M(r"50\times 40\times 8", size=30, color=EMBER).next_to(P[2], UP, buff=.3).shift(.8 * LEFT)
         d500 = span(P[4], P[3], r"500\ \mathrm{mm}", side=DOWN)
-        d300 = span(P[4], P[1], r"300", side=LEFT)
+        xa = P[4][0] - .28
+        d300 = VGroup(DoubleArrow([xa, P[4][1], 0], [xa, P[1][1], 0], buff=0, color=AXIS, stroke_width=2,
+                                  tip_length=.15),
+                      M(r"300\ \mathrm{mm}", size=30, color=INK2).rotate(PI / 2))
+        d300[1].next_to(d300[0], LEFT, buff=.08)
 
         # beat 1: the box, the angles, the dimensions
         self.beat("Here's the box. Each corner has an angle: sixty by fifty by ten on the left, fifty by forty by eight on the right.",

@@ -37,8 +37,8 @@ def note(s):
     return TX(s, size=26, color=MUTED)
 
 
-def row(eq, s):
-    return VGroup(eq, note(s)).arrange(DOWN, aligned_edge=LEFT, buff=.14)
+def row(eq, s, buff=.14):
+    return VGroup(eq, note(s)).arrange(DOWN, aligned_edge=LEFT, buff=buff)
 
 
 def column(*rows):
@@ -62,7 +62,7 @@ class S03_Skin_Area(VScene):
         n1 = T("1", size=30, color=INK2).next_to(bm1, DOWN, buff=.18)
         n2 = T("2", size=30, color=INK2).next_to(bm2, DOWN, buff=.18)
         tlab = M(r"t_D", size=40).next_to(bm2, RIGHT, buff=.2)
-        bspan = span(np.array([XL, Y0 - .55, 0]), np.array([XR, Y0 - .55, 0]), r"b", off=0.0)
+        bspan = span(np.array([XL, Y0 - .8, 0]), np.array([XR, Y0 - .8, 0]), r"b", off=0.0, size=40)
 
         block = Polygon(np.array([XL, YB, 0]), np.array([XL, YB + H1, 0]),
                         np.array([XR, YB + H2, 0]), np.array([XR, YB, 0]),
@@ -115,8 +115,8 @@ class S03_Skin_Area(VScene):
         mt = Dot(np.array([xt_, Y0, 0]), radius=.09, color=INK).set_z_index(4)
         lr = DashedLine(np.array([xr_, YB + H2 / 2, 0]), np.array([xr_, Y0, 0]), color=INK, stroke_width=2)
         lt = DashedLine(np.array([xt_, YB + H2 + (H1 - H2) / 3, 0]), np.array([xt_, Y0, 0]), color=INK, stroke_width=2)
-        sr = span(np.array([xr_, Y0 - 1.05, 0]), np.array([XR, Y0 - 1.05, 0]), r"\tfrac{b}{2}", off=0.0)
-        st = span(np.array([xt_, Y0 - 1.75, 0]), np.array([XR, Y0 - 1.75, 0]), r"\tfrac{2}{3}b", off=0.0)
+        sr = span(np.array([xr_, Y0 - 1.45, 0]), np.array([XR, Y0 - 1.45, 0]), r"\frac{b}{2}", off=0.0, size=36)
+        st = span(np.array([xt_, Y0 - 2.25, 0]), np.array([XR, Y0 - 2.25, 0]), r"\frac{2}{3}b", off=0.0, size=36)
 
         r1 = row(E(r"\sigma_2|\,t_D b|\cdot|\tfrac{b}{2}", size=44), "rectangle: force times arm")
         r2 = row(E(r"+|\tfrac{1}{2}(|\sigma_1|-|\sigma_2|)\,t_D b|\cdot|\tfrac{2}{3}b", size=44),
@@ -139,7 +139,7 @@ class S03_Skin_Area(VScene):
         # ---- solve for B_1 -------------------------------------------------------------
         r4b = row(E(r"=|\frac{t_D b}{6}|\Big(3\frac{\sigma_2}{\sigma_1}+2-2\frac{\sigma_2}{\sigma_1}\Big)", size=42),
                   "common denominator 6")
-        r5 = row(E(r"B_1|=|\frac{t_D b}{6}|\Big(2+\frac{\sigma_2}{\sigma_1}\Big)", size=48), "collect terms")
+        r5 = row(E(r"B_1|=|\frac{t_D b}{6}|\Big(2+\frac{\sigma_2}{\sigma_1}\Big)", size=48), "collect terms", buff=.34)
         stage_b = column(r4.copy(), r4b, r5)
         box1 = SurroundingRectangle(r5[0], color=EMBER, buff=.18, stroke_width=3)
 
@@ -152,14 +152,14 @@ class S03_Skin_Area(VScene):
             self.play(Write(r5), Create(box1), run_time=.2 * d)
             g5 = glow(r5[0], EMBER)
             self.play(FadeIn(g5), Indicate(ib1, color=EMBER, scale_factor=1.5), run_time=.13 * d)
-        self.wait(1.5)
+        self.wait(1)
 
         # ---- B_2 by symmetry -----------------------------------------------------------
-        r6 = row(E(r"B_2|=|\frac{t_D b}{6}|\Big(2+\frac{\sigma_1}{\sigma_2}\Big)", size=48), "swap 1 and 2")
+        r6 = row(E(r"B_2|=|\frac{t_D b}{6}|\Big(2+\frac{\sigma_1}{\sigma_2}\Big)", size=48), "swap 1 and 2", buff=.34)
         stage_c = column(r5.copy(), r6)
         box2 = SurroundingRectangle(r6[0], color=EMBER, buff=.18, stroke_width=3)
         self.play(FadeOut(r4), FadeOut(r4b), VGroup(r5, box1, g5).animate.shift(stage_c[0].get_center() - r5.get_center()),
-                  run_time=1.2)
+                  run_time=1.0)
         self.play(Write(r6), Create(box2), Indicate(ib2, color=EMBER, scale_factor=1.5), run_time=2.0)
-        self.wait(3)
+        self.wait(2)
         self.wipe()
