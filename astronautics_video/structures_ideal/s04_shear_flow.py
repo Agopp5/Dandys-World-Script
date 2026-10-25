@@ -29,7 +29,7 @@ class S04_Shear_Flow(VScene):
         self.section("Shear stress and shear flow")
 
         # ---- beat 1: a thin-walled section, tau running along its walls
-        W, H = 6.0, 4.6
+        W, H = 6.2, 5.4
         cx, cy = L[0], L[1]
         w, h = W / 2, H / 2
         sec = RoundedRectangle(width=W, height=H, corner_radius=0.7, stroke_color=INK2, stroke_width=7).move_to(L)
@@ -40,7 +40,7 @@ class S04_Shear_Flow(VScene):
             arr([cx + 1.1, cy - h + d], [cx - 1.1, cy - h + d]),      # bottom: to the left
             arr([cx - w + d, cy - 0.8], [cx - w + d, cy + 0.8]),      # left: up
         )
-        tau_lbl = M(r"\tau", size=56, color=SKY).next_to(taus[0], DOWN, buff=0.15)
+        tau_lbl = M(r"\tau", size=64, color=SKY).next_to(taus[0], DOWN, buff=0.15)
         wall_lbl = T("thin wall", size=34, color=INK2).next_to(sec, UP, buff=0.18).align_to(sec, LEFT)
         self.beat("Shear forces and twisting create shear stress in the thin walls. We'll call it tau. "
                   "It acts along the wall, around the section.",
@@ -50,20 +50,22 @@ class S04_Shear_Flow(VScene):
 
         # ---- beat 2: magnify one piece of wall: tau uniform through the thickness t
         mag = Rectangle(width=0.9, height=0.6, stroke_color=ACCENT, stroke_width=4).move_to([cx + 1.85, cy + h, 0])
-        big = Rectangle(width=6.0, height=2.2, stroke_color=INK2, stroke_width=5,
+        big = Rectangle(width=6.0, height=2.6, stroke_color=INK2, stroke_width=5,
                         fill_color=SURFACE, fill_opacity=1).move_to([RX, 0.9, 0])
         links = VGroup(
             Line(mag.get_corner(UR), big.get_corner(UL), stroke_color=ACCENT, stroke_width=2.5),
             Line(mag.get_corner(DR), big.get_corner(DL), stroke_color=ACCENT, stroke_width=2.5),
         )
         x0, x1 = big.get_left()[0] + 0.7, big.get_right()[0] - 1.0
-        ys = [big.get_center()[1] + k for k in (-0.75, -0.25, 0.25, 0.75)]
+        ys = [big.get_center()[1] + k for k in (-0.9, -0.3, 0.3, 0.9)]
         stack = VGroup(*[arr([x0, y], [x1, y], sw=6) for y in ys])
         tips = DashedLine([x1, big.get_bottom()[1] + 0.1, 0], [x1, big.get_top()[1] - 0.1, 0],
                           color=MUTED, stroke_width=3)
-        tmark = span(big.get_corner(DL), big.get_corner(UL), "t", side=LEFT)
-        stack_tau = M(r"\tau", size=48, color=SKY).next_to(tips, RIGHT, buff=0.2)
-        note2 = TX(r"$\tau$ is nearly the same all across $t$", size=32).set_color(INK2)
+        tm_line = DoubleArrow(big.get_corner(DL) + LEFT * 0.3, big.get_corner(UL) + LEFT * 0.3, buff=0,
+                              stroke_width=3, tip_length=0.2, color=INK2)
+        tmark = VGroup(tm_line, M(r"t", size=56, color=INK).next_to(tm_line, LEFT, buff=0.15))
+        stack_tau = M(r"\tau", size=60, color=SKY).next_to(tips, RIGHT, buff=0.2)
+        note2 = TX(r"$\tau$ is nearly the same all across $t$", size=40).set_color(INK2)
         note2.next_to(big, DOWN, buff=0.45)
         self.beat("The walls are so thin that tau is nearly constant through the thickness. "
                   "So instead of tau, we usually track tau times the thickness.",
@@ -78,11 +80,11 @@ class S04_Shear_Flow(VScene):
                   wall.animate.move_to(L + UP * 1.0), run_time=1.2)
         q_arrow = arr([big.get_left()[0] + 0.5, big.get_bottom()[1] - 0.55],
                       [big.get_right()[0] - 0.5, big.get_bottom()[1] - 0.55], sw=12)
-        q_lbl = M(r"q", size=56, color=SKY).next_to(q_arrow, DOWN, buff=0.15)
-        q_eq = E(r"q|=|\tau|\,t", size=64).move_to([RX, 1.6, 0])
+        q_lbl = M(r"q", size=64, color=SKY).next_to(q_arrow, DOWN, buff=0.15)
+        q_eq = E(r"q|=|\tau|\,t", size=72).move_to([RX, 1.6, 0])
         q_box = SurroundingRectangle(q_eq, color=SKY, buff=0.3, stroke_width=4)
-        unit = M(r"\mathrm{N/mm}", size=48, color=INK).next_to(q_box, DOWN, buff=0.35)
-        q_note = T("force per unit length along the wall", size=30, color=MUTED).next_to(unit, DOWN, buff=0.3)
+        unit = M(r"\mathrm{N/mm}", size=56, color=INK).next_to(q_box, DOWN, buff=0.35)
+        q_note = T("force per unit length along the wall", size=32, color=MUTED).next_to(unit, DOWN, buff=0.3)
         self.beat("That product is called the shear flow, q. "
                   "It's a force per unit length along the wall, in newtons per millimeter.",
                   FadeTransform(stack.copy(), q_arrow), FadeIn(q_lbl), Write(q_eq), Create(q_box), .1,
@@ -98,11 +100,11 @@ class S04_Shear_Flow(VScene):
         q1 = arr([-6.3, 1.55], [-4.1, 1.55])
         q2 = arr([-2.7, 1.55], [-0.6, 1.55])
         q3 = arr([-2.95, 0.4], [-2.95, -2.4])
-        l1 = M(r"q_1", size=48, color=SKY).next_to(q1, UP, buff=0.12)
-        l2 = M(r"q_2", size=48, color=SKY).next_to(q2, UP, buff=0.12)
-        l3 = M(r"q_3", size=48, color=SKY).next_to(q3, RIGHT, buff=0.2)
-        j_eq = E(r"q_1|=|q_2|+|q_3", size=60, cmap={"q_3": SKY}).move_to([RX, -0.7, 0])
-        j_note = T("what flows in must flow out", size=30, color=MUTED).next_to(j_eq, DOWN, buff=0.4)
+        l1 = M(r"q_1", size=60, color=SKY).next_to(q1, UP, buff=0.12)
+        l2 = M(r"q_2", size=60, color=SKY).next_to(q2, UP, buff=0.12)
+        l3 = M(r"q_3", size=60, color=SKY).next_to(q3, RIGHT, buff=0.2)
+        j_eq = E(r"q_1|=|q_2|+|q_3", size=68, cmap={"q_3": SKY}).move_to([RX, -0.7, 0])
+        j_note = T("what flows in must flow out", size=34, color=MUTED).next_to(j_eq, DOWN, buff=0.4)
         flashes = [ShowPassingFlash(Line(A, J).set_stroke(SKY, width=14), time_width=0.6),
                    ShowPassingFlash(Line(J, Bp).set_stroke(SKY, width=14), time_width=0.6),
                    ShowPassingFlash(Line(J, Cp).set_stroke(SKY, width=14), time_width=0.6)]
@@ -119,7 +121,7 @@ class S04_Shear_Flow(VScene):
         q_arrow2 = arr([big.get_left()[0] + 0.5, big.get_bottom()[1] - 0.55],
                        [big.get_right()[0] - 0.5, big.get_bottom()[1] - 0.55], sw=12)
         q_lbl2 = q_lbl.copy()
-        t_eq = E(r"\tau|=|q|\,/\,|t", size=64).move_to([RX, -1.2, 0])
+        t_eq = E(r"\tau|=|q|\,/\,|t", size=72).move_to([RX, -1.2, 0])
         t_box = SurroundingRectangle(t_eq, color=SKY, buff=0.3, stroke_width=4)
         self.beat("To get back to stress at the end, just divide by the thickness: tau equals q over t.",
                   [FadeIn(wall2), FadeIn(q_arrow2), FadeIn(q_lbl2)], .05,

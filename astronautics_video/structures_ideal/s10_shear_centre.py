@@ -56,7 +56,7 @@ class S10_Shear_Centre(VScene):
             flow(sec, 2, 3, q23, label=r"-12", size=34),
             flow(sec, 3, 4, q34, label=r"-6", size=34),
         )
-        unit = T("q in N/mm", size=30, color=SKY).next_to(sec.p(3), LEFT, buff=0.35).shift(0.3 * DOWN)
+        unit = T("q in N/mm", size=30, color=SKY).next_to(sec.p(3), DL, buff=0.25)
 
         def load_at(x):
             a = Arrow([x, cy - 1.1, 0], [x, cy + 1.1, 0], buff=0, color=ROSE, stroke_width=9,
@@ -82,6 +82,7 @@ class S10_Shear_Centre(VScene):
             self.play(GrowArrow(load[0]), FadeIn(load[1]), run_time=.08 * d)
             self.play(Rotate(VGroup(body, load), 9 * DEGREES, about_point=sc), FadeIn(twist_note),
                       FadeIn(twist_arc), run_time=.13 * d)
+            self.snap("twisted")
             self.wait(.05 * d)
             self.play(Rotate(VGroup(body, load), -9 * DEGREES, about_point=sc), FadeOut(twist_arc),
                       run_time=.08 * d)
@@ -147,6 +148,7 @@ class S10_Shear_Centre(VScene):
 
         sc_dot = Dot(sc, radius=0.12, color=ROSE).set_z_index(6)
         e_span = dim(sc + 1.55 * DOWN, np.array([xw, sc[1] - 1.55, 0]), "e = 100 mm", DOWN)
+        e_span[1].next_to(e_span[0], DOWN, buff=0.12).align_to(np.array([xw - 0.2, 0, 0]), RIGHT)
         e_dash = DashedLine(sc + 1.1 * DOWN, sc + 1.55 * DOWN, color=MUTED)
         load2 = load_at(sc[0])
 

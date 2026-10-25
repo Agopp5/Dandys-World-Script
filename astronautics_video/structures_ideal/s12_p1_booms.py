@@ -51,7 +51,7 @@ class S12_P1_Booms(VScene):
 
     def construct(self):
         self.section("Idealize the box")
-        sec = hw_box(width=6.0, center=(-3.0, -0.35))
+        sec = hw_box(width=6.4, center=(-3.15, -0.45))
         s = sec.s
         walls = sec.draw(t_scale=1.4)
         P = {k: sec.p(k) for k in (1, 2, 3, 4)}
@@ -104,7 +104,7 @@ class S12_P1_Booms(VScene):
         qs = VGroup(*[M(r"B_%d=\,?" % k, size=LAB, color=EMBER).move_to(slot(k)) for k in (1, 2, 3, 4)])
         self.beat("The problem asks us to replace all this with four corner booms, so let's add up what goes into each boom. First the angles.",
                   Create(rings), .06, [FadeIn(m_) for m_ in qs], .1,
-                  [FadeOut(rings), FadeOut(qs)], [Indicate(angles[k], scale_factor=1.3) for k in (1, 2, 3, 4)], .1,
+                  FadeOut(rings), [Indicate(angles[k], scale_factor=1.3) for k in (1, 2, 3, 4)], .1,
                   w=(.25, .2, .15, .3))
 
         def tot_at(v, k):
@@ -131,7 +131,7 @@ class S12_P1_Booms(VScene):
         self.beat("An angle's area is the two leg lengths, minus the overlap, times the thickness. Sixty plus fifty minus ten is one hundred, times ten: one thousand square millimeters on the left.",
                   [FadeIn(h4), Indicate(lab_L)], .06, Write(e4a[0]), Write(e4a[1]), .05,
                   [Write(e4b[0]), Write(e4b[1])], [Write(e4b[2]), Write(e4b[3]), FadeIn(n4)],
-                  [TransformFromCopy(e4b[3], cur[1]), TransformFromCopy(e4b[3], cur[4])], .14,
+                  [TransformFromCopy(e4b[3], cur[1]), TransformFromCopy(e4b[3], cur[4]), FadeOut(qs[0]), FadeOut(qs[3])], .14,
                   w=(.2, .2, .1, .15, .15, .2))
 
         # beat 5: right angle area
@@ -146,7 +146,7 @@ class S12_P1_Booms(VScene):
         self.beat("Fifty plus forty minus eight is eighty two, times eight: six hundred fifty six on the right.",
                   [Indicate(lab_R), VGroup(e4a, e4b, n4).animate.shift(.75 * UP), FadeOut(h4)],
                   Write(e5a), [Write(e5b), FadeIn(n5)],
-                  [TransformFromCopy(e5b[3], cur[2]), TransformFromCopy(e5b[3], cur[3])], .16,
+                  [TransformFromCopy(e5b[3], cur[2]), TransformFromCopy(e5b[3], cur[3]), FadeOut(qs[1]), FadeOut(qs[2])], .16,
                   w=(.15, .25, .3, .2))
         alg45 = VGroup(e4a, e4b, n4, e5a, e5b, n5)
 
@@ -225,7 +225,7 @@ class S12_P1_Booms(VScene):
         # dot radius r0 + k sqrt(B), steepened so 4000 vs 3556 reads at a glance (radii 0.28 vs 0.19)
         sec.booms({1: B1, 2: B2, 3: B2, 4: B1}, r0=-1.3, k=.025)
         assert sec.boom_m[1].width > 1.3 * sec.boom_m[2].width
-        names = sec.names(size=LAB)
+        names = sec.names(size=LAB, off=.62)
         with self.say("Adding it all up: each left boom is four thousand square millimeters, and each right boom is three thousand five hundred fifty six.") as d:
             self.play(FadeOut(alg7), FadeIn(a8), FadeIn(n8), run_time=.12 * d)
             self.play(Write(b8), Indicate(cur[1]), Indicate(cur[4]), run_time=.16 * d)

@@ -20,14 +20,14 @@ for tD, bb, s1, s2 in [(2.0, 150.0, 80.0, 30.0), (1.2, 90.0, -40.0, 55.0), (3.0,
     assert np.isclose(s2 * B2 * bb, s1 * tD * bb * bb / 2 + 0.5 * (s2 - s1) * tD * bb * (2 / 3) * bb)  # moment about 1
 
 # picture geometry (scene units): the panel on the left, filling the height; algebra on the right
-XL, XR = -5.9, -2.3            # boom 1, boom 2
+XL, XR = -5.9, -1.6            # boom 1, boom 2
 BW = XR - XL                   # panel width b
 Y0 = 0.55                      # panel centre line
 TH = 0.26                      # drawn panel thickness
 YB = Y0 + TH / 2               # base of the stress block
 H1, H2 = 2.0, 0.8              # stress heights at boom 1 and boom 2 (sigma_1 > sigma_2)
 YI = -3.05                     # idealized booms
-XC = -1.25                     # left edge of the algebra column
+XC = -0.55                    # left edge of the algebra column
 
 # idealized booms drawn to scale: B_1, B_2 from the rule with sigma_2/sigma_1 = H2/H1
 RAT = H2 / H1
@@ -122,10 +122,9 @@ class S06_Skin_Area(VScene):
                       stroke_color=GOLD, stroke_width=3, fill_color=GOLD, fill_opacity=.6)
         trilab = backed(E(r"\sigma_1|-|\sigma_2", size=36)).move_to(np.array([XL + .95, YB + H2 + .4, 0]))
         pivot = Circle(radius=.36, color=EMBER, stroke_width=4).move_to(bm2)
-        pivlab = T("pivot", size=34, color=EMBER).next_to(pivot, RIGHT, buff=.12)
 
         self.beat("To find B one, take moments about boom two. Split the stress into a rectangle and a triangle.",
-                  [FadeOut(card), Create(pivot), FadeIn(pivlab)], .12,
+                  [FadeOut(card), Create(pivot)], .12,
                   [FadeOut(block), arrows.animate.set_opacity(.2), FadeIn(rect)],
                   [FadeIn(tri), FadeIn(trilab)], .18, w=(.35, .3, .35))
 
@@ -179,7 +178,7 @@ class S06_Skin_Area(VScene):
                    size=46), r"divide both sides by $\sigma_1 b$")
         rB = row(E(r"=|\frac{t_D b}{6}|\Big(|3|\frac{\sigma_2}{\sigma_1}|+2-2|\frac{\sigma_2}{\sigma_1}|\Big)", size=46),
                  "common denominator 6")
-        rC = row(E(r"B_1|=|\frac{t_D b}{6}|\Big(2+|\frac{\sigma_2}{\sigma_1}|\Big)", size=52), "collect terms")
+        rC = row(E(r"B_1|=|\frac{t_D b}{6}|\Big(2+|\frac{\sigma_2}{\sigma_1}|\Big)", size=52), "collect terms", buff=.38)
         for e, ks in [(rA[0], (3, 7)), (rB[0], (4, 6)), (rC[0], (4,))]:
             paint(e, {k: GOLD for k in ks})
         column(rA, rB, rC)
@@ -195,21 +194,22 @@ class S06_Skin_Area(VScene):
             self.play(Write(rB), run_time=.17 * d)
             self.wait(.05 * d)
             self.play(Write(rC), run_time=.22 * d)
-            self.play(Create(boxC), FadeIn(glow(rC[0], EMBER)), Indicate(ib1, color=EMBER, scale_factor=1.5),
+            gC = glow(rC[0], EMBER)
+            self.play(Create(boxC), FadeIn(gC), Indicate(ib1, color=EMBER, scale_factor=1.5),
                       run_time=.1 * d)
         self.snap("boxed B_1")
-        self.wait(2.0)
+        self.wait(1.5)
 
         # ---- B_2 by swapping 1 and 2 ----------------------------------------------------
-        r6 = row(E(r"B_2|=|\frac{t_D b}{6}|\Big(2+|\frac{\sigma_1}{\sigma_2}|\Big)", size=52), "swap 1 and 2")
+        r6 = row(E(r"B_2|=|\frac{t_D b}{6}|\Big(2+|\frac{\sigma_1}{\sigma_2}|\Big)", size=52), "swap 1 and 2", buff=.38)
         paint(r6[0], {4: GOLD})
-        keepC = VGroup(rC, boxC)
+        keepC = VGroup(gC, rC, boxC)
         stage = column(rC.copy(), r6, buff=.7)
         self.play(FadeOut(rA), FadeOut(rB), keepC.animate.shift(stage[0].get_center() - rC.get_center()),
-                  *[m.animate.set_opacity(.25) for m in (sr, st, lr, lt, mr, mt, pivot, pivlab)], run_time=1.2)
+                  *[m.animate.set_opacity(.25) for m in (sr, st, lr, lt, mr, mt, pivot)], run_time=1.0)
         box6 = SurroundingRectangle(r6[0], color=EMBER, buff=.2, stroke_width=4)
-        self.play(Write(r6), run_time=2.0)
+        self.play(Write(r6), run_time=1.6)
         self.play(Create(box6), Indicate(ib2, color=EMBER, scale_factor=1.5), Indicate(f2lab, color=EMBER),
-                  run_time=1.2)
-        self.wait(3.0)
+                  run_time=1.0)
+        self.wait(2.5)
         self.wipe()
