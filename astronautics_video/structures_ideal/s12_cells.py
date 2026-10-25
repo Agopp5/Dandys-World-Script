@@ -11,8 +11,8 @@ colors(**{"B": EMBER, "B_r": EMBER, "B_1": EMBER, "B_2": EMBER, r"\sigma_1": GOL
 CM = {"q_{III}": SKY, "A_I": MINT, "A_{II}": LIME, "A_{III}": SKY}
 
 # a generic tapered three-cell wing box (mm), straight walls; webs at x = 0, 220, 420, 600
-PTS = {"a1": (0, 250), "a2": (0, -250), "b1": (220, 260), "b2": (220, -260),
-       "c1": (420, 220), "c2": (420, -220), "d1": (600, 160), "d2": (600, -160)}
+PTS = {"a1": (0, 300), "a2": (0, -300), "b1": (220, 310), "b2": (220, -310),
+       "c1": (420, 260), "c2": (420, -260), "d1": (600, 190), "d2": (600, -190)}
 WALLS = [("a1", "b1", 2), ("b1", "c1", 2), ("c1", "d1", 2),
          ("a2", "b2", 2), ("b2", "c2", 2), ("c2", "d2", 2),
          ("a1", "a2", 3), ("b1", "b2", 3), ("c1", "c2", 3), ("d1", "d2", 2.5)]
@@ -28,7 +28,7 @@ def shoelace(names):
 # facts: each cell encloses a positive area, and every interior web is shared by exactly two cells
 AREAS = [shoelace(c) for c in CELLS]
 assert all(a > 0 for a in AREAS)
-assert np.isclose(AREAS[0], 220 * (500 + 520) / 2)
+assert np.isclose(AREAS[0], 220 * (600 + 620) / 2)
 edges = [frozenset(e) for c in CELLS for e in zip(c, c[1:] + c[:1])]
 assert edges.count(frozenset(("b1", "b2"))) == 2 and edges.count(frozenset(("c1", "c2"))) == 2
 # T = sum 2 A_R q_R: with all q_R equal to q, the box acts as one cell of area sum A_R
@@ -53,12 +53,13 @@ class S12_Cells(VScene):
                          for c, h in zip(CELLS, hues)])
         centers = [np.mean([sec.p(n) for n in c], axis=0) for c in CELLS]
         qnames = [r"q_I", r"q_{II}", r"q_{III}"]
-        flows = VGroup(*[cell_flow(ctr + UP * .75, radius=.5, color=h, ccw=True, label=qn)
+        flows = VGroup(*[VGroup(cell_flow(ctr + UP * .9, radius=.6, color=h, ccw=True),
+                                M(qn, size=36, color=h).move_to(ctr + UP * .9))
                          for ctr, h, qn in zip(centers, hues, qnames)])
         shared = VGroup(flow(sec, "b2", "b1", 1.0, color=GOLD, frac=.45, off=.0),
                         flow(sec, "c2", "c1", 1.0, color=GOLD, frac=.45, off=.0))
-        dl = VGroup(backed(M(r"q_I - q_{II}", size=30, color=GOLD)),
-                    backed(M(r"q_{II} - q_{III}", size=30, color=GOLD)))
+        dl = VGroup(backed(M(r"q_I - q_{II}", size=34, color=GOLD)),
+                    backed(M(r"q_{II} - q_{III}", size=34, color=GOLD)))
         dl[0].move_to(sec.mid("b1", "b2") + DOWN * 1.3)
         dl[1].move_to(sec.mid("c1", "c2") + DOWN * 1.3)
         self.add(polys)
@@ -69,15 +70,15 @@ class S12_Cells(VScene):
 
         # torque equation on the right
         eq = E(r"T|=|\sum_R|2|A_R|q_R", size=52)
-        rows = VGroup(E(r"T|=|2|A_I|q_I", size=44, cmap=CM),
-                      E(r"+|2|A_{II}|q_{II}", size=44, cmap=CM),
-                      E(r"+|2|A_{III}|q_{III}", size=44, cmap=CM)).arrange(DOWN, buff=.35, aligned_edge=LEFT)
+        rows = VGroup(E(r"T|=|2|A_I|q_I", size=48, cmap=CM),
+                      E(r"+|2|A_{II}|q_{II}", size=48, cmap=CM),
+                      E(r"+|2|A_{III}|q_{III}", size=48, cmap=CM)).arrange(DOWN, buff=.35, aligned_edge=LEFT)
         rows[1].align_to(rows[0][2], LEFT).shift(LEFT * rows[1][0].width * 1.6)
         rows[2].align_to(rows[1], LEFT)
         alg = VGroup(eq, rows).arrange(DOWN, buff=.7)
-        place(alg, "right")
-        alg.shift(UP * .3)
-        anote = TX(r"$A_R$ = area enclosed by cell $R$", size=26, color=MUTED).next_to(eq, DOWN, buff=.2)
+        alg.move_to(np.array([3.8, 0, 0])).to_edge(UP, buff=.6)
+        anote = VGroup(M(r"A_R", size=36, color=MUTED), T("is the area enclosed by cell R", size=28, color=MUTED))
+        anote.arrange(RIGHT, buff=.2).next_to(eq, DOWN, buff=.25)
         rows.next_to(anote, DOWN, buff=.45)
         alabels = VGroup(*[M(a, size=34, color=h).move_to(ctr + DOWN * .25)
                            for a, h, ctr in zip([r"A_I", r"A_{II}", r"A_{III}"], hues, centers)])

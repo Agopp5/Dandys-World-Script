@@ -91,7 +91,7 @@ class S08_P1_Booms(VScene):
 
         # beat 2: angle areas
         r1 = row(E(r"A_L|=|(60+50-10)\times 10|=|1000", size=40),
-                 T("legs minus the overlap, times thickness", size=26, color=MUTED))
+                 T("legs minus overlap, times thickness", size=26, color=MUTED))
         r2 = row(E(r"A_R|=|(50+40-8)\times 8|=|656", size=40),
                  T("areas in square millimeters", size=26, color=MUTED))
         paint(r1[0], {4: EMBER}); paint(r2[0], {4: EMBER})
@@ -144,8 +144,8 @@ class S08_P1_Booms(VScene):
         t1 = E(r"B_1|=|1000+2500+500|=|4000", size=40)
         t2 = E(r"B_2|=|656+2500+400|=|3556", size=40)
         paint(t1, {4: EMBER}); paint(t2, {4: EMBER})
-        n1 = T("angle plus skin plus web, in square millimeters", size=26, color=MUTED)
-        n2 = T("by symmetry, boom 4 matches boom 1, boom 3 matches boom 2", size=26, color=MUTED)
+        n1 = T("angle plus skin plus web", size=26, color=MUTED)
+        n2 = T("by symmetry: boom 4 as 1, boom 3 as 2", size=26, color=MUTED)
         tot = VGroup(t1, n1, t2, n2).arrange(DOWN, buff=.3, aligned_edge=LEFT)
         n1.shift(.1 * UP); t2.shift(.25 * DOWN); n2.shift(.15 * DOWN)
         col(tot, .2)

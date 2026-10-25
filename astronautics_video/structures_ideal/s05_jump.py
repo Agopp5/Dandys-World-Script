@@ -146,7 +146,7 @@ class S05_Jump(VScene):
             self.play(Circumscribe(res[5], color=GOLD), run_time=.08 * d)
             self.play(Write(bend), FadeIn(bendn), run_time=.16 * d)
             self.play(TransformFromCopy(bend[0], sub[0]), FadeIn(VGroup(sub[1], sub[3])),
-                      TransformFromCopy(bend[5], sub[2]), FadeIn(subn), run_time=.16 * d)
+                      TransformFromCopy(VGroup(bend[2], bend[6]), sub[2]), FadeIn(subn), run_time=.16 * d)
             self.wait(.06 * d)
             self.play(TransformFromCopy(VGroup(*res[0:5]), VGroup(*fin[0:5])),
                       TransformFromCopy(sub[2], fin[5]),

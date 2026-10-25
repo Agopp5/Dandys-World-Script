@@ -15,8 +15,8 @@ assert np.isclose(G_SKIN / G_REF, 0.8768, atol=1e-4)
 assert Q_II > Q_I > Q_III > 0
 
 # a schematic three-cell wing box (mm): skins one material, spars another
-PTS = {"a": (0, 0), "b": (300, 15), "c": (600, 40), "d": (800, 70),
-       "e": (0, 600), "f": (300, 585), "g": (600, 545), "h": (800, 500)}
+PTS = {"a": (0, 0), "b": (280, 20), "c": (560, 50), "d": (800, 90),
+       "e": (0, 800), "f": (280, 780), "g": (560, 740), "h": (800, 680)}
 SKINS = [("a", "b", 2.0), ("b", "c", 2.0), ("c", "d", 2.0), ("e", "f", 2.0), ("f", "g", 2.0), ("g", "h", 2.0)]
 SPARS = [("a", "e", 3.0), ("b", "f", 3.0), ("c", "g", 3.0), ("d", "h", 3.0)]
 
@@ -25,7 +25,7 @@ class S14_Gstar(VScene):
     budget = 70
 
     def construct(self):
-        sec = Section(PTS, SKINS + SPARS, width=5.6, center=(-3.4, -0.5))
+        sec = Section(PTS, SKINS + SPARS, width=5.4, center=(-3.4, -0.4))
         walls = sec.draw()
         skins = VGroup(*[sec.walls_m[(a, b)] for a, b, _ in SKINS])
         spars = VGroup(*[sec.walls_m[(a, b)] for a, b, _ in SPARS])
@@ -33,8 +33,12 @@ class S14_Gstar(VScene):
         spars.set_color(MUTED)
         g_sk = VGroup(T("skin", size=28, color=INK2), M(r"G_{\text{skin}}", size=40, color=ACCENT)).arrange(RIGHT, buff=.2)
         g_sk.next_to(sec.mid("e", "f"), UP, buff=.3)
+        sk_ln = Line(g_sk.get_bottom(), sec.mid("e", "f"), color=INK2, stroke_width=2)
         g_sp = VGroup(T("spar", size=28, color=MUTED), M(r"G_{\text{spar}}", size=40, color=ACCENT)).arrange(RIGHT, buff=.2)
-        g_sp.next_to(sec.mid("a", "b"), DOWN, buff=.35).align_to(sec.p("a"), LEFT)
+        g_sp.next_to(sec.p("b"), DOWN, buff=.15).shift(DOWN * .35 + RIGHT * .4)
+        sp_ln = Line(g_sp.get_top(), sec.mid("b", "f") + DOWN * 1.2, color=MUTED, stroke_width=2)
+        g_sk.add(sk_ln)
+        g_sp.add(sp_ln)
 
         old = E(r"\frac{d\theta}{dz}|=|\frac{1}{2AG}|\oint|q|\,\frac{ds}{t}", size=48)
         new = E(r"\frac{d\theta}{dz}|=|\frac{1}{2A}|\oint|q|\,\frac{ds}{G\,t}", size=48)
@@ -70,13 +74,14 @@ class S14_Gstar(VScene):
         flows, labs = VGroup(), VGroup()
         for k, cell in enumerate(cells):
             cen = np.mean([sec.p(n) for n in cell], axis=0)
-            flows.add(cell_flow(cen, radius=.5, color=cols[k], ccw=True))
-            labs.add(M(tex[k], size=44, color=cols[k]).move_to(cen))
+            flows.add(cell_flow(cen, radius=.68, color=cols[k], ccw=True))
+            labs.add(M(tex[k], size=40, color=cols[k]).move_to(cen))
         rows = VGroup(*[M(tex[k] + r"\;=\;" + str(vals[k]) + r"\ \text{N/mm}", size=48)
                         for k in range(3)]).arrange(DOWN, buff=.5, aligned_edge=LEFT)
         for k, r in enumerate(rows):
             r[0][0:k + 2].set_color(cols[k])
-        head = TX(r"your notes' three-cell box, $T = 11.3$ kNm", size=30, color=MUTED)
+        head = VGroup(T("your notes' three-cell box", size=30, color=MUTED),
+                      M(r"T = 11.3\ \text{kNm}", size=40, color=LILAC)).arrange(DOWN, buff=.2)
         card = panel(VGroup(head, rows).arrange(DOWN, buff=.45))
         card.move_to([3.6, -1.2, 0])
         self.beat("Everything else stays the same. Your notes' three cell example works out to seven point one, eight point nine and four point two newtons per millimeter.",

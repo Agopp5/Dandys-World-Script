@@ -42,7 +42,7 @@ class S06_Channel(VScene):
 
         # staircase plot of q along s (bottom right)
         ax = axes((-100, 900, 200), (-14, 2, 2), width=7.0, height=2.5, xlabel="s", ylabel="q").to_corner(DR, buff=0.4)
-        ax.shift(0.35 * UP)
+        ax.shift(0.1 * UP)
         bl = VGroup(*[DashedLine(ax.c2p(s, 1.5), ax.c2p(s, -13.5), color=EMBER, stroke_width=2, dash_length=0.08)
                       for s in S_POS])
         bnum = VGroup(*[T(str(i + 1), 26, EMBER).next_to(bl[i], DOWN, buff=0.05) for i in range(4)])
@@ -82,8 +82,7 @@ class S06_Channel(VScene):
         kbox = panel(kbox[0], color=GOLD)
         kbox[1].set_z_index(3)
         rule = E(r"q_2|-|q_1|=|-|S_y|/|I_{xx}|B_r|y_r", size=40)
-        kbox.to_corner(UR, buff=0.35)
-        rule.next_to(kbox, DOWN, buff=0.35).to_edge(RIGHT, buff=0.5)
+        VGroup(rule, kbox).arrange(RIGHT, buff=0.45).to_corner(UR, buff=0.4)
         rule_note = T("the jump at each boom", 26, MUTED).next_to(rule, DOWN, buff=0.12).align_to(rule, LEFT)
         l1 = E(r"q_{12}|=|0|-|10^{-4}|(300)|(200)|=|-6\ \text{N/mm}", size=40)
         paint(l1, {0: SKY, 5: EMBER, 8: SKY})
@@ -117,7 +116,7 @@ class S06_Channel(VScene):
         r3 = row("boom 3", r"q_{34}|=|-12|-|10^{-4}|(300)|(-200)|=|-6", {0: SKY, 2: SKY, 5: EMBER, 8: SKY})
         r4 = row("boom 4", r"q_{\text{end}}|=|-6|-|10^{-4}|(300)|(-200)|=|0", {0: SKY, 2: SKY, 5: EMBER, 8: SKY})
         rows = VGroup(r2, r3, r4).arrange(DOWN, buff=0.38, aligned_edge=LEFT)
-        rows.next_to(rule_note, DOWN, buff=0.45).to_edge(RIGHT, buff=0.5)
+        rows.next_to(rule_note, DOWN, buff=0.35).to_edge(RIGHT, buff=0.5)
         for r in rows:                          # line the equals signs up
             r[1].shift((rows[0][1][1].get_x() - r[1][1].get_x()) * RIGHT)
         f23 = flow(sec, 2, 3, q23, label="-12")
