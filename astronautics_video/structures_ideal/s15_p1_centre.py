@@ -45,12 +45,13 @@ class S15_P1_Centre(VScene):
         # final flows: both webs up (q_23 < 0 so the arrow on 2->3 points up)
         fRa = flow(sec, 2, 3, -1.534)
         fLa = flow(sec, 4, 1, 1.800)
-        qR = M(r"1.534\times10^{-3}\,S_y", size=34, color=SKY).next_to(fRa, LEFT, buff=0.15)
+        qR = M(r"1.534\times10^{-3}\,S_y", size=34, color=SKY).next_to(fRa, LEFT, buff=0.15).shift(DOWN * 0.7)
         qL = M(r"1.800\times10^{-3}\,S_y", size=34, color=SKY).next_to(fLa, RIGHT, buff=0.15).shift(UP * 1.3)
         FRl = M(r"0.460\,S_y", size=38, color=ROSE).move_to(qR).align_to(qR, RIGHT)
         FLl = M(r"0.540\,S_y", size=38, color=ROSE).move_to(qL).align_to(qL, LEFT)
-        xh = sec.p(1)[0] + 0.62 * (sec.p(2)[0] - sec.p(1)[0])
-        hspan = span([xh, sec.p(3)[1] + 0.1, 0], [xh, sec.p(2)[1] - 0.1, 0], r"300\text{ mm}", side=LEFT)
+        xh = sec.p(1)[0] + 0.55 * (sec.p(2)[0] - sec.p(1)[0])
+        hspan = span([xh, sec.p(3)[1] + 0.1, 0], [xh, sec.p(2)[1] - 0.1, 0], "", side=LEFT)
+        hspan = VGroup(hspan, M(r"300\text{ mm}", size=36, color=INK).next_to([xh, -0.3, 0], LEFT, buff=0.15))
 
         X0 = 3.7   # centre of the algebra column
 
@@ -83,7 +84,8 @@ class S15_P1_Centre(VScene):
 
         # ---------------- beat 3: moment of the right web about the left web
         pivot = Dot(sec.mid(4, 1), radius=0.11, color=ACCENT).set_z_index(6)
-        arm = span(sec.p(4) + DOWN * 0.2, sec.p(3) + DOWN * 0.2, r"500\text{ mm}", side=DOWN)
+        arm = span(sec.p(4) + DOWN * 0.25, sec.p(3) + DOWN * 0.25, "", side=DOWN)
+        arm = VGroup(arm, M(r"500\text{ mm}", size=36, color=INK).next_to(arm, DOWN, buff=0.12))
         arc = Arc(radius=0.75, start_angle=-PI * 0.4, angle=PI * 0.8, color=INK, stroke_width=5)
         arc.move_arc_center_to(sec.mid(4, 1))
         arc.add_tip(tip_length=0.22)
@@ -106,8 +108,8 @@ class S15_P1_Centre(VScene):
         topl = M(r"3.52\times10^{-5}\,S_y", size=34, color=SKY).next_to(sec.walls_m[(1, 2)], UP, buff=0.15)
         botl = M(r"3.52\times10^{-5}\,S_y", size=34, color=SKY).next_to(bot, UP, buff=0.12)
         r2 = E(r"M_R|=|230.0\,|S_y", size=44)
-        res2 = panel(VGroup(r2, T("counterclockwise", size=30, color=MUTED)).arrange(RIGHT, buff=0.35), color=HAIR)
-        res2.move_to([X0, 2.35, 0])
+        res2 = panel(VGroup(r2, T("counterclockwise", size=30, color=MUTED)).arrange(DOWN, buff=0.15), color=HAIR)
+        res2.move_to([X0, 2.2, 0])
         s0 = E(r"F_{sk}|=|3.52\times10^{-5}\,|S_y|\times 500", size=44)
         n0 = T("force in each skin; 300 mm apart", size=30, color=MUTED)
         s1 = E(r"M_{sk}|=|F_{sk}\times 300", size=44)
@@ -116,7 +118,7 @@ class S15_P1_Centre(VScene):
         g3 = VGroup(s0, n0, s1, s1b, ns1).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
         s1b.shift(RIGHT * 1.2)
         fit(g3, 6.2, 4.6)
-        g3.next_to(res2, DOWN, buff=0.45).set_x(X0)
+        g3.next_to(res2, DOWN, buff=0.35).set_x(X0)
         self.beat("The small flows in the top and bottom skins point opposite ways, so they make a small couple, the other way: about five point three S y.",
                   [ReplacementTransform(g2, res2), GrowFromCenter(top), GrowFromCenter(bot)], [FadeIn(topl), FadeIn(botl)], .06,
                   [Write(s0), FadeIn(n0)], Write(s1), FadeIn(s1b), FadeIn(ns1), .12,
@@ -149,7 +151,7 @@ class S15_P1_Centre(VScene):
         # ---------------- beat 6: left of the middle
         mid = DashedLine([xm, ybot, 0], [xm, ytop, 0], color=MUTED, stroke_width=3, dash_length=0.1)
         midl = M(r"\text{middle: }250\text{ mm}", size=34, color=MUTED).next_to(mid, UP, buff=0.1).shift(RIGHT * 0.9)
-        ne = VGroup(T("left booms are heavier (mm squared):", size=30, color=MUTED),
+        ne = VGroup(T("the left booms are heavier:", size=30, color=MUTED),
                     E(r"B_1|=|4000\;>\;3556|=|B_2", size=44)).arrange(DOWN, buff=0.15, aligned_edge=LEFT)
         ne.next_to(g4, DOWN, buff=0.6).align_to(g4, LEFT)
         self.beat("It sits left of the middle, because the left booms are heavier and carry more of the load.",

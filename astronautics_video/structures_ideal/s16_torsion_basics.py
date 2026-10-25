@@ -34,10 +34,10 @@ class S16_Torsion_Basics(VScene):
     budget = 134
 
     def construct(self):
-        sec = Section(PTS, WALLS, width=6.4, center=(-2.95, -0.3))
+        sec = Section(PTS, WALLS, width=6.2, center=(-3.25, -0.3))
         walls = sec.draw(t_scale=2.5)
         O = (sec.p(1) + sec.p(3)) / 2
-        tq = torque(O + DOWN * .3, radius=0.7, ccw=True, label="T", size=44)
+        tq = torque(O + DOWN * .6, radius=0.62, ccw=True, label="T", size=44)
 
         # ---- beat 1: the cell and the torque
         self.beat("Now a different load: a pure twist. A torque T is applied to the wing box, and nothing else.",
@@ -71,7 +71,7 @@ class S16_Torsion_Basics(VScene):
         foot = np.array([O[0], p1[1], 0])
         o_dot = Dot(O, radius=.08, color=INK)
         o_lab = M(r"O", size=34, color=INK).next_to(o_dot, DL, buff=.08)
-        lever = DashedLine(O, foot, color=INK, stroke_width=4)
+        lever = DashedLine(O, foot, color=INK, stroke_width=5)
         p_lab = M(r"p", size=40, color=INK).next_to(lever, LEFT, buff=.12)
         k = .2
         corner = VMobject(color=INK, stroke_width=3).set_points_as_corners(
@@ -111,8 +111,8 @@ class S16_Torsion_Basics(VScene):
                       LaggedStart(*[FadeIn(t) for t in tris], lag_ratio=.12), run_time=.25 * d)
             self.play(Write(r3[0][:4]), run_time=.12 * d)
             self.play(Write(r3[0][4:]), FadeIn(r3[1]), run_time=.12 * d)
-            g3 = glow(r3[0][5:])
-            self.play(Create(box), FadeIn(g3), run_time=.08 * d)
+            g3 = VGroup()
+            self.play(Create(box), run_time=.08 * d)
 
         # ---- beat 5: the numbers
         self.play(FadeOut(VGroup(tris, tri0, piece, ds_lab, o_dot, o_lab, lever, p_lab, r0, r1, r2, r3, box, g3)),
@@ -123,16 +123,16 @@ class S16_Torsion_Basics(VScene):
                                    tip_length=.2),
                        M(r"500\ \text{mm}", size=36, color=INK2))
         dim_w[1].next_to(dim_w[0], DOWN, buff=.1)
-        x_d = p4[0] - .3
+        x_d = p4[0] - .22
         dim_h = VGroup(DoubleArrow([x_d, p4[1], 0], [x_d, p1[1], 0], buff=0, color=MUTED, stroke_width=3,
                                    tip_length=.2),
                        M(r"250\ \text{mm}", size=36, color=INK2).rotate(PI / 2))
-        dim_h[1].next_to(dim_h[0], LEFT, buff=.1)
+        dim_h[1].next_to(dim_h[0], LEFT, buff=.06)
         t_lab = TX(r"all walls $t = 2$ mm", size=34).next_to(dim_w, DOWN, buff=.25)
         nA = row(E(r"A|=|500 \times 250|=|125\,000\ \text{mm}^2", size=46), note("width times height of the cell"))
         nq1 = E(r"q|=|\frac{T}{2A}", size=48)
         nq2 = E(r"=|\frac{10 \times 10^{6}}{2 \times 125\,000}|=|40\ \text{N/mm}", size=46)
-        nq = VGroup(nq1, nq2, TX(r"$T$ = 10 kN m = $10 \times 10^{6}$ N mm", size=30, color=MUTED)).arrange(
+        nq = VGroup(nq1, nq2, TX(r"$T$ = 10 kN m = $10 \times 10^{6}$ N mm", size=36, color=MUTED)).arrange(
             DOWN, buff=.2, aligned_edge=LEFT)
         nq2.shift(RIGHT * .45)
         nt = row(E(r"\tau|=|\frac{q}{t}|=|\frac{40}{2}|=|20\ \text{N/mm}^2", size=46),
