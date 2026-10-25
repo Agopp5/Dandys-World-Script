@@ -83,7 +83,7 @@ Several scenes already exist from the previous, faster cut of this video: the br
   Totals: q_12 = q_34 = 3.52 x 10^-5 S_y; q_23 = -1.534 x 10^-3 S_y (flows UP the right web); q_41 = +1.800 x 10^-3 S_y
   (UP the left web). Web forces 0.460 S_y and 0.540 S_y, sum 1.000 S_y.
   Moments about the left web: right web 0.460 S_y x 500 = 230.0 S_y (counterclockwise); skins' couple
-  3.52 x 10^-5 S_y x 500 x 300 = 5.27 S_y (clockwise). xi = 230.0 - 5.3 = 224.8 mm from the left web.
+  3.52 x 10^-5 S_y x 500 x 300 = 5.27 S_y (clockwise). xi = 230.04 - 5.27 = 224.8 mm from the left web (0.46007 x 500 = 230.04, unrounded).
 - Torsion of one closed cell: a torque T twists the section; rate of twist d theta/dz (radians per mm of span).
   Shear modulus G (N/mm^2): how stiff the material is in shear. In pure torsion the shear flow q is the same all the way
   around a single cell. Torque from q: each bit of wall ds carries force q ds at lever arm p, and p ds is twice the area
@@ -338,7 +338,7 @@ Picture: the box with final flows: both webs flowing up.
    → 0.460 S_y x 500 = 230.0 S_y.
 4. "The small flows in the top and bottom skins point opposite ways, so they make a small couple, the other way: about five point three S y."
    → 3.52 x 10^-5 S_y x 500 x 300 = 5.27 S_y, opposite sense.
-5. "So S y times xi equals two thirty minus five point three. xi is two hundred twenty four point eight millimeters from the left web. That's the answer."
+5. "So S y times xi equals two thirty point zero four, minus five point two seven. xi is two hundred twenty four point eight millimeters from the left web. That's the answer."
    → xi = 224.8 mm, ROSE, glowing; dashed line marks the shear centre.
 6. "It sits left of the middle, because the left booms are heavier and carry more of the load."
    → dashed "middle" at 250 mm; the left booms flash.

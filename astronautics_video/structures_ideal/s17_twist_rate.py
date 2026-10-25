@@ -23,8 +23,8 @@ DEG_PER_M = RATE * 1000 * 180 / np.pi
 assert np.isclose(DEG_PER_M, 0.25, atol=0.01)     # 0.2546 deg/m: "about a quarter"
 
 ANG = 12 * DEGREES                                # drawn twist, exaggerated (real: 4.4e-6 rad/mm)
-CF = np.array([-4.0, -1.3, 0])                    # front section centre
-DEPTH = np.array([1.3, 1.7, 0])                   # oblique offset of the section a distance dz behind
+CF = np.array([-3.85, -1.75, 0])                    # front section centre
+DEPTH = np.array([1.2, 2.1, 0])                   # oblique offset of the section a distance dz behind
 
 
 def rot(v, a=ANG):
@@ -44,10 +44,10 @@ class S17_Twist_Rate(VScene):
 
         # back section (a distance dz behind), faint
         back_pts = [c + DEPTH for c in corners]
-        back = sec.draw().copy().shift(DEPTH).set_stroke(opacity=.55)
+        back = sec.draw(t_scale=2.0).copy().shift(DEPTH).set_stroke(opacity=.55)
         # front section: opaque cut face + walls
         face = Polygon(*corners, stroke_width=0, fill_color=BG, fill_opacity=.92)
-        front = VGroup(face, sec.draw())
+        front = VGroup(face, sec.draw(t_scale=2.0))
         front.set_z_index(2)
         tq_local = np.array([-1.5, 0, 0])
         tq = torque(CF + tq_local, radius=.55, color=LILAC, label="T").set_z_index(4)
@@ -71,7 +71,8 @@ class S17_Twist_Rate(VScene):
         dz_arrow = DoubleArrow(p0 + .4 * nrm, p1 + .4 * nrm, buff=0, color=INK, stroke_width=3,
                                tip_length=.2, max_tip_length_to_length_ratio=.2)
         dz_lab = E(r"dz", size=40).move_to((p0 + p1) / 2 + .85 * nrm)
-        note_x = T("(twist drawn exaggerated)", size=30, color=MUTED).move_to([-5.0, 3.45, 0])
+        note_x = T("(twist drawn exaggerated)", size=30, color=MUTED)
+        note_x.move_to([-6.7 + note_x.width / 2, 3.5, 0])
 
         rate_word = T("rate of twist", size=36, color=INK2)
         rate_m = E(r"\frac{d\theta}{dz}", size=60)
@@ -91,12 +92,12 @@ class S17_Twist_Rate(VScene):
         # labels: G above the box, t at the bottom wall
         g_word = T("shear modulus", size=34, color=INK2)
         g_m = E(r"G", size=44)
-        g_lab = VGroup(g_word, g_m).arrange(RIGHT, buff=.25).move_to([-2.7, 2.35, 0])
-        bot_mid = CF + rot([0, local[2][1]])
-        t_m = E(r"t", size=44).move_to(bot_mid + np.array([0, -1.0, 0]))
-        t_arrow = Arrow(t_m.get_top() + UP * .05, bot_mid + DOWN * .06, buff=0, color=INK, stroke_width=3,
+        g_lab = VGroup(g_word, g_m).arrange(RIGHT, buff=.25).move_to([-2.9, 2.4, 0])
+        top_mid = CF + rot([0, local[0][1]])
+        t_m = E(r"t", size=44).move_to(top_mid + np.array([0, .85, 0])).set_z_index(5)
+        t_arrow = Arrow(t_m.get_bottom() + DOWN * .05, top_mid + UP * .08, buff=0, color=INK, stroke_width=3,
                         tip_length=.18)
-        t_word = T("thickness", size=34, color=INK2).next_to(t_m, LEFT, buff=.3)
+        t_word = backed(T("thickness", size=34, color=INK2).next_to(t_m, LEFT, buff=.3)).set_z_index(5)
 
         self.beat("How much it twists depends on the material's shear stiffness, the shear modulus G, and on how thin the walls are.",
                   .05, [FadeIn(g_word), Write(g_m)], Indicate(g_m, color=ACCENT), .08,
@@ -109,8 +110,8 @@ class S17_Twist_Rate(VScene):
         L1[2][-1].set_color(ACCENT)          # the G in 2AG
         L1[4][0].set_color(SKY)              # the q
         L1.next_to([0.7, 2.75, 0], RIGHT, buff=0)
-        n1 = TX(r"$A$: area enclosed by the wall", size=30).set_color(MUTED)
-        n2 = TX(r"$\oint$: once all the way around the cell", size=30).set_color(MUTED)
+        n1 = VGroup(E(r"A", size=36), T("area enclosed by the wall", size=30, color=MUTED)).arrange(RIGHT, buff=.25)
+        n2 = VGroup(E(r"\oint", size=36), T("once all the way around the cell", size=30, color=MUTED)).arrange(RIGHT, buff=.25)
         notes1 = VGroup(n1, n2).arrange(DOWN, aligned_edge=LEFT, buff=.2).next_to(L1, DOWN, buff=.35, aligned_edge=LEFT)
 
         self.beat("The formula is: d theta by d z equals one over two A G, times the integral of q d s over t, all the way around.",
@@ -120,13 +121,14 @@ class S17_Twist_Rate(VScene):
                   w=(.14, .18, .1, .16, .1, .1))
 
         # beat 4: delta, and its value for this cell
-        L2 = E(r"\delta|=|\int|\frac{ds}{t}", size=50).next_to([0.7, 0.35, 0], RIGHT, buff=0)
+        L2 = E(r"\delta|=|\int|\frac{ds}{t}", size=50).next_to(notes1, DOWN, buff=.55, aligned_edge=LEFT)
         L2n = T("for one wall", size=30, color=MUTED).next_to(L2, RIGHT, buff=.5)
         t_new = E(r"t = 2\ \text{mm}", size=44)
         t_new.next_to(t_m.get_left(), RIGHT, buff=0)
-        t_word2 = T("every wall", size=34, color=INK2).next_to(t_new, LEFT, buff=.3)
-        perim = TX(r"around the cell: $2(500 + 250) = 1500$ mm", size=30).set_color(MUTED)
-        L3 = E(r"\oint|\frac{ds}{t}|=|\frac{1500}{2}|=|750", size=50).next_to([0.7, -1.35, 0], RIGHT, buff=0)
+        t_new = backed(t_new).set_z_index(5)
+        t_word2 = backed(T("every wall", size=34, color=INK2).next_to(t_new, LEFT, buff=.3)).set_z_index(5)
+        perim = VGroup(T("perimeter", size=30, color=MUTED), E(r"2(500 + 250) = 1500\ \text{mm}", size=36)).arrange(RIGHT, buff=.25)
+        L3 = E(r"\oint|\frac{ds}{t}|=|\frac{1500}{2}|=|750", size=50).next_to(L2, DOWN, buff=.5, aligned_edge=LEFT)
         perim.next_to(L3, DOWN, buff=.4, aligned_edge=LEFT)
         g3 = glow(L3[5], ACCENT)
 
@@ -138,17 +140,18 @@ class S17_Twist_Rate(VScene):
                   w=(.16, .12, .08, .1, .08, .12, .08, .06))
 
         # beat 5: plug in and convert
-        lab_a = E(r"A = 125\,000\ \text{mm}^2", size=34).move_to(CF + rot([1.0, .42])).set_z_index(5)
-        lab_q = E(r"q| = 40\ \text{N/mm}", size=34).move_to(CF + rot([1.0, -.42])).set_z_index(5)
+        lab_a = E(r"A = 125\,000\ \text{mm}^2", size=34).move_to(CF + rot([0.95, .68])).set_z_index(5)
+        lab_q = E(r"q| = 40\ \text{N/mm}", size=34).move_to(CF + rot([0.95, -.68])).set_z_index(5)
         g_val = E(r"=|27\,000\ \text{N/mm}^2", size=44)
-        g_tgt = VGroup(g_word.copy(), g_m.copy(), g_val).arrange(RIGHT, buff=.22).move_to([-3.6, 2.35, 0])
+        g_tgt = VGroup(g_word.copy(), g_m.copy(), g_val).arrange(RIGHT, buff=.22).move_to([-3.55, 2.4, 0])
         L3_tgt = L3.copy().next_to(L1, DOWN, buff=.45, aligned_edge=LEFT)
         L4 = E(r"=|\frac{40 \times 750}{2 \times 125\,000 \times 27\,000}", size=48)
         L4.next_to(L3_tgt, DOWN, buff=.45, aligned_edge=LEFT)
         L5 = E(r"=|4.44 \times 10^{-6}|\ \text{rad/mm}", size=48).next_to(L4, DOWN, buff=.4, aligned_edge=LEFT)
-        box5 = SurroundingRectangle(L5[1:], color=GOOD, buff=.15)
+        L5[0].shift(LEFT * .12)
+        box5 = SurroundingRectangle(L5[1:], color=GOOD, buff=.1)
         L6 = E(r"\approx|0.25^{\circ}\ \text{per meter}", size=48).next_to(L5, DOWN, buff=.4, aligned_edge=LEFT)
-        L6n = TX(r"$1000$ mm per m, $180/\pi$ degrees per radian", size=30).set_color(MUTED)
+        L6n = VGroup(T("converted:", size=30, color=MUTED), E(r"\times 1000 \times \frac{180}{\pi}", size=38)).arrange(RIGHT, buff=.25)
         L6n.next_to(L6, DOWN, buff=.25, aligned_edge=LEFT)
 
         self.beat("So the rate of twist is forty times seven fifty, over two times one twenty five thousand times twenty seven thousand. That's four point four four times ten to the minus six radians per millimeter: about a quarter of a degree per meter.",

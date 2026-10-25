@@ -25,8 +25,8 @@ MR = 0.460 * 500
 assert np.isclose(MR, 230.0) and np.isclose(FR * 500, 230.0, atol=0.2)
 Msk = 3.52e-5 * 500 * 300
 assert np.isclose(Msk, 5.28, atol=0.01) and np.isclose(qs0 * 500 * 300, 5.27, atol=0.01)
-xi = 230.0 - 5.3
-assert np.isclose(xi, 224.7, atol=0.01) and np.isclose(FR * 500 - qs0 * 500 * 300, 224.8, atol=0.1)
+xi = 230.04 - 5.27
+assert np.isclose(xi, 224.8, atol=0.05) and np.isclose(FR * 500, 230.04, atol=0.005) and np.isclose(FR * 500 - qs0 * 500 * 300, 224.8, atol=0.1)
 assert 224.8 < 250 and np.isclose(500 / 2, 250)
 
 
@@ -125,10 +125,11 @@ class S15_P1_Centre(VScene):
                   w=(.17, .1, .2, .14, .1, .08))
 
         # ---------------- beat 5: xi
-        e1 = E(r"S_y|\,|\xi|=|230.0\,|S_y|-|5.3\,|S_y", size=48)
+        e1 = E(r"S_y|\,|\xi|=|230.04\,|S_y|-|5.27\,|S_y", size=48)
+        ne1 = T("unrounded: 0.46007 x 500", size=30, color=MUTED)
         e2 = E(r"\xi|=|224.8\text{ mm}", size=60)
         ne2 = T("from the left web", size=30, color=MUTED)
-        g4 = VGroup(e1, e2, ne2).arrange(DOWN, buff=0.45, aligned_edge=LEFT)
+        g4 = VGroup(e1, ne1, e2, ne2).arrange(DOWN, buff=0.45, aligned_edge=LEFT)
         e2.shift(RIGHT * 0.6)
         ne2.align_to(e2, LEFT)
         fit(g4, 6.2, 4)
@@ -142,9 +143,9 @@ class S15_P1_Centre(VScene):
         xi_span = span([sec.p(4)[0], ybot + 0.15, 0], [xs, ybot + 0.15, 0], "", side=DOWN)
         xil = M(r"\xi", size=48, color=ROSE).next_to(xi_span, LEFT, buff=0.2).shift(RIGHT * 0)
         xil.move_to([(sec.p(4)[0] + xs) / 2, ybot - 0.35, 0])
-        self.beat("So S y times xi equals two thirty minus five point three. xi is two hundred twenty four point eight millimeters from the left web. That's the answer.",
+        self.beat("So S y times xi equals two thirty point zero four, minus five point two seven. xi is two hundred twenty four point eight millimeters from the left web. That's the answer.",
                   [FadeOut(res2), FadeOut(g3), FadeOut(arc), FadeOut(arm), FadeOut(topl), FadeOut(botl), FadeOut(pivot)],
-                  Write(e1), .1, Write(e2), [FadeIn(glow(e2, ROSE)), FadeIn(ne2), Create(sc), GrowArrow(sy), FadeIn(syl)],
+                  [Write(e1), FadeIn(ne1)], .1, Write(e2), [FadeIn(glow(e2, ROSE)), FadeIn(ne2), Create(sc), GrowArrow(sy), FadeIn(syl)],
                   [FadeIn(xi_span), FadeIn(xil)], .18,
                   w=(.08, .2, .14, .2, .12))
 

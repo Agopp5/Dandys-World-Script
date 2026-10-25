@@ -34,7 +34,7 @@ class S16_Torsion_Basics(VScene):
     budget = 134
 
     def construct(self):
-        sec = Section(PTS, WALLS, width=6.2, center=(-3.25, -0.3))
+        sec = Section(PTS, WALLS, width=6.6, center=(-3.3, -0.3))
         walls = sec.draw(t_scale=2.5)
         O = (sec.p(1) + sec.p(3)) / 2
         tq = torque(O + DOWN * .6, radius=0.62, ccw=True, label="T", size=44)
@@ -44,7 +44,7 @@ class S16_Torsion_Basics(VScene):
                   Create(walls), FadeIn(tq), .25)
 
         # ---- beat 2: one constant shear flow, all the way round
-        flows = VGroup(*[flow(sec, a, b, 1, label="q", size=36, frac=.5) for a, b in CCW])
+        flows = VGroup(*[flow(sec, a, b, 1, label="q", size=44, frac=.5) for a, b in CCW])
         r0 = row(E(r"q|=|\text{same on every wall}", size=48), note("one value for the whole cell"))
         r1 = row(E(r"dT|=|p|\cdot|q|\,ds", size=48, cmap={"dT": LILAC}),
                  note("moment = lever arm x force"))
@@ -52,6 +52,8 @@ class S16_Torsion_Basics(VScene):
         r3 = row(E(r"T|=|q|\oint p\,ds|=|2|A|q", size=52), note("A = area enclosed by the wall midline"))
         rows = VGroup(r0, r1, r2, r3).arrange(DOWN, buff=.42, aligned_edge=LEFT)
         place(rows, "right")
+        fit(rows, 5.7, 7.0)
+        rows.to_edge(RIGHT, buff=.3)
         self.beat("In a single closed cell under pure torque, the shear flow is the same all the way around. "
                   "Call it q.",
                   LaggedStart(*[GrowArrow(f[0]) if isinstance(f, VGroup) else Create(f) for f in flows],
@@ -64,15 +66,15 @@ class S16_Torsion_Basics(VScene):
         a = p1 + (p2 - p1) * .70           # ds runs leftward (the flow direction) along the top wall
         b = p1 + (p2 - p1) * .58
         piece = Line(a, b, color=SKY, stroke_width=12)
-        ds_lab = M(r"ds", size=36, color=SKY).next_to(piece, DOWN, buff=.18)
+        ds_lab = M(r"ds", size=42, color=SKY).next_to(piece, DOWN, buff=.18)
         f_arr = Arrow(a + UP * .32 + RIGHT * .1, b + UP * .32 + LEFT * .25, buff=0, color=SKY, stroke_width=6,
                       max_tip_length_to_length_ratio=.35)
-        f_lab = M(r"q\,ds", size=36, color=SKY).next_to(f_arr, UP, buff=.1)
+        f_lab = M(r"q\,ds", size=42, color=SKY).next_to(f_arr, UP, buff=.1)
         foot = np.array([O[0], p1[1], 0])
         o_dot = Dot(O, radius=.08, color=INK)
-        o_lab = M(r"O", size=34, color=INK).next_to(o_dot, DL, buff=.08)
+        o_lab = M(r"O", size=42, color=INK).next_to(o_dot, DL, buff=.08)
         lever = DashedLine(O, foot, color=INK, stroke_width=5)
-        p_lab = M(r"p", size=40, color=INK).next_to(lever, LEFT, buff=.12)
+        p_lab = M(r"p", size=46, color=INK).next_to(lever, LEFT, buff=.12)
         k = .2
         corner = VMobject(color=INK, stroke_width=3).set_points_as_corners(
             [foot + DOWN * k, foot + DOWN * k + RIGHT * k, foot + RIGHT * k])
@@ -121,14 +123,14 @@ class S16_Torsion_Basics(VScene):
         y_d = p4[1] - .45
         dim_w = VGroup(DoubleArrow([p4[0], y_d, 0], [p3[0], y_d, 0], buff=0, color=MUTED, stroke_width=3,
                                    tip_length=.2),
-                       M(r"500\ \text{mm}", size=36, color=INK2))
+                       M(r"500\ \text{mm}", size=42, color=INK2))
         dim_w[1].next_to(dim_w[0], DOWN, buff=.1)
-        x_d = p4[0] - .22
-        dim_h = VGroup(DoubleArrow([x_d, p4[1], 0], [x_d, p1[1], 0], buff=0, color=MUTED, stroke_width=3,
+        x_d = p3[0] + .25
+        dim_h = VGroup(DoubleArrow([x_d, p3[1], 0], [x_d, sec.p(2)[1], 0], buff=0, color=MUTED, stroke_width=3,
                                    tip_length=.2),
-                       M(r"250\ \text{mm}", size=36, color=INK2).rotate(PI / 2))
-        dim_h[1].next_to(dim_h[0], LEFT, buff=.06)
-        t_lab = TX(r"all walls $t = 2$ mm", size=34).next_to(dim_w, DOWN, buff=.25)
+                       M(r"250\ \text{mm}", size=42, color=INK2).rotate(PI / 2))
+        dim_h[1].next_to(dim_h[0], RIGHT, buff=.08)
+        t_lab = TX(r"all walls $t = 2$ mm", size=38).next_to(dim_w, DOWN, buff=.25)
         nA = row(E(r"A|=|500 \times 250|=|125\,000\ \text{mm}^2", size=46), note("width times height of the cell"))
         nq1 = E(r"q|=|\frac{T}{2A}", size=48)
         nq2 = E(r"=|\frac{10 \times 10^{6}}{2 \times 125\,000}|=|40\ \text{N/mm}", size=46)
@@ -139,7 +141,9 @@ class S16_Torsion_Basics(VScene):
                  note("shear stress in the 2 mm wall"))
         nums = VGroup(nA, nq, nt).arrange(DOWN, buff=.42, aligned_edge=LEFT)
         place(nums, "right")
-        flows40 = VGroup(*[flow(sec, a_, b_, 1, label=r"40", size=36, frac=.5) for a_, b_ in CCW])
+        fit(nums, 5.7, 7.0)
+        nums.to_edge(RIGHT, buff=.3)
+        flows40 = VGroup(*[flow(sec, a_, b_, 1, label=r"40", size=44, frac=.5) for a_, b_ in CCW])
         with self.say("For a five hundred by two fifty cell, A is one hundred twenty five thousand square "
                       "millimeters. Under ten kilonewton meters, q is ten million over two hundred fifty "
                       "thousand: forty newtons per millimeter.") as d:
