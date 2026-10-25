@@ -1,0 +1,82 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.960
+Cut out one boom, with a short length d z, and the skin on either side.
+
+00:00:06.233 --> 00:00:11.431
+Along the boom, the bending stress changes from sigma to sigma plus d sigma.
+
+00:00:11.431 --> 00:00:15.193
+The skin pushes on it with shear flows q one and q two.
+
+00:00:15.567 --> 00:00:23.207
+Force balance along the boom gives q two minus q one equals minus d sigma by d z, times B r.
+
+00:00:23.600 --> 00:00:34.178
+With only a vertical load and I x y zero, d sigma by d z is S y over I x x, times y.
+
+00:00:34.178 --> 00:00:40.600
+So the jump is minus S y over I x x, times B r y r.
+
+00:00:41.566 --> 00:00:46.654
+Between booms the skin carries no direct stress, so the shear flow is constant.
+
+00:00:46.654 --> 00:00:49.166
+It only changes when it crosses a boom.
+
+00:00:49.566 --> 00:00:59.382
+For this channel, I x x is four times three hundred times two hundred squared: forty eight million.
+
+00:00:59.382 --> 00:01:03.646
+So S y over I x x is ten to the minus four.
+
+00:01:04.733 --> 00:01:07.749
+Start at the free edge, where q is zero.
+
+00:01:07.749 --> 00:01:14.685
+Crossing boom one: zero minus ten to the minus four, times three hundred, times two hundred.
+
+00:01:14.685 --> 00:01:17.173
+Minus six newtons per millimeter.
+
+00:01:17.566 --> 00:01:18.133
+Your turn.
+
+00:01:18.133 --> 00:01:21.366
+Pause here and do checkpoint two point one in your guide.
+
+00:01:24.599 --> 00:01:28.738
+Boom two adds another minus six: minus twelve in the web.
+
+00:01:28.738 --> 00:01:34.329
+Boom three sits at minus two hundred, so it adds plus six: back to minus six.
+
+00:01:34.329 --> 00:01:38.759
+And boom four brings it to zero at the free edge, as it must.
+
+00:01:42.565 --> 00:01:47.019
+In a closed section there is no free edge to start from.
+
+00:01:47.019 --> 00:01:49.325
+So we make one: cut any wall.
+
+00:01:50.332 --> 00:01:53.120
+With the cut, it's an open section.
+
+00:01:53.120 --> 00:01:56.944
+March around from the cut, jumping at each boom.
+
+00:01:56.944 --> 00:01:59.572
+That's the basic shear flow, q b.
+
+00:02:00.032 --> 00:02:06.752
+Closing the cut adds one constant shear flow, q s zero, all the way around the cell.
+
+00:02:07.132 --> 00:02:09.604
+To find q s zero, use moments.
+
+00:02:09.604 --> 00:02:17.761
+If the load passes through the shear center, there's another condition: the section must not twist.
+
+00:02:17.761 --> 00:02:22.292
+The integral of q d s over G t around the cell is zero.

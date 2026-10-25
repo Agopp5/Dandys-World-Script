@@ -1,0 +1,73 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:08.760
+Here's a real wing section: a thin skin, two spars, and a row of stringers along the top and bottom.
+
+00:00:09.133 --> 00:00:18.213
+To find its bending stresses and shear flow, you'd need the area and position of every one of these shapes, and the skin between them.
+
+00:00:18.633 --> 00:00:20.517
+That's a lot of bookkeeping.
+
+00:00:20.517 --> 00:00:24.553
+So we simplify the section in a way that keeps what matters.
+
+00:00:25.467 --> 00:00:32.267
+Each stringer is small compared with the whole section, so the bending stress across it is nearly constant.
+
+00:00:32.600 --> 00:00:37.575
+So we can replace it by a single point with the same area.
+
+00:00:37.575 --> 00:00:39.120
+We call it a boom.
+
+00:00:40.100 --> 00:00:47.460
+Here's the key assumption: the booms carry all of the direct stress, and the skin between them carries only shear.
+
+00:00:47.800 --> 00:00:49.449
+That's a big simplification.
+
+00:00:49.449 --> 00:00:54.280
+The bending part of the problem now only needs the boom areas and their positions.
+
+00:00:55.766 --> 00:00:59.531
+Sometimes the skin does carry real direct stress.
+
+00:00:59.531 --> 00:01:03.526
+Then we add its share to the booms at its two edges.
+
+00:01:05.399 --> 00:01:10.679
+The rule: the two booms must give the same force and the same moment as the panel.
+
+00:01:11.533 --> 00:01:13.517
+Take moments about boom two.
+
+00:01:13.517 --> 00:01:17.908
+The uniform part of the stress, sigma two, acts at the middle.
+
+00:01:17.908 --> 00:01:21.733
+The triangle on top acts two thirds of the way across.
+
+00:01:22.099 --> 00:01:38.019
+Setting their moment equal to sigma one times B one times b, and dividing through, gives B one equals t D b over six, times two plus sigma two over sigma one.
+
+00:01:44.400 --> 00:01:47.560
+The stress ratio depends on where the panel is.
+
+00:01:47.867 --> 00:01:55.827
+A top skin in bending has the same stress at both edges, so the ratio is one, and each boom gets t D b over two.
+
+00:01:56.167 --> 00:02:06.407
+A web that crosses the neutral axis has equal and opposite stresses at its ends, so the ratio is minus one, and each boom gets only t D b over six.
+
+00:02:06.800 --> 00:02:07.427
+Your turn.
+
+00:02:07.427 --> 00:02:11.000
+Pause here and do checkpoint one point one in your guide.
+
+00:02:14.233 --> 00:02:19.080
+Ten times three hundred over six: five hundred square millimeters to each boom.
+
+00:02:19.080 --> 00:02:21.473
+We'll use exactly that in the homework.

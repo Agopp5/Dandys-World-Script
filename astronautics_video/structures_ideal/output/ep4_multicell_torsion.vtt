@@ -1,0 +1,70 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.671
+Now twist a wing box with several cells.
+
+00:00:02.671 --> 00:00:08.280
+With no axial restraint, there's no direct stress, so the booms play no part at all.
+
+00:00:08.633 --> 00:00:12.045
+Each cell carries its own constant shear flow.
+
+00:00:12.045 --> 00:00:15.753
+A wall shared by two cells carries the difference.
+
+00:00:16.100 --> 00:00:22.660
+The torque is two times the area of each cell, times its shear flow, added up.
+
+00:00:23.033 --> 00:00:28.053
+But that's one equation, and there's one unknown for every cell.
+
+00:00:28.053 --> 00:00:29.073
+We need more.
+
+00:00:30.533 --> 00:00:33.349
+The extra equations come from compatibility.
+
+00:00:33.349 --> 00:00:38.533
+The whole section rotates as one piece, so every cell has the same rate of twist.
+
+00:00:38.866 --> 00:00:46.506
+For one cell, the rate of twist is one over two A G, times the integral of q d s over t around that cell.
+
+00:00:46.866 --> 00:00:47.608
+Your turn.
+
+00:00:47.608 --> 00:00:51.906
+Pause here and do checkpoint four point one in your guide.
+
+00:00:55.100 --> 00:01:02.333
+Around cell one, every wall carries q one, except the shared wall, which carries q one minus q two.
+
+00:01:02.333 --> 00:01:05.109
+Call delta the integral of d s over t.
+
+00:01:05.109 --> 00:01:08.980
+Then it's q one delta one, minus q two delta one two.
+
+00:01:09.366 --> 00:01:12.505
+Set cell one's rate equal to cell two's.
+
+00:01:12.505 --> 00:01:17.526
+With the torque equation, that's two equations for two unknowns.
+
+00:01:18.467 --> 00:01:21.235
+Skins and spars are often different materials.
+
+00:01:21.235 --> 00:01:25.267
+Then G is different on each wall, and it moves inside the integral.
+
+00:01:25.934 --> 00:01:33.347
+The trick: pick a reference G, and scale each wall's thickness by its G over the reference.
+
+00:01:33.347 --> 00:01:37.094
+That's the modulus weighted thickness, t star.
+
+00:01:38.034 --> 00:01:40.259
+Everything else stays the same.
+
+00:01:40.259 --> 00:01:48.874
+Your notes' three cell example works out to seven point one, eight point nine and four point two newtons per millimeter.
