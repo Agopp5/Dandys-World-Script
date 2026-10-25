@@ -53,15 +53,15 @@ class S12_Cells(VScene):
                          for c, h in zip(CELLS, hues)])
         centers = [np.mean([sec.p(n) for n in c], axis=0) for c in CELLS]
         qnames = [r"q_I", r"q_{II}", r"q_{III}"]
-        flows = VGroup(*[VGroup(cell_flow(ctr + UP * .9, radius=.6, color=h, ccw=True),
-                                M(qn, size=36, color=h).move_to(ctr + UP * .9))
+        flows = VGroup(*[VGroup(cell_flow(ctr + UP * 1.0, radius=.72, color=h, ccw=True),
+                                M(qn, size=42, color=h).move_to(ctr + UP * 1.0))
                          for ctr, h, qn in zip(centers, hues, qnames)])
         shared = VGroup(flow(sec, "b2", "b1", 1.0, color=GOLD, frac=.45, off=.0),
                         flow(sec, "c2", "c1", 1.0, color=GOLD, frac=.45, off=.0))
-        dl = VGroup(backed(M(r"q_I - q_{II}", size=34, color=GOLD)),
-                    backed(M(r"q_{II} - q_{III}", size=34, color=GOLD)))
-        dl[0].move_to(sec.mid("b1", "b2") + DOWN * 1.3)
-        dl[1].move_to(sec.mid("c1", "c2") + DOWN * 1.3)
+        dl = VGroup(backed(M(r"q_I - q_{II}", size=38, color=GOLD)),
+                    backed(M(r"q_{II} - q_{III}", size=38, color=GOLD)))
+        dl[0].move_to(sec.mid("b1", "b2") + DOWN * 1.6)
+        dl[1].move_to(sec.mid("c1", "c2") + DOWN * 1.6)
         self.add(polys)
         self.beat("Each cell carries its own constant shear flow. A wall shared by two cells carries the difference.",
                   LaggedStart(*[FadeIn(f) for f in flows], lag_ratio=.4), .1,
@@ -80,7 +80,7 @@ class S12_Cells(VScene):
         anote = VGroup(M(r"A_R", size=36, color=MUTED), T("is the area enclosed by cell R", size=28, color=MUTED))
         anote.arrange(RIGHT, buff=.2).next_to(eq, DOWN, buff=.25)
         rows.next_to(anote, DOWN, buff=.45)
-        alabels = VGroup(*[M(a, size=34, color=h).move_to(ctr + DOWN * .25)
+        alabels = VGroup(*[M(a, size=42, color=h).move_to(ctr + DOWN * .45)
                            for a, h, ctr in zip([r"A_I", r"A_{II}", r"A_{III}"], hues, centers)])
         self.beat("The torque is two times the area of each cell, times its shear flow, added up.",
                   [FadeOut(tq), FadeOut(tnote), Write(eq)],

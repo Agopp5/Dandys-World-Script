@@ -61,7 +61,7 @@ class S15_P2_Setup(VScene):
 
         self.beat("Here's the two cell wing box. The torque is counterclockwise, but the problem doesn't give its size, so we'll find each shear flow per unit of torque.",
                   [Create(walls), FadeIn(booms), FadeIn(names)], [FadeIn(labI), FadeIn(labII)],
-                  Create(tq), .1, FadeIn(note1, shift=UP * .2), w=(.3, .15, .25, .1, .2))
+                  Create(tq), .1, FadeIn(note1, shift=UP * .2), w=(.3, .15, .25, .2))
 
         # ---- boom areas: irrelevant in pure torsion
         bt = T("boom areas (HW table)", size=28, color=INK2)
