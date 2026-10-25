@@ -20,7 +20,7 @@ B1 = A_L + B_skin + B_wl
 B2 = A_R + B_skin + B_wr
 assert np.isclose(B1, 4000) and np.isclose(B2, 3556)
 
-RX = 3.85         # centre x of the algebra column
+RX = 3.75         # centre x of the algebra column
 
 
 def angle_L(c, ax, ay, lh, lv, t, s):
@@ -31,7 +31,7 @@ def angle_L(c, ax, ay, lh, lv, t, s):
     return Polygon(*pts, color=EMBER, fill_color=EMBER, fill_opacity=.85, stroke_width=1.5).set_z_index(3)
 
 
-def col(g, y, x0=.85):
+def col(g, y, x0=.6):
     """Algebra column: left edge at x0, vertical centre y; asserts it stays inside the frame."""
     g.move_to([RX, y, 0]).align_to(np.array([x0, 0, 0]), LEFT)
     assert g.get_right()[0] < 6.95, g.get_right()
@@ -51,7 +51,7 @@ class S08_P1_Booms(VScene):
     def construct(self):
         self.section("Idealize the box")
         sec = hw_box()
-        sec = Section(sec.pts, sec.walls, width=6.6, center=(-3.0, -0.4))
+        sec = Section(sec.pts, sec.walls, width=6.5, center=(-3.1, -0.4))
         s = sec.s
         walls = sec.draw()
         P = {k: sec.p(k) for k in (1, 2, 3, 4)}

@@ -29,7 +29,8 @@ for v, s in zip(DELTA, DELTA_S):
 d16, d25, d34, d12, d23 = DELTA
 dI, dII = d16 + 2 * d12 + d25, d34 + 2 * d23 + d25
 assert abs(dI - 1969.0) < 0.06 and abs(dII - 3527.8) < 0.06
-assert np.isclose(156.3 + 2 * 806.4 + 199.8, 1969.0) and np.isclose(165.6 + 2 * 1581.2 + 199.8, 3527.8)
+# the rounded table entries sum to 1968.9 / 3527.8; the exact sums (above) round to 1969.0 / 3527.8
+assert abs(156.3 + 2 * 806.4 + 199.8 - 1969.0) < .15 and np.isclose(165.6 + 2 * 1581.2 + 199.8, 3527.8)
 
 COLS_X = [-6.3, -4.9, -3.5, -1.85, -0.15, 1.45]
 ROWS_Y = [-0.85, -1.45, -2.0, -2.55, -3.1, -3.65]

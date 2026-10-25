@@ -33,7 +33,7 @@ class S11_P1_Centre(VScene):
 
     def construct(self):
         self.section("Where the shear centre is")
-        sec = hw_box(width=7.0, center=(-3.3, -0.35))
+        sec = hw_box(width=6.8, center=(-3.15, -0.35))
         walls = sec.draw()
         booms = sec.booms({1: 4000, 2: 3556, 3: 3556, 4: 4000})
         names = sec.names()
@@ -46,7 +46,7 @@ class S11_P1_Centre(VScene):
         fR = VGroup(fRa, M(r"0.460\,S_y", size=34, color=ROSE).next_to(fRa, LEFT, buff=0.15))
         fL = VGroup(fLa, M(r"0.540\,S_y", size=34, color=ROSE).next_to(fLa, RIGHT, buff=0.15))
 
-        X0 = 3.85   # centre of the algebra column
+        X0 = 3.95   # centre of the algebra column
 
         # ---------------- beat 1: web forces
         l1 = E(r"F_R|=|1.534\times10^{-3}\,|S_y|\cdot 300", size=40)
@@ -60,7 +60,7 @@ class S11_P1_Centre(VScene):
             m.shift(RIGHT * 1.0)
         fit(g1, 5.6, 5.6)
         g1.move_to([X0, -0.1, 0])
-        chk = T("check ✓", size=30, color=GOOD).next_to(l3, RIGHT, buff=0.4)
+        chk = T("check ✓", size=30, color=GOOD).next_to(l3, DOWN, buff=0.25, aligned_edge=LEFT)
         gl3 = glow(l3, GOOD)
         self.beat("Both webs now carry shear flow upward. Times three hundred millimeters, the right web carries zero point four six S y, the left web zero point five four. Together, exactly S y.",
                   [GrowFromCenter(fR), GrowFromCenter(fL)], FadeIn(n1),

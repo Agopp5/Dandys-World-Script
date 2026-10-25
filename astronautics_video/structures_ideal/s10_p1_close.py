@@ -34,7 +34,7 @@ class S10_P1_Close(VScene):
     budget = 124
 
     def construct(self):
-        sec = hw_box(width=5.6, center=(-3.4, 0.5))
+        sec = hw_box(width=6.5, center=(-3.45, 0.45))
         walls = sec.draw()
         booms = sec.booms({1: B1, 2: B2, 3: B2, 4: B1})
         names = sec.names()
@@ -43,7 +43,7 @@ class S10_P1_Close(VScene):
             return sec.walls_m[(a, b)] if (a, b) in sec.walls_m else sec.walls_m[(b, a)]
 
         def wl(a, b, tex, d=0.85, color=SKY):
-            m = M(tex, size=32, color=color)
+            m = M(tex, size=38, color=color)
             m.move_to(sec.mid(a, b) + d * sec.inward(a, b))
             return m
 
@@ -54,11 +54,11 @@ class S10_P1_Close(VScene):
         l23 = wl(2, 3, "-1.569", d=1.0)
         l41 = wl(4, 1, "+1.765", d=1.0)
         bottom_y = sec.p(3)[1]
-        legend = TX(r"flows in units of $10^{-3}\,S_y$ N/mm", size=26, color=MUTED)
-        legend.move_to([sec.mid(3, 4)[0], bottom_y - 0.85, 0])
+        legend = TX(r"flows in units of $10^{-3}\,S_y$ N/mm", size=32, color=MUTED)
+        legend.move_to([sec.mid(3, 4)[0], bottom_y - 0.75, 0])
 
         # ---- right column: the zero-twist condition ----
-        X = 3.55
+        X = 3.75
         head = E(r"\oint|\big(|q_b|+|q_{s,0}|\big)|\,\frac{ds}{t}|=|0", size=48).move_to([X, 2.75, 0])
         why = T("no twist at the shear center, one material", size=26, color=MUTED)
         why.next_to(head, DOWN, buff=0.25)
@@ -91,6 +91,7 @@ class S10_P1_Close(VScene):
         steps = []
         for (name, (a, b), _, _), r in zip(rows_spec, rows):
             steps.append([FadeIn(r[0]), Write(r[1]), Indicate(wall(a, b), color=ACCENT, scale_factor=1.0)])
+        steps[0].append(FadeOut(why))
         self.beat("d s over t for each wall: fifty on top, thirty seven and a half on the right, fifty on the bottom, thirty on the left. One hundred sixty seven and a half in total.",
                   *steps, Write(total), Indicate(total[4], color=ACCENT),
                   w=(.17, .17, .17, .17, .22, .1))
@@ -98,30 +99,30 @@ class S10_P1_Close(VScene):
         # ---- beat 3: substitute ----
         tot_small = E(r"\oint|\,\frac{ds}{t}|=|167.5", size=40)
         paint(tot_small, {3: ACCENT})
-        tot_small.move_to([sec.mid(3, 4)[0], -2.95, 0])
+        tot_small.move_to([sec.mid(3, 4)[0], -3.2, 0])
         tot_box = SurroundingRectangle(tot_small, color=HAIR, buff=0.15)
 
-        L1 = E(r"(-1.569\times10^{-3})|(37.5)", size=40)
+        L1 = E(r"(-1.569\times10^{-3})|(37.5)", size=44)
         paint(L1, {0: SKY, 1: ACCENT})
-        L2 = E(r"+\;|(1.765\times10^{-3})|(30)", size=40)
+        L2 = E(r"+\;|(1.765\times10^{-3})|(30)", size=44)
         paint(L2, {1: SKY, 2: ACCENT})
-        L3 = E(r"+\;|167.5|\,|q_{s,0}|=|0", size=40)
+        L3 = E(r"+\;|167.5|\,|q_{s,0}|=|0", size=44)
         paint(L3, {1: ACCENT})
         L1.move_to([X, 1.25, 0])
         L2.move_to([X, 0.25, 0])
         L3.move_to([X, -0.75, 0])
         L2.align_to(L1, LEFT)
         L3.align_to(L1, LEFT)
-        note3 = TX(r"top and bottom: $q_b = 0$, they drop out", size=26, color=MUTED)
+        note3 = TX(r"top and bottom: $q_b = 0$, they drop out", size=32, color=MUTED)
         note3.next_to(L1, UP, buff=0.3).set_x(X)
-        L4 = E(r"-5.89\times10^{-3}|+|167.5|\,|q_{s,0}|=|0", size=40)
+        L4 = E(r"-5.89\times10^{-3}|+|167.5|\,|q_{s,0}|=|0", size=44)
         paint(L4, {2: ACCENT})
         L4.move_to([X, -2.0, 0])
-        note4 = TX(r"$-58.83\times10^{-3} + 52.94\times10^{-3}$", size=26, color=MUTED)
+        note4 = TX(r"$-58.83\times10^{-3} + 52.94\times10^{-3}$", size=32, color=MUTED)
         note4.next_to(L4, DOWN, buff=0.2)
 
         self.beat("Only the two webs have basic flow. Minus one point five six nine times thirty seven and a half, plus one point seven six five times thirty, plus one sixty seven and a half q s zero, equals zero.",
-                  [FadeOut(rows), FadeOut(why), ReplacementTransform(total, tot_small), Create(tot_box),
+                  [FadeOut(rows), ReplacementTransform(total, tot_small), Create(tot_box),
                    Indicate(l12, color=MUTED), Indicate(l34, color=MUTED), FadeIn(note3)],
                   [Write(L1), Indicate(l23, scale_factor=1.3)],
                   [Write(L2), Indicate(l41, scale_factor=1.3)],
@@ -134,20 +135,20 @@ class S10_P1_Close(VScene):
         res.move_to([X, 1.55, 0])
         res_box = SurroundingRectangle(res, color=MINT, buff=0.18)
         tots = VGroup(
-            E(r"q_{12}=q_{34}|=|+3.52\times10^{-5}|\,|S_y", size=36),
-            E(r"q_{23}|=|-1.534\times10^{-3}|\,|S_y", size=36),
-            E(r"q_{41}|=|+1.800\times10^{-3}|\,|S_y", size=36),
+            E(r"q_{12}=q_{34}|=|+3.52\times10^{-5}|\,|S_y", size=40),
+            E(r"q_{23}|=|-1.534\times10^{-3}|\,|S_y", size=40),
+            E(r"q_{41}|=|+1.800\times10^{-3}|\,|S_y", size=40),
         )
         for t in tots:
             paint(t, {0: SKY})
         tots.arrange(DOWN, buff=0.4, aligned_edge=LEFT)
-        tlab = TX(r"totals: $q = q_b + q_{s,0}$", size=26, color=MUTED)
+        tlab = TX(r"totals: $q = q_b + q_{s,0}$", size=32, color=MUTED)
         card = VGroup(tlab, tots).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
         card_p = panel(card)
-        fit(card_p, 6.4, 3.4)
+        fit(card_p, 6.5, 3.6)
         card_p.move_to([X, -1.35, 0])
 
-        cf = cell_flow((sec.p(1) + sec.p(3)) / 2, radius=0.5, color=MINT, ccw=False)
+        cf = cell_flow((sec.p(1) + sec.p(3)) / 2, radius=0.5, color=MINT, ccw=False, label=r"q_{s,0}")
         f12 = flow(sec, 1, 2, qs0)
         f34 = flow(sec, 3, 4, qs0)
         n12 = wl(1, 2, "+0.035", d=0.6)
