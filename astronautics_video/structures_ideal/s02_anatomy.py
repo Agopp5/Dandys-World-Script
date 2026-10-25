@@ -133,22 +133,20 @@ class S02_Anatomy(VScene):
         sk_lbl = T("skin", 36, INK2).move_to([4.6, 1.75, 0])
         sk_arr = Arrow(sk_lbl.get_bottom(), [3.6, yu(3.6) + .05, 0], buff=.08, color=INK2, stroke_width=4)
         wb_lbl = T("wing box", 40, INK, weight=BOLD).move_to([(XF + XR) / 2, Y0 + .2, 0])
-        self.beat("The box made by the two spars and the skin between them is called the wing box.",
+        box = VGroup(box_fill, box_top, box_bot, front, rear, stringers)
+        box_orig = box.copy()
+        self.beat("The box made by the two spars and the skin between them is called the wing box. It does most of the structural work.",
                   [FadeOut(VGroup(spar_lbl, spar_note, web_lbl, web_arr, fl_lbl, fl_arrs, fl_glow,
                                   skin_t, skin_b, skin_lbl)),
                    big.animate.set_fill(INK2)],
                   [ReplacementTransform(big, front), FadeIn(fs_lbl), GrowArrow(fs_arr)],
                   [FadeIn(rear), FadeIn(rs_lbl), GrowArrow(rs_arr)],
                   [Create(nose), Create(box_top), Create(box_bot), Create(tail), FadeIn(stringers),
-                   FadeIn(sk_lbl), GrowArrow(sk_arr)], .08,
-                  [FadeIn(box_fill), FadeIn(wb_lbl)], .15,
-                  w=(.1, .17, .15, .2, .15))
-        box = VGroup(box_fill, box_top, box_bot, front, rear, stringers)
-        box_orig = box.copy()
-        self.beat("It does most of the structural work.",
+                   FadeIn(sk_lbl), GrowArrow(sk_arr)], .06,
+                  [FadeIn(box_fill), FadeIn(wb_lbl)], .1,
                   [box_fill.animate.set_fill(MUTED, .45), Circumscribe(VGroup(box_fill, front, rear), color=INK,
-                                                                       stroke_width=4)], .45,
-                  w=(.55,))
+                                                                       stroke_width=4)], .13,
+                  w=(.07, .12, .11, .15, .12, .14))
 
         # ---------------- beat 4: lift, and the three things it does
         lift = VGroup(*[Arrow([x, yl(x) - 1.05, 0], [x, yl(x) - .1, 0], buff=0, color=ROSE, stroke_width=7,
@@ -156,11 +154,6 @@ class S02_Anatomy(VScene):
                         for x in np.linspace(-5.0, 3.6, 6)])
         lift_lbl = T("lift", 38, ROSE).next_to(lift[-1], RIGHT, buff=.35)
         wing = VGroup(nose, tail, box, wb_lbl, lift, lift_lbl)
-        self.beat("Lift pushes the wing up.",
-                  [FadeOut(VGroup(fs_lbl, fs_arr, rs_lbl, rs_arr, sk_lbl, sk_arr))],
-                  [LaggedStart(*[GrowArrow(a) for a in lift], lag_ratio=.12), FadeIn(lift_lbl)],
-                  VGroup(nose, tail, box, wb_lbl, lift, lift_lbl).animate.shift(UP * .3), .2,
-                  w=(.1, .4, .3))
 
         # three icons: bending, shear force, twisting
         cx = [-4.6, 0.0, 4.6]
@@ -185,12 +178,15 @@ class S02_Anatomy(VScene):
         tbox = Rectangle(width=2.2, height=1.3).set_stroke(INK2, 7).move_to([cx[2], yb, 0])
         tq = torque(np.array([cx[2], yb, 0]), radius=1.35, color=LILAC, ccw=True, label="T")
         t_twist = T("twisting", 36, INK).move_to([cx[2], yl_, 0])
-        self.beat("That does three things to the wing box: it bends it, it pushes on it with a shear force, and it twists it.",
+        self.beat("Lift pushes the wing up. That does three things to the wing box: it bends it, it pushes on it with a shear force, and it twists it.",
+                  [FadeOut(VGroup(fs_lbl, fs_arr, rs_lbl, rs_arr, sk_lbl, sk_arr))],
+                  [LaggedStart(*[GrowArrow(a) for a in lift], lag_ratio=.12), FadeIn(lift_lbl)],
+                  wing.animate.shift(UP * .3), .05,
                   wing.animate.scale(.45).to_edge(UP, buff=.3),
-                  [FadeIn(i_bend), FadeIn(t_bend)], ReplacementTransform(straight, bent), .06,
-                  [FadeIn(sbox), GrowArrow(s_arr), FadeIn(s_lbl), FadeIn(t_shear)], .08,
-                  [FadeIn(tref), FadeIn(tbox), FadeIn(tq), Rotate(tbox, 14 * DEGREES), FadeIn(t_twist)], .2,
-                  w=(.18, .1, .12, .13, .13))
+                  [FadeIn(i_bend), FadeIn(t_bend)], ReplacementTransform(straight, bent), .04,
+                  [FadeIn(sbox), GrowArrow(s_arr), FadeIn(s_lbl), FadeIn(t_shear)], .06,
+                  [FadeIn(tref), FadeIn(tbox), FadeIn(tq), Rotate(tbox, 14 * DEGREES), FadeIn(t_twist)], .17,
+                  w=(.04, .1, .06, .13, .07, .08, .1, .1))
 
         # ---------------- beat 5: the two kinds of stress
         K = 1.5
@@ -210,12 +206,6 @@ class S02_Anatomy(VScene):
         sig_note = VGroup(T("bending: along the span,", 30, INK2),
                           T("into the screen", 30, INK2)).arrange(DOWN, buff=.12, aligned_edge=LEFT)
         sig_grp = VGroup(sig_row, sig_note).arrange(DOWN, buff=.3, aligned_edge=LEFT).move_to([4.5, 1.7, 0])
-        self.beat("Bending makes stresses along the span, into the screen.",
-                  [FadeOut(VGroup(i_bend, bent, t_bend, sbox, s_arr, s_lbl, t_shear, tref, tbox, tq, t_twist,
-                                  nose, tail, wb_lbl, lift, lift_lbl))],
-                  Transform(box, tgt), .05,
-                  [LaggedStart(*[GrowFromCenter(c) for c in crosses], lag_ratio=.08), FadeIn(sig_grp)], .25,
-                  w=(.15, .2, .35))
 
         dx, dy = .58, .42
         legs = [((XF + dx, yu(XF + dx) - dy), (XR - dx, yu(XR - dx) - dy)),     # top skin, toward the rear
@@ -231,10 +221,14 @@ class S02_Anatomy(VScene):
                           T("in the skin and webs", 30, INK2)).arrange(DOWN, buff=.12, aligned_edge=LEFT)
         tau_grp = VGroup(tau_row, tau_note).arrange(DOWN, buff=.3, aligned_edge=LEFT)
         tau_grp.next_to(sig_grp, DOWN, buff=.8, aligned_edge=LEFT)
-        self.beat("Shear forces and twisting make stresses that run around the section, in the skin and the webs.",
+        self.beat("Bending makes stresses along the span, into the screen. Shear forces and twisting make stresses that run around the section, in the skin and the webs.",
+                  [FadeOut(VGroup(i_bend, bent, t_bend, sbox, s_arr, s_lbl, t_shear, tref, tbox, tq, t_twist,
+                                  nose, tail, wb_lbl, lift, lift_lbl))],
+                  Transform(box, tgt), .02,
+                  [LaggedStart(*[GrowFromCenter(c) for c in crosses], lag_ratio=.08), FadeIn(sig_grp)], .07,
                   [crosses.animate.set_opacity(.45), sig_grp.animate.set_opacity(.5)],
-                  [LaggedStart(*[GrowArrow(f) for f in flows], lag_ratio=.35), FadeIn(tau_grp)], .12,
-                  [crosses.animate.set_opacity(1), sig_grp.animate.set_opacity(1)], .2,
-                  w=(.1, .45, .13))
+                  [LaggedStart(*[GrowArrow(f) for f in flows], lag_ratio=.35), FadeIn(tau_grp)], .07,
+                  [crosses.animate.set_opacity(1), sig_grp.animate.set_opacity(1)], .18,
+                  w=(.06, .08, .12, .04, .3, .06))
         self.wait(1.0)
         self.wipe()

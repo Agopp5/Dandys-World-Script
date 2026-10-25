@@ -18,24 +18,24 @@ PTS = {"a": (0, 0), "b": (280, 20), "c": (560, 50), "d": (800, 90),
        "e": (0, 800), "f": (280, 780), "g": (560, 740), "h": (800, 680)}
 SKINS = [("a", "b", 2.0), ("b", "c", 2.0), ("c", "d", 2.0), ("e", "f", 2.0), ("f", "g", 2.0), ("g", "h", 2.0)]
 SPARS = [("a", "e", 3.0), ("b", "f", 3.0), ("c", "g", 3.0), ("d", "h", 3.0)]
-RX = 3.6                                   # centre of the algebra column
+RX = 3.45                                  # centre of the algebra column
 
 
 class S20_Gstar(VScene):
     budget = 99
 
     def construct(self):
-        sec = Section(PTS, SKINS + SPARS, width=5.0, center=(-3.7, -0.5))
+        sec = Section(PTS, SKINS + SPARS, width=5.9, center=(-3.55, -0.15))
         walls = sec.draw(t_scale=1.4)
         skins = VGroup(*[sec.walls_m[(a, b)] for a, b, _ in SKINS])
         spars = VGroup(*[sec.walls_m[(a, b)] for a, b, _ in SPARS])
         skins.set_color(INK2)
         spars.set_color(MUTED)
         g_sk = VGroup(T("skin", size=34, color=INK2), M(r"G_{\text{skin}}", size=44, color=ACCENT)).arrange(RIGHT, buff=.25)
-        g_sk.next_to(sec.mid("e", "f"), UP, buff=.45)
+        g_sk.next_to(sec.mid("e", "f"), UP, buff=.3)
         sk_ln = Line(g_sk.get_bottom() + DOWN * .05, sec.mid("e", "f"), color=INK2, stroke_width=2)
         g_sp = VGroup(T("spar", size=34, color=MUTED), M(r"G_{\text{spar}}", size=44, color=ACCENT)).arrange(RIGHT, buff=.25)
-        g_sp.next_to(sec.p("b"), DOWN, buff=.45)
+        g_sp.next_to(sec.p("b"), DOWN, buff=.3)
         sp_ln = Line(g_sp.get_top() + UP * .05, sec.p("b") + UP * .9, color=MUTED, stroke_width=2)
         g_sk.add(sk_ln)
         g_sp.add(sp_ln)
@@ -43,7 +43,7 @@ class S20_Gstar(VScene):
         # beat 1: G moves inside the integral
         old = E(r"\frac{d\theta}{dz}|=|\frac{1}{2AG}|\oint|q|\,\frac{ds}{t}", size=50)
         new = E(r"\frac{d\theta}{dz}|=|\frac{1}{2A}|\oint|q|\,\frac{ds}{G\,t}", size=50)
-        old.move_to([RX, 2.6, 0])
+        old.move_to([RX, 2.7, 0])
         new.move_to(old)
         n1 = T("one material: G sat outside", size=30, color=MUTED).next_to(old, DOWN, buff=.3)
         n2 = T("G changes wall to wall: it goes inside", size=30, color=MUTED).next_to(new, DOWN, buff=.3)
@@ -80,7 +80,7 @@ class S20_Gstar(VScene):
         flows, labs = VGroup(), VGroup()
         for k, cell in enumerate(cells):
             cen = np.mean([sec.p(n) for n in cell], axis=0)
-            flows.add(cell_flow(cen, radius=.62, color=cols[k], ccw=True))
+            flows.add(cell_flow(cen, radius=.66, color=cols[k], ccw=True))
             labs.add(M(tex[k], size=44, color=cols[k]).move_to(cen))
         rows = VGroup(*[M(tex[k] + r"\;=\;" + str(vals[k]) + r"\ \text{N/mm}", size=50)
                         for k in range(3)]).arrange(DOWN, buff=.5, aligned_edge=LEFT)

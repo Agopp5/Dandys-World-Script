@@ -86,13 +86,13 @@ class S18_Cells(VScene):
         eq = E(r"T|=|\sum_R|2|A_R|q_R", size=60)
         rows = VGroup(E(r"T|=|2|A_I|q_I", size=54, cmap=CM),
                       E(r"+|2|A_{II}|q_{II}", size=54, cmap=CM),
-                      E(r"+|2|A_{III}|q_{III}", size=54, cmap=CM)).arrange(DOWN, buff=.45, aligned_edge=LEFT)
+                      E(r"+|2|A_{III}|q_{III}", size=54, cmap=CM)).arrange(DOWN, buff=.38, aligned_edge=LEFT)
         rows[1].align_to(rows[0][2], LEFT).shift(LEFT * rows[1][0].width * 1.6)
         rows[2].align_to(rows[1], LEFT)
         anote = VGroup(M(r"A_R", size=44, color=MUTED), T("= area enclosed by cell R", size=30, color=MUTED))
         anote.arrange(RIGHT, buff=.2)
-        alg = VGroup(eq, anote, rows).arrange(DOWN, buff=.55)
-        alg.move_to(np.array([3.6, 0, 0])).to_edge(UP, buff=.5)
+        alg = VGroup(eq, anote, rows).arrange(DOWN, buff=.45)
+        alg.move_to(np.array([3.6, 0, 0])).to_edge(UP, buff=.3)
         alabels = VGroup(*[M(a, size=44, color=h).move_to(ctr + DOWN * .15)
                            for a, h, ctr in zip([r"A_I", r"A_{II}", r"A_{III}"], hues, centers)])
         self.beat("The torque is the sum of two A q for every cell.",
@@ -104,7 +104,7 @@ class S18_Cells(VScene):
         box = SurroundingRectangle(rows, color=HAIR, buff=.2, corner_radius=.1)
         count = panel(VGroup(T("N unknowns, 1 equation", size=40, color=INK),
                              T("We need more equations.", size=34, color=MUTED)).arrange(DOWN, buff=.2))
-        count.next_to(rows, DOWN, buff=.45)
+        count.next_to(box, DOWN, buff=.25)
         if count.get_bottom()[1] < -3.8:
             count.shift(UP * (-3.8 - count.get_bottom()[1]))
         self.beat("But that's only one equation, and there's one unknown shear flow for every cell. We need more equations.",

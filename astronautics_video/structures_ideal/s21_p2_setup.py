@@ -69,7 +69,7 @@ class S21_P2_Setup(VScene):
 
         self.beat("Here's homework problem two: a two cell wing box under a counterclockwise torque. The problem doesn't give the size of the torque, so we'll find each shear flow per unit of torque.",
                   [Create(walls), FadeIn(booms), FadeIn(names)], .08, [FadeIn(labI), FadeIn(labII)],
-                  Create(tq), .1, FadeIn(note1, shift=UP * .2), .15, w=(.24, .08, .14, .16, .1, .13, .15))
+                  Create(tq), .1, FadeIn(note1, shift=UP * .2), .15, w=(.24, .14, .16, .13))
 
         # ---- boom areas from the HW table: irrelevant in pure torsion
         bt = T("boom areas from the HW table", size=34, color=INK2)
@@ -84,7 +84,7 @@ class S21_P2_Setup(VScene):
         sk = VGroup(*[strike(m) for m in blines])
         self.beat("The table also lists boom areas. In pure torsion there's no direct stress, so the booms carry nothing. We can ignore them.",
                   [FadeIn(bt), FadeIn(blines)], Indicate(booms, color=EMBER), FadeIn(bn), .08,
-                  [Create(sk), booms.animate.set_opacity(.2)], .12, w=(.2, .2, .2, .08, .2, .12))
+                  [Create(sk), booms.animate.set_opacity(.2)], .12, w=(.2, .2, .2, .2))
 
         # ---- table 1: wall | t | G | t*
         cells = {}  # (key, r) -> mobject, r = 0..4
@@ -126,11 +126,11 @@ class S21_P2_Setup(VScene):
                    FadeIn(VGroup(col("w"), col("t"), Gcol))],
                   Indicate(Gcol, color=ACCENT), .06, Write(g1), .1,
                   [Indicate(webs, color=ACCENT), Indicate(web_G, color=ACCENT)],
-                  [FadeIn(h_ts), FadeIn(web_ts), FadeIn(gn)], .14, w=(.16, .12, .06, .16, .1, .12, .14, .14))
+                  [FadeIn(h_ts), FadeIn(web_ts), FadeIn(gn)], .14, w=(.16, .12, .16, .12, .14))
 
         self.beat("The skins have G of twenty four thousand two hundred. So their thickness is scaled by twenty four two hundred over twenty seven six hundred: zero point eight seven seven.",
                   [Indicate(skins, color=ACCENT), Indicate(skin_G, color=ACCENT)], .06, Write(t1), .1,
-                  [Write(t2), FadeIn(skin_ts)], FadeIn(tn), .16, w=(.18, .06, .22, .1, .16, .12, .16))
+                  [Write(t2), FadeIn(skin_ts)], FadeIn(tn), .16, w=(.18, .22, .16, .12))
 
         # ---- table 2: wall | L | t* | delta
         dl1 = E(r"\delta|=|\int\frac{ds}{t^*}|=|\frac{L}{t^*}", size=48, cmap={r"\int\frac{ds}{t^*}": INK})

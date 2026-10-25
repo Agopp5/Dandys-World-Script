@@ -83,13 +83,13 @@ class S22_P2_Solve(VScene):
                   .1, [Write(f1[0][0]), Write(f1[0][1]), Indicate(colD[0])],
                   [Write(f1[0][2:]), Indicate(colD[1])],
                   [Create(f1[1]), Write(f1[2]), Indicate(colA[0])], FadeIn(tagI), .18,
-                  w=(.1, .25, .22, .2, .08, .15))
+                  w=(.25, .22, .2, .08))
 
         # ---- beat 2: equals cell two's rate ----
         self.beat("That must equal cell two's rate: minus q one times one ninety nine point eight, plus q two times thirty five twenty eight, over two times two hundred fifty eight thousand.",
                   Write(eqs), [Write(f2[0][:2]), Indicate(colD[1])], [Write(f2[0][2:]), Indicate(colD[0])],
                   [Create(f2[1]), Write(f2[2]), Indicate(colA[1])], [FadeIn(tagII), FadeIn(n1)], .2,
-                  w=(.1, .2, .2, .2, .1, .2))
+                  w=(.1, .2, .2, .2, .1))
 
         # ---- beat 3: cross multiply and collect ----
         lA = E(r"258\,000\,(1969.0\,|q_I|-|199.8\,|q_{II}|)|=|232\,000\,(-199.8\,|q_I|+|3527.8\,|q_{II}|)",
@@ -103,7 +103,7 @@ class S22_P2_Solve(VScene):
         self.beat("Cross multiply and collect. Five hundred fifty four million q one equals eight hundred seventy million q two. So q one is one point five seven times q two.",
                   [FadeOut(tagI), FadeOut(tagII), FadeOut(n1), FadeTransform(eq1, lA)], FadeIn(nA), .06,
                   [Write(lC), FadeIn(nC)], .1, Write(lD[0]), Create(lD[1]), .18,
-                  w=(.14, .06, .06, .24, .1, .16, .06, .18))
+                  w=(.14, .06, .24, .16, .06))
 
         # ---- beat 4: the torque equation ----
         lDt = lD.copy().scale(0.9).move_to([-4.2, 1.15, 0])
@@ -114,7 +114,7 @@ class S22_P2_Solve(VScene):
                   [FadeOut(lA), FadeOut(nA), FadeOut(lC), FadeOut(nC), Transform(lD, lDt)], FadeIn(nDt),
                   [Write(t1[0:2]), FadeIn(nt1)], [Write(t1[2:4]), Indicate(colA[0])],
                   [Write(t1[4:]), Indicate(colA[1])], .2,
-                  w=(.12, .06, .2, .22, .22, .18))
+                  w=(.12, .06, .2, .22, .22))
 
         # ---- beat 5: substitute ----
         t2 = E(r"T|=|(728\,200|+|516\,000)\,|q_{II}", size=50).move_to([0, -1.75, 0])
@@ -123,7 +123,7 @@ class S22_P2_Solve(VScene):
         t3 = boxed(E(r"T|=|1.244\times 10^{6}\,|q_{II}", size=54), LILAC).move_to([0, -3.35, 0])
         self.beat("Substitute q one. That gives T equals one point two four four million times q two.",
                   [Indicate(lD, color=MINT), Indicate(t1[2], color=MINT), FadeOut(nt1)], [Write(t2), FadeIn(nt2)],
-                  .08, Write(t3[0]), Create(t3[1]), .15, w=(.14, .3, .08, .25, .08, .15))
+                  .08, Write(t3[0]), Create(t3[1]), .15, w=(.14, .3, .25, .08))
         self.wait(1.0)
 
         # ---- beat 6: the two flows per unit torque ----
@@ -134,7 +134,7 @@ class S22_P2_Solve(VScene):
         self.beat("So q two is zero point eight zero four times ten to the minus six, T. And q one is one point two six one times ten to the minus six, T, with T in newton millimeters.",
                   [FadeOut(t1), FadeOut(t2), FadeOut(lD), FadeOut(nDt), FadeOut(t3)],
                   Write(q2[0]), Create(q2[1]), .1, Write(q1[0]), Create(q1[1]), FadeIn(nq), .15,
-                  w=(.08, .26, .06, .08, .26, .06, .08, .12))
+                  w=(.08, .26, .06, .26, .06, .08))
 
         # ---- beat 7: one kilonewton meter, drawn on the box ----
         big = hw_twocell(width=12.8, center=(0, 1.0))
@@ -160,10 +160,10 @@ class S22_P2_Solve(VScene):
                   [LaggedStart(*[FadeIn(a) for a in arrI]), Create(cfI), Write(vI)], .05,
                   [LaggedStart(*[FadeIn(a) for a in arrII]), Create(cfII), Write(vII)], .05,
                   [FadeIn(spar), Write(vS), Write(r2), FadeIn(nS)], .1,
-                  w=(.12, .15, .03, .18, .03, .17, .03, .19, .1))
+                  w=(.12, .15, .18, .17, .19))
 
         # ---- beat 8: your turn ----
         self.beat("Your turn. Pause here and do checkpoint six point one: a two cell box with a real torque.",
-                  Circumscribe(VGroup(vI, vII), color=ACCENT), Indicate(vS, color=GOLD), .2, w=(.4, .4, .2))
+                  Circumscribe(VGroup(vI, vII), color=ACCENT), Indicate(vS, color=GOLD), .2, w=(.4, .4))
         self.checkpoint("6.1", "Practice two-cell box: T = 15 kN m")
         self.wipe()

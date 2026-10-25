@@ -45,6 +45,7 @@ class S23_Recap(VScene):
     def construct(self):
         # card 1: idealization
         b1 = E(r"B_1|=|\frac{t_D\,b}{6}|\Big(2+|\frac{\sigma_2}{\sigma_1}|\Big)", size=52)
+        paint(b1, {4: GOLD})
         n1 = T("skin's direct stress, lumped into the booms", size=32, color=MUTED)
         c1, h1, m1 = card(1, "Booms carry the direct stress; the skin carries shear", [[b1, n1]], buff=.7)
 
@@ -58,6 +59,7 @@ class S23_Recap(VScene):
 
         # card 3: torsion, one cell then several
         one = E(r"T|=|2A|\,q", size=52)
+        paint(one, {3: SKY})
         n3a = T("one cell", size=32, color=MUTED)
         many = E(r"T|=|\sum_R 2A_R|\,q_R", size=52)
         paint(many, {3: SKY})

@@ -86,9 +86,9 @@ class S19_Twist(VScene):
                              stroke_width=0, fill_color=MINT, fill_opacity=.12)
         self.beat("For each cell, the rate of twist is the same formula as before: one over two A G, "
                   "times the integral of q d s over t around that cell.",
-                  [FadeOut(same), FadeOut(same_n)], Write(rate), .12, FadeIn(rn1), FadeIn(cellI_fill),
-                  [FadeIn(rn2), Circumscribe(rate[3:], color=SKY)], .2,
-                  w=(.08, .26, .12, .14, .22, .18))
+                  [FadeOut(same), FadeOut(same_n)], Write(rate), .12, [FadeIn(rn1), FadeIn(cellI_fill)],
+                  [FadeIn(rn2), Circumscribe(rate[3:], color=SKY)], .18,
+                  w=(.1, .35, .25, .3))
         self.wait(1.0)
 
         # ---- beat 3: checkpoint
