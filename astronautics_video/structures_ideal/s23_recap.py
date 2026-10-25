@@ -77,7 +77,7 @@ class S23_Recap(VScene):
         w0, h0 = cards.width, cards.height
         fit(cards, 13.8, 7.8)
         s = min(cards.width / w0, cards.height / h0)
-        assert s > .86, s    # math stays >= 44, notes >= 27.5
+        print("DBG", w0, h0, [c.width for c in (m1, m2, m3)]); assert s > .86, s    # math stays >= 44, notes >= 27.5
         cards.move_to(ORIGIN)
         for c, inner in ((c1, VGroup(h1, m1)), (c2, VGroup(h2, m2)), (c3, VGroup(h3, m3))):
             inner.align_to(c[0], LEFT).shift(RIGHT * .35)

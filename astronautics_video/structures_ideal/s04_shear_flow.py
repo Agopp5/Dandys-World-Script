@@ -65,7 +65,7 @@ class S04_Shear_Flow(VScene):
                               stroke_width=3, tip_length=0.2, color=INK2)
         tmark = VGroup(tm_line, M(r"t", size=56, color=INK).next_to(tm_line, LEFT, buff=0.15))
         stack_tau = M(r"\tau", size=60, color=SKY).next_to(tips, RIGHT, buff=0.2)
-        note2 = TX(r"$\tau$ is nearly the same all across $t$", size=40).set_color(INK2)
+        note2 = TX(r"$\tau$ is nearly the same all across $t$", size=48).set_color(INK2)
         note2.next_to(big, DOWN, buff=0.45)
         self.beat("The walls are so thin that tau is nearly constant through the thickness. "
                   "So instead of tau, we usually track tau times the thickness.",
