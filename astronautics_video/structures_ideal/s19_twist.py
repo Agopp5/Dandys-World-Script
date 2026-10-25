@@ -166,10 +166,9 @@ class S19_Twist(VScene):
         tally.next_to(stack, DOWN, buff=.5)
         with self.say("Set cell one's rate equal to cell two's. Together with the torque equation, "
                       "that's two equations for the two unknowns.") as d:
-            self.play(FadeOut(VGroup(box, labI, labII, fI, fS, fII, cellI_fill)),
-                      final.animate.move_to(eqA1).scale(eqA1.height / final.height), FadeOut(frame_f),
-                      run_time=.12 * d)
-            self.play(FadeIn(eqA2), FadeOut(final), FadeIn(eqA1), run_time=.16 * d)
+            self.play(FadeOut(VGroup(box, labI, labII, fI, fS, fII, cellI_fill, final, frame_f)), run_time=.1 * d)
+            self.play(Write(eqA1), run_time=.09 * d)
+            self.play(Write(eqA2), run_time=.09 * d)
             self.play(FadeIn(nA), Create(rA), run_time=.08 * d)
             self.wait(.1 * d)
             self.play(Write(eqB), FadeIn(nB), Create(rB), run_time=.18 * d)

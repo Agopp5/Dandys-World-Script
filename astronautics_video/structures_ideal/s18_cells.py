@@ -42,7 +42,7 @@ class S18_Cells(VScene):
         sec = Section(PTS, WALLS, width=6.0, center=(-3.2, -0.3))
         walls = sec.draw()
         booms = sec.booms({n: 600 for n in PTS})
-        tq = torque(np.array([3.6, 0.6, 0]), radius=1.2, color=LILAC, ccw=True, label="T")
+        tq = torque(np.array([3.6, 0.6, 0]), radius=1.5, color=LILAC, ccw=True, label="T")
         tnote = T("pure torque", size=34, color=MUTED).next_to(tq, DOWN, buff=.4)
         bnote = T("no bending stress: booms play no part", size=30, color=MUTED).next_to(tnote, DOWN, buff=.35)
         self.beat("Real wings often have several cells side by side. With pure torque, there's no bending stress, so the booms don't matter at all.",
@@ -72,8 +72,8 @@ class S18_Cells(VScene):
         pairs = VGroup(pair("b1", "b2", MINT, LIME), pair("c1", "c2", LIME, SKY))
         shared = VGroup(flow(sec, "b2", "b1", 1.0, color=GOLD, frac=.45, off=.0),
                         flow(sec, "c2", "c1", 1.0, color=GOLD, frac=.45, off=.0))
-        dl = VGroup(backed(M(r"q_I - q_{II}", size=40, color=GOLD)),
-                    backed(M(r"q_{II} - q_{III}", size=40, color=GOLD)))
+        dl = VGroup(backed(M(r"q_I - q_{II}", size=44, color=GOLD)),
+                    backed(M(r"q_{II} - q_{III}", size=44, color=GOLD)))
         dl[0].move_to(sec.mid("b1", "b2") + DOWN * 1.3)
         dl[1].move_to(sec.mid("c1", "c2") + DOWN * 2.2)
         self.beat("A wall shared by two cells has both flows on it, in opposite directions. So it carries the difference.",
@@ -83,15 +83,15 @@ class S18_Cells(VScene):
                   FadeIn(dl), .15, w=(.15, .2, .15, .15))
 
         # torque equation on the right
-        eq = E(r"T|=|\sum_R|2|A_R|q_R", size=52)
-        rows = VGroup(E(r"T|=|2|A_I|q_I", size=48, cmap=CM),
-                      E(r"+|2|A_{II}|q_{II}", size=48, cmap=CM),
-                      E(r"+|2|A_{III}|q_{III}", size=48, cmap=CM)).arrange(DOWN, buff=.35, aligned_edge=LEFT)
+        eq = E(r"T|=|\sum_R|2|A_R|q_R", size=60)
+        rows = VGroup(E(r"T|=|2|A_I|q_I", size=54, cmap=CM),
+                      E(r"+|2|A_{II}|q_{II}", size=54, cmap=CM),
+                      E(r"+|2|A_{III}|q_{III}", size=54, cmap=CM)).arrange(DOWN, buff=.45, aligned_edge=LEFT)
         rows[1].align_to(rows[0][2], LEFT).shift(LEFT * rows[1][0].width * 1.6)
         rows[2].align_to(rows[1], LEFT)
         anote = VGroup(M(r"A_R", size=44, color=MUTED), T("= area enclosed by cell R", size=30, color=MUTED))
         anote.arrange(RIGHT, buff=.2)
-        alg = VGroup(eq, anote, rows).arrange(DOWN, buff=.45)
+        alg = VGroup(eq, anote, rows).arrange(DOWN, buff=.55)
         alg.move_to(np.array([3.6, 0, 0])).to_edge(UP, buff=.5)
         alabels = VGroup(*[M(a, size=44, color=h).move_to(ctr + DOWN * .15)
                            for a, h, ctr in zip([r"A_I", r"A_{II}", r"A_{III}"], hues, centers)])
@@ -102,8 +102,8 @@ class S18_Cells(VScene):
                   w=(.08, .17, .17, .3))
 
         box = SurroundingRectangle(rows, color=HAIR, buff=.2, corner_radius=.1)
-        count = panel(VGroup(T("N unknowns, 1 equation", size=36, color=INK),
-                             T("We need more equations.", size=32, color=MUTED)).arrange(DOWN, buff=.2))
+        count = panel(VGroup(T("N unknowns, 1 equation", size=40, color=INK),
+                             T("We need more equations.", size=34, color=MUTED)).arrange(DOWN, buff=.2))
         count.next_to(rows, DOWN, buff=.45)
         if count.get_bottom()[1] < -3.8:
             count.shift(UP * (-3.8 - count.get_bottom()[1]))

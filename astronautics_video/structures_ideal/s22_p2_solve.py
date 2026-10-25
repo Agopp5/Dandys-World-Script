@@ -117,19 +117,14 @@ class S22_P2_Solve(VScene):
                   w=(.12, .06, .2, .22, .22, .18))
 
         # ---- beat 5: substitute ----
-        t2 = E(r"T|=|(728\,200|+|516\,000)\,|q_{II}", size=50).move_to([0, -1.95, 0])
+        t2 = E(r"T|=|(728\,200|+|516\,000)\,|q_{II}", size=50).move_to([0, -1.75, 0])
         nt2 = note(r"$2\,(232\,000)(1.5694) = 728\,200$ (one more digit, so rounding doesn't build up)",
                    size=30).next_to(t2, DOWN, buff=0.22)
-        t3 = boxed(E(r"T|=|1.244\times 10^{6}\,|q_{II}", size=54), LILAC).move_to([0, -0.9, 0])
+        t3 = boxed(E(r"T|=|1.244\times 10^{6}\,|q_{II}", size=54), LILAC).move_to([0, -3.35, 0])
         self.beat("Substitute q one. That gives T equals one point two four four million times q two.",
-                  [Indicate(lD, color=MINT), Indicate(t1[2], color=MINT)], [Write(t2), FadeIn(nt2)], .1,
-                  [FadeOut(nt1), FadeOut(nt2), t1.animate.shift(UP * 0.1), t2.animate.move_to([0, -0.95 - 1.0, 0])],
-                  .02, w=(.15, .35, .12, .03, .35))
-        # fold: replace the two working lines with the boxed result
-        t3.move_to([0, -2.6, 0])
-        self.play(Write(t3[0]), run_time=1.6)
-        self.play(Create(t3[1]), run_time=0.8)
-        self.wait(1.2)
+                  [Indicate(lD, color=MINT), Indicate(t1[2], color=MINT), FadeOut(nt1)], [Write(t2), FadeIn(nt2)],
+                  .08, Write(t3[0]), Create(t3[1]), .15, w=(.14, .3, .08, .25, .08, .15))
+        self.wait(1.0)
 
         # ---- beat 6: the two flows per unit torque ----
         q2 = boxed(E(r"q_{II}|=|\dfrac{T}{1.244\times 10^{6}}|=|0.804\times 10^{-6}\,|T", size=50), LIME)

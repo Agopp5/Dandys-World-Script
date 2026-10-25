@@ -84,15 +84,15 @@ class S23_Recap(VScene):
 
         self.beat("Let's recap. Booms carry the direct stress, and the skin carries shear. Any direct stress the skin does carry is added to the booms with t D b over six, times two plus the stress ratio.",
                   FadeIn(c1[0]), FadeIn(h1), .12, Write(b1[:3]), Write(b1[3:]), FadeIn(n1, shift=UP * .1),
-                  Circumscribe(b1[2:], color=GOLD), .15, w=(.05, .1, .1, .16, .14, .1, .12, .23))
+                  Circumscribe(b1[2:], color=GOLD), .15, w=(.06, .1, .12, .2, .14, .15))
 
         self.beat("Shear flow is constant between booms, and jumps at each one. For a closed section: cut, march around, then close with q s zero.",
                   FadeIn(c2[0]), FadeIn(h2), .1, Write(jump), .1, Write(close), FadeIn(n2),
-                  Indicate(close[4], color=MINT), .12, w=(.04, .1, .1, .2, .08, .14, .1, .12, .12))
+                  Indicate(close[4], color=MINT), .12, w=(.05, .1, .22, .16, .12, .12))
 
         self.beat("In torsion, a single cell has T equals two A q. With several cells, each has its own q: the torque gives one equation, equal twist gives the rest, and different materials just scale the thickness.",
                   FadeIn(c3[0]), FadeIn(h3), Write(one), FadeIn(n3a), .06, Write(many), FadeIn(n3b), .04,
                   FadeIn(twist), .04, Write(ts), Circumscribe(ts, color=ACCENT), .1,
-                  w=(.03, .07, .1, .05, .06, .13, .07, .04, .12, .04, .11, .08, .1))
+                  w=(.03, .07, .1, .06, .14, .08, .13, .12, .1))
         self.wait(2.0)
         self.wipe()

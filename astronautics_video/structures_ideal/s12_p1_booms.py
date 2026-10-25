@@ -225,7 +225,8 @@ class S12_P1_Booms(VScene):
         # dot radius r0 + k sqrt(B), steepened so 4000 vs 3556 reads at a glance (radii 0.28 vs 0.19)
         sec.booms({1: B1, 2: B2, 3: B2, 4: B1}, r0=-1.3, k=.025)
         assert sec.boom_m[1].width > 1.3 * sec.boom_m[2].width
-        names = sec.names(size=LAB, off=.62)
+        names = VGroup(*[M(str(k), size=LAB, color=INK2).move_to(P[k] + (.55 if k in (1, 2) else -.55) * UP)
+                         for k in (1, 2, 3, 4)])   # straight above/below: the algebra sits just right of the box
         with self.say("Adding it all up: each left boom is four thousand square millimeters, and each right boom is three thousand five hundred fifty six.") as d:
             self.play(FadeOut(alg7), FadeIn(a8), FadeIn(n8), run_time=.12 * d)
             self.play(Write(b8), Indicate(cur[1]), Indicate(cur[4]), run_time=.16 * d)
@@ -233,7 +234,7 @@ class S12_P1_Booms(VScene):
             self.play(FadeIn(c8), run_time=.1 * d)
             self.play(Write(d8), Indicate(cur[2]), Indicate(cur[3]), run_time=.16 * d)
             self.play(*[ReplacementTransform(angles[k], sec.boom_m[k]) for k in (1, 2, 3, 4)],
-                      FadeOut(lab_L), FadeOut(lab_R), FadeIn(names), run_time=.2 * d)
+                      FadeOut(lab_L), FadeOut(lab_R), FadeOut(d500), FadeOut(d300), FadeIn(names), run_time=.2 * d)
             self.play(FadeIn(glow(b8[1], EMBER)), FadeIn(glow(d8[1], EMBER)), run_time=.1 * d)
         self.wait(2.0)
         self.wipe()
