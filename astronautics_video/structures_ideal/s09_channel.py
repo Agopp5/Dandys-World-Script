@@ -37,7 +37,7 @@ class S09_Channel(VScene):
         ax.move_to([3.15, -2.3, 0])
         bl = VGroup(*[DashedLine(ax.c2p(s, 2), ax.c2p(s, -14), color=EMBER, stroke_width=2, dash_length=0.08)
                       for s in S_POS])
-        bnum = VGroup(*[T(str(i + 1), 34, EMBER).next_to(bl[i], UP, buff=0.06) for i in range(4)])
+        bnum = VGroup(*[T(str(i + 1), 34, EMBER).next_to(bl[i], DOWN, buff=0.06) for i in range(4)])
         plot = VGroup(ax, bl, bnum)
         home = plot.get_center()
         plot.scale(1.6).move_to([0, 0.2, 0])
@@ -50,9 +50,9 @@ class S09_Channel(VScene):
         bots = lvl + [0]
         jumps = VGroup(*[Line(ax.c2p(s, tops[i]), ax.c2p(s, bots[i]), color=EMBER, stroke_width=7)
                          for i, s in enumerate(S_POS)])
-        n_flat = T("flat between booms", 30, INK2).next_to(ax, DOWN, buff=0.35).align_to(ax, LEFT).shift(0.6 * RIGHT)
+        n_flat = T("flat between booms", 30, INK2).next_to(bnum, DOWN, buff=0.3).align_to(ax, LEFT).align_to(ax, LEFT).shift(0.6 * RIGHT)
         n_jump = T("jumps at the booms", 30, EMBER).next_to(n_flat, RIGHT, buff=0.8)
-        n_shape = T("shape only", 30, MUTED).next_to(bnum, UP, buff=0.25).align_to(ax, RIGHT)
+        n_shape = T("shape only", 30, MUTED).next_to(ax, UP, buff=0.25).align_to(ax, RIGHT)
 
         self.beat("Between booms the skin carries no direct stress, so the shear flow can't change there. It's constant, and it only jumps when it crosses a boom.",
                   [Create(ax), FadeIn(bl), FadeIn(bnum), FadeIn(n_shape)], .08,
@@ -75,8 +75,8 @@ class S09_Channel(VScene):
                              tip_length=0.18, max_tip_length_to_length_ratio=0.1)
         sp_bot = DoubleArrow([sx, y0, 0], [sx, sec.p(3)[1], 0], buff=0, color=MUTED, stroke_width=3,
                              tip_length=0.18, max_tip_length_to_length_ratio=0.1)
-        yl_top = E(r"y|=|200\ \text{mm}", size=36).next_to(sp_top, RIGHT, buff=0.12)
-        yl_bot = E(r"y|=|-200\ \text{mm}", size=36).next_to(sp_bot, RIGHT, buff=0.12)
+        yl_top = E(r"y|=|200", size=36).next_to(sp_top, RIGHT, buff=0.12)
+        yl_bot = E(r"y|=|-200", size=36).next_to(sp_bot, RIGHT, buff=0.12)
         b_lab = E(r"B|=|300\ \text{mm}^2", size=44).move_to([sec.mid(3, 4)[0], -3.72, 0])
 
         self.beat("Here's the channel from your slides: four booms of three hundred square millimeters, two hundred millimeters above and below the axis.",
@@ -176,7 +176,7 @@ class S09_Channel(VScene):
         rule_up = VGroup(rule, rule_note)
 
         self.beat("Boom two adds another minus six. That's minus twelve in the web.",
-                  [FadeOut(kbox), FadeOut(kb_eq), rule_up.animate.shift(1.0 * UP),
+                  [FadeOut(kbox), FadeOut(kb_eq), FadeOut(free), rule_up.animate.shift(1.0 * UP),
                    *morph(l1, r12, [(0, 0), (1, 1), (2, 2), (3, 3), (5, 4), (7, 5), (8, 6)]), FadeIn(notes[0])],
                   .06, [Indicate(booms[1], color=EMBER, scale_factor=1.6), Write(r23[:5]), FadeIn(notes[1])], .08,
                   [Write(r23[5:]), FadeIn(f23), Create(st2), FadeIn(v2)], .18,
