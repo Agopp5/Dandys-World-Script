@@ -42,7 +42,7 @@ class S10_Shear_Centre(VScene):
     budget = 148
 
     def construct(self):
-        sec = channel(width=2.9, center=(-2.75, -0.3))
+        sec = channel(width=2.8, center=(-2.75, -0.1))
         walls = sec.draw()
         booms = sec.booms({1: B, 2: B, 3: B, 4: B})
         names = sec.names(size=34)
@@ -56,7 +56,7 @@ class S10_Shear_Centre(VScene):
             flow(sec, 2, 3, q23, label=r"-12", size=34),
             flow(sec, 3, 4, q34, label=r"-6", size=34),
         )
-        unit = T("q in N/mm", size=30, color=SKY).next_to(sec.p(4), DOWN, buff=0.45).align_to(sec.p(3), LEFT)
+        unit = T("q in N/mm", size=30, color=SKY).next_to(sec.p(3), LEFT, buff=0.35).shift(0.3 * DOWN)
 
         def load_at(x):
             a = Arrow([x, cy - 1.1, 0], [x, cy + 1.1, 0], buff=0, color=ROSE, stroke_width=9,
@@ -70,7 +70,8 @@ class S10_Shear_Centre(VScene):
         twist_note = at_left(T("Load at the web: it twists", size=34, color=BAD), 2.4)
         twist_arc = torque(sc + 0.0 * UP, radius=0.55, ccw=True, label=None).set_color(BAD).move_to(
             sec.p(1) + 0.6 * RIGHT + 0.3 * DOWN)
-        ok_note = at_left(T("Load at the shear centre: no twist", size=34, color=GOOD), 1.5)
+        ok_note = at_left(VGroup(T("Load at the shear centre:", size=34, color=GOOD),
+                                 T("no twist", size=34, color=GOOD)).arrange(DOWN, aligned_edge=LEFT, buff=0.15), 1.2)
         sc_dot = Dot(sc, radius=0.11, color=ROSE).set_z_index(6)
         sc_q = E(r"?", size=44, cmap={"?": ROSE}).next_to(sc_dot, DOWN, buff=0.2)
 

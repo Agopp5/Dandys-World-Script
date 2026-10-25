@@ -16,7 +16,7 @@ assert np.isclose(2 * (4000 + 3556) * 150 ** 2 / 1e6, 340.0, atol=0.05)
 PROFILE_Y = [150, 100, 50, -50, -100, -150]
 assert all(np.isclose(-(y / 150), (-y) / 150) for y in PROFILE_Y)
 
-SEC_W, SEC_C = 6.4, (-3.0, -0.2)
+SEC_W, SEC_C = 7.0, (-3.3, -0.3)
 
 
 def vspan(top, bot, label, side=RIGHT, color=INK2, size=40):
@@ -47,17 +47,18 @@ class S03_Direct_Stress(VScene):
                           T("points along the span (z)", size=30, color=MUTED)).arrange(DOWN, buff=.15)
         sig_note.next_to(sig, DOWN, buff=.3)
 
+        g_sig = glow(sig, GOLD)
         self.section("Direct stress from bending")
         self.beat("Bending produces direct stress: stress that points along the span. We'll call it sigma z.",
                   Create(walls), [Create(na), FadeIn(na_lab)], .1,
-                  FadeIn(sig_note, shift=UP * .2), .1, Write(sig), FadeIn(glow(sig, GOLD)), .2,
+                  FadeIn(sig_note, shift=UP * .2), .1, Write(sig), FadeIn(g_sig), .2,
                   w=(.3, .2, .15, .1, .1))
 
         # beat 2: linear stress profile beside the section (tension + above, compression - below)
-        x0 = 1.9
+        x0 = 1.8
         L = 1.25                                          # arrow length at |y| = 150 mm
         ax_line = Line([x0, P(0, 165)[1], 0], [x0, P(0, -165)[1], 0], color=AXIS, stroke_width=3)
-        zero_tick = DashedLine(P(BOX_W + 40, 0), [x0 + .3, o[1], 0], color=MUTED, stroke_width=2, dash_length=.12)
+        zero_tick = DashedLine(P(BOX_W + 40, 0), [x0, o[1], 0], color=MUTED, stroke_width=2, dash_length=.12)
         arrows = {}
         for y in PROFILE_Y:
             Y = P(0, y)[1]
@@ -70,11 +71,11 @@ class S03_Direct_Stress(VScene):
         ten.next_to(arrows[150], RIGHT, buff=.2)
         com = VGroup(T("compression", size=34), M("-", size=48, color=GOLD)).arrange(RIGHT, buff=.15)
         com.next_to([x0, P(0, -150)[1], 0], RIGHT, buff=.25)
-        zero = M("0", size=44, color=INK2).next_to([x0, o[1], 0], RIGHT, buff=.2).shift(UP * .25)
+        zero = M("0", size=44, color=INK2).next_to([x0, o[1], 0], RIGHT, buff=.2)
         cap = T("stress across the height", size=30, color=MUTED).next_to(ax_line, UP, buff=.25)
         self.beat("Above the neutral axis the material is stretched, and below it the material is squeezed. "
                   "The farther from the axis, the bigger the stress.",
-                  [sig.animate.scale(.8).move_to([5.6, 3.2, 0]), FadeOut(sig_note), Create(ax_line), FadeIn(cap)],
+                  [sig.animate.scale(.8).move_to([5.6, 3.2, 0]), FadeOut(sig_note), FadeOut(g_sig), Create(ax_line), FadeIn(cap)],
                   LaggedStart(*[GrowArrow(a) for a in up], lag_ratio=.3),
                   FadeIn(ten), .1, LaggedStart(*[GrowArrow(a) for a in dn], lag_ratio=.3), FadeIn(com), .1,
                   [Create(env), FadeIn(zero), Create(zero_tick)], .2,
@@ -98,7 +99,7 @@ class S03_Direct_Stress(VScene):
                   w=(.12, .05, .12, .08, .1, .1, .12))
 
         # beat 4: I_xx = sum A y^2, small squares at different heights
-        pieces = [(1, 110, 150, UP, RIGHT), (2, BOX_W, 60, RIGHT, LEFT), (3, 330, -150, DOWN, RIGHT)]
+        pieces = [(1, 240, 150, UP, RIGHT), (2, BOX_W, 60, RIGHT, LEFT), (3, 380, -150, DOWN, RIGHT)]
         cm = {"A_1": EMBER, "A_2": EMBER, "A_3": EMBER, "A": EMBER}
         bits = []
         for i, x, y, aside, yside in pieces:
