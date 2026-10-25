@@ -75,7 +75,7 @@ class S06_Channel(VScene):
         g_k = glow(k[6], GOLD)
         self.beat("For this channel, I x x is four times three hundred times two hundred squared: forty eight million. So S y over I x x is ten to the minus four.",
                   [FadeOut(ghost), FadeOut(flats), FadeOut(jumps), FadeOut(shape_note)], Write(ix), FadeIn(ix_note), .1,
-                  Write(k), FadeIn(g_k), w=(.1, .3, .1, .05, .33, .12))
+                  Write(k), FadeIn(g_k), w=(.1, .3, .1, .33, .12))
 
         # beat 3: fold, the jump rule, first boom
         kbox = VGroup(E(r"S_y|/|I_{xx}|=|10^{-4}", size=40))
@@ -137,5 +137,5 @@ class S06_Channel(VScene):
                   [Create(st3), FadeIn(f34), FadeIn(v3)],
                   [FadeIn(r4[0]), Write(r4[1]), Indicate(booms[3], color=EMBER, scale_factor=1.5)],
                   [Create(st4), FadeIn(v4), FadeIn(free2), FadeIn(g4)], .4,
-                  w=(.05, .14, .1, .16, .1, .14, .11, .2))
+                  w=(.05, .14, .1, .16, .1, .14, .11))
         self.wipe()

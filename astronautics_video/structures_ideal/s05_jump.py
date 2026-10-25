@@ -33,7 +33,7 @@ class S05_Jump(VScene):
     def construct(self):
         # ---------- the free body: boom (rod) of length dz, skin on both sides ----------
         L, H = 2.6, 0.6          # rod half-length, rod height
-        FW, FH = 2.1, 2.55       # skin flap half-width, flap height
+        FW, FH = 2.1, 2.35       # skin flap half-width, flap height
         rod = RoundedRectangle(width=2 * L, height=H, corner_radius=0.18,
                                fill_color=EMBER, fill_opacity=0.9, stroke_color=EMBER, stroke_width=3)
         br = E("B_r", size=44)
@@ -44,7 +44,7 @@ class S05_Jump(VScene):
                         stroke_color=INK2, stroke_width=3).next_to(rod, DOWN, buff=0)
         sk1 = T("skin", size=26, color=MUTED).move_to(top.get_corner(UL) + np.array([0.55, -0.32, 0]))
         sk2 = T("skin", size=26, color=MUTED).move_to(bot.get_corner(DL) + np.array([0.55, 0.32, 0]))
-        dzspan = span(np.array([-L, -H / 2 - FH - 0.35, 0]), np.array([L, -H / 2 - FH - 0.35, 0]), "dz")
+        dzspan = span(np.array([-L, -H / 2 - FH - 0.25, 0]), np.array([L, -H / 2 - FH - 0.25, 0]), "dz")
         body = VGroup(top, bot, rod, br)
 
         # ---------- forces along z ----------

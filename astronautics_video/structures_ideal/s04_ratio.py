@@ -53,8 +53,8 @@ def web_picture(cx, cy, h=2.8):
                     stroke_color=GOLD, stroke_width=3)
     s1 = E(r"\sigma_1", size=40).next_to(tri_t, LEFT, buff=0.12).align_to(tri_t, UP)
     s2 = E(r"\sigma_2=-\sigma_1", size=40, cmap=RATIO).next_to(tri_b, RIGHT, buff=0.12).align_to(tri_b, DOWN)
-    na = DashedLine([cx - 1.8, cy, 0], [cx + 1.8, cy, 0], color=MUTED, stroke_width=3)
-    nal = T("neutral axis", size=26, color=MUTED).next_to(na, DOWN, buff=0.1).align_to(na, LEFT)
+    na = DashedLine([cx - 2.0, cy, 0], [cx + 1.8, cy, 0], color=MUTED, stroke_width=3)
+    nal = T("neutral axis", size=26, color=MUTED).next_to(np.array([cx - 0.25, cy, 0]), DL, buff=0.1)
     return VGroup(web, b1, b2, lb1, lb2, tri_t, tri_b, s1, s2, na, nal)
 
 
@@ -95,7 +95,7 @@ class S04_Ratio(VScene):
 
         # ---- beat 4: your turn (a 300 mm web, 10 mm thick)
         big = web_picture(-2.5, -0.55, h=4.4)
-        dim = DoubleArrow([-4.7, -0.55 + 2.2, 0], [-4.7, -0.55 - 2.2, 0], buff=0, color=INK2, stroke_width=3,
+        dim = DoubleArrow([-5.05, -0.55 + 2.2, 0], [-5.05, -0.55 - 2.2, 0], buff=0, color=INK2, stroke_width=3,
                           tip_length=0.2)
         dl = VGroup(E(r"b=300", size=40), M(r"\text{mm}", size=40)).arrange(DOWN, buff=0.15).next_to(dim, LEFT, buff=0.2)
         tl = E(r"t_D=10\ \text{mm}", size=40).move_to([0.9, 1.25, 0])
