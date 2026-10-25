@@ -33,7 +33,7 @@ class S11_P1_Centre(VScene):
 
     def construct(self):
         self.section("Where the shear centre is")
-        sec = hw_box(width=6.4, center=(-3.4, -0.4))
+        sec = hw_box(width=7.0, center=(-3.3, -0.35))
         walls = sec.draw()
         booms = sec.booms({1: 4000, 2: 3556, 3: 3556, 4: 4000})
         names = sec.names()
@@ -41,10 +41,12 @@ class S11_P1_Centre(VScene):
         self.add(box)
 
         # final flows: both webs up (q_23 < 0 so the arrow on 2->3 points up)
-        fR = flow(sec, 2, 3, -1.534, label=r"0.460\,S_y", size=32)
-        fL = flow(sec, 4, 1, 1.800, label=r"0.540\,S_y", size=32)
+        fRa = flow(sec, 2, 3, -1.534)
+        fLa = flow(sec, 4, 1, 1.800)
+        fR = VGroup(fRa, M(r"0.460\,S_y", size=34, color=ROSE).next_to(fRa, LEFT, buff=0.15))
+        fL = VGroup(fLa, M(r"0.540\,S_y", size=34, color=ROSE).next_to(fLa, RIGHT, buff=0.15))
 
-        X0 = 3.55   # centre of the algebra column
+        X0 = 3.85   # centre of the algebra column
 
         # ---------------- beat 1: web forces
         l1 = E(r"F_R|=|1.534\times10^{-3}\,|S_y|\cdot 300", size=40)
@@ -56,7 +58,7 @@ class S11_P1_Centre(VScene):
         g1 = VGroup(n1, l1, l1b, l2, l2b, l3).arrange(DOWN, buff=0.34, aligned_edge=LEFT)
         for m in (l1b, l2b):
             m.shift(RIGHT * 1.0)
-        fit(g1, 6.3, 5.6)
+        fit(g1, 5.6, 5.6)
         g1.move_to([X0, -0.1, 0])
         chk = T("check ✓", size=30, color=GOOD).next_to(l3, RIGHT, buff=0.4)
         gl3 = glow(l3, GOOD)
@@ -74,8 +76,8 @@ class S11_P1_Centre(VScene):
 
         # ---------------- beat 2: moment of the right web about the left web
         pivot = Dot(sec.mid(4, 1), radius=0.1, color=ACCENT)
-        arm = span(sec.p(4) + DOWN * 0.15, sec.p(3) + DOWN * 0.15, "500 mm", side=DOWN)
-        arc = Arc(radius=0.75, start_angle=-PI / 3, angle=4 * PI / 3, color=ROSE, stroke_width=5).move_arc_center_to(sec.mid(4, 1))
+        arm = span(sec.p(4) + DOWN * 0.15, sec.p(3) + DOWN * 0.15, r"500\text{ mm}", side=DOWN)
+        arc = Arc(radius=1.0, start_angle=-PI * 0.4, angle=PI * 0.8, color=INK, stroke_width=5).move_arc_center_to(sec.mid(4, 1))
         arc.add_tip(tip_length=0.22)
         m1 = E(r"M_R|=|0.460\,|S_y|\times 500", size=44)
         m1b = E(r"=|230.0\,|S_y", size=44)
@@ -90,17 +92,18 @@ class S11_P1_Centre(VScene):
                   w=(.15, .18, .18, .24, .15, .1))
 
         # ---------------- beat 3: the skins' small couple
-        top = flow(sec, 1, 2, 0.6, color=SKY, label=r"3.52\times10^{-5}\,S_y", size=30)
+        top = flow(sec, 1, 2, 0.6, color=SKY)
+        topl = M(r"3.52\times10^{-5}\,S_y", size=32, color=SKY).next_to(top, DOWN, buff=0.12)
         bot = flow(sec, 3, 4, 0.6, color=SKY)
         s1 = E(r"M_{sk}|=|3.52\times10^{-5}\,|S_y|\,(500)(300)", size=40)
         s1b = E(r"=|5.27\,|S_y", size=44)
         ns1 = T("a couple: clockwise, the other way", size=26, color=MUTED)
         g3 = VGroup(s1, s1b, ns1).arrange(DOWN, buff=0.34, aligned_edge=LEFT)
         s1b.shift(RIGHT * 1.0)
-        fit(g3, 6.3, 3)
+        fit(g3, 5.6, 3)
         g3.next_to(g2, DOWN, buff=0.55).set_x(X0)
         self.beat("The small flows in the top and bottom skins form a couple the other way, about five point three S y.",
-                  [GrowFromCenter(top), GrowFromCenter(bot)], Write(s1), FadeIn(s1b), FadeIn(ns1),
+                  [GrowFromCenter(top), GrowFromCenter(bot), FadeIn(topl)], Write(s1), FadeIn(s1b), FadeIn(ns1),
                   w=(.28, .36, .2, .16))
 
         # ---------------- beat 4: xi
@@ -115,13 +118,13 @@ class S11_P1_Centre(VScene):
         sc = DashedLine([xs, ybot, 0], [xs, ytop, 0], color=ROSE, stroke_width=5, dash_length=0.14)
         mid = DashedLine([xm, ybot, 0], [xm, ytop, 0], color=MUTED, stroke_width=3, dash_length=0.1)
         sy = Arrow([xs, -0.9, 0], [xs, 0.5, 0], buff=0, color=ROSE, stroke_width=7)
-        syl = M(r"S_y", size=40, color=ROSE).next_to(sy, RIGHT, buff=0.12)
+        syl = M(r"S_y", size=40, color=ROSE).next_to(sy, LEFT, buff=0.12)
         xil = M(r"\xi", size=44, color=ROSE)
         xi_span = span([sec.p(4)[0], ytop, 0], [xs, ytop, 0], "", side=UP)
         xil.next_to(xi_span, UP, buff=0.1)
         midl = T("middle", size=26, color=MUTED).next_to(mid, UP, buff=0.08).shift(RIGHT * 0.45)
         self.beat("So S y times xi equals two thirty minus five point three, and xi is two hundred twenty four point eight millimeters from the left web. Left of the middle, because the left booms are heavier.",
-                  [FadeOut(g2), FadeOut(g3), FadeOut(arc), FadeOut(arm)],
+                  [FadeOut(g2), FadeOut(g3), FadeOut(arc), FadeOut(arm), FadeOut(topl)],
                   Write(e1), Write(e2), [FadeIn(glow(e2, ROSE)), Create(sc), GrowArrow(sy), FadeIn(syl)],
                   [FadeIn(xi_span), FadeIn(xil)], [Create(mid), FadeIn(midl), FadeIn(ne)],
                   Indicate(VGroup(sec.boom_m[1], sec.boom_m[4]), color=EMBER, scale_factor=1.6),

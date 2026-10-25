@@ -115,7 +115,7 @@ class S08_P1_Booms(VScene):
         n3b = E(r"=|\frac{10\times 500}{2}|=|2500", size=40)
         paint(n3b, {3: EMBER})
         alg3 = VGroup(f3, n3, n3b).arrange(DOWN, buff=.55, aligned_edge=LEFT)
-        n3b.align_to(n3[1], LEFT)
+        n3b.align_to(n3, RIGHT)
         col(alg3, .2)
         skins = [sec.walls_m[(1, 2)], sec.walls_m[(3, 4)]]
         src_top = M(r"2500", size=30, color=EMBER).move_to(sec.mid(1, 2) + .9 * DOWN)

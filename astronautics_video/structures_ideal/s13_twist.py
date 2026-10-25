@@ -71,7 +71,6 @@ class S13_Twist(VScene):
         # ---- beat 2: the twist rate of one cell
         rate = E(r"\frac{d\theta}{dz}|=|\frac{1}{2A_R\,G}|\oint|q|\frac{ds}{t}", size=52)
         rate.move_to([RX, .7, 0])
-        rn1 = note("A_R: area enclosed by cell R").set_color(MUTED)
         rn1 = TX(r"$A_R$: the area enclosed by cell $R$", size=28).set_color(MUTED)
         rn2 = note("the integral runs once around that cell's walls")
         rnotes = VGroup(rn1, rn2).arrange(DOWN, buff=.3).next_to(rate, DOWN, buff=.55)
@@ -95,7 +94,7 @@ class S13_Twist(VScene):
                      l3).arrange(DOWN, buff=.55)
         fit(col, 8.4, 6.4)
         col.move_to([RX, -.3, 0])
-        l3.align_to(l2[1], LEFT).shift(LEFT * l3[0].width * 0 + (l2[1].get_left()[0] - l3[0].get_left()[0]) * RIGHT * 0)
+        l3.shift(RIGHT * (l2[1].get_center()[0] - l3[0].get_center()[0]))
         # walls of cell I and their flows
         outer = VGroup(*[sec.walls_m[k] for k in [("A", "B"), ("E", "F"), ("F", "A")]])
         fI = VGroup(flow(sec, "A", "B", 1, color=MINT, label="q_I"),
@@ -103,7 +102,7 @@ class S13_Twist(VScene):
                     flow(sec, "F", "A", 1, color=MINT, label="q_I"))
         fS = flow(sec, "B", "E", 1, color=GOLD, label=r"q_I - q_{II}")
         fII = cell_flow(cII + DOWN * .3, radius=.55, color=LIME, ccw=True, label="q_{II}")
-        final = E(r"\left.\frac{d\theta}{dz}\right|_{\mathrm{I}}|=|\frac{1}{2A_{\mathrm{I}}\,G}|\Big(|q_I|\delta_I|-|q_{II}|\delta_{12}|\Big)",
+        final = E(r"\frac{d\theta}{dz}\Big\vert_{\mathrm{I}}|=|\frac{1}{2A_{\mathrm{I}}\,G}|\Big(|q_I|\delta_I|-|q_{II}|\delta_{12}|\Big)",
                   size=48, cmap=DCM)
         final.move_to([RX, -.3, 0])
         frame_f = SurroundingRectangle(final, color=ACCENT, buff=.3)
@@ -134,13 +133,11 @@ class S13_Twist(VScene):
         stack.move_to(DOWN * .2)
         rA = SurroundingRectangle(eqA, color=ACCENT, buff=.25)
         rB = SurroundingRectangle(eqB, color=LILAC, buff=.25)
-        tally = TX(r"two equations, two unknowns: $q_I$ and $q_{II}$", size=32)
-        paint_tx = tally
+        tally = VGroup(T("two equations, two unknowns:", size=32), E(r"q_I|,\;|q_{II}", size=44)).arrange(RIGHT, buff=.3)
         tally.next_to(stack, DOWN, buff=.45)
         with self.say("Set cell one's rate equal to cell two's. With the torque equation, that's two equations for two unknowns.") as d:
-            self.play(FadeOut(VGroup(box, labI, labII, fI, fS, fII, frame_f)),
-                      final.animate.scale(.85).move_to(UP * 2.2), run_time=.12 * d)
-            self.play(FadeOut(final), Write(eqA), FadeIn(nA), run_time=.25 * d)
+            self.play(FadeOut(VGroup(box, labI, labII, fI, fS, fII, frame_f, final)), run_time=.12 * d)
+            self.play(Write(eqA), FadeIn(nA), run_time=.25 * d)
             self.play(Create(rA), run_time=.08 * d)
             self.play(Write(eqB), FadeIn(nB), Create(rB), run_time=.22 * d)
             self.play(FadeIn(tally, shift=UP * .2), run_time=.13 * d)

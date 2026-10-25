@@ -72,7 +72,7 @@ class S17_Recap(VScene):
         for c in cards:      # equal-width rows, left-aligned content
             c[0].stretch_to_fit_width(w)
         cards.arrange(DOWN, buff=.3)
-        fit(cards, 13.6, 7.6)
+        assert False, [(len(c), [(type(s).__name__, round(s.width, 2), round(s.height, 2)) for s in c]) for c in cards] + [(h1.width, m1.width, m3.width, h3.height, m2.height)]
         cards.move_to(ORIGIN)
         for c, inner in ((c1, VGroup(h1, m1)), (c2, VGroup(h2, m2)), (c3, VGroup(h3, m3))):
             inner.align_to(c[0], LEFT).shift(RIGHT * .35)

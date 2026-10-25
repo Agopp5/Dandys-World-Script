@@ -65,7 +65,7 @@ class S10_P1_Close(VScene):
 
         self.beat("At the shear center the box doesn't twist. With one material, that means the integral of q d s over t around the box is zero.",
                   [Create(walls), FadeIn(booms), FadeIn(names)],
-                  [GrowArrow(f23) if isinstance(f23, Arrow) else FadeIn(f23), FadeIn(f41),
+                  [FadeIn(f23), FadeIn(f41),
                    FadeIn(l12), FadeIn(l34), FadeIn(l23), FadeIn(l41), FadeIn(legend)],
                   Write(head), FadeIn(why, shift=UP * .1), .1, w=(.2, .2, .3, .15))
 
@@ -81,11 +81,8 @@ class S10_P1_Close(VScene):
             paint(eq, {2: ACCENT})
             rows.add(VGroup(lab, eq))
         for k, r in enumerate(rows):
-            r[0].move_to([1.15, 1.45 - 0.98 * k, 0], aligned_edge=LEFT)
+            r[0].move_to([1.15 + r[0].width / 2, 1.45 - 0.98 * k, 0])
             r[1].move_to([4.2, 1.45 - 0.98 * k, 0], aligned_edge=LEFT)
-            r[0].align_to(r[0], LEFT)
-        for r in rows:
-            r[0].set_x(1.15 + r[0].width / 2)
         total = E(r"\oint|\,\frac{ds}{t}|=|50+37.5+50+30|=|167.5", size=40)
         paint(total, {4: ACCENT})
         fit(total, 6.0, 2)
@@ -95,7 +92,7 @@ class S10_P1_Close(VScene):
         for (name, (a, b), _, _), r in zip(rows_spec, rows):
             steps.append([FadeIn(r[0]), Write(r[1]), Indicate(wall(a, b), color=ACCENT, scale_factor=1.0)])
         self.beat("d s over t for each wall: fifty on top, thirty seven and a half on the right, fifty on the bottom, thirty on the left. One hundred sixty seven and a half in total.",
-                  *steps, Write(total), FadeIn(glow(total[4], ACCENT)) if False else Indicate(total[4], color=ACCENT),
+                  *steps, Write(total), Indicate(total[4], color=ACCENT),
                   w=(.17, .17, .17, .17, .22, .1))
 
         # ---- beat 3: substitute ----
@@ -144,14 +141,13 @@ class S10_P1_Close(VScene):
         for t in tots:
             paint(t, {0: SKY})
         tots.arrange(DOWN, buff=0.4, aligned_edge=LEFT)
-        tlab = T("totals: q = q_b + q_s0", size=26, color=MUTED)
         tlab = TX(r"totals: $q = q_b + q_{s,0}$", size=26, color=MUTED)
         card = VGroup(tlab, tots).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
         card_p = panel(card)
         fit(card_p, 6.4, 3.4)
         card_p.move_to([X, -1.35, 0])
 
-        cf = cell_flow(sec.mid(1, 3) if False else (sec.p(1) + sec.p(3)) / 2, radius=0.5, color=MINT, ccw=False)
+        cf = cell_flow((sec.p(1) + sec.p(3)) / 2, radius=0.5, color=MINT, ccw=False)
         f12 = flow(sec, 1, 2, qs0)
         f34 = flow(sec, 3, 4, qs0)
         n12 = wl(1, 2, "+0.035", d=0.6)
@@ -165,5 +161,5 @@ class S10_P1_Close(VScene):
                   [Create(cf)],
                   [FadeIn(f12), FadeIn(f34), ReplacementTransform(l12, n12), ReplacementTransform(l34, n34),
                    ReplacementTransform(l23, n23), ReplacementTransform(l41, n41), FadeIn(card_p)],
-                  .25, w=(.08, .22, .15, .3, .25))
+                  .25, w=(.08, .22, .15, .3))
         self.wipe()

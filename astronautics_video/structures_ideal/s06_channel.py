@@ -94,7 +94,7 @@ class S06_Channel(VScene):
         st1 = VMobject(color=SKY, stroke_width=6).set_points_as_corners(
             [ax.c2p(0, 0), ax.c2p(0, -6), ax.c2p(200, -6)])
         v1 = M("-6", size=30, color=SKY).next_to(ax.c2p(100, -6), UP, buff=0.1)
-        free = T("free edge", 26, MUTED).next_to(sec.p(1), RIGHT, buff=0.5).shift(0.15 * DOWN)
+        free = T("free edge", 26, MUTED).next_to(sec.p(1), UP, buff=0.2).shift(0.75 * LEFT)
         self.beat("Start at the free edge, where q is zero. Crossing boom one: zero minus ten to the minus four, times three hundred, times two hundred. Minus six newtons per millimeter.",
                   [FadeOut(ix), FadeOut(ix_note), FadeOut(g_k), ReplacementTransform(k, kbox[1]), FadeIn(kbox[0])],
                   [FadeIn(free), Flash(sec.p(1), color=SKY), Create(st0)], [Write(rule), FadeIn(rule_note)],

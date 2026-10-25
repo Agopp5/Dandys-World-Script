@@ -97,7 +97,7 @@ class S05_Jump(VScene):
         paint(mid, {0: GOLD})
         mid.move_to(np.array([XR, 0.15, 0]))
         midn = note(r"$\sigma_z B_r$ cancels; now divide by $dz$").next_to(mid, DOWN, buff=0.25)
-        cutD = VGroup(strike(mid[1]), strike(mid[4]), strike(mid[7]))
+        cutD = VGroup(strike(mid[1]), strike(mid[5]), strike(mid[8]))
         res = E(r"q_2|-|q_1|=|-|\frac{d\sigma_z}{dz}|\,B_r", size=52)
         paint(res, {5: GOLD})
         res.move_to(np.array([XR, -2.3, 0]))
