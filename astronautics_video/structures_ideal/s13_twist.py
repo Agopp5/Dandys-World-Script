@@ -39,7 +39,7 @@ class S13_Twist(VScene):
         sec = Section(pts, walls, width=4.8, center=(-3.9, -0.4))
         box = sec.draw()
         shared = sec.walls_m[("B", "E")]
-        shared.set_color(GOLD)
+        shared.set_stroke(color=GOLD, width=7)
         cI = (sec.p("A") + sec.p("B") + sec.p("E") + sec.p("F")) / 4
         cII = (sec.p("B") + sec.p("C") + sec.p("D") + sec.p("E")) / 4
         labI = T("Cell I", size=30, color=MINT).move_to(cI + UP * 1.4)
@@ -67,7 +67,7 @@ class S13_Twist(VScene):
             self.play(Write(same), FadeIn(same_n), run_time=.2 * d)
             self.play(Rotate(fig, angle=-7 * DEGREES, about_point=pivot), FadeOut(ghost),
                       FadeOut(twI), FadeOut(twII), run_time=.15 * d)
-            self.play(shared.animate.set_stroke(color=GOLD), run_time=.05 * d)
+            self.play(Indicate(shared, color=GOLD, scale_factor=1.05), run_time=.05 * d)
             self.wait(.08 * d)
 
         # ---- beat 2: the twist rate of one cell

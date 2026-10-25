@@ -32,7 +32,7 @@ assert abs(dI - 1969.0) < 0.06 and abs(dII - 3527.8) < 0.06
 # the rounded table entries sum to 1968.9 / 3527.8; the exact sums (above) round to 1969.0 / 3527.8
 assert abs(156.3 + 2 * 806.4 + 199.8 - 1969.0) < .15 and np.isclose(165.6 + 2 * 1581.2 + 199.8, 3527.8)
 
-COLS_X = [-6.3, -4.85, -3.4, -1.65, 0.1, 1.6]
+COLS_X = [-6.35, -4.95, -3.55, -1.8, 0.35, 1.85]
 ROWS_Y = [-0.75, -1.35, -1.95, -2.55, -3.15, -3.72]
 DCM = {r"\delta_I": ACCENT, r"\delta_{II}": ACCENT, r"\delta_{25}": ACCENT, r"\delta_{16}": ACCENT,
        r"G_{\mathrm{ref}}": ACCENT, r"t^*": ACCENT}
@@ -55,7 +55,7 @@ class S15_P2_Setup(VScene):
         labI = M(r"\mathrm{I}", size=48, color=MINT).move_to(cI)
         labII = M(r"\mathrm{II}", size=48, color=LIME).move_to(cII)
         tq = torque(np.array([5.55, 1.9, 0]), radius=0.6, color=LILAC, ccw=True, label="T")
-        note1 = VGroup(TX(r"$T$ not given:", size=28), TX(r"solve per unit $T$", size=28)).arrange(DOWN, buff=.15)
+        note1 = VGroup(TX(r"$T$ not given:", size=34), TX(r"solve per unit $T$", size=34)).arrange(DOWN, buff=.15)
         note1.move_to([5.6, 0.5, 0])
 
         self.beat("Here's the two cell wing box. The torque is counterclockwise, but the problem doesn't give its size, so we'll find each shear flow per unit of torque.",
@@ -81,7 +81,7 @@ class S15_P2_Setup(VScene):
                      E(r"\delta", size=40))
         for m, x in zip(hdr, COLS_X):
             m.move_to([x, ROWS_Y[0], 0])
-        rule = Line([-7.0, ROWS_Y[0] - .3, 0], [2.4, ROWS_Y[0] - .3, 0], color=HAIR, stroke_width=2)
+        rule = Line([-7.0, ROWS_Y[0] - .3, 0], [2.5, ROWS_Y[0] - .3, 0], color=HAIR, stroke_width=2)
         cells = []  # cells[r][c]
         for r, (lab, L, t, G) in enumerate(WALLS):
             y = ROWS_Y[r + 1]
@@ -102,8 +102,8 @@ class S15_P2_Setup(VScene):
         tn = T("skins 12, 56, 23, 45", size=28, color=MUTED)
         alg = VGroup(g1, gn, t1, t2, tn).arrange(DOWN, buff=.22)
         t2.align_to(t1[1], LEFT)
-        fit(alg, 4.5, 3.6)
-        alg.move_to([4.8, -2.2, 0])
+        fit(alg, 4.3, 3.6)
+        alg.move_to([4.9, -2.2, 0])
         webs = VGroup(*[sec.walls_m[k] for k in [(6, 1), (2, 5), (3, 4)]])
         skins = VGroup(*[sec.walls_m[k] for k in [(1, 2), (5, 6), (2, 3), (4, 5)]])
         web_ts = VGroup(*[cells[r][4] for r in range(3)])
@@ -117,8 +117,8 @@ class S15_P2_Setup(VScene):
         dl1 = E(r"\delta|=|\int\frac{ds}{t^*}|=|\frac{L}{t^*}", size=40, cmap={r"\int\frac{ds}{t^*}": INK})
         dl2 = E(r"\delta_{16}|=|\frac{254}{1.625}|=|156.3", size=40, cmap=DCM)
         dalg = VGroup(dl1, dl2).arrange(DOWN, buff=.45)
-        fit(dalg, 4.5, 3.4)
-        dalg.move_to([4.8, -2.2, 0])
+        fit(dalg, 4.3, 3.4)
+        dalg.move_to([4.9, -2.2, 0])
         dcol = [cells[r][5] for r in range(5)]
         self.play(FadeOut(alg), run_time=.6)
         self.beat("Now delta for each wall is its length over t star.",
@@ -138,10 +138,9 @@ class S15_P2_Setup(VScene):
         s2n = T("right web + top and bottom skins + spar", size=26, color=MUTED)
         s3 = E(r"\delta_{25}|=|199.8", size=40, cmap=DCM)
         s3n = T("the shared spar alone", size=26, color=MUTED)
-        sums = VGroup(VGroup(s1, s1n).arrange(DOWN, buff=.12), VGroup(s2, s2n).arrange(DOWN, buff=.12),
-                      VGroup(s3, s3n).arrange(DOWN, buff=.12)).arrange(DOWN, buff=.35, aligned_edge=LEFT)
-        for g in sums:
-            g[1].align_to(g[0], LEFT)
+        sums = VGroup(VGroup(s1, s1n).arrange(DOWN, buff=.12, aligned_edge=LEFT),
+                      VGroup(s2, s2n).arrange(DOWN, buff=.12, aligned_edge=LEFT),
+                      VGroup(s3, s3n).arrange(DOWN, buff=.12, aligned_edge=LEFT)).arrange(DOWN, buff=.35, aligned_edge=LEFT)
         fit(sums, 9.8, 3.4)
         sums.move_to([2.0, -2.25, 0])
         self.play(FadeOut(dalg), FadeOut(drop_cols), ReplacementTransform(rule, rule2),

@@ -69,8 +69,8 @@ class S09_P1_Basic(VScene):
         booms = sec.booms({1: B1, 2: B2, 3: B2, 4: B1})
         names = sec.names()
         c = (sec.p(1) + sec.p(3)) / 2
-        axis = DashedLine(c + 3.5 * LEFT, c + 3.5 * RIGHT, color=MUTED, stroke_width=2, dash_length=0.12)
-        axl = M("x", size=32, color=MUTED).next_to(axis.get_end(), UP + LEFT, buff=0.1)
+        axis = DashedLine(c + 3.4 * LEFT, c + 3.4 * RIGHT, color=MUTED, stroke_width=2, dash_length=0.12)
+        axl = M("x", size=32, color=MUTED).next_to(axis.get_start(), UP + RIGHT, buff=0.1)
         # boom-area labels, outside each corner (above the top booms, below the bottom ones)
         blab = VGroup()
         for n, b in ((1, B1), (2, B2), (3, B2), (4, B1)):
@@ -86,7 +86,7 @@ class S09_P1_Basic(VScene):
         l1 = E(r"I_{xx}|=|\textstyle\sum|B_r|\,y_r^2", size=44)
         l2 = E(r"=|2\,\big(|4000|+|3556|\big)|\,(150)^2", size=44, cmap=QC)
         l3 = E(r"=|340.0\times 10^{6}\ \text{mm}^4", size=44)
-        n1 = note("two of each boom, each 150 mm out")
+        n1 = note("two of each, all 150 mm off axis")
         col(VGroup(lxy, nxy).arrange(DOWN, aligned_edge=LEFT, buff=0.15), l1, top=2.9, buff=0.5)
         eq_under(l2, l1)
         eq_under(l3, l2)
@@ -130,11 +130,12 @@ class S09_P1_Basic(VScene):
         b = jump(r"q_{b,23}|=|0|-|\frac{S_y}{I_{xx}}|(3556)|(150)")
         cc = E(r"=|-1.569\times 10^{-3}|\,S_y", size=44)
         nb = note("boom 2: B = 3556, y = +150")
-        col(VGroup(rule, nrule).arrange(DOWN, aligned_edge=LEFT, buff=0.12), b, top=1.95, buff=0.5)
+        col(VGroup(rule, nrule).arrange(DOWN, aligned_edge=LEFT, buff=0.12), b, top=1.25, buff=0.5)
         eq_under(cc, b)
         nb.next_to(cc, DOWN, buff=0.25).align_to(b, LEFT)
         z12 = M(r"q_{b,12}=0", size=36, color=SKY).next_to([sec.mid(1, 2)[0] - 1.25, top_y, 0], DOWN, buff=0.45)
         f23 = flow(sec, 2, 3, q23, label=r"q_{b,23}", size=36)
+        f23[-1].next_to(f23[0], LEFT, buff=0.12)
         self.beat("Wall one two: zero. Crossing boom two: minus S y over I x x, times three five five six, times one fifty. That's minus one point five six nine times ten to the minus three, S y.",
                   [FadeOut(VGroup(cutl, xq)), FadeIn(z12), Indicate(sec.walls_m[(1, 2)], color=SKY)],
                   [FadeIn(rule), FadeIn(nrule)],
