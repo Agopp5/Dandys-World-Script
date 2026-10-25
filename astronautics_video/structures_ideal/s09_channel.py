@@ -25,7 +25,7 @@ assert np.allclose([q12, q23, q34, q_end], [-6, -12, -6, 0])
 XI = (-q12) * 200 * 400 / S_Y
 assert np.isclose(XI, 100.0)
 S_POS = [0, 200, 600, 800]                   # arc length s (mm) at booms 1..4: flange 200, web 400, flange 200
-LX = -0.5                                    # left edge of the algebra column
+LX = -1.1                                    # left edge of the algebra column
 
 
 class S09_Channel(VScene):
@@ -33,14 +33,14 @@ class S09_Channel(VScene):
 
     def construct(self):
         # ---------- the staircase plot (built at its final spot, shown big first) ----------
-        ax = axes((-100, 900, 200), (-14, 2, 2), width=6.8, height=2.4, xlabel="s", ylabel="q")
+        ax = axes((-200, 900, 100), (-14, 2, 2), width=6.8, height=2.4, xlabel="s", ylabel="q")
         ax.move_to([3.15, -2.3, 0])
         bl = VGroup(*[DashedLine(ax.c2p(s, 2), ax.c2p(s, -14), color=EMBER, stroke_width=2, dash_length=0.08)
                       for s in S_POS])
         bnum = VGroup(*[T(str(i + 1), 34, EMBER).next_to(bl[i], UP, buff=0.06) for i in range(4)])
         plot = VGroup(ax, bl, bnum)
         home = plot.get_center()
-        plot.scale(1.35).move_to([0, 0.2, 0])
+        plot.scale(1.6).move_to([0, 0.2, 0])
 
         lvl = [-4, -9, -3]                           # shape only: arbitrary step heights
         flats = VGroup(*[Line(ax.c2p(a, v), ax.c2p(b, v), color=INK2, stroke_width=7)
@@ -81,22 +81,27 @@ class S09_Channel(VScene):
 
         self.beat("Here's the channel from your slides: four booms of three hundred square millimeters, two hundred millimeters above and below the axis.",
                   [FadeOut(flats), FadeOut(jumps), FadeOut(n_flat), FadeOut(n_jump), FadeOut(n_shape),
-                   plot.animate.scale(1 / 1.35).move_to(home)],
+                   plot.animate.scale(1 / 1.6).move_to(home)],
                   Create(walls), [FadeIn(booms, scale=1.6), FadeIn(names)], [FadeIn(b_lab)], .08,
                   [Create(na), FadeIn(na_lab)], [GrowFromCenter(sp_top), FadeIn(yl_top)],
                   [GrowFromCenter(sp_bot), FadeIn(yl_bot)], .15,
                   w=(.12, .1, .14, .1, .1, .1, .11))
 
         # ---------- beat 3: I_xx and S_y / I_xx ----------
-        ix = E(r"I_{xx}|=|4\,|(300)|(200)^2|=|48\times 10^6\ \text{mm}^4", size=44)
+        ix = E(r"I_{xx}|=|4\,|(300)|(200)^2", size=44)
         paint(ix, {3: EMBER})
-        ix.move_to([0, 3.35, 0]).align_to([LX, 0, 0], LEFT)
-        ix_note = T("four booms, each 200 mm from the axis", 30, MUTED).next_to(ix, DOWN, buff=0.18).align_to(ix, LEFT)
-        k = E(r"S_y|/|I_{xx}|=|4800|/|48\times 10^6|=|10^{-4}\ \text{N/mm}^4", size=44)
+        ix.move_to([0, 3.4, 0]).align_to([LX, 0, 0], LEFT)
+        ix2 = E(r"=|48\times 10^6\ \text{mm}^4", size=44)
+        ix2.next_to(ix, DOWN, buff=0.3)
+        ix2.shift((ix[1].get_x() - ix2[0].get_x()) * RIGHT)
+        ix_note = T("four booms, each 200 mm from the axis", 30, MUTED).next_to(ix2, DOWN, buff=0.2).align_to(ix, LEFT)
+        k = E(r"S_y|/|I_{xx}|=|4800|/|48\times 10^6", size=44)
         paint(k, {4: ROSE})
         k.next_to(ix_note, DOWN, buff=0.55).align_to(ix, LEFT)
-        k_note = TX(r"$S_y = 4.8$ kN $= 4800$ N", size=30).set_color(MUTED).next_to(k, DOWN, buff=0.18).align_to(k, LEFT)
-        g_k = glow(k[8], GOLD)
+        k2 = E(r"=|10^{-4}\ \text{N/mm}^4", size=44)
+        k2.next_to(k, DOWN, buff=0.3)
+        k2.shift((k[3].get_x() - k2[0].get_x()) * RIGHT)
+        g_k = glow(k2[1], GOLD)
         sy_arr = Arrow([xs, y0 - 1.1, 0], [xs, y0 + 1.1, 0], buff=0, color=ROSE, stroke_width=7)
         sy_lab = E(r"S_y", size=44).next_to(sy_arr, UP, buff=0.1)
         sy_val = M(r"4.8\ \text{kN}", size=36, color=ROSE).next_to(sy_arr, DOWN, buff=0.12)
@@ -104,9 +109,9 @@ class S09_Channel(VScene):
 
         self.beat("I x x is four times three hundred times two hundred squared. That's forty eight million. So S y over I x x is forty eight hundred over forty eight million: ten to the minus four.",
                   [Write(ix[:3])], [Write(ix[3:5]), Indicate(booms, color=EMBER, scale_factor=1.3)], .06,
-                  [Write(ix[5:]), FadeIn(ix_note)], .1,
+                  [Write(ix2), FadeIn(ix_note)], .1,
                   [GrowArrow(sy_arr), FadeIn(sy_lab), FadeIn(sy_val), FadeIn(sc_dot)], [Write(k[:3])],
-                  [Write(k[3:6]), FadeIn(k_note)], [Write(k[6:]), FadeIn(g_k)], .16,
+                  [Write(k[3:])], [Write(k2), FadeIn(g_k)], .16,
                   w=(.08, .14, .12, .1, .06, .1, .08))
 
         # ---------- beat 4: fold, the jump rule, boom 1 ----------
@@ -120,7 +125,7 @@ class S09_Channel(VScene):
         rule_note = T("the jump at each boom (last scene)", 30, MUTED).next_to(rule, DOWN, buff=0.15).align_to(rule, LEFT)
         l1 = E(r"q_{12}|=|0|-|10^{-4}|(300)|(200)|=|-6\ \text{N/mm}", size=44)
         paint(l1, {0: SKY, 2: SKY, 5: EMBER, 8: SKY})
-        fit(l1, 7.3, 1)
+        fit(l1, 7.9, 1)
         l1.move_to([0, 1.05, 0]).align_to([LX, 0, 0], LEFT)
         free = T("free edge", 30, MUTED).next_to(names[0], UP, buff=0.12)
         f12 = flow(sec, 1, 2, q12, label="-6", size=34)
@@ -130,8 +135,8 @@ class S09_Channel(VScene):
         v1 = M("-6", size=34, color=SKY).next_to(ax.c2p(100, -6), UP, buff=0.1)
 
         self.beat("Start at the free edge, where the shear flow is zero. Crossing boom one: zero, minus ten to the minus four, times three hundred, times two hundred. That's minus six newtons per millimeter.",
-                  [FadeOut(ix), FadeOut(ix_note), FadeOut(k_note), FadeOut(g_k),
-                   ReplacementTransform(k, kb_eq), FadeIn(kbox[0])],
+                  [FadeOut(ix), FadeOut(ix2), FadeOut(ix_note), FadeOut(g_k),
+                   ReplacementTransform(VGroup(k, k2), kb_eq), FadeIn(kbox[0])],
                   [FadeIn(rule), FadeIn(rule_note)],
                   [FadeIn(free), Flash(sec.p(1), color=SKY), Create(st0)], .08,
                   [Write(l1[:3]), Indicate(booms[0], color=EMBER, scale_factor=1.6)],
@@ -159,11 +164,12 @@ class S09_Channel(VScene):
             r.shift((xe - r[1].get_x()) * RIGHT)
         rows.move_to([0, 0.95, 0]).align_to([LX, 0, 0], LEFT)
         nx = max(r.get_right()[0] for r in rows) + 0.5
-        notes = [T("boom 1", 30, EMBER), T("boom 2: same B, same y", 30, EMBER),
-                 TX(r"boom 3 at $y=-200$", size=30).set_color(EMBER), T("boom 4: free edge", 30, EMBER)]
+        notes = [T("boom 1", 30, EMBER), T("boom 2, same y", 30, EMBER),
+                 T("boom 3, below axis", 30, EMBER), T("boom 4", 30, EMBER)]
         for n, r in zip(notes, rows):
             n.move_to([0, r.get_y(), 0]).align_to([nx, 0, 0], LEFT)
-        f23 = flow(sec, 2, 3, q23, label="-12", size=34)
+        f23 = VGroup(flow(sec, 2, 3, q23))
+        f23.add(M("-12", size=34, color=SKY).next_to(f23[0], RIGHT, buff=0.12).set_y(y0 + 0.7))
         st2 = VMobject(color=SKY, stroke_width=7).set_points_as_corners(
             [ax.c2p(200, -6), ax.c2p(200, -12), ax.c2p(600, -12)])
         v2 = M("-12", size=34, color=SKY).next_to(ax.c2p(400, -12), UP, buff=0.1)

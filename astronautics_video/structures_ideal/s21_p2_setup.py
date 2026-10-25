@@ -107,7 +107,7 @@ class S21_P2_Setup(VScene):
 
         # ---- reference G; webs keep t
         g1 = E(r"G_{\mathrm{ref}}|=|27\,600", size=48, cmap=DCM)
-        gn = TX(r"webs: $t^* = t$", size=34, color=MUTED)
+        gn = VGroup(T("webs:", size=34, color=MUTED), E(r"t^*|=|t", size=44, cmap=DCM)).arrange(RIGHT, buff=.2)
         t1 = E(r"t^*|=|\frac{24\,200}{27\,600}\,t", size=48, cmap=DCM)
         t2 = E(r"=|0.8768\,t", size=48)
         tn = T("skins 12, 56, 23, 45", size=34, color=MUTED)

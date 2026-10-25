@@ -120,7 +120,8 @@ class S13_P1_Basic(VScene):
             self.play(Write(l2[2:5]), Indicate(VGroup(blab[1], blab[2]), color=EMBER), run_time=.12 * d)
             self.play(Write(l2[5:]), Indicate(VGroup(yup, ydn), color=INK), run_time=.1 * d)
             self.play(Write(l3), run_time=.1 * d)
-            self.play(FadeIn(glow(l3[1], ACCENT)), run_time=.06 * d)
+            gl3 = glow(l3[1], ACCENT)
+            self.play(FadeIn(gl3), run_time=.06 * d)
             self.wait(.08 * d)
 
         # fold I_xx into one boxed result
@@ -138,7 +139,7 @@ class S13_P1_Basic(VScene):
         below(goal, ixxg, buff=0.6)
         with self.say("We want the shear centre. So put a vertical load S y at an unknown distance xi from the left web.") as d:
             self.play(FadeOut(VGroup(lxy, nxy, l1, n1, l2, l3[0])), ReplacementTransform(l3[1:], ixxq[2:]),
-                      FadeIn(ixxq[:2]), FadeIn(ixxg[0]), FadeOut(VGroup(yup, ydn)), run_time=.16 * d)
+                      FadeIn(ixxq[:2]), FadeIn(ixxg[0]), FadeOut(VGroup(yup, ydn, gl3)), run_time=.16 * d)
             self.play(FadeIn(goal), run_time=.14 * d)
             self.wait(.08 * d)
             self.play(GrowArrow(sy), FadeIn(syl), run_time=.16 * d)
@@ -189,7 +190,7 @@ class S13_P1_Basic(VScene):
             self.play(Write(b[6:]), FadeIn(nb), run_time=.08 * d)
             self.wait(.08 * d)
             self.play(Write(cc), run_time=.16 * d)
-            self.play(FadeIn(f23), Indicate(sec.walls_m[(2, 3)], color=SKY), FadeIn(glow(cc[1:], SKY)), run_time=.14 * d)
+            self.play(FadeIn(f23), Indicate(sec.walls_m[(2, 3)], color=SKY), FadeIn(gcc := glow(cc[1:], SKY)), run_time=.14 * d)
             self.wait(.16 * d)
 
         # beat 6: boom 3 cancels it -> bottom wall zero
@@ -202,7 +203,7 @@ class S13_P1_Basic(VScene):
         nd = note("boom 3: y = -150, so it cancels").next_to(d2, RIGHT, buff=0.5)
         z34 = M(r"q_{b,34}=0", size=40, color=SKY).next_to([sec.mid(3, 4)[0] + 1.0, bot_y, 0], UP, buff=0.4)
         with self.say("Boom three is one fifty below the middle, so it cancels that exactly: the bottom wall is zero.") as d:
-            self.play(FadeOut(VGroup(ixxg, b, nb, cc[0])), *[FadeOut(m) for m in self.mobjects if m.__class__.__name__ == "Glow"],
+            self.play(FadeOut(VGroup(ixxg, b, nb, cc[0], gcc)),
                       grule.animate.move_to(grule6), ReplacementTransform(cc[1:], q23q[2:]),
                       FadeIn(q23q[:2]), FadeIn(q23b[0]), run_time=.16 * d)
             self.play(Write(d1), Indicate(sec.boom_m[3], color=EMBER, scale_factor=1.8), run_time=.2 * d)
@@ -210,3 +211,26 @@ class S13_P1_Basic(VScene):
             self.play(Write(d2), FadeIn(nd), run_time=.12 * d)
             self.play(FadeIn(z34), Indicate(sec.walls_m[(3, 4)], color=SKY), run_time=.14 * d)
             self.wait(.28 * d)
+
+        # beat 7: boom 4 -> left web
+        q23n = at_top(q23b.copy())
+        q34q = E(r"q_{b,34}|=|0", size=44, cmap=QC)
+        q34b = boxed(q34q).next_to(q23n, DOWN, buff=0.3).align_to(q23n, LEFT)
+        e1 = below(jump(r"q_{b,41}|=|0|-|\frac{S_y}{I_{xx}}|(4000)|(-150)"), q34b, buff=0.55)
+        e2 = eq_under(E(r"=|+1.765\times 10^{-3}|S_y", size=44), e1, buff=0.3)
+        ne = note("boom 4: B = 4000, y = -150").next_to(e2, DOWN, buff=0.22).align_to(e1, LEFT)
+        f41 = flow(sec, 4, 1, q41, label=r"q_{b,41}", size=40)
+        with self.say("Boom four is also below the middle, and bigger: the left web gets plus one point seven six five times ten to the minus three, S y.") as d:
+            self.play(FadeOut(VGroup(grule, d1[2:], d2[0], nd)), q23b.animate.move_to(q23n),
+                      ReplacementTransform(d1[:2], q34q[:2]), ReplacementTransform(d2[1], q34q[2]), FadeIn(q34b[0]),
+                      run_time=.14 * d)
+            self.play(Write(e1[:5]), Indicate(sec.boom_m[4], color=EMBER, scale_factor=1.8), run_time=.14 * d)
+            self.play(Write(e1[5:]), Indicate(blab[3], color=EMBER), Indicate(blab[2], color=EMBER), FadeIn(ne),
+                      run_time=.14 * d)
+            self.wait(.06 * d)
+            self.play(Write(e2), run_time=.16 * d)
+            self.play(FadeIn(f41), Indicate(sec.walls_m[(4, 1)], color=SKY), FadeIn(ge2 := glow(e2[1:], SKY)),
+                      run_time=.14 * d)
+            self.wait(.22 * d)
+        self.wait(1.5)
+        self.wipe()
