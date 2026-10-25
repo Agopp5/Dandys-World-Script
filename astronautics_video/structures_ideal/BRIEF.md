@@ -188,6 +188,7 @@ Picture: one skin panel between two booms, width b, thickness t_D, with a linear
 7. "Their moments add up to the moment of the boom force, sigma one B one, times b."
    → full line: sigma_2 t_D b (b/2) + (1/2)(sigma_1 - sigma_2) t_D b (2b/3) = sigma_1 B_1 b.
 8. "Divide both sides by sigma one times b, and collect terms. You get B one equals t D b over six, times two plus sigma two over sigma one."
+9. "The boom at the other end, B two, uses the same formula with one and two swapped: two plus sigma one over sigma two."
    → divide; common denominator 6; boxed B_1 = (t_D b/6)(2 + sigma_2/sigma_1); then B_2 by swapping 1 and 2.
 
 ## S07_Ratio [145] Two cases you will use

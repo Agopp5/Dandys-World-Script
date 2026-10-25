@@ -198,18 +198,19 @@ class S06_Skin_Area(VScene):
             self.play(Create(boxC), FadeIn(gC), Indicate(ib1, color=EMBER, scale_factor=1.5),
                       run_time=.1 * d)
         self.snap("boxed B_1")
-        self.wait(1.5)
+        self.wait(1.0)
 
         # ---- B_2 by swapping 1 and 2 ----------------------------------------------------
         r6 = row(E(r"B_2|=|\frac{t_D b}{6}|\Big(2+|\frac{\sigma_1}{\sigma_2}|\Big)", size=52), "swap 1 and 2", buff=.38)
         paint(r6[0], {4: GOLD})
         keepC = VGroup(gC, rC, boxC)
         stage = column(rC.copy(), r6, buff=.7)
-        self.play(FadeOut(rA), FadeOut(rB), keepC.animate.shift(stage[0].get_center() - rC.get_center()),
-                  *[m.animate.set_opacity(.25) for m in (sr, st, lr, lt, mr, mt, pivot)], run_time=1.0)
         box6 = SurroundingRectangle(r6[0], color=EMBER, buff=.2, stroke_width=4)
-        self.play(Write(r6), run_time=1.6)
-        self.play(Create(box6), Indicate(ib2, color=EMBER, scale_factor=1.5), Indicate(f2lab, color=EMBER),
-                  run_time=1.0)
-        self.wait(2.5)
+        self.beat("The boom at the other end, B two, uses the same formula with one and two swapped: two plus sigma one over sigma two.",
+                  [FadeOut(rA), FadeOut(rB), keepC.animate.shift(stage[0].get_center() - rC.get_center()),
+                   *[m.animate.set_opacity(.25) for m in (sr, st, lr, lt, mr, mt, pivot)]], .05,
+                  Write(r6), .05,
+                  [Create(box6), Indicate(ib2, color=EMBER, scale_factor=1.5), Indicate(f2lab, color=EMBER)], .25,
+                  w=(.15, .3, .2))
+        self.wait(1.0)
         self.wipe()
