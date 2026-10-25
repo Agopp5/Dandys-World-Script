@@ -78,7 +78,7 @@ class S13_P1_Basic(VScene):
         left_x, right_x = sec.p(1)[0], sec.p(2)[0]
         axis = DashedLine([left_x - 0.25, c[1], 0], [right_x + 0.25, c[1], 0], color=MUTED, stroke_width=2,
                           dash_length=0.12)
-        axl = T("middle", size=30, color=MUTED).next_to([left_x + 0.66 * (right_x - left_x), c[1], 0], UP + RIGHT, buff=0.08)
+        axl = T("middle", size=30, color=MUTED).next_to([left_x + 0.5 * (right_x - left_x), c[1], 0], DOWN + RIGHT, buff=0.1)
         sx = left_x + 0.25 * (right_x - left_x)
         yup = span([sx, c[1], 0], [sx, top_y, 0], r"y=+150", side=RIGHT, off=0.25, color=INK2, size=34)
         ydn = span([sx, bot_y, 0], [sx, c[1], 0], r"y=-150", side=RIGHT, off=0.25, color=INK2, size=34)
@@ -130,7 +130,7 @@ class S13_P1_Basic(VScene):
 
         # beat 3: S_y at an unknown xi
         xs = left_x + 0.42 * (right_x - left_x)
-        sy = Arrow([xs, c[1] - 1.25, 0], [xs, c[1] + 1.2, 0], color=ROSE, buff=0, stroke_width=8,
+        sy = Arrow([xs, c[1] - 0.95, 0], [xs, c[1] + 1.1, 0], color=ROSE, buff=0, stroke_width=8,
                    max_tip_length_to_length_ratio=0.16)
         syl = M("S_y", size=44, color=ROSE).next_to(sy.get_start(), DOWN, buff=0.1)
         xi = span([left_x, bot_y, 0], [xs, bot_y, 0], r"\xi", side=DOWN, off=0.85, color=ROSE, size=40)
