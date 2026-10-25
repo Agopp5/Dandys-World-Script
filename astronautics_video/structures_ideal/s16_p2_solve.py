@@ -38,7 +38,7 @@ def frac(num, den, size=44):
     return VGroup(n, bar, d).arrange(DOWN, buff=0.16)
 
 
-def note(s, size=26):
+def note(s, size=28):
     return TX(s, size=size, color=MUTED)
 
 
@@ -119,24 +119,25 @@ class S16_P2_Solve(VScene):
                   w=(.12, .05, .25, .08, .22, .2, .08))
 
         # ---- beat 4: the two flows per unit torque ----
-        t3t = t3.copy().move_to([0, -0.55, 0])
+        t3t = t3.copy().move_to([0, 0.5, 0])
         q2 = boxed(E(r"q_{II}|=|\dfrac{T}{1.244\times 10^{6}}|=|0.804\times 10^{-6}\,|T", size=44), LIME)
         q1 = boxed(E(r"q_I|=|1.5694\,|q_{II}|=|1.261\times 10^{-6}\,|T", size=44), MINT)
-        res = VGroup(q2, q1).arrange(DOWN, buff=0.4).move_to([0, -2.3, 0])
+        res = VGroup(q2, q1).arrange(DOWN, buff=0.4).move_to([0, -1.55, 0])
         nq = note(r"$T$ in N mm, so each $q$ comes out in N/mm", size=28).next_to(res, DOWN, buff=0.25)
         self.beat("So q two is zero point eight zero four times ten to the minus six, T. And q one is one point two six one times ten to the minus six, T.",
-                  [FadeOut(t1), FadeOut(nt1), FadeOut(t2), FadeOut(nt2), t3.animate.move_to(t3t)],
+                  [FadeOut(t1), FadeOut(nt1), FadeOut(t2), FadeOut(nt2), FadeOut(lD), FadeOut(nDt),
+                   t3.animate.move_to(t3t)],
                   Write(q2[0]), Create(q2[1]), Write(q1[0]), [Create(q1[1]), FadeIn(nq)],
                   w=(.12, .35, .08, .35, .1))
 
         # ---- beat 5: one kilonewton meter, drawn on the box ----
-        big = hw_twocell(width=11.6, center=(0, 1.15))
+        big = hw_twocell(width=12.8, center=(0, 1.1))
         walls2 = big.draw()
         cI, cII = cell_center(big, [1, 2, 5, 6]), cell_center(big, [2, 3, 4, 5])
         arrI = VGroup(*[flow(big, a, b, 1.26, color=MINT) for a, b in [(1, 2), (5, 6), (6, 1)]])
         arrII = VGroup(*[flow(big, a, b, 0.80, color=LIME) for a, b in [(2, 3), (3, 4), (4, 5)]])
         cfI = cell_flow(cI + LEFT * 0.9, radius=0.42, color=MINT, ccw=True)
-        cfII = cell_flow(cII + LEFT * 1.0, radius=0.42, color=LIME, ccw=True)
+        cfII = cell_flow(cII + LEFT * 0.6, radius=0.42, color=LIME, ccw=True)
         vI = E(r"q_I = 1.26", size=40).next_to(cfI, RIGHT, buff=0.25)
         vII = E(r"q_{II} = 0.80", size=40).next_to(cfII, RIGHT, buff=0.25)
         spar = flow(big, 2, 5, 0.46, color=GOLD)
@@ -148,7 +149,7 @@ class S16_P2_Solve(VScene):
         r2.move_to([0, -3.2, 0]).set_x(r1.get_center()[0] - 0.3)
         nS = note(r"the spar's share", size=28).next_to(r2, RIGHT, buff=0.35)
         self.beat("For a torque of one kilonewton meter: one point two six in cell one, zero point eight zero in cell two, and the spar carries the difference, zero point four six newtons per millimeter.",
-                  [FadeOut(card), FadeOut(labI), FadeOut(labII), FadeOut(lD), FadeOut(nDt), FadeOut(t3),
+                  [FadeOut(card), FadeOut(labI), FadeOut(labII), FadeOut(t3),
                    FadeOut(q1), FadeOut(q2), FadeOut(nq), ReplacementTransform(walls, walls2)],
                   [Create(tq), Write(r1)],
                   [LaggedStart(*[GrowArrow(a) if isinstance(a, Arrow) else FadeIn(a) for a in arrI]),

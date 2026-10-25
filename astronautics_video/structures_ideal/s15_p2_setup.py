@@ -32,8 +32,8 @@ assert abs(dI - 1969.0) < 0.06 and abs(dII - 3527.8) < 0.06
 # the rounded table entries sum to 1968.9 / 3527.8; the exact sums (above) round to 1969.0 / 3527.8
 assert abs(156.3 + 2 * 806.4 + 199.8 - 1969.0) < .15 and np.isclose(165.6 + 2 * 1581.2 + 199.8, 3527.8)
 
-COLS_X = [-6.3, -4.9, -3.5, -1.85, -0.15, 1.45]
-ROWS_Y = [-0.85, -1.45, -2.0, -2.55, -3.1, -3.65]
+COLS_X = [-6.3, -4.85, -3.4, -1.65, 0.1, 1.6]
+ROWS_Y = [-0.75, -1.35, -1.95, -2.55, -3.15, -3.72]
 DCM = {r"\delta_I": ACCENT, r"\delta_{II}": ACCENT, r"\delta_{25}": ACCENT, r"\delta_{16}": ACCENT,
        r"G_{\mathrm{ref}}": ACCENT, r"t^*": ACCENT}
 
@@ -46,7 +46,7 @@ class S15_P2_Setup(VScene):
 
         # ---- the section, top of the frame
         sec = hw_twocell()
-        sec = Section(sec.pts, sec.walls, width=9.0, center=(-1.0, 1.45))
+        sec = Section(sec.pts, sec.walls, width=9.4, center=(-1.2, 1.5))
         walls = sec.draw()
         booms = sec.booms({k: 300 for k in sec.pts})
         names = sec.names()
@@ -56,8 +56,7 @@ class S15_P2_Setup(VScene):
         labII = M(r"\mathrm{II}", size=48, color=LIME).move_to(cII)
         tq = torque(np.array([5.55, 1.9, 0]), radius=0.6, color=LILAC, ccw=True, label="T")
         note1 = VGroup(TX(r"$T$ not given:", size=28), TX(r"solve per unit $T$", size=28)).arrange(DOWN, buff=.15)
-        fit(note1, 2.9, 1.2)
-        note1.move_to([5.55, 0.45, 0])
+        note1.move_to([5.6, 0.5, 0])
 
         self.beat("Here's the two cell wing box. The torque is counterclockwise, but the problem doesn't give its size, so we'll find each shear flow per unit of torque.",
                   [Create(walls), FadeIn(booms), FadeIn(names)], [FadeIn(labI), FadeIn(labII)],
@@ -77,18 +76,18 @@ class S15_P2_Setup(VScene):
                   FadeIn(bn), w=(.2, .25, .3, .25))
 
         # ---- the HW table (walls)
-        hdr = VGroup(T("wall", size=30, color=INK2), M(r"L\ (\mathrm{mm})", size=30), M(r"t\ (\mathrm{mm})", size=30),
-                     M(r"G\ (\mathrm{N/mm^2})", size=30), E(r"t^*|\ (\mathrm{mm})", size=30),
-                     E(r"\delta", size=34))
+        hdr = VGroup(T("wall", size=30, color=INK2), M(r"L\ (\mathrm{mm})", size=34), M(r"t\ (\mathrm{mm})", size=34),
+                     M(r"G\ (\mathrm{N/mm^2})", size=34), E(r"t^*|\ (\mathrm{mm})", size=34),
+                     E(r"\delta", size=40))
         for m, x in zip(hdr, COLS_X):
             m.move_to([x, ROWS_Y[0], 0])
-        rule = Line([-7.0, ROWS_Y[0] - .3, 0], [2.2, ROWS_Y[0] - .3, 0], color=HAIR, stroke_width=2)
+        rule = Line([-7.0, ROWS_Y[0] - .3, 0], [2.4, ROWS_Y[0] - .3, 0], color=HAIR, stroke_width=2)
         cells = []  # cells[r][c]
         for r, (lab, L, t, G) in enumerate(WALLS):
             y = ROWS_Y[r + 1]
-            row = [M(lab, size=30, color=INK2), M(str(L), size=30), M(f"{t:.3f}", size=30),
-                   M(r"27\,600" if G == G_REF else r"24\,200", size=30),
-                   M(TSTAR_S[r], size=30, color=ACCENT), M(DELTA_S[r], size=30, color=ACCENT)]
+            row = [M(lab, size=34, color=INK2), M(str(L), size=34), M(f"{t:.3f}", size=34),
+                   M(r"27\,600" if G == G_REF else r"24\,200", size=34),
+                   M(TSTAR_S[r], size=34, color=ACCENT), M(DELTA_S[r], size=34, color=ACCENT)]
             for m, x in zip(row, COLS_X):
                 m.move_to([x, y, 0])
             cells.append(row)
@@ -97,14 +96,14 @@ class S15_P2_Setup(VScene):
 
         # ---- reference G and t*
         g1 = E(r"G_{\mathrm{ref}}|=|27\,600", size=40, cmap=DCM)
-        gn = T("webs: G is the reference, so t* = t", size=26, color=MUTED)
+        gn = T("webs keep their t", size=28, color=MUTED)
         t1 = E(r"t^*|=|\frac{24\,200}{27\,600}\,t", size=40, cmap=DCM)
         t2 = E(r"=|0.8768\,t", size=40)
-        tn = T("skins 12, 56, 23, 45", size=26, color=MUTED)
+        tn = T("skins 12, 56, 23, 45", size=28, color=MUTED)
         alg = VGroup(g1, gn, t1, t2, tn).arrange(DOWN, buff=.22)
         t2.align_to(t1[1], LEFT)
-        fit(alg, 4.6, 3.4)
-        alg.move_to([4.7, -2.25, 0])
+        fit(alg, 4.5, 3.6)
+        alg.move_to([4.8, -2.2, 0])
         webs = VGroup(*[sec.walls_m[k] for k in [(6, 1), (2, 5), (3, 4)]])
         skins = VGroup(*[sec.walls_m[k] for k in [(1, 2), (5, 6), (2, 3), (4, 5)]])
         web_ts = VGroup(*[cells[r][4] for r in range(3)])
@@ -118,8 +117,8 @@ class S15_P2_Setup(VScene):
         dl1 = E(r"\delta|=|\int\frac{ds}{t^*}|=|\frac{L}{t^*}", size=40, cmap={r"\int\frac{ds}{t^*}": INK})
         dl2 = E(r"\delta_{16}|=|\frac{254}{1.625}|=|156.3", size=40, cmap=DCM)
         dalg = VGroup(dl1, dl2).arrange(DOWN, buff=.45)
-        fit(dalg, 4.6, 3.2)
-        dalg.move_to([4.7, -2.25, 0])
+        fit(dalg, 4.5, 3.4)
+        dalg.move_to([4.8, -2.2, 0])
         dcol = [cells[r][5] for r in range(5)]
         self.play(FadeOut(alg), run_time=.6)
         self.beat("Now delta for each wall is its length over t star.",
