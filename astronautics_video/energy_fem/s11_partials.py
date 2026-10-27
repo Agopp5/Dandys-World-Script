@@ -25,24 +25,36 @@ LX = -6.6          # left edge of the derivation column
 ROW_A, ROW_B, ROW_C = 1.15, -0.1, -1.35
 
 
+def pair_box(a, b):
+    """GOOD frame (faint GOOD fill) around a Newton equation and its energy twin: they match."""
+    return SurroundingRectangle(VGroup(a, b), color=GOOD, stroke_width=4, buff=.14, corner_radius=.12,
+                                fill_color=GOOD, fill_opacity=.1).set_z_index(-1)
+
+
+def tick(box):
+    """check badge just left of a pair box"""
+    c = Circle(radius=.2, color=GOOD, stroke_width=3, fill_color=BG, fill_opacity=1)
+    return VGroup(c, M(r"\checkmark", size=30, color=GOOD).move_to(c)).next_to(box, LEFT, buff=.05).set_z_index(3)
+
+
 class S11_Partials(VScene):
     budget = 223
 
     def construct(self):
         # Pi at the top: term groups 0 Pi, 1 =, 2-4 spring 1, 5 +, 6-8 spring 2, 9 -, 10-11 F1 q1, 12 -, 13-14 F2 q2
         pi = E(r"\Pi|=|\tfrac{1}{2}|k_1|q_1^2|+|\tfrac{1}{2}|k_2|(q_2-q_1)^2|-|F_1|q_1|-|F_2|q_2",
-               size=46, cmap=SQ).move_to(UP * 2.95)
+               size=52, cmap=SQ).move_to(UP * 2.95)
         t_s1, t_s2, t_f1, t_f2 = pi[2:5], pi[6:9], pi[9:12], pi[12:15]
 
         # Newton panel (the force balances from S09)
         n_title = T("Newton: node balances", size=32, color=INK2)
         N1 = E(r"(|k_1|+|k_2|)|q_1|-|k_2|q_2|=|F_1", size=40)
         N2 = E(r"-|k_2|q_1|+|k_2|q_2|=|F_2", size=40)
-        PX = 4.55
-        n_title.move_to([PX, 1.75, 0]); N1.move_to([PX, 0.95, 0]); N2.move_to([PX, -0.95, 0])
-        slot1, slot2 = np.array([PX, 0.1, 0]), np.array([PX, -1.8, 0])
-        card = RoundedRectangle(width=4.9, height=4.6, corner_radius=.15, stroke_color=HAIR, stroke_width=2,
-                                fill_color=SURFACE, fill_opacity=1).move_to([PX, -0.1, 0])
+        PX = 4.66
+        n_title.move_to([PX, 1.95, 0]); N1.move_to([PX, 1.15, 0]); N2.move_to([PX, -1.05, 0])
+        slot1, slot2 = np.array([PX, 0.3, 0]), np.array([PX, -1.9, 0])
+        card = RoundedRectangle(width=5.2, height=5.1, corner_radius=.15, stroke_color=HAIR, stroke_width=2,
+                                fill_color=SURFACE, fill_opacity=1).move_to([4.45, -0.3, 0]).set_z_index(-2)
         newton = VGroup(card, n_title, N1, N2)
 
         # beat 1: the two stationarity conditions
@@ -73,7 +85,7 @@ class S11_Partials(VScene):
             self.play(Write(D1[11:13]), run_time=.1 * d)
 
         # beat 3: the inside derivative is minus one
-        ring = Circle(color=ACCENT, stroke_width=5).surround(D1[12], buffer_factor=1.35)
+        ring = SurroundingRectangle(D1[12], color=ACCENT, stroke_width=5, buff=.07, corner_radius=.12)
         inside = M(r"\frac{\partial (q_2-q_1)}{\partial q_1} = -1", size=36, color=ACCENT)
         inside.next_to(ring, DOWN, buff=.25)
         if inside.get_right()[0] > 1.9:
@@ -100,6 +112,7 @@ class S11_Partials(VScene):
         # beat 5: collect, compare with Newton row 1
         G = E(r"(|k_1|+|k_2|)|q_1|-|k_2|q_2|=|F_1", size=44)
         G.move_to([0, ROW_C, 0]).set_x(X.get_left()[0] + G.width / 2)
+        match1 = pair_box(N1, G.copy().scale(40 / 44).move_to(slot1))
         with self.say("Group the q one terms and move F one across: k one plus k two, times q one, minus k two q "
                       "two, equals F one. Exactly Newton's first equation.") as d:
             self.play(Indicate(X[0:2], color=SKY), Indicate(X[5:8], color=SKY), run_time=.12 * d)
@@ -110,8 +123,7 @@ class S11_Partials(VScene):
             self.play(FadeIn(G[9]), TransformFromCopy(X[9], G[10]), run_time=.12 * d)
             self.wait(.04 * d)
             self.play(G.animate.scale(40 / 44).move_to(slot1), run_time=.14 * d)
-            g1, g2 = glow(G, GOOD), glow(N1, GOOD)
-            self.play(FadeIn(g1), FadeIn(g2), run_time=.12 * d)
+            self.play(FadeIn(match1), run_time=.12 * d)
 
         # beat 6: d Pi / d q2
         # D2 parts: 0 dPi/dq2, 1 =, 2 k2, 3 (, 4 q2, 5 -, 6 q1, 7 ), 8 -, 9 F2, 10 =, 11 0
@@ -123,7 +135,7 @@ class S11_Partials(VScene):
         with self.say("Now q two. Only two terms contain it: the second spring gives k two times q two minus q one, "
                       "and the load gives minus F two. Set to zero and multiply out: minus k two q one plus k two q "
                       "two equals F two. Newton's second equation. We never drew an arrow.") as d:
-            self.play(FadeOut(VGroup(D1, X, ring)), FadeOut(g1), FadeOut(g2), run_time=.07 * d)
+            self.play(FadeOut(VGroup(D1, X, ring)), run_time=.07 * d)
             self.play(Write(D2[0:2]), run_time=.06 * d)
             self.play(Indicate(t_s2, color=GOLD), run_time=.08 * d)
             self.play(TransformFromCopy(t_s2[1:3], D2[2:8]), run_time=.1 * d)
@@ -137,8 +149,8 @@ class S11_Partials(VScene):
                       run_time=.08 * d)
             self.play(FadeIn(H[6]), TransformFromCopy(D2[9], H[7]), run_time=.07 * d)
             self.play(H.animate.scale(40 / 44).move_to(slot2), run_time=.1 * d)
-            ticks = VGroup(*[M(r"\checkmark", size=48, color=GOOD).next_to(m, LEFT, buff=.15) for m in (G, H)])
-            self.play(FadeIn(glow(H, GOOD)), FadeIn(glow(N2, GOOD)), FadeIn(glow(G, GOOD)),
-                      FadeIn(glow(N1, GOOD)), FadeIn(ticks, scale=1.4), run_time=.07 * d)
+            match2 = pair_box(N2, H)
+            ticks = VGroup(*[tick(b) for b in (match1, match2)])
+            self.play(FadeIn(match2), FadeIn(ticks, scale=1.4), run_time=.07 * d)
             self.play(FadeIn(note), run_time=.05 * d)
         self.wipe()

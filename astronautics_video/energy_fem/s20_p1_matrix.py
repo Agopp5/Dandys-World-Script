@@ -112,9 +112,9 @@ class S20_P1_Matrix(VScene):
                 self.play(FadeOut(bx), FadeOut(g), run_time=.03 * d)
             self.wait(.02 * d)
 
-        mirror = DashedLine(ent[0].get_center() + (ent[0].get_center() - ent[8].get_center()) * .18,
-                            ent[8].get_center() + (ent[8].get_center() - ent[0].get_center()) * .18,
-                            color=MUTED, stroke_width=3)
+        mirror = DashedLine(ent[0].get_center() + (ent[0].get_center() - ent[8].get_center()) * .06,
+                            ent[8].get_center() + (ent[8].get_center() - ent[0].get_center()) * .06,
+                            color=INK2, stroke_width=4)
         sym = E(r"K|=|K^{T}", size=48).move_to(card)
         paint(sym, {2: LILAC})
         self.beat("And it's symmetric: each spring puts the same minus k in both of its off-diagonal spots. "

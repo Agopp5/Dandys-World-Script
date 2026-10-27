@@ -113,7 +113,8 @@ class S13_Why_Energy(VScene):
         reads = VGroup(r1, r2).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.9, -1.6, 0])
 
         with self.say("And the picture still works. With two unknowns, Pi is a bowl over a floor. One floor direction is q one, the other is q two. The answer is the lowest point of the bowl: one point five and two point five, where Pi is minus fifty five.") as d:
-            self.play(FadeIn(floor), FadeIn(surf), Write(eq1), Write(eq2), FadeIn(units), run_time=0.24 * d)
+            self.add(surf)
+            self.play(FadeIn(floor), Write(eq1), Write(eq2), FadeIn(units), run_time=0.24 * d)
             self.play(GrowArrow(ax1), FadeIn(l1), run_time=0.1 * d)
             self.play(GrowArrow(ax2), FadeIn(l2), run_time=0.1 * d)
             self.wait(0.06 * d)

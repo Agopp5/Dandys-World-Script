@@ -22,6 +22,13 @@ HW_WALL_X, HW_BAR_X0, HW_BAR_X1, HW_J_X, HW_O_X = -5.8, 0.9, 1.4, -2.6, 4.4
 HW_TOP_Y, HW_BOT_Y, HW_MID_Y, HW_BAR_H = 0.9, -1.1, 0.0, 4.0
 
 
+def qarrow(p, tex, below=0.45, length=0.7):
+    """A SKY displacement arrow drawn below p, with a readable label (the kit's disp label is small)."""
+    a = Arrow(p + below * DOWN, p + below * DOWN + length * RIGHT, buff=0, color=SKY, stroke_width=5,
+              max_tip_length_to_length_ratio=0.3)
+    return VGroup(a, E(tex, size=34).next_to(a, RIGHT, buff=0.1))
+
+
 def hw_figure(at=ORIGIN, k2b_label=False):
     o = np.array(at, dtype=float)
     P = lambda x, y: o + np.array([x, y, 0.0])
@@ -53,9 +60,9 @@ def hw_figure(at=ORIGIN, k2b_label=False):
               3: E("P_3", size=36).next_to(g.P[3], LEFT, buff=0.1),
               4: E("P_4", size=36).next_to(g.P[4], RIGHT, buff=0.1)}
     # displacements
-    g.q = {1: disp(pts["J"] + 0.5 * DOWN, label="q_1", below=0.5),
-           2: disp(P((HW_BAR_X0 + HW_BAR_X1) / 2, -HW_BAR_H / 2), label="q_2", below=0.4),
-           3: disp(pts["O"], label="q_3", below=0.45)}
+    g.q = {1: qarrow(pts["J"] + 0.5 * DOWN, "q_1", below=0.5),
+           2: qarrow(P((HW_BAR_X0 + HW_BAR_X1) / 2, -HW_BAR_H / 2), "q_2", below=0.4),
+           3: qarrow(pts["O"], "q_3", below=0.45)}
     g.add(g.wall, g.k1, g.k2a, g.k2b, g.k3, g.bar, g.J, g.O, *g.klab.values(), g.stem,
           *g.P.values(), *g.Plab.values(), *g.q.values())
 
@@ -89,7 +96,6 @@ class S16_P1_Read(VScene):
         fig = hw_figure(at=0.35 * DOWN)
         head = T("Homework 6, Problem 1", size=36, color=ACCENT, weight=BOLD)
         task = TX(r"Stationary principle: find $q_1$, $q_2$, $q_3$ in terms of the $K$'s and $P$'s", size=32)
-        tint(task, [])
         stmt = VGroup(head, task).arrange(DOWN, buff=0.2).to_edge(UP, buff=0.35)
 
         structure = [fig.wall, fig.k1, fig.k2a, fig.J, fig.k2b, fig.bar, fig.k3, fig.O]
@@ -114,13 +120,13 @@ class S16_P1_Read(VScene):
                   Indicate(fig.wall, color=INK, scale_factor=1.05), .05,
                   [FadeIn(g_k1), Indicate(fig.klab["K1"], color=LILAC)], .1,
                   FadeIn(g_bar), .05, GrowFromEdge(fig.q[2], LEFT), .2,
-                  w=(.15, .05, .2, .1, .15, .05, .15, .15))
+                  w=(.15, .25, .12, .13))
 
         # 3: the bottom chain; the unlabeled spring gets an assumed K2 tag that resolves
         g_k2a, g_k2b = glow(fig.k2a, LILAC), glow(fig.k2b, LILAC)
         guess = M(r"K_2\,?", size=36, color=MUTED).next_to(fig.k2b, UP, buff=0.12)
         box = DashedVMobject(SurroundingRectangle(guess, buff=0.1, color=MUTED, corner_radius=0.08), num_dashes=24)
-        note = T("assumed", size=26, color=MUTED).next_to(box, UP, buff=0.08)
+        note = T("assumed", size=30, color=MUTED).next_to(box, UP, buff=0.08)
         k2b_lab = E("K_2", size=36).move_to(guess, aligned_edge=LEFT)
         with self.say("Along the bottom, spring K two runs from the wall to a junction that moves q one. Then a "
                       "second spring runs from that junction to the bar. The figure doesn't label that second "
@@ -134,8 +140,10 @@ class S16_P1_Read(VScene):
             self.wait(.06 * d)
             self.play(Create(box), FadeIn(guess), FadeIn(note), run_time=.1 * d)
             self.wait(.16 * d)
-            self.play(ReplacementTransform(guess[0][0:2], k2b_lab[0]), FadeOut(guess[0][2:]),
-                      box.animate.set_color(LILAC), run_time=.12 * d)
+            box2 = DashedVMobject(SurroundingRectangle(k2b_lab, buff=0.1, color=LILAC, corner_radius=0.08),
+                                  num_dashes=20)
+            self.play(ReplacementTransform(guess, k2b_lab), ReplacementTransform(box, box2), run_time=.12 * d)
+            box = box2
             self.wait(.14 * d)
             self.play(Indicate(VGroup(box, k2b_lab), color=LILAC, scale_factor=1.1), run_time=.08 * d)
             self.wait(.06 * d)
@@ -146,14 +154,14 @@ class S16_P1_Read(VScene):
         self.beat("On the right, spring K three joins the bar to an outer point that moves q three.",
                   [FadeOut(g_k2a), FadeOut(g_k2b), FadeIn(g_k3), Indicate(fig.klab["K3"], color=LILAC)], .1,
                   [Indicate(fig.O, color=SKY, scale_factor=1.8), GrowFromEdge(fig.q[3], LEFT)], .2,
-                  w=(.25, .1, .3, .35))
+                  w=(.3, .4))
 
         # 5: the loads pulse in turn
         with self.say("The loads: P one pulls the junction, P two and P three both push on the bar, and P four "
                       "pulls the outer point. All to the right.") as d:
             self.play(FadeOut(g_k3), run_time=.06 * d)
-            for i, (a, b) in zip((1, 2, 3, 4), ((.1, .2), (.32, .42), (.44, .54), (.6, .7))):
-                self.play(Indicate(loads[i - 1], color=ROSE, scale_factor=1.25), run_time=.1 * d)
+            for ld in loads:
+                self.play(Indicate(ld, color=ROSE, scale_factor=1.25), run_time=.1 * d)
                 self.wait(.04 * d)
             arrows = VGroup(*[fig.P[i] for i in (1, 2, 3, 4)])
             self.play(LaggedStart(*[ApplyMethod(a.shift, .25 * RIGHT, rate_func=there_and_back) for a in arrows],
@@ -166,8 +174,8 @@ class S16_P1_Read(VScene):
         new = fig.rebuild_springs(dq2=dq)
         ends = [fig.pts["b_top"], fig.pts["b_bot"], fig.pts["b_mid"]]
         dots = VGroup(*[Dot(p + dq * RIGHT, radius=0.1, color=SKY).set_z_index(5) for p in ends])
-        dlabs = VGroup(*[E("q_2", size=32).next_to(dt, d_, buff=0.12).set_z_index(5)
-                         for dt, d_ in zip(dots, (UR, UR, UR))])
+        dlabs = VGroup(*[E("q_2", size=34).next_to(dt, d_, buff=0.1).set_z_index(5)
+                         for dt, d_ in zip(dots, (UL, UL, DR))])
         halos = VGroup(*[glow(dt, SKY) for dt in dots])
         with self.say("One assumption about the bar: it's rigid and slides without tilting. So every spring "
                       "attached to it moves exactly q two at that end.") as d:

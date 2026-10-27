@@ -40,16 +40,19 @@ class S14_Four_Springs(VScene):
         p = lambda x, y=0: np.array([x, y, 0])
         wl = wall(p(X1), side=LEFT)
         n1, n2, n3, n4 = [node(p(x)) for x in (X1, X2, X3, X4)]
-        k1 = spring(p(X1), p(X2), label="k_1")
-        k3 = spring(p(X3), p(X4), label="k_3")
+        k1 = spring(p(X1), p(X2))
+        k3 = spring(p(X3), p(X4))
+        k1.add(E("k_1", size=36).next_to(k1, UP, buff=.1))
+        k3.add(E("k_3", size=36).next_to(k3, UP, buff=.1))
         b1 = badge(1).move_to(p(X1 + .4, .95))
         b2, b3, b4 = [badge(i).move_to(p(x, .95)) for i, x in ((2, X2), (3, X3), (4, X4))]
         cL = Line(p(X2, -H), p(X2, H), color=INK, stroke_width=4)
         cR = Line(p(X3, -H), p(X3, H), color=INK, stroke_width=4)
-        up = spring(p(X2, H), p(X3, H), label="k_2")
+        up = spring(p(X2, H), p(X3, H))
+        up_lab = E("k_2", size=36).next_to(up, UP, buff=.1)
         lo = spring(p(X2, -H), p(X3, -H))
-        lo_lab = E("k_2", size=34).next_to(lo, DOWN, buff=.12)
-        pair = VGroup(cL, cR, up, lo, lo_lab)
+        lo_lab = E("k_2", size=36).next_to(lo, DOWN, buff=.12)
+        pair = VGroup(cL, cR, up, lo, up_lab, lo_lab)
         fig = VGroup(wl, k1, k3, pair, n1, n2, n3, n4, b1, b2, b3, b4)
         for b in (b1, b2, b3, b4, n1, n2, n3, n4):
             b.set_z_index(3)
@@ -73,7 +76,7 @@ class S14_Four_Springs(VScene):
                       "the same two end points, so they stretch by the same amount, and together they store "
                       "twice the energy of one. That's why you'll see two k two.") as d:
             self.play(Create(cL), Create(cR), run_time=.08 * d)
-            self.play(Create(up), Create(lo), FadeIn(lo_lab), run_time=.2 * d)
+            self.play(Create(up), Create(lo), FadeIn(up_lab), FadeIn(lo_lab), run_time=.2 * d)
             self.wait(.1 * d)
             self.play(FadeIn(g_up), FadeIn(g_lo), run_time=.12 * d)
             self.wait(.15 * d)
@@ -83,11 +86,11 @@ class S14_Four_Springs(VScene):
         U = E(r"U|=|\tfrac12|k_1|(|q_2|-|q_1|)^2|+|2\cdot\tfrac12|k_2|(|q_3|-|q_2|)^2|+|\tfrac12|k_3|(|q_4|-|q_3|)^2",
               size=46)
         fit(U, 13.2, 1.2)
-        U.move_to(UP * .55)
+        U.move_to(UP * .3)
         t1, t2, t3 = VGroup(*U[2:9]), VGroup(*U[10:17]), VGroup(*U[18:25])
         with self.say("So U is one half k one, q two minus q one, squared, plus two times one half k two, q three "
                       "minus q two, squared, plus one half k three, q four minus q three, squared.") as d:
-            self.play(FadeOut(g_up), FadeOut(g_lo), fig.animate.scale(.8).move_to(UP * 2.45),
+            self.play(FadeOut(g_up), FadeOut(g_lo), fig.animate.move_to(UP * 2.55),
                       term.animate.move_to(DOWN * 1.6), run_time=.12 * d)
             self.play(FadeIn(U[0]), FadeIn(U[1]), Write(t1), run_time=.25 * d)
             self.play(FadeIn(U[9]), *morph(term, t2, [(i, i) for i in range(7)]), run_time=.28 * d)
@@ -95,9 +98,11 @@ class S14_Four_Springs(VScene):
             self.add(t2)
             self.play(FadeIn(U[17]), Write(t3), run_time=.25 * d)
 
-        Wq = E(r"W|=|F_2|q_2|+|F_4|q_4", size=48).move_to(DOWN * .75)
-        f2 = force(n2.get_center(), d=RIGHT, length=.7, label="F_2")
-        f4 = force(n4.get_center(), d=RIGHT, length=.9, label="F_4")
+        Wq = E(r"W|=|F_2|q_2|+|F_4|q_4", size=48, cmap={"F_4": ROSE}).move_to(DOWN * 1.0)
+        f2 = force(n2.get_center(), d=RIGHT, length=.85)
+        f2.add(E("F_2", size=34).next_to(f2, RIGHT, buff=.08))
+        f4 = force(n4.get_center(), d=RIGHT, length=1.0)
+        f4.add(E("F_4", size=34, cmap={"F_4": ROSE}).next_to(f4, RIGHT, buff=.08))
         box1 = SurroundingRectangle(t1, color=ACCENT, buff=.08)
         box2 = SurroundingRectangle(t2, color=ACCENT, buff=.08)
         with self.say("The loads are F two and F four, so W is F two q two plus F four q four. Take the partial "
@@ -111,8 +116,8 @@ class S14_Four_Springs(VScene):
             self.play(Create(box2), run_time=.12 * d)
 
         dPi = E(r"\frac{\partial\Pi}{\partial q_2}|=|k_1|(|q_2|-|q_1|)|-|2|k_2|(|q_3|-|q_2|)|-|F_2|=|0", size=46)
-        dPi.move_to(DOWN * .95)
-        row = E(r"-|k_1|q_1|+|(|k_1|+|2|k_2|)|q_2|-|2|k_2|q_3|=|F_2", size=48).move_to(DOWN * 2.6)
+        dPi.move_to(DOWN * 1.15)
+        row = E(r"-|k_1|q_1|+|(|k_1|+|2|k_2|)|q_2|-|2|k_2|q_3|=|F_2", size=48).move_to(DOWN * 2.85)
         with self.say("That gives k one times q two minus q one, minus two k two times q three minus q two, "
                       "minus F two. Set it to zero and multiply out: minus k one q one, plus k one plus two k "
                       "two, times q two, minus two k two q three, equals F two.") as d:
@@ -136,7 +141,7 @@ class S14_Four_Springs(VScene):
                      h_buff=1.9, v_buff=.75)
         mat.get_brackets().set_color(INK)
         lhs = E(r"K|=", size=48)
-        KM = VGroup(lhs, mat).arrange(RIGHT, buff=.25).move_to(DOWN * .45)
+        KM = VGroup(lhs, mat).arrange(RIGHT, buff=.25).move_to(DOWN * .55)
         rbox = SurroundingRectangle(mat.get_rows()[1], color=ACCENT, buff=.12)
         with self.say("Do that for every node, and you get this four by four matrix. Row two is the one we just "
                       "built.") as d:
