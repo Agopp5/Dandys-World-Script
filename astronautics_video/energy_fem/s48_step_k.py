@@ -67,7 +67,7 @@ class S48_Step_k(VScene):
         self.beat("Each piece of bar is an element, and each element is a spring with stiffness E A over l.",
                   FadeIn(fig), .1,
                   [ReplacementTransform(fig["e1"], s1), ReplacementTransform(fig["e2"], s2)],
-                  Write(rule.move_to([0, -0.9, 0])), w=(.25, .05, .4, .3))
+                  Write(rule.move_to([0, -0.9, 0])), w=(.25, .4, .3))
 
         eq1 = E(r"k_1|=|\frac{70{,}000 \times 200}{500}|=|28{,}000\text{ N/mm}", size=48)
         eq2 = E(r"k_2|=|14{,}000\text{ N/mm}", size=48)
@@ -80,9 +80,9 @@ class S48_Step_k(VScene):
         L3 = klabel(r"14{,}000", fig["s3"], Y)
         self.beat("Thick piece: seventy thousand times two hundred, over five hundred: twenty eight thousand "
                   "newtons per millimeter. Thin piece: half the area, so half the stiffness, fourteen thousand.",
-                  rule.animate.shift(UP * 0.0), Write(eq1), TransformFromCopy(eq1[4], L1), .05,
+                  Write(eq1), TransformFromCopy(eq1[4], L1), .05,
                   [Write(eq2), FadeIn(note)], TransformFromCopy(eq2[2], L2),
-                  w=(.02, .3, .13, .05, .3, .2))
+                  w=(.32, .13, .3, .2))
 
         chain = VGroup(fig["w0"], s1, L1, fig["n"][1], s2, L2, fig["n"][2], fig["s3"], L3, fig["w3"])
         with self.say("And the real spring is already a spring, fourteen thousand. "
@@ -90,8 +90,7 @@ class S48_Step_k(VScene):
             self.play(Indicate(fig["s3"], color=LILAC, scale_factor=1.12), Write(L3), run_time=.3 * d)
             self.play(FadeOut(VGroup(rule, eq1, eq2, note)), run_time=.12 * d)
             self.play(VGroup(fig, s1, s2, L1, L2, L3).animate.shift(DOWN * 1.9), run_time=.13 * d)
-            self.play(LaggedStart(*[Indicate(m, color=GOLD if m in (fig["w0"], fig["w3"]) else None,
-                                             scale_factor=1.1) if False else Indicate(m, scale_factor=1.12)
-                                    for m in chain], lag_ratio=.35), run_time=.35 * d)
+            self.play(LaggedStart(*[Indicate(m, color=m.get_color(), scale_factor=1.15) for m in chain],
+                                  lag_ratio=.35), run_time=.35 * d)
             self.wait(.1 * d)
         self.wipe()

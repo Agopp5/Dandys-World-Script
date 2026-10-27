@@ -55,7 +55,7 @@ class S46_Reaction(VScene):
 
         self.beat("Remember row one, the one we set aside? Now that we know q two, it tells us the reaction.",
                   FadeIn(body), [FadeIn(row1, shift=LEFT * 3), FadeIn(tag)], .1,
-                  Indicate(qlab[1], color=SKY, scale_factor=1.3), w=(.25, .3, .1, .35))
+                  Indicate(qlab[1], color=SKY, scale_factor=1.3), w=(.25, .3, .35))
 
         eq = E(r"\frac{EA}{l}|(q_1 - q_2)|=|\frac{cl}{2}|+|R", size=52)
         tint(eq[1], [((1, 3), SKY), ((4, 6), SKY)])
