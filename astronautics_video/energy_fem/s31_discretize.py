@@ -64,13 +64,14 @@ class S31_Discretize(VScene):
         qs = VGroup(*[qlab(i) for i in range(1, 5)])
         dof = T("4 degrees of freedom", size=44, color=INK).move_to(p(-0.6, YB - 2.55))
         dof[0].set_color(SKY)
+        dof_g = glow(dof, SKY)
         dof_s = T("instead of infinitely many", size=32, color=MUTED).next_to(dof, DOWN, buff=0.2)
         self.beat("The displacements of the nodes, q one, q two, q three, q four, are our unknowns. Just four "
                   "numbers, instead of infinitely many. Each one is called a degree of freedom: a number the "
                   "structure is free to choose.",
                   [FadeOut(nd_t), FadeOut(nd_a)],
                   LaggedStart(*[FadeIn(q, shift=.2 * DOWN) for q in qs], lag_ratio=.5), .1,
-                  [FadeIn(dof), FadeIn(dof_s)], FadeIn(glow(dof, SKY)),
+                  [FadeIn(dof), FadeIn(dof_s)], FadeIn(dof_g),
                   w=(.08, .4, .05, .2, .27))
 
         # ---- beat 3: straight lines between node values ----
@@ -89,3 +90,52 @@ class S31_Discretize(VScene):
                   [FadeOut(el_t), FadeOut(el_a), Create(base)], [Create(sticks), FadeIn(dots), FadeIn(note)],
                   Create(broken), FadeIn(u_l),
                   w=(.1, .25, .4, .25))
+
+        # ---- beat 4: explode, equal end displacements at each gap, reassemble ----
+        ends = VGroup(*[VGroup(Dot(p(XS[i], YB), radius=0.09, color=INK),
+                               Dot(p(XS[i + 1], YB), radius=0.09, color=INK)) for i in range(3)])
+        pieces = [VGroup(fb.elems[i], fb.tags[i], ends[i]) for i in range(3)]
+        SH = [0.0, 1.0, 2.0]                     # how far each element slides right
+        ya = YB - 0.62
+        gaps = VGroup()
+        for i in range(2):                       # gap between element i+1 and i+2: shared node q_{i+2}
+            xr = XS[i + 1] + SH[i] - 0.55        # arrow ending at the right end of the left element
+            xl = XS[i + 1] + SH[i + 1]           # arrow starting at the left end of the right element
+            a1, a2 = darrow(xr, ya, 0.55), darrow(xl, ya, 0.55)
+            l1 = M("q_%d" % (i + 2), size=40, color=SKY).next_to(a1, DOWN, buff=0.12)
+            l2 = M("q_%d" % (i + 2), size=40, color=SKY).next_to(a2, DOWN, buff=0.12)
+            gaps.add(VGroup(a1, a2, l1, l2))
+        same = T("same end displacement", size=32, color=INK2).move_to(p(-0.6, YB - 2.3))
+        fb.nodes.set_opacity(0)                  # shared node dots hide; each element shows its own end dots
+        self.add(ends)
+        self.beat("Neighbors share a node, so the displacement can't jump: the right end of element one moves "
+                  "exactly as much as the left end of element two.",
+                  [FadeOut(plot), FadeOut(qs), FadeOut(dof), FadeOut(dof_s), FadeOut(dof_g)],
+                  [pieces[1].animate.shift(SH[1] * RIGHT), pieces[2].animate.shift(SH[2] * RIGHT),
+                   load.animate.shift(SH[2] * RIGHT)],
+                  [FadeIn(gaps), FadeIn(same)], Circumscribe(gaps[0], color=SKY), .05,
+                  [FadeOut(gaps), FadeOut(same), pieces[1].animate.shift(-SH[1] * RIGHT),
+                   pieces[2].animate.shift(-SH[2] * RIGHT), load.animate.shift(-SH[2] * RIGHT)],
+                  w=(.08, .2, .15, .25, .07, .25))
+        self.remove(ends)
+        fb.nodes.set_opacity(1)
+
+        # ---- beat 5: element 2 lifted out; local u1, u2 = global q2, q3 ----
+        LIFT = 2.4
+        e2 = VGroup(bar(XS[1], XS[2], y=YB, h=H, color=LILAC), Dot(p(XS[1], YB), radius=0.1, color=INK),
+                    Dot(p(XS[2], YB), radius=0.1, color=INK))
+        u1 = M("u_1", size=44, color=SKY).move_to(p(XS[1], YB + LIFT + 0.75))
+        u2 = M("u_2", size=44, color=SKY).move_to(p(XS[2], YB + LIFT + 0.75))
+        e2_t = T("element 2", size=36, color=INK).next_to(p(XS[1], YB + LIFT, 0), LEFT, buff=0.5)
+        links = VGroup(*[Arrow(p(x, YB + LIFT - H / 2), p(x, YB + H / 2), buff=0.12, color=SKY, stroke_width=4,
+                               max_tip_length_to_length_ratio=0.12) for x in (XS[1], XS[2])])
+        qs2 = VGroup(qlab(2), qlab(3))
+        eqs = VGroup(E(r"u_1|=|q_2", size=52), E(r"u_2|=|q_3", size=52)).arrange(RIGHT, buff=1.6)
+        eqs.move_to(p(-1.5, YB - 2.6))
+        self.beat("When we study one element on its own, we'll call its two end displacements u one and u two. "
+                  "For element two, its u one is the bar's q two, and its u two is q three.",
+                  FadeIn(e2), e2.animate.shift(LIFT * UP), [FadeIn(e2_t), FadeIn(u1), FadeIn(u2)], .1,
+                  [GrowArrow(links[0]), GrowArrow(links[1]), FadeIn(qs2)], FadeIn(eqs[0]), FadeIn(eqs[1]),
+                  w=(.05, .12, .18, .05, .2, .2, .2))
+        self.wait(1)
+        self.wipe()

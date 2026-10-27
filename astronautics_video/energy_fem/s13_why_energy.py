@@ -114,7 +114,7 @@ class S13_Why_Energy(VScene):
                                              stroke_opacity=0.6, fill_color=col, fill_opacity=1)))
         quads.sort(key=lambda t: -t[0])
         mesh = VGroup(*[q[1] for q in quads])
-        off = np.array([-2.5, -0.5, 0]) - mesh.get_center()
+        off = np.array([-2.8, -0.85, 0]) - mesh.get_center()
         mesh.shift(off)
 
         def P3(a, b, z):
@@ -142,7 +142,7 @@ class S13_Why_Energy(VScene):
         foot = Dot(P3(1.5, 2.5, 0), radius=0.08, color=SKY).set_z_index(4)
         r1 = E(r"q_1|=|1.5,\quad|q_2|=|2.5\ \text{mm}", size=48)
         r2 = E(r"\Pi|=|-55\ \text{N mm}", size=52)
-        reads = VGroup(r1, r2).arrange(DOWN, buff=0.45).move_to([4.3, 0.4, 0])
+        reads = VGroup(r1, r2).arrange(DOWN, buff=0.45).move_to([3.95, 0.2, 0])
 
         with self.say("And the picture still works. With two unknowns, Pi is a bowl over a floor. One floor direction is q one, the other is q two. The answer is the lowest point of the bowl: one point five and two point five, where Pi is minus fifty five.") as d:
             self.play(FadeIn(floor), FadeIn(mesh), Write(eqs), FadeIn(units), run_time=0.24 * d)

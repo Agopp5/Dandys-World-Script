@@ -8,11 +8,12 @@ colors(**{"U": MINT, "U_e": MINT, "W": EMBER, r"\Pi": GOLD, "q": SKY, "q_1": SKY
 
 # facts: integral of (1 - s) and of s over 0..1 are one half; uniform f = c gives Q1 = Q2 = c l / 2
 _s = np.linspace(0, 1, 200001)
-assert np.isclose(np.trapz(1 - _s, _s), 0.5)
-assert np.isclose(np.trapz(_s, _s), 0.5)
+_trap = getattr(np, "trapezoid", None) or np.trapz
+assert np.isclose(_trap(1 - _s, _s), 0.5)
+assert np.isclose(_trap(_s, _s), 0.5)
 _c, _l = -5.0, 20.0                               # HW P2 element: c = -5 lb/in, l = 20 in
-_Q1 = np.trapz(_c * (1 - _s) * _l, _s)
-_Q2 = np.trapz(_c * _s * _l, _s)
+_Q1 = _trap(_c * (1 - _s) * _l, _s)
+_Q2 = _trap(_c * _s * _l, _s)
 assert np.isclose(_Q1, _c * _l / 2) and np.isclose(_Q2, _c * _l / 2)
 assert np.isclose(_Q1 + _Q2, _c * _l)             # half the element's total load c l to each node
 assert np.isclose(_c * _l / 2, -50)

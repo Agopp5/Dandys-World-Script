@@ -82,7 +82,7 @@ class S39_Column_Setup(VScene):
                       "density, times area, times gravity. Since x points up, the load is negative: f equals "
                       "minus rho A g. In our element formulas, c equals minus rho A g.") as d:
             self.play(FadeOut(rng), FadeOut(fixed), run_time=.06 * d)
-            self.play(LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=.15), FadeIn(f_lab),
+            self.play(LaggedStart(*[FadeIn(a, shift=DOWN * .25) for a in arrows], lag_ratio=.15), FadeIn(f_lab),
                       run_time=.14 * d)
             self.play(Write(rag), run_time=.1 * d)
             self.play(FadeIn(note, shift=UP * .2), run_time=.1 * d)
@@ -120,8 +120,7 @@ class S39_Column_Setup(VScene):
             self.play(FadeIn(floor_r), TransformFromCopy(col, whole_r), run_time=.14 * d)
             self.add(elems)
             self.remove(whole_r)
-            self.play(LaggedStart(*[elems[k].animate.shift(UP * 0) for k in range(N_EL)], lag_ratio=.3),
-                      LaggedStart(*[GrowFromCenter(dt) for dt in dots], lag_ratio=.25), run_time=.14 * d)
+            self.play(LaggedStart(*[GrowFromCenter(dt) for dt in dots], lag_ratio=.25), run_time=.14 * d)
             self.play(GrowFromCenter(brace), Write(l_eq), run_time=.12 * d)
             self.wait(.06 * d)
             self.play(LaggedStart(*[FadeIn(n, shift=UP * .15) for n in nums], lag_ratio=.3), run_time=.14 * d)

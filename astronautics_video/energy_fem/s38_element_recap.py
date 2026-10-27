@@ -19,12 +19,12 @@ for _ in range(5):
     assert np.isclose((1 - 0) * u1 + 0 * u2, u1) and np.isclose((1 - 1) * u1 + 1 * u2, u2)
     # element energy: (1/2) EA/l (u2-u1)^2 = (1/2) u^T k u  (a spring with K = EA/l)
     s = np.linspace(0, 1, 2001)
-    Ue_int = 0.5 * np.trapz(EA * ((u2 - u1) / l) ** 2 * l * np.ones_like(s), s)
+    Ue_int = 0.5 * np.trapezoid(EA * ((u2 - u1) / l) ** 2 * l * np.ones_like(s), s)
     assert np.isclose(Ue_int, 0.5 * uv @ k @ uv)
     assert np.allclose(k.sum(axis=1), 0)
     # uniform load f = c: Q1 = Q2 = c l / 2
-    Q1 = np.trapz(c * (1 - s) * l, s)
-    Q2 = np.trapz(c * s * l, s)
+    Q1 = np.trapezoid(c * (1 - s) * l, s)
+    Q2 = np.trapezoid(c * s * l, s)
     assert np.isclose(Q1, c * l / 2) and np.isclose(Q2, c * l / 2)
     Q = np.array([Q1, Q2])
     # d Pi_e / d u_i = (k u - Q)_i, so stationarity gives k u = Q
@@ -73,7 +73,7 @@ class S38_Element_Recap(VScene):
                   [Create(d1), Create(d2), FadeIn(e1), FadeIn(e2), FadeIn(lu1), FadeIn(lu2)],
                   [Create(uline), FadeIn(lus)],
                   Write(eq_u), .15,
-                  w=(.18, .1, .2, .2, .2, .12))
+                  w=(.18, .1, .2, .2, .2))
 
         # ---- beat 2: the element is a spring; spread load -> two nodal forces
         spr = spring(p1, p2, coils=6, amp=0.32)
@@ -98,7 +98,7 @@ class S38_Element_Recap(VScene):
                   [ReplacementTransform(VGroup(*spread[:nd // 2 + 1]), fL),
                    ReplacementTransform(VGroup(*spread[nd // 2 + 1:]), fR), FadeOut(lc)],
                   [FadeIn(lfL), FadeIn(lfR), FadeIn(eq_Q)], .15,
-                  w=(.17, .15, .08, .18, .17, .15, .1))
+                  w=(.17, .15, .18, .17, .15))
         n1.set_z_index(3)
         n2.set_z_index(3)
 
@@ -130,5 +130,5 @@ class S38_Element_Recap(VScene):
         box.move_to(ORIGIN + DOWN * 0.1)
         self.beat("Here's everything about one element in one place.",
                   [FadeOut(VGroup(spr, n1, n2, dim, ll, lk, fL, fR, lfL, lfR, eq_pi, eq_kq, halo, note))], FadeIn(box, shift=UP * 0.2), .4,
-                  w=(.15, .3, .55))
+                  w=(.15, .3))
         self.wipe()
