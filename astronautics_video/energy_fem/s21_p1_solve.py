@@ -76,7 +76,7 @@ class S21_P1_Solve(VScene):
         self.add(r1, r2, r3, chips, sep)
 
         # ---- beat 1: the plan; equation 3 regrouped ----
-        plan = VGroup(*[VGroup(badge(i + 1), TX(s, size=34)).arrange(RIGHT, buff=.35) for i, s in enumerate([
+        plan = VGroup(*[VGroup(badge(i + 1), TX(s, size=40)).arrange(RIGHT, buff=.35) for i, s in enumerate([
             r"Use equation (3) to remove $q_3$",
             r"Use equation (1) to remove $q_1$",
             r"One equation is left: solve it for $q_2$"])]).arrange(DOWN, aligned_edge=LEFT, buff=.45)
@@ -106,10 +106,8 @@ class S21_P1_Solve(VScene):
         s_b = strike(VGroup(*rb[0:7]))
         with self.say("Add it to the second equation. The K three terms cancel, and we're left with minus K two q "
                       "one, plus K one plus K two times q two, equals P two plus P three plus P four.") as d:
-            r2c = r2.copy()
-            self.add(r2c)
             self.play(FadeOut(plan), Indicate(r2, color=GOLD, scale_factor=1.05), run_time=.08 * d)
-            self.play(*morph(r2c, ra, [(i, i) for i in range(8)] + [(8, 9), (9, 13), (10, 14), (11, 15), (12, 16)]),
+            self.play(*morph(r2, ra, [(i, i) for i in range(8)] + [(8, 9), (9, 13), (10, 14), (11, 15), (12, 16)]),
                       run_time=.12 * d)
             self.play(*morph(r3b.copy(), rb, [(i, i + 1) for i in range(8)]), run_time=.12 * d)
             self.play(Create(s_a), Create(s_b), run_time=.14 * d)
@@ -147,7 +145,7 @@ class S21_P1_Solve(VScene):
         with self.say("That makes sense physically. It's the force balance of the bar together with the outer "
                       "point: the two springs on the bar's left side, K one and the second K two, hold P two, P "
                       "three and P four together.") as d:
-            self.play(FadeOut(VGroup(ra, rb, rule, s_a, s_b, r2, g_rc)),
+            self.play(FadeOut(VGroup(ra, rb, rule, s_a, s_b, g_rc)),
                       rc.animate.shift(np.array([x_eq, Y2, 0]) - rc[6].get_center()),
                       r3b.animate.set_opacity(.35), chips[2].animate.set_opacity(.35), run_time=.14 * d)
             self.play(FadeIn(sketch, lag_ratio=.05), run_time=.2 * d)

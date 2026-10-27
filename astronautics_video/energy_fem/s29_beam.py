@@ -62,7 +62,8 @@ class S29_Beam(VScene):
         p_arr = force([XM, YB + 2.2, 0], d=DOWN, length=2.05)
         p_lab = M(r"P", size=52, color=ROSE).next_to(p_arr, LEFT, buff=0.2).shift(UP * 0.3)
         note_w = TX(r"slides: $W$", size=42).set_color(MUTED).next_to(p_arr, RIGHT, buff=0.3).shift(UP * 0.3)
-        span_l = span(np.array([X0, YZ, 0]), np.array([X1, YZ, 0]), "L")
+        span_l = VGroup(DoubleArrow([X0, YZ, 0], [X1, YZ, 0], buff=0, color=INK2, stroke_width=3, tip_length=0.2),
+                        M(r"L", size=46, color=INK2).move_to([XM, YZ - 0.4, 0]))
         self.beat("The course slides use the same trick on a beam, so let's see it once. A beam of length L, "
                   "stiffness E I, supported at both ends, with a point load at the middle. The slides call that "
                   "load W; we'll call it P, so it doesn't clash with work potential.",
@@ -70,7 +71,7 @@ class S29_Beam(VScene):
                   .1, FadeIn(note_w), w=(.2, .15, .1, .15, .1, .2))
 
         # ---- beat 2: z along the beam, v down, point B -------------------------------------------
-        z_ax = Arrow([X0 - 0.1, YZ, 0], [X1 + 0.6, YZ, 0], buff=0, color=AXIS, stroke_width=4)
+        z_ax = Arrow([X0 - 0.1, YZ, 0], [X1 + 0.4, YZ, 0], buff=0, color=AXIS, stroke_width=4)
         z_lab = M(r"z", size=46).next_to(z_ax, RIGHT, buff=0.12)
         ticks = VGroup(*[Line([x, YZ - 0.12, 0], [x, YZ + 0.12, 0], color=AXIS, stroke_width=4) for x in (X0, X1)])
         tick_l = VGroup(M(r"0", size=44).next_to(ticks[0], DOWN, buff=0.12),
@@ -78,7 +79,7 @@ class S29_Beam(VScene):
         xq = X0 + 0.25 * (X1 - X0)
         v_arr = Arrow([xq, YB, 0], [xq, sag_y(xq), 0], buff=0, color=SKY, stroke_width=6,
                       max_tip_length_to_length_ratio=0.3)
-        v_lab = M(r"v", size=48, color=SKY).next_to(v_arr, LEFT, buff=0.15)
+        v_lab = M(r"v", size=48, color=SKY).next_to(v_arr, RIGHT, buff=0.15)
         b_dot = node([XM, YB, 0], color=INK)
         b_lab = M(r"B", size=46).next_to(b_dot, UR, buff=0.12).shift(RIGHT * 0.15)
         vb_arr = Arrow([XM, YB, 0], [XM, sag_y(XM), 0], buff=0, color=SKY, stroke_width=6,
@@ -146,9 +147,9 @@ class S29_Beam(VScene):
         # ---- beat 7: compare with beam theory ----------------------------------------------------
         exact = E(r"\frac{PL^3}{48EI}|\approx|0.02083\,\frac{PL^3}{EI}", size=48).move_to([RX, -0.3, 0])
         ex_tag = T("beam theory, exact", size=32, color=MUTED).next_to(exact, UP, buff=0.25)
-        BW = 4.6                                   # exact bar length; the guess is 98.55 percent of it
+        BW = 4.2                                   # exact bar length; the guess is 98.55 percent of it
         b_lbl = VGroup(T("guess", size=32, color=SKY), T("exact", size=32, color=INK2))
-        bx = RX - 2.2
+        bx = RX - 1.6
         g_bar = Rectangle(width=BW * (1 - low), height=0.55, color=SKY, fill_color=SKY, fill_opacity=.6)
         e_bar = Rectangle(width=BW, height=0.55, color=INK2, fill_color=INK2, fill_opacity=.35)
         g_bar.move_to([bx, -1.65, 0], aligned_edge=LEFT)

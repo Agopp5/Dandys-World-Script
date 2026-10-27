@@ -98,7 +98,7 @@ class S24_Energy_Density(VScene):
         g_old = DashedVMobject(g_old, num_dashes=36)
         g_new = DashedVMobject(Polygon(ax.c2p(0, 0), ax.c2p(E0, 0), ax.c2p(E0, SL * E0), stroke_width=4,
                                        color=INK2), num_dashes=36)
-        gl = E(r"F|=|K|q", size=44).next_to(ax.c2p(0.78, 0.22), RIGHT, buff=0.05)
+        gl = E(r"F|=|K|q", size=44).next_to(ax.c2p(0.05, 0.78), RIGHT, buff=0)
         gtag = T("the spring", size=32, color=INK2).next_to(gl, UP, buff=0.15).align_to(gl, LEFT)
         self.beat("Now connect it to the spring. Stress times the slice's area A is a force. Strain times its "
                   "length d x is a stretch. So this graph is just the spring's force-stretch graph, rescaled.",

@@ -74,7 +74,7 @@ class S28_Compare_Exact(VScene):
         yl.arrange(RIGHT, buff=0.15).next_to(ax.c2p(0, 0.62), UP, buff=0.15).shift(RIGHT * 0.6)
         frame_ax = VGroup(ax, xt, xl, yl)
         ex = ax.plot(lambda t: t - t * t / 2, x_range=[0, 1], color=SKY, stroke_width=7)
-        ex_lab = M(r"u_{\text{exact}}", size=50, color=SKY).next_to(ax.c2p(0.42, 0.33), UL, buff=0.1)
+        ex_lab = M(r"u_{\text{exact}}", size=50, color=SKY).next_to(ax.c2p(0.3, 0.29), UL, buff=0.05)
 
         with self.say("How good is that guess? This simple bar has an exact answer. Cut it at x: the piece beyond "
                       "the cut carries f times L minus x, so the strain there is f times L minus x, over E A. "
@@ -124,7 +124,7 @@ class S28_Compare_Exact(VScene):
         d_ln = Dot(p_ln, radius=0.1, color=SKY)
         d_ex = Dot(p_ex, radius=0.1, color=SKY)
         v_ln = M(r"\frac{1}{4}", size=48, color=SKY).move_to(p_ln + RIGHT * 0.55 + DOWN * 0.3)
-        v_ex = M(r"\frac{3}{8}", size=48, color=SKY).move_to(p_ex + LEFT * 0.75 + UP * 0.35)
+        v_ex = M(r"\frac{3}{8}", size=48, color=SKY).move_to(p_ex + LEFT * 0.6 + UP * 0.75)
         gap = DoubleArrow(p_ln, p_ex, buff=0.12, color=BAD, stroke_width=5, tip_length=0.2,
                           max_tip_length_to_length_ratio=0.3).shift(LEFT * 0.28)
         area = ax.get_area(ex, x_range=(0, 1), bounded_graph=ax.plot(lambda t: t / 2, x_range=[0, 1]),
@@ -159,7 +159,7 @@ class S28_Compare_Exact(VScene):
         spar = VGroup(*[Line([6.6 * c, camber(c) - half(c) * 0.92, 0], [6.6 * c, camber(c) + half(c) * 0.92, 0],
                              color=INK2, stroke_width=5) for c in (0.3, 0.72)])
         ribg = VGroup(rib, holes, spar)
-        ribg.scale(1.1).move_to([RX, -0.6, 0])
+        fit(ribg, 6.5, 4).move_to([RX - 0.05, -0.6, 0])
         qm = T("?", size=130, color=GOLD, weight=BOLD).move_to([RX + 2.2, 2.0, 0])
         rib_lab = T("a wing rib", size=32, color=MUTED).next_to(ribg, DOWN, buff=0.35)
         s1 = T("Assumed shapes are approximate.", size=40)

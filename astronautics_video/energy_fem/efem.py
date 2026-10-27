@@ -33,7 +33,7 @@ def wall(p, side=LEFT, h=1.6, color=INK2):
     return g
 
 
-def spring(a, b, coils=5, amp=0.18, color=LILAC, label=None, size=34, lead=0.22):
+def spring(a, b, coils=5, amp=0.18, color=LILAC, label=None, size=40, lead=0.22):
     a, b = np.array(a, float), np.array(b, float)
     d = b - a
     L = np.linalg.norm(d)
@@ -58,7 +58,7 @@ def node(p, color=INK, r=0.08):
     return Dot(np.array(p, float), radius=r, color=color)
 
 
-def force(p, d=RIGHT, length=1.0, label=None, color=ROSE, tail=False, size=34):
+def force(p, d=RIGHT, length=1.0, label=None, color=ROSE, tail=False, size=40):
     p, d = np.array(p, float), np.array(d, float)
     d = d / np.linalg.norm(d)
     s, e = (p - d * length, p) if tail else (p, p + d * length)
@@ -70,7 +70,7 @@ def force(p, d=RIGHT, length=1.0, label=None, color=ROSE, tail=False, size=34):
     return g
 
 
-def disp(p, label="q", length=0.7, below=0.45, color=SKY, size=32):
+def disp(p, label="q", length=0.7, below=0.45, color=SKY, size=38):
     p = np.array(p, float) + DOWN * below
     arr = Arrow(p, p + RIGHT * length, buff=0, color=color, stroke_width=4, tip_length=0.16,
                 max_tip_length_to_length_ratio=0.35)
@@ -87,13 +87,13 @@ def bar(x0, x1, y=0.0, h=0.42, color=INK2, fill=SURFACE):
 
 
 class fem_bar(VGroup):
-    def __init__(self, xs, y=0.0, h=0.42, elem_labels=True, node_labels=None, size=30):
+    def __init__(self, xs, y=0.0, h=0.42, elem_labels=True, node_labels=None, size=38):
         super().__init__()
         self.elems, self.nodes, self.tags = VGroup(), VGroup(), VGroup()
         for i in range(len(xs) - 1):
             self.elems.add(bar(xs[i], xs[i + 1], y, h))
             if elem_labels:
-                c = Circle(radius=0.2, color=INK2, stroke_width=2.5).move_to([(xs[i] + xs[i + 1]) / 2, y + h / 2 + 0.38, 0])
+                c = Circle(radius=0.26, color=INK2, stroke_width=2.5).move_to([(xs[i] + xs[i + 1]) / 2, y + h / 2 + 0.42, 0])
                 self.tags.add(VGroup(c, T(str(i + 1), size=size - 6, color=INK2).move_to(c)))
         for i, x in enumerate(xs):
             self.nodes.add(node([x, y, 0]))
