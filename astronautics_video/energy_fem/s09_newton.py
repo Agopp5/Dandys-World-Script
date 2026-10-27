@@ -15,8 +15,8 @@ assert np.isclose(-k2 * (q2 - q1) + F2, 0)                            # node 2 b
 assert np.isclose(-k2 * q1 + k2 * q2, F2)                             # node 2 multiplied out
 assert np.allclose(np.array([[k1 + k2, -k2], [-k2, k2]]) @ [q1, q2], [F1, F2])
 
-LAB = 36      # arrow labels
-EQ = 44       # main equations
+LAB = 38      # arrow labels
+EQ = 48       # main equations
 RX = 3.55     # right column centre
 
 
@@ -36,24 +36,25 @@ class S09_Newton(VScene):
 
         # the two-spring system, small, along the top left
         y0 = 2.0
-        pw, p1, p2 = np.array([-6.5, y0, 0]), np.array([-4.7, y0, 0]), np.array([-2.9, y0, 0])
+        pw, p1, p2 = np.array([-6.6, y0, 0]), np.array([-4.3, y0, 0]), np.array([-2.0, y0, 0])
         w = wall(pw, side=LEFT, h=1.0)
         s1 = spring(pw, p1, coils=4, label="k_1")
         s2 = spring(p1, p2, coils=4, label="k_2")
         n1, n2 = node(p1), node(p2)
-        f1 = force(p1 + UP * 0.42, RIGHT, length=0.75, label="F_1")
-        f2 = force(p2, RIGHT, length=0.75, label="F_2")
+        fa = arrow(p1 + UP * 0.75, p1 + UP * 0.75 + RIGHT * 0.8, ROSE)
+        f1 = VGroup(fa, E("F_1", size=32).next_to(fa, UP, buff=0.06))
+        f2 = force(p2, RIGHT, length=0.8, label="F_2")
         d1, d2 = disp(p1, "q_1"), disp(p2, "q_2")
         system = VGroup(w, s1, s2, n1, n2, f1, f2, d1, d2)
 
         # node 1 cut out
-        c1 = np.array([-4.2, -0.15, 0])
-        ring1_sys = cut_circle(p1, 0.38)
+        c1 = np.array([-4.3, -0.1, 0])
+        ring1_sys = cut_circle(p1, 0.4)
         ring1 = cut_circle(c1)
         fn1 = node(c1, r=0.11)
-        a1 = arrow(c1 + LEFT * 0.5, c1 + LEFT * 1.6, LILAC)
-        a2 = arrow(c1 + RIGHT * 0.46 + UP * 0.2, c1 + RIGHT * 1.6 + UP * 0.2, LILAC)
-        a3 = arrow(c1 + RIGHT * 0.46 + DOWN * 0.2, c1 + RIGHT * 1.6 + DOWN * 0.2, ROSE)
+        a1 = arrow(c1 + LEFT * 0.5, c1 + LEFT * 1.8, LILAC)
+        a2 = arrow(c1 + RIGHT * 0.46 + UP * 0.2, c1 + RIGHT * 1.8 + UP * 0.2, LILAC)
+        a3 = arrow(c1 + RIGHT * 0.46 + DOWN * 0.2, c1 + RIGHT * 1.8 + DOWN * 0.2, ROSE)
         l1 = E("k_1|q_1", size=LAB).next_to(a1, UP, buff=0.15)
         l2 = E("k_2|(|q_2|-|q_1|)", size=LAB).next_to(a2, UP, buff=0.15).align_to(a2, LEFT)
         l3 = E("F_1", size=LAB).next_to(a3, DOWN, buff=0.15)
@@ -103,22 +104,23 @@ class S09_Newton(VScene):
             self.wait(0.08 * d)
             self.play(Create(box_a), Create(box_b), ex[2].animate.set_color(SKY), ex[8].animate.set_color(SKY),
                       run_time=0.1 * d)
+            q_extra = ex[8].copy()
             self.play(FadeIn(co[0]), TransformFromCopy(ex[1], co[1]), FadeIn(co[2]),
                       TransformFromCopy(ex[7], co[3]), FadeIn(co[4]),
-                      TransformFromCopy(ex[2], co[5]), TransformFromCopy(ex[8], co[5]), run_time=0.17 * d)
+                      TransformFromCopy(ex[2], co[5]), q_extra.animate.move_to(co[5]), run_time=0.17 * d)
+            self.remove(q_extra)
             self.play(FadeIn(co[6]), TransformFromCopy(ex[4:6], co[7:9]),
                       FadeIn(co[9]), TransformFromCopy(ex[11], co[10]), run_time=0.15 * d)
-            g1 = glow(co, SKY)
-            self.play(FadeIn(g1), run_time=0.05 * d)
+            self.play(Circumscribe(co, color=SKY), run_time=0.05 * d)
             self.wait(0.08 * d)
 
         # node 2: clear node 1's working, keep its result
-        c2 = np.array([-4.2, -2.55, 0])
-        ring2_sys = cut_circle(p2, 0.38)
+        c2 = np.array([-4.3, -2.55, 0])
+        ring2_sys = cut_circle(p2, 0.4)
         ring2 = cut_circle(c2)
         fn2 = node(c2, r=0.11)
-        b1 = arrow(c2 + LEFT * 0.5, c2 + LEFT * 1.75, LILAC)
-        b2 = arrow(c2 + RIGHT * 0.5, c2 + RIGHT * 1.6, ROSE)
+        b1 = arrow(c2 + LEFT * 0.5, c2 + LEFT * 1.9, LILAC)
+        b2 = arrow(c2 + RIGHT * 0.5, c2 + RIGHT * 1.8, ROSE)
         m1 = E("k_2|(|q_2|-|q_1|)", size=LAB).next_to(b1, UP, buff=0.15).align_to(b1, RIGHT).shift(LEFT * 0.35)
         m2 = E("F_2", size=LAB).next_to(b2, UP, buff=0.15)
         tag2 = T("node 2", size=30, color=MUTED).next_to(ring2, DOWN, buff=0.2)
@@ -127,7 +129,7 @@ class S09_Newton(VScene):
         with self.say("Node two: spring two pulls it back with k two times q two minus q one, and F two pulls "
                       "forward. So minus k two times q two minus q one, plus F two, equals zero. "
                       "Multiply out: minus k two q one, plus k two q two, equals F two.") as d:
-            self.play(FadeOut(bal), FadeOut(ex), FadeOut(box_a), FadeOut(box_b), FadeOut(g1),
+            self.play(FadeOut(bal), FadeOut(ex), FadeOut(box_a), FadeOut(box_b),
                       co.animate.move_to([RX, 1.25, 0]), Create(ring2_sys), run_time=0.12 * d)
             self.play(TransformFromCopy(ring2_sys, ring2), TransformFromCopy(n2, fn2), FadeIn(tag2),
                       run_time=0.1 * d)
@@ -139,18 +141,20 @@ class S09_Newton(VScene):
             self.play(FadeIn(co2[0]), TransformFromCopy(bal2[1], co2[1]), TransformFromCopy(bal2[5], co2[2]),
                       FadeIn(co2[3]), TransformFromCopy(bal2[1], co2[4]), TransformFromCopy(bal2[3], co2[5]),
                       FadeIn(co2[6]), TransformFromCopy(bal2[8], co2[7]), run_time=0.16 * d)
-            g2 = glow(co2, SKY)
-            self.play(FadeIn(g2), run_time=0.04 * d)
+            self.play(Circumscribe(co2, color=SKY), run_time=0.04 * d)
             self.wait(0.06 * d)
 
         # the pair goes into a "Newton" panel at the top right
-        pair = VGroup(co.copy(), co2.copy()).arrange(DOWN, buff=0.35).scale(0.8)
+        pair = VGroup(co.copy(), co2.copy()).arrange(DOWN, buff=0.35).scale(0.85)
         card = panel(pair, color=HAIR)
         head = T("Newton", size=32, color=INK2, weight=BOLD)
         box = VGroup(head, card).arrange(DOWN, buff=0.15).to_corner(UR, buff=0.4)
+        card[0].set_z_index(0)
+        for m in (pair, co, co2):
+            m.set_z_index(3)
         with self.say("Two equations, two unknowns. Keep these on the side. "
                       "Now let's get the very same equations from energy alone.") as d:
-            self.play(FadeOut(bal2), FadeOut(g2), co.animate.move_to([RX, 0.4, 0]),
+            self.play(FadeOut(bal2), co.animate.move_to([RX, 0.4, 0]),
                       co2.animate.move_to([RX, -0.6, 0]), run_time=0.15 * d)
             self.play(Circumscribe(VGroup(co, co2), color=SKY), run_time=0.2 * d)
             self.play(FadeOut(VGroup(ring1, fn1, a1, a2, a3, l1, l2, l3, tag1,

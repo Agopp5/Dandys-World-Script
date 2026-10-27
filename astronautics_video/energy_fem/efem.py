@@ -20,14 +20,16 @@ core.FONT = "Lato"   # Avenir Next is not installed here
 
 
 def wall(p, side=LEFT, h=1.6, color=INK2):
-    p = np.array(p, float)
-    line = Line(p + UP * h / 2, p + DOWN * h / 2, color=color, stroke_width=4)
+    """Hatched support with its face through p. side LEFT/RIGHT: a vertical wall (hatching on that side);
+    side UP: a ceiling (face below, hatching above); side DOWN: a floor (face above, hatching below). h = face length."""
+    p, side = np.array(p, float), np.array(side, float)
+    along = RIGHT if abs(side[1]) > 0.5 else UP
+    line = Line(p - along * h / 2, p + along * h / 2, color=color, stroke_width=4)
     g = VGroup(line)
     n = int(h / 0.2)
     for i in range(n + 1):
-        y = p[1] - h / 2 + i * h / n
-        a = np.array([p[0], y, 0])
-        g.add(Line(a, a + side * 0.22 + DOWN * 0.18, color=color, stroke_width=2))
+        a = p - along * h / 2 + along * i * h / n
+        g.add(Line(a, a + side * 0.22 - along * 0.18, color=color, stroke_width=2))
     return g
 
 

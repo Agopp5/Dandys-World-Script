@@ -132,7 +132,7 @@ class S06_Minimum(VScene):
             self.play(FadeIn(lab_e), run_time=.08 * d)
             self.play(FadeIn(fb, shift=LEFT * 1.5), run_time=.2 * d)
             self.play(FadeIn(lab_f), run_time=.07 * d)
-            self.play(self.spotlight(kqf, fb), run_time=.15 * d)
+            self.play(self.spotlight(kqf, fb, lab_e, lab_f), run_time=.15 * d)
             self.play(Indicate(kqf, color=GOLD), Indicate(kqf_force, color=GOLD), run_time=.15 * d)
             self.wait(.3 * d)
         self.wipe()
