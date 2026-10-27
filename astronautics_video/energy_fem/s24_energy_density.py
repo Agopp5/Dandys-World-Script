@@ -85,7 +85,7 @@ class S24_Energy_Density(VScene):
         self.beat("For an elastic material, stress and strain are related by Hooke's law: sigma equals E times "
                   "epsilon. On a graph, a straight line from the origin with slope E.",
                   [Create(ax), FadeIn(xl), FadeIn(yl)], [Write(hooke), FadeIn(hk)], .1, Create(line),
-                  [Create(run), Create(rise), FadeIn(one), FadeIn(Elab)], .2, w=(.18, .25, .1, .2, .17, .1))
+                  [Create(run), Create(rise), FadeIn(one), FadeIn(Elab)], .2, w=(.2, .3, .25, .25))
 
         # ---------- beat 3: rescale to the spring graph ----------
         Al = M("A", size=52, color=INK).move_to(big_s)
@@ -94,20 +94,19 @@ class S24_Energy_Density(VScene):
             .arrange(RIGHT, buff=0.2).next_to(ax.c2p(1, 0), DOWN, buff=0.3).align_to(ax.c2p(1, 0), RIGHT)
         yl2 = VGroup(T("force", size=34, color=ROSE), M(r"\sigma A", size=48, color=ROSE)) \
             .arrange(RIGHT, buff=0.2).next_to(ax.c2p(0, 1), UP, buff=0.25).align_to(ax.c2p(0, 1), LEFT)
-        g_old = Polygon(ax.c2p(0, 0), ax.c2p(0.5, 0), ax.c2p(0.5, 0.5 * 1.7), color=MUTED, stroke_width=3,
-                        fill_color=MUTED, fill_opacity=0.15)
-        g_old = DashedVMobject(g_old, num_dashes=36).set_fill(MUTED, 0.15)
-        g_new = DashedVMobject(Polygon(ax.c2p(0, 0), ax.c2p(E0, 0), ax.c2p(E0, SL * E0), stroke_width=3,
-                                       color=MUTED), num_dashes=36).set_fill(MUTED, 0.15)
-        gl = E(r"F|=|K|q", size=44).next_to(ax.c2p(0.5, 0.85), LEFT, buff=0.2)
-        gtag = T("the spring", size=32, color=MUTED).next_to(gl, UP, buff=0.15)
+        g_old = Polygon(ax.c2p(0, 0), ax.c2p(0.5, 0), ax.c2p(0.5, 0.5 * 1.7), color=INK2, stroke_width=4)
+        g_old = DashedVMobject(g_old, num_dashes=36)
+        g_new = DashedVMobject(Polygon(ax.c2p(0, 0), ax.c2p(E0, 0), ax.c2p(E0, SL * E0), stroke_width=4,
+                                       color=INK2), num_dashes=36)
+        gl = E(r"F|=|K|q", size=44).next_to(ax.c2p(0.78, 0.22), RIGHT, buff=0.05)
+        gtag = T("the spring", size=32, color=INK2).next_to(gl, UP, buff=0.15).align_to(gl, LEFT)
         self.beat("Now connect it to the spring. Stress times the slice's area A is a force. Strain times its "
                   "length d x is a stretch. So this graph is just the spring's force-stretch graph, rescaled.",
                   [FadeOut(hooke), FadeOut(hk), FadeOut(VGroup(run, rise, one, Elab))],
                   [FadeIn(Al), FadeIn(alab)], [ReplacementTransform(yl, yl2), Indicate(Al)],
                   [ReplacementTransform(xl, xl2), Indicate(dxl)],
                   [FadeIn(g_old), FadeIn(gl), FadeIn(gtag)], Transform(g_old, g_new), .1,
-                  w=(.06, .12, .2, .2, .16, .16, .1))
+                  w=(.06, .14, .22, .22, .18, .18))
 
         # ---------- beat 4: the triangle and U* ----------
         tri = Polygon(ax.c2p(0, 0), ax.c2p(E0, 0), ax.c2p(E0, SL * E0), stroke_width=0,
@@ -145,9 +144,9 @@ class S24_Energy_Density(VScene):
         eqB = E(r"U|=|\tfrac12|K|q^2", size=56, cmap=CM).move_to([-3.6, -0.6, 0])
         eqB.shift((eqA[1].get_center()[0] - eqB[1].get_center()[0]) * RIGHT)
         tagB = T("the spring", size=32, color=MUTED).next_to(eqB, UP, buff=0.3)
-        bx_k = VGroup(SurroundingRectangle(eqA[3], color=LILAC, buff=.1), SurroundingRectangle(eqB[3], color=LILAC, buff=.1))
-        bx_d = VGroup(SurroundingRectangle(eqA[4], color=SKY, buff=.1), SurroundingRectangle(eqB[4], color=SKY, buff=.1))
-        bx_h = VGroup(SurroundingRectangle(eqA[2], color=INK2, buff=.08), SurroundingRectangle(eqB[2], color=INK2, buff=.08))
+        bx_k = VGroup(*[Underline(e[3], color=LILAC, buff=.1, stroke_width=6) for e in (eqA, eqB)])
+        bx_d = VGroup(*[Underline(e[4], color=SKY, buff=.1, stroke_width=6) for e in (eqA, eqB)])
+        bx_h = VGroup(*[Underline(e[2], color=INK2, buff=.1, stroke_width=6) for e in (eqA, eqB)])
         lk = T("stiffness", size=34, color=LILAC)
         ld = T("deformation", size=34, color=SKY)
         lh = T("one half", size=34, color=INK2)
@@ -158,5 +157,5 @@ class S24_Energy_Density(VScene):
                   [FadeIn(tagA), FadeIn(glow(eqA[0], MINT))], [FadeIn(eqB), FadeIn(tagB)],
                   [Create(bx_k), FadeIn(lk)], [Create(bx_d), FadeIn(ld)],
                   [Indicate(eqA[4]), Indicate(eqB[4])], [Create(bx_h), FadeIn(lh)], .1,
-                  w=(.1, .14, .16, .12, .12, .1, .12, .14))
+                  w=(.12, .14, .18, .14, .14, .12, .16))
         self.wipe()

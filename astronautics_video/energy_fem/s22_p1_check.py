@@ -148,14 +148,20 @@ class S22_P1_Check(VScene):
                   w=(.3, .15, .2, .22, .13))
 
         # 6
-        kb = key_box(TX(r"1. stretch $=$ right end minus left end", size=40),
-                     E(r"2.\ |\Pi|=|U|-|W", size=44),
-                     TX(r"3. one partial derivative per unknown", size=40),
-                     TX(r"4. solve, then check with Newton", size=40), label="THE METHOD")
-        fit(kb, 12.5, 6.2)
+        m1 = TX(r"1. stretch $=$ right end minus left end", size=46)
+        m2 = E(r"2.\ |\Pi|=|U|-|W", size=52)
+        m3 = TX(r"3. one partial derivative per unknown", size=46)
+        m4 = TX(r"4. solve, then check with Newton", size=46)
+        lines = VGroup(m1, m2, m3, m4).arrange(DOWN, buff=0.38, aligned_edge=LEFT)
+        head = T("THE METHOD", size=34, color=ACCENT, weight=BOLD)
+        kb = panel(VGroup(head, lines).arrange(DOWN, buff=0.45), color=ACCENT)
+        fit(kb, 13.2, 6.4)
         kb.move_to(DOWN * 0.35)
         rest = VGroup(fig, card, e1, e2, e3, b1, b2, b3, row5, g1, g2, n70, n50)
         self.beat("So, stepping back: stretches, then U and W, then one derivative per unknown, then solve and "
                   "check. That's the whole method. Next, we leave springs behind and look at a real bar.",
-                  FadeOut(rest), FadeIn(kb, shift=UP * 0.2), w=(.15, .25))
+                  FadeOut(rest), FadeIn(kb, shift=UP * 0.2), Indicate(m1, color=SKY, scale_factor=1.05),
+                  Indicate(m2, color=GOLD, scale_factor=1.05), Indicate(m3, color=LILAC, scale_factor=1.05),
+                  Indicate(m4, color=GOOD, scale_factor=1.05), Circumscribe(kb, color=ACCENT),
+                  w=(.08, .1, .1, .1, .12, .14, .2))
         self.wipe()

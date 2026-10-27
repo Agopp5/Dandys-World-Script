@@ -12,8 +12,8 @@ _x = np.linspace(0, _L, 20001)
 _Wnum = _P * _a * _L + np.trapezoid(_f * _a * _x, _x)
 assert np.isclose(_Wnum, _P * _a * _L + _f * _a * _L ** 2 / 2)
 
-X0, X1, Y = -6.0, 4.4, 1.8      # bar from the wall to the tip, centre height
-H = 0.62                        # bar thickness
+X0, X1, Y = -6.0, 4.4, 2.0      # bar from the wall to the tip, centre height
+H = 0.9                        # bar thickness
 
 
 class S26_Bar_W(VScene):
@@ -21,14 +21,14 @@ class S26_Bar_W(VScene):
 
     def construct(self):
         # the bar, fixed at the left wall
-        w = wall(np.array([X0, Y, 0]), side=LEFT, h=1.9)
+        w = wall(np.array([X0, Y, 0]), side=LEFT, h=2.4)
         b = bar(X0, X1, y=Y, h=H)
         tip = np.array([X1, Y, 0])
-        fP = force(tip, d=RIGHT, length=1.3, label=None)
-        lP = M("P", size=48, color=ROSE).next_to(fP, UP, buff=.15)
-        uL = Arrow(np.array([X1, Y - .75, 0]), np.array([X1 + 1.0, Y - .75, 0]), buff=0, color=SKY,
+        fP = force(tip, d=RIGHT, length=1.4, label=None)
+        lP = M("P", size=54, color=ROSE).next_to(fP, UP, buff=.15)
+        uL = Arrow(np.array([X1, Y - H / 2 - .4, 0]), np.array([X1 + 1.1, Y - H / 2 - .4, 0]), buff=0, color=SKY,
                    stroke_width=7, max_tip_length_to_length_ratio=.3)
-        luL = M("u(L)", size=44, color=SKY).next_to(uL, DOWN, buff=.15)
+        luL = M("u(L)", size=50, color=SKY).next_to(uL, DOWN, buff=.15)
         tipbox = SurroundingRectangle(Line(tip + .4 * UP, tip + .4 * DOWN), color=ROSE, buff=.12)
         self.add(w, b)
 
@@ -39,20 +39,20 @@ class S26_Bar_W(VScene):
                   Write(eqP), w=(.25, .15, .25, .25))
 
         # the spread-out load: a row of small f arrows, and one slice dx
-        fl = dist_load(X0 + .3, X1 - .3, Y + .62, n=11, d=RIGHT)
-        lf = M("f", size=44, color=ROSE).next_to(fl, LEFT, buff=.2).shift(.05 * UP)
-        sx0, sx1 = -0.3, 0.3
+        fl = dist_load(X0 + .3, X1 - .3, Y + H / 2 + .35, n=11, d=RIGHT, length=.6)
+        lf = M("f", size=50, color=ROSE).next_to(fl[0], UP, buff=.15)
+        sx0, sx1 = -0.35, 0.35
         slc = Rectangle(width=sx1 - sx0, height=H, stroke_color=INK, stroke_width=4,
                         fill_color=GOLD, fill_opacity=.45).move_to(np.array([(sx0 + sx1) / 2, Y, 0]))
-        sdx = span(np.array([sx0, Y - H / 2 - .05, 0]), np.array([sx1, Y - H / 2 - .05, 0]),
-                   M("dx", size=40), side=DOWN)
-        fdx = force(np.array([sx0, Y + 1.25, 0]), d=RIGHT, length=.9, label=None)
-        lfdx = M(r"f|\,dx", size=44)
+        br = Brace(slc, DOWN, buff=.08, color=INK2)
+        sdx = VGroup(br, M("dx", size=46).next_to(br, DOWN, buff=.1))
+        fdx = force(np.array([sx0 - .1, Y + H / 2 + 1.0, 0]), d=RIGHT, length=.9, label=None)
+        lfdx = E(r"f|\,dx", size=50)
         paint(lfdx, {0: ROSE})
-        lfdx.next_to(fdx, UP, buff=.12)
-        us = Arrow(np.array([sx0 - 1.6, Y - .75, 0]), np.array([sx0 - .7, Y - .75, 0]), buff=0, color=SKY,
+        lfdx.next_to(fdx, RIGHT, buff=.15)
+        us = Arrow(np.array([sx0, Y - H / 2 - 1.15, 0]), np.array([sx0 + 1.0, Y - H / 2 - 1.15, 0]), buff=0, color=SKY,
                    stroke_width=7, max_tip_length_to_length_ratio=.3)
-        lus = M("u", size=44, color=SKY).next_to(us, DOWN, buff=.15)
+        lus = M("u", size=50, color=SKY).next_to(us, RIGHT, buff=.15)
         eqI = E(r"\int_0^L|f|u|\,dx", size=60).move_to(np.array([0, -2.6, 0]))
         self.beat("The spread-out load acts everywhere. A slice d x carries f d x, and moves u, so add up f u d x along the bar.",
                   [FadeOut(tipbox), LaggedStart(*[FadeIn(a, shift=.2 * RIGHT) for a in fl], lag_ratio=.12), FadeIn(lf)],
@@ -77,10 +77,10 @@ class S26_Bar_W(VScene):
                         for x in np.linspace(X0 + .4, X1, 22)])
         q = M(r"\frac{\partial \Pi}{\partial\, u(x)}", size=60).move_to(np.array([-1.0, -2.2, 0]))
         qm = M("?", size=110, color=ACCENT).next_to(q, RIGHT, buff=.5)
-        note = T("a value at every point", size=34, color=MUTED).next_to(dots, UP, buff=1.25)
+        note = T("a value at every point", size=36, color=MUTED).next_to(dots, UP, buff=.8)
         self.beat("But here's the problem. Pi now depends on a whole function, u of x. We can't take a partial derivative with respect to every point. We need a trick.",
                   [FadeOut(wl), FadeOut(gpl), pl.animate.move_to(np.array([0, -.9, 0])).scale(.85)],
-                  [FadeOut(VGroup(fl, lf, fdx, lfdx, slc, sdx)), LaggedStart(*[GrowFromCenter(p) for p in dots], lag_ratio=.08)],
+                  [FadeOut(VGroup(fl, lf, fdx, lfdx, slc, sdx, us, lus)), LaggedStart(*[GrowFromCenter(p) for p in dots], lag_ratio=.08)],
                   FadeIn(note),
                   Write(q), [FadeIn(qm, scale=1.4), FadeIn(glow(qm, ACCENT))], .15,
                   w=(.15, .25, .1, .2, .15))

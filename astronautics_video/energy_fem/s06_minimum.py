@@ -116,18 +116,21 @@ class S06_Minimum(VScene):
 
         # energy result next to force balance
         nd = node(ORIGIN, r=0.1)
-        pull = force(nd.get_center(), d=LEFT, length=1.2, label="Kq", color=LILAC)
-        push = force(nd.get_center(), d=RIGHT, length=1.2, label="F")
-        fbd = VGroup(pull, push, nd)
+        pull = force(nd.get_center(), d=LEFT, length=1.3, color=LILAC)
+        push = force(nd.get_center(), d=RIGHT, length=1.3)
+        pull_l = E(r"K|q", size=44).next_to(pull, UP, buff=.15)
+        push_l = E(r"F", size=44).next_to(push, UP, buff=.15)
+        fbd = VGroup(pull, push, nd, pull_l, push_l)
         kqf_force = E(r"K|q|=|F", size=56)
         lab_e = T("from energy", size=30, color=MUTED)
         lab_f = T("from forces", size=30, color=MUTED)
         with self.say("This is the key step, so take it in slowly: setting the slope of the energy to zero gave us exactly Newton's force balance. Same equation, reached without drawing a single force.",
                       style="slower and deliberate, stressing the key words") as d:
-            self.play(FadeOut(VGroup(pi_l, eqL)), kqf.animate.move_to(RIGHT * 1.6 + DOWN * 0.5),
+            self.play(FadeOut(VGroup(pi_l, eqL)), kqf.animate.move_to(RIGHT * 1.3 + DOWN * 0.5),
                       run_time=.12 * d)
             kqf_force.move_to(RIGHT * 5.0).match_y(kqf)
-            fbd.next_to(kqf_force, UP, buff=.6)
+            fbd.set_x(5.0)
+            fbd.next_to(kqf_force, UP, buff=.5)
             fb = VGroup(fbd, kqf_force)
             lab_e.next_to(kqf, DOWN, buff=.45)
             lab_f.next_to(kqf_force, DOWN, buff=.45)

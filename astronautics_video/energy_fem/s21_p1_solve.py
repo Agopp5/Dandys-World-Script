@@ -88,7 +88,7 @@ class S21_P1_Solve(VScene):
                   LaggedStart(*[FadeIn(p, shift=RIGHT * .3) for p in plan], lag_ratio=.6),
                   Circumscribe(VGroup(r3, chips[2]), color=GOLD),
                   morph(r3, r3b, [(4, 0), (5, 2), (0, 3), (2, 4), (6, 6), (7, 7)]),
-                  .2, w=(.45, .12, .23, .2))
+                  .2, w=(.45, .12, .23))
 
         # ---- beat 2: add equations 2 and 3; the K3 terms cancel ----
         ra = E(r"-|K_2|q_1|+|(K_1+K_2)|\,q_2|-|K_3|(|q_3|-|q_2|)|=|P_2|+|P_3", size=48)
@@ -147,7 +147,7 @@ class S21_P1_Solve(VScene):
         with self.say("That makes sense physically. It's the force balance of the bar together with the outer "
                       "point: the two springs on the bar's left side, K one and the second K two, hold P two, P "
                       "three and P four together.") as d:
-            self.play(FadeOut(VGroup(ra, rb, rule, s_a, s_b, r2, r2c, g_rc)),
+            self.play(FadeOut(VGroup(ra, rb, rule, s_a, s_b, r2, g_rc)),
                       rc.animate.shift(np.array([x_eq, Y2, 0]) - rc[6].get_center()),
                       r3b.animate.set_opacity(.35), chips[2].animate.set_opacity(.35), run_time=.14 * d)
             self.play(FadeIn(sketch, lag_ratio=.05), run_time=.2 * d)
@@ -158,3 +158,88 @@ class S21_P1_Solve(VScene):
                       Indicate(rc[4], color=LILAC), run_time=.18 * d)
             self.play(Circumscribe(VGroup(*rc[7:12]), color=ROSE), run_time=.14 * d)
             self.wait(.08 * d)
+
+        # ---- beat 4: q1 from equation 1 ----
+        qa = frac_q1()
+        at_eq(qa, 1, XW, S1)
+        self.beat("From the first equation, q one equals P one plus K two q two, all over two K two.",
+                  [FadeOut(VGroup(sketch, fb, gk)), Circumscribe(VGroup(r1, chips[0]), color=GOLD)],
+                  [TransformFromCopy(r1[2], qa[0]), Write(qa[1:])], .3, w=(.3, .4))
+
+        # ---- beat 5: substitute into the new second equation ----
+        qb = E(r"-|K_2|q_1|=|-\tfrac12|P_1|-|\tfrac12|K_2|q_2", size=48)
+        at_eq(qb, 3, XW, S2)
+        self.beat("Substitute. Minus K two times q one is minus one half P one, minus one half K two q two.",
+                  Indicate(VGroup(*rc[0:3]), color=GOLD),
+                  [*[TransformFromCopy(rc[i], qb[i]) for i in range(3)], FadeIn(qb[3])],
+                  Write(VGroup(*qb[4:])), .25, w=(.15, .25, .35))
+
+        # ---- beat 6: collect the q2 terms ----
+        qc = E(r"(K_1+K_2|-\tfrac12 K_2)|\,q_2|=|(K_1+\tfrac12 K_2)|\,q_2", size=48)
+        paint(qc, {0: LILAC, 1: LILAC, 4: LILAC})
+        at_eq(qc, 3, XW, S2)
+        qd = E(r"(K_1+\tfrac12 K_2)|\,q_2|-|\tfrac12|P_1|=|P_2|+|P_3|+|P_4", size=48)
+        paint(qd, {0: LILAC})
+        at_eq(qd, 5, XW, S3)
+        with self.say("So the q two terms are K one plus K two, minus one half K two, which is K one plus one half "
+                      "K two. The equation becomes: K one plus one half K two, times q two, minus one half P one, "
+                      "equals P two plus P three plus P four.") as d:
+            self.play(FadeOut(qa), qb.animate.shift(UP * (S1 - S2)), run_time=.1 * d)
+            self.play(Indicate(rc[4], color=LILAC), Indicate(VGroup(*qb[6:10]), color=LILAC), run_time=.1 * d)
+            self.play(TransformFromCopy(rc[4], qc[0]), TransformFromCopy(VGroup(*qb[6:9]), qc[1]),
+                      TransformFromCopy(qb[9], qc[2]), run_time=.14 * d)
+            self.play(Write(VGroup(*qc[3:])), run_time=.1 * d)
+            g_qc = glow(qc[4], LILAC)
+            self.play(FadeIn(g_qc), run_time=.06 * d)
+            self.play(TransformFromCopy(VGroup(*qc[4:6]), VGroup(*qd[0:2])),
+                      TransformFromCopy(qb[4], VGroup(qd[2], qd[3])), TransformFromCopy(qb[5], qd[4]),
+                      run_time=.2 * d)
+            self.play(*[TransformFromCopy(rc[6 + i], qd[5 + i]) for i in range(6)], run_time=.16 * d)
+            self.wait(.14 * d)
+
+        # ---- beat 7: times two, solve for q2 ----
+        qx = E(r"(2K_1+K_2)|\,q_2|-|P_1|=|2(|P_2|+|P_3|+|P_4|)", size=48)
+        paint(qx, {0: LILAC})
+        at_eq(qx, 4, XW, S2)
+        x2 = M(r"\times 2", size=36, color=MUTED).next_to(qx, LEFT, buff=.6)
+        q2r = E(r"q_2|=|\frac{P_1+2(P_2+P_3+P_4)}{2K_1+K_2}", size=52)
+        fcol(q2r[2], [((0, 2), ROSE), ((5, 7), ROSE), ((8, 10), ROSE), ((11, 13), ROSE),
+                      ((16, 18), LILAC), ((19, 21), LILAC)])
+        at_eq(q2r, 1, XW, S3 - .05)
+        b2 = rbox(q2r)
+        g2 = glow(q2r, SKY)
+        with self.say("Multiply through by two and solve. q two equals P one, plus two times the sum of P two, P "
+                      "three and P four, all over two K one plus K two.") as d:
+            self.play(FadeOut(VGroup(qb, qc, g_qc)), qd.animate.shift(UP * (S1 - S3)), run_time=.12 * d)
+            self.play(FadeIn(x2, shift=RIGHT * .2), TransformFromCopy(VGroup(*qd[0:2]), VGroup(*qx[0:2])),
+                      TransformFromCopy(qd[2], qx[2]), TransformFromCopy(qd[4], qx[3]),
+                      TransformFromCopy(qd[5], qx[4]), *[TransformFromCopy(qd[6 + i], qx[6 + i]) for i in range(5)],
+                      FadeIn(qx[5]), FadeIn(qx[11]), run_time=.22 * d)
+            self.play(Write(q2r), run_time=.3 * d)
+            self.play(Create(b2), FadeIn(g2), run_time=.14 * d)
+            self.wait(.22 * d)
+
+        # ---- beat 8: back-substitute for q1 and q3 ----
+        q1r = frac_q1()
+        q1r.move_to([-3.6, -.9, 0])
+        q3r = E(r"q_3|=|q_2|+|\frac{P_4}{K_3}", size=48)
+        fcol(q3r[4], [((0, 2), ROSE), ((3, 5), LILAC)])
+        q3r.move_to([3.6, -.9, 0])
+        b1, b3 = rbox(q1r), rbox(q3r)
+        top = VGroup(q2r, b2, g2)
+        note = T("put q2 in for a formula in the loads alone", size=32, color=MUTED).move_to([0, -2.9, 0])
+        with self.say("Then q one is P one plus K two q two, over two K two, and q three is q two plus P four over "
+                      "K three.") as d:
+            self.play(FadeOut(VGroup(r1, rc, r3b, chips, sep, qd, qx, x2)),
+                      top.animate.move_to([0, 1.9, 0]), run_time=.16 * d)
+            a1 = Arrow(b2.get_bottom() + LEFT * 1.2, b1.get_top() + UP * .25, color=MUTED, buff=.1,
+                       stroke_width=4, max_tip_length_to_length_ratio=.15)
+            a3 = Arrow(b2.get_bottom() + RIGHT * 1.2, b3.get_top() + UP * .25, color=MUTED, buff=.1,
+                       stroke_width=4, max_tip_length_to_length_ratio=.15)
+            self.play(Write(q1r), GrowArrow(a1), run_time=.22 * d)
+            self.play(Create(b1), run_time=.08 * d)
+            self.play(Write(q3r), GrowArrow(a3), run_time=.22 * d)
+            self.play(Create(b3), run_time=.08 * d)
+            self.play(FadeIn(note, shift=UP * .2), run_time=.12 * d)
+            self.wait(.12 * d)
+        self.wipe()

@@ -20,10 +20,10 @@ assert np.isclose(0.5 * np.trapezoid(_EA * _dudx ** 2, _x), 0.5 * _EA / _L * _q 
 # rigid slide u = c: du/dx = 0, U = 0
 assert np.isclose(0.5 * np.trapezoid(_EA * np.gradient(0 * _x + 0.4, _x) ** 2, _x), 0.0)
 
-LAB = 40   # figure labels
-EQ = 54    # main equations
+LAB = 44   # figure labels
+EQ = 58    # main equations
 
-X0, X1, Y, H = -5.6, 4.9, 1.65, 1.0     # the bar
+X0, X1, Y, H = -5.6, 4.9, 1.6, 1.3     # the bar
 NS = 12                                  # slices
 DX = (X1 - X0) / NS
 STR = (X1 - X0 + 0.7) / (X1 - X0)        # even stretch: tip moves 0.7 on screen
@@ -34,7 +34,7 @@ class S25_Bar_U(VScene):
 
     def construct(self):
         # ---- the bar and one slice ------------------------------------------------------------
-        w = wall(np.array([X0, Y, 0]), side=LEFT, h=1.9)
+        w = wall(np.array([X0, Y, 0]), side=LEFT, h=2.2)
         b = bar(X0, X1, y=Y, h=H)
         k = 6
         xl, xr = X0 + k * DX, X0 + (k + 1) * DX
@@ -78,7 +78,7 @@ class S25_Bar_U(VScene):
         # ---- add up the slices --------------------------------------------------------------------
         slices = VGroup(*[Rectangle(width=DX, height=H).move_to([X0 + (i + .5) * DX, Y, 0])
                           .set_fill(MINT, .3).set_stroke(MINT, 2.5) for i in range(NS)])
-        U = E(r"U|=|\tfrac12|\int_0^L|E A|\Big(\frac{du}{dx}\Big)^2|dx", size=56,
+        U = E(r"U|=|\tfrac12|\int_0^L|E A|\Big(\frac{du}{dx}\Big)^2|dx", size=60,
               cmap={"E A": LILAC, r"\Big(\frac{du}{dx}\Big)^2": ACCENT})
         U.move_to([0, -2.65, 0])
         self.beat("Add up the slices with an integral from zero to L, and the bar's strain energy is one "
@@ -108,16 +108,16 @@ class S25_Bar_U(VScene):
         tql = M("q", size=LAB, color=SKY).next_to(tq, UP, buff=.12)
         eq3 = E(r"\frac{du}{dx}|=|\frac{q}{L}", size=EQ, cmap={r"\frac{du}{dx}": ACCENT})
         eq3[2][0].set_color(SKY)
-        eq3.move_to([-4.0, -2.5, 0])
+        eq3.move_to([-4.0, -2.3, 0])
         eq4 = E(r"U|=|\tfrac12|\frac{EA}{L}|q^2", size=EQ, cmap={r"\frac{EA}{L}": LILAC})
-        eq4.move_to([2.6, -2.5, 0])
+        eq4.move_to([2.6, -2.3, 0])
         kg = glow(eq4[3], LILAC)
         kbr = Brace(eq4[3], DOWN, color=LILAC, buff=.1)
-        klab = T("a spring's K", size=32, color=LILAC).next_to(kbr, DOWN, buff=.08)
+        klab = T("a spring's K", size=34, color=LILAC).next_to(kbr, DOWN, buff=.08)
         self.beat("In fact, if the bar stretches evenly, so its tip moves q, then d u d x is q over L "
                   "everywhere, and U becomes one half, E A over L, q squared. A spring with stiffness E A "
                   "over L.",
-                  [self.unspot(), FadeOut(eq1), FadeOut(eq2), U.animate.move_to([0, -0.9, 0])],
+                  [self.unspot(), FadeOut(eq1), FadeOut(eq2), U.animate.move_to([0, -0.75, 0])],
                   [FadeIn(tdash), bar_grp.animate.stretch(STR, 0, about_point=lp), GrowArrow(tq),
                    FadeIn(tql)],
                   Write(eq3), Write(eq4), [FadeIn(kg), GrowFromCenter(kbr), FadeIn(klab)],
@@ -131,8 +131,8 @@ class S25_Bar_U(VScene):
                     max_tip_length_to_length_ratio=.35)
         sl1 = M("q", size=LAB, color=SKY).next_to(sq1, UP, buff=.12)
         sl2 = M("q", size=LAB, color=SKY).next_to(sq2, UP, buff=.12)
-        eq5 = E(r"\frac{du}{dx}|=|0", size=EQ, cmap={r"\frac{du}{dx}": ACCENT}).move_to([-3.0, -2.5, 0])
-        eq6 = E(r"U|=|0", size=EQ).move_to([3.0, -2.5, 0])
+        eq5 = E(r"\frac{du}{dx}|=|0", size=EQ, cmap={r"\frac{du}{dx}": ACCENT}).move_to([-3.0, -2.3, 0])
+        eq6 = E(r"U|=|0", size=EQ).move_to([3.0, -2.3, 0])
         self.beat("And if the bar just slides along without stretching, d u d x is zero, and so is U. "
                   "No stretch, no stored energy.",
                   [FadeOut(VGroup(eq3, eq4, kg, kbr, klab, tq, tql, tdash)),

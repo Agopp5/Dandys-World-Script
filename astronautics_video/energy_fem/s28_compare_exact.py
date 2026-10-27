@@ -44,17 +44,17 @@ class S28_Compare_Exact(VScene):
         y0 = 0.4
         xa, xb, xc = -6.5, -0.7, -3.3
         wl = wall(np.array([xa, y0, 0]), side=LEFT, h=1.8)
-        br = bar(xa, xb, y=y0, h=0.6)
-        ld = dist_load(xa + 0.2, xb - 0.1, y0 + 0.65, n=9, d=RIGHT)
-        fl = M("f", size=44, color=ROSE).next_to(ld, UP, buff=0.15)
+        br = bar(xa, xb, y=y0, h=0.8)
+        ld = dist_load(xa + 0.2, xb - 0.1, y0 + 0.8, n=9, d=RIGHT, length=0.5)
+        fl = M("f", size=52, color=ROSE).next_to(ld, UP, buff=0.15)
         sketch = VGroup(wl, br, ld, fl)
-        cut = DashedLine([xc, y0 - 0.9, 0], [xc, y0 + 1.25, 0], color=INK, stroke_width=4)
-        outer = Rectangle(width=xb - xc, height=0.6, stroke_color=ROSE, stroke_width=6,
+        cut = DashedLine([xc, y0 - 1.0, 0], [xc, y0 + 1.4, 0], color=INK, stroke_width=4)
+        outer = Rectangle(width=xb - xc, height=0.8, stroke_color=ROSE, stroke_width=6,
                           fill_color=ROSE, fill_opacity=0.18).move_to([(xb + xc) / 2, y0, 0])
-        b_out = Brace(Line([xc, y0 - 0.3, 0], [xb, y0 - 0.3, 0]), DOWN, color=INK2)
-        l_out = E(r"f|(L-x)", size=44).next_to(b_out, DOWN, buff=0.15)
-        b_x = Brace(Line([xa, y0 - 0.3, 0], [xc, y0 - 0.3, 0]), DOWN, color=INK2)
-        l_x = M("x", size=44).next_to(b_x, DOWN, buff=0.15)
+        b_out = Brace(Line([xc, y0 - 0.4, 0], [xb, y0 - 0.4, 0]), DOWN, color=INK2)
+        l_out = E(r"f|(L-x)", size=52).next_to(b_out, DOWN, buff=0.15)
+        b_x = Brace(Line([xa, y0 - 0.4, 0], [xc, y0 - 0.4, 0]), DOWN, color=INK2)
+        l_x = M("x", size=52).next_to(b_x, DOWN, buff=0.15)
         cutgrp = VGroup(cut, outer, b_out, l_out, b_x, l_x)
 
         eps = E(r"\varepsilon|=|\frac{f(L-x)}{EA}", size=56).move_to([RX, 1.5, 0])
@@ -64,17 +64,17 @@ class S28_Compare_Exact(VScene):
         uex.move_to([RX, -0.6, 0])
 
         # ---------- the plot: u in units of f L^2 / EA ----------
-        ax = Axes(x_range=[0, 1.08, 0.5], y_range=[0, 0.62, 0.125], x_length=5.9, y_length=5.0,
+        ax = Axes(x_range=[0, 1.08, 0.5], y_range=[0, 0.62, 0.125], x_length=6.2, y_length=5.5,
                   axis_config={"color": AXIS, "stroke_width": 3, "include_ticks": True, "tip_length": 0.22})
-        ax.move_to([LX + 0.35, -0.35, 0])
-        xt = VGroup(*[M(s, size=38, color=INK2).next_to(ax.c2p(v, 0), DOWN, buff=0.22)
-                      for s, v in [("0", 0), (r"\tfrac{L}{2}", 0.5), ("L", 1)]])
+        ax.move_to([LX + 0.3, -0.45, 0])
+        xt = VGroup(*[M(s, size=44, color=INK2).next_to(ax.c2p(v, 0), DOWN, buff=0.22)
+                      for s, v in [("0", 0), ("L/2", 0.5), ("L", 1)]])
         xl = M("x", size=44).next_to(ax.c2p(1.08, 0), RIGHT, buff=0.15)
-        yl = VGroup(M("u", size=44, color=SKY), M(r"\Big[\frac{fL^2}{EA}\Big]", size=36, color=INK2))
+        yl = VGroup(M("u", size=52, color=SKY), M(r"\Big[\frac{fL^2}{EA}\Big]", size=44, color=INK2))
         yl.arrange(RIGHT, buff=0.15).next_to(ax.c2p(0, 0.62), UP, buff=0.15).shift(RIGHT * 0.6)
         frame_ax = VGroup(ax, xt, xl, yl)
         ex = ax.plot(lambda t: t - t * t / 2, x_range=[0, 1], color=SKY, stroke_width=7)
-        ex_lab = M(r"u_{\text{exact}}", size=40, color=SKY).next_to(ax.c2p(0.42, 0.33), UL, buff=0.1)
+        ex_lab = M(r"u_{\text{exact}}", size=50, color=SKY).next_to(ax.c2p(0.42, 0.33), UL, buff=0.1)
 
         with self.say("How good is that guess? This simple bar has an exact answer. Cut it at x: the piece beyond "
                       "the cut carries f times L minus x, so the strain there is f times L minus x, over E A. "
@@ -85,6 +85,7 @@ class S28_Compare_Exact(VScene):
             self.play(GrowFromCenter(b_x), FadeIn(l_x), run_time=.05 * d)
             self.play(GrowFromCenter(b_out), Write(l_out), run_time=.08 * d)
             self.wait(.04 * d)
+            self.snap("cut")
             self.play(Write(eps), run_time=.12 * d)
             self.wait(.05 * d)
             self.play(Write(uex), run_time=.13 * d)
@@ -94,9 +95,9 @@ class S28_Compare_Exact(VScene):
 
         # ---------- beat 2: the straight line meets the curve at the tip ----------
         ln = dashed(ax.plot(lambda t: t / 2, x_range=[0, 1], color=SKY, stroke_width=6))
-        ln_lab = M("u = ax", size=40, color=SKY).next_to(ax.c2p(0.78, 0.39), DR, buff=0.12)
+        ln_lab = M("u = ax", size=50, color=SKY).next_to(ax.c2p(0.78, 0.39), DR, buff=0.12)
         tip = Dot(ax.c2p(1, 0.5), radius=0.11, color=SKY)
-        tip_tick = M(r"\tfrac12", size=38, color=INK2).next_to(ax.c2p(0, 0.5), LEFT, buff=0.18)
+        tip_tick = M(r"\frac{1}{2}", size=44, color=INK2).next_to(ax.c2p(0, 0.5), LEFT, buff=0.18)
         tip_guide = DashedLine(ax.c2p(0, 0.5), ax.c2p(1, 0.5), color=MUTED, stroke_width=2.5)
         t1 = E(r"u_{\text{exact}}(L)|=|\frac{fL^2}{2EA}", size=52, cmap=UCM)
         t2 = E(r"u_{\text{line}}(L)|=|aL|=|\frac{fL^2}{2EA}", size=52, cmap=UCM)
@@ -105,10 +106,11 @@ class S28_Compare_Exact(VScene):
         t2.shift((t1[1].get_x() - t2[1].get_x()) * RIGHT)
         tips = VGroup(t1, t2)
         tips.shift((RX - tips.get_center()[0]) * RIGHT)
+        g1, g2 = glow(t1[2], SKY), glow(t2[4], SKY)
         self.beat("At the tip, the exact answer is f L squared over two E A. Exactly what our straight line gave.",
                   FadeOut(eps), uex.animate.move_to([RX, 2.6, 0]),
                   [Create(ln), FadeIn(ln_lab)], [FadeIn(tip), Create(tip_guide), FadeIn(tip_tick), Write(t1)],
-                  Write(t2), [FadeIn(glow(t1[2], SKY)), FadeIn(glow(t2[4], SKY))], .15,
+                  Write(t2), [FadeIn(g1), FadeIn(g2)], .15,
                   w=(.08, .12, .2, .2, .15, .1))
 
         # ---------- beat 3: checkpoint ----------
@@ -121,8 +123,8 @@ class S28_Compare_Exact(VScene):
         p_ln, p_ex = ax.c2p(0.5, 0.25), ax.c2p(0.5, 0.375)
         d_ln = Dot(p_ln, radius=0.1, color=SKY)
         d_ex = Dot(p_ex, radius=0.1, color=SKY)
-        v_ln = M(r"\tfrac14", size=44, color=SKY).next_to(p_ln, DR, buff=0.12)
-        v_ex = M(r"\tfrac38", size=44, color=SKY).next_to(p_ex, UL, buff=0.12)
+        v_ln = M(r"\frac{1}{4}", size=48, color=SKY).move_to(p_ln + RIGHT * 0.55 + DOWN * 0.3)
+        v_ex = M(r"\frac{3}{8}", size=48, color=SKY).move_to(p_ex + LEFT * 0.75 + UP * 0.35)
         gap = DoubleArrow(p_ln, p_ex, buff=0.12, color=BAD, stroke_width=5, tip_length=0.2,
                           max_tip_length_to_length_ratio=0.3).shift(LEFT * 0.28)
         area = ax.get_area(ex, x_range=(0, 1), bounded_graph=ax.plot(lambda t: t / 2, x_range=[0, 1]),
@@ -134,11 +136,12 @@ class S28_Compare_Exact(VScene):
         m2.shift((m1[1].get_x() - m2[1].get_x()) * RIGHT)
         VGroup(m1, m2).shift((RX - VGroup(m1, m2).get_center()[0]) * RIGHT)
         n1 = T("Too low everywhere inside the bar", size=32, color=BAD).move_to([RX, -1.2, 0])
+        fit(n1, 6.4, 1)
         n2 = T("Tip match: a coincidence, not a rule", size=32, color=MUTED).next_to(n1, DOWN, buff=0.45)
         self.beat("At the middle, the straight line gives one quarter f L squared over E A. The exact answer is "
                   "three eighths. The line sits too low everywhere inside the bar. The tip matching was a lucky "
                   "coincidence, not a rule.",
-                  [FadeOut(uex), FadeOut(t1), FadeOut(t2), FadeOut(tip_guide), FadeOut(tip_tick)],
+                  [FadeOut(uex), FadeOut(t1), FadeOut(t2), FadeOut(g1), FadeOut(g2), FadeOut(tip_guide), FadeOut(tip_tick)],
                   [FadeIn(d_ln), FadeIn(v_ln), Write(m1)], .05,
                   [FadeIn(d_ex), FadeIn(v_ex), Write(m2)], GrowFromCenter(gap),
                   [FadeIn(area), FadeIn(n1)], .05,
@@ -146,23 +149,23 @@ class S28_Compare_Exact(VScene):
                   w=(.05, .2, .2, .1, .22, .15))
 
         # ---------- beat 5: a real structure ----------
-        pts, camber, half = rib_outline(0.0, 6.2)
+        pts, camber, half = rib_outline(0.0, 6.6)
         rib = Polygon(*pts, color=INK2, stroke_width=4, fill_color=SURFACE, fill_opacity=1)
         holes = VGroup()
         for c in (0.2, 0.42, 0.63, 0.81):
             r = 0.55 * half(c)
             holes.add(Circle(radius=r, color=INK2, stroke_width=3, fill_color=BG, fill_opacity=1)
-                      .move_to([6.2 * c, camber(c), 0]))
-        spar = VGroup(*[Line([6.2 * c, camber(c) - half(c) * 0.92, 0], [6.2 * c, camber(c) + half(c) * 0.92, 0],
+                      .move_to([6.6 * c, camber(c), 0]))
+        spar = VGroup(*[Line([6.6 * c, camber(c) - half(c) * 0.92, 0], [6.6 * c, camber(c) + half(c) * 0.92, 0],
                              color=INK2, stroke_width=5) for c in (0.3, 0.72)])
         ribg = VGroup(rib, holes, spar)
-        ribg.move_to([RX, -0.6, 0])
+        ribg.scale(1.1).move_to([RX, -0.6, 0])
         qm = T("?", size=130, color=GOLD, weight=BOLD).move_to([RX + 2.2, 2.0, 0])
         rib_lab = T("a wing rib", size=32, color=MUTED).next_to(ribg, DOWN, buff=0.35)
-        s1 = T("Assumed shapes are approximate.", size=36)
-        s2 = T("Better shape, better answer.", size=36)
-        s3 = T("One good shape for a whole", size=36, color=INK2)
-        s4 = T("real structure? Hard.", size=36, color=INK2)
+        s1 = T("Assumed shapes are approximate.", size=40)
+        s2 = T("Better shape, better answer.", size=40)
+        s3 = T("One good shape for a whole", size=40, color=INK2)
+        s4 = T("real structure? Hard.", size=40, color=INK2)
         notes = VGroup(s1, s2, s3, s4).arrange(DOWN, aligned_edge=LEFT, buff=0.5)
         s3.shift(DOWN * 0.3)
         s4.shift(DOWN * 0.3)

@@ -168,7 +168,7 @@ class S12_Two_Matrix(VScene):
             self.play(VGroup(g2, q2r).animate.move_to(q2_home), FadeOut(r2b), run_time=.06 * d)
 
         # beat 6: Newton check
-        xc = (wp[0] + n1p[0]) / 2
+        xc = .3 * wp[0] + .7 * n1p[0]   # clear of the k_1 label
         cut = DashedLine([xc, y0 + .75, 0], [xc, y0 - .75, 0], color=ACCENT, stroke_width=4)
         L0 = E(r"F_1|+|F_2|=|60\text{ N}", size=48)
         L1 = E(r"\text{spring 1:}\ \ 60/40|=|1.5\text{ mm}", size=48)

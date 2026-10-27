@@ -31,7 +31,7 @@ class S30_To_FEM(VScene):
     budget = 152
 
     def construct(self):
-        ax = axes([0, 1, 0.25], [0, 0.5, 0.25], width=11, height=3.9, xlabel="x", ylabel="u")
+        ax = axes([0, 1, 0.25], [0, 0.5, 0.25], width=11, height=3.9, xlabel="", ylabel="")
         ax.move_to(DOWN * 1.35)
         X = lambda xi: ax.c2p(xi, 0)[0]
         yb = 2.35
@@ -48,7 +48,7 @@ class S30_To_FEM(VScene):
         line = ax.plot(assumed, color=SKY, stroke_width=6)
         llab = M(r"u = a\,x", size=40, color=SKY).next_to(ax.c2p(0.7, assumed(0.7)), DR, buff=0.15)
         gap = Line(ax.c2p(0.5, assumed(0.5)), ax.c2p(0.5, exact(0.5)), color=BAD, stroke_width=7)
-        miss = T("missed", size=32, color=BAD).next_to(gap, RIGHT, buff=0.25).shift(DOWN * 0.1)
+        miss = T("missed", size=32, color=BAD).next_to(gap, RIGHT, buff=0.25).shift(UP * 0.18)
 
         self.beat("So assumed shapes work, but one shape for the whole structure is hard to choose, "
                   "and our single straight line missed the curve inside the bar.",

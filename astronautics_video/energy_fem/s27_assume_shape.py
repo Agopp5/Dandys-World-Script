@@ -116,8 +116,8 @@ class S27_Assume_Shape(VScene):
         e_Pi = E(r"\Pi|(a)|=|\tfrac12 EA\,a^2 L|-|\tfrac12|f|a L^2", size=52)
         fit(e_Pi, 6.4, 2)
         e_Pi.move_to([RX, 2.6, 0])
-        bc = np.array([RX, 0.15, 0])                       # a-axis level (Pi = 0) for the bowl
-        bw, bh = 4.2, 1.7                                  # Pi = a^2 - 2a on a in [-0.15, 2.15]
+        bc = np.array([RX, 1.0, 0])                       # a-axis level (Pi = 0) for the bowl
+        bw, bh = 4.2, 1.35                                  # Pi = a^2 - 2a on a in [-0.15, 2.15]
         b2p = lambda a: bc + np.array([(a - 1) * bw / 2.3, (a * a - 2 * a) * bh, 0])
         a_ax = Arrow(b2p(-0.2) * [1, 0, 0] + [0, bc[1], 0], [RX + 2.6, bc[1], 0], buff=0, color=AXIS,
                      stroke_width=3, max_tip_length_to_length_ratio=0.06)
@@ -161,8 +161,8 @@ class S27_Assume_Shape(VScene):
         aL_mark = always_redraw(lambda: DashedLine(O + RIGHT * LW, O + np.array([LW, tr.get_value() * LW, 0]),
                                                    color=SKY, stroke_width=3))
         aL_lab = M(r"a\,L", size=40, color=SKY).next_to(O + np.array([LW, A_BEST * LW / 2, 0]), RIGHT, buff=0.15)
-        n1 = TX(r"true $u(x)$: lowest $\Pi$ of all", size=34)
-        n2 = TX(r"best straight line: lowest $\Pi$ among lines", size=34)
+        n1 = TX(r"true $u(x)$: lowest $\Pi$ of all", size=38)
+        n2 = TX(r"best line: lowest $\Pi$ of the lines", size=38)
         notes = VGroup(n1, n2).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
         fit(notes, 6.4, 2)
         notes.move_to([RX, 0.6, 0])
@@ -184,9 +184,9 @@ class S27_Assume_Shape(VScene):
         # ---- the idea FEM is built on
         big = E(r"u(x)|=|a\,x", size=72).move_to([RX, 1.5, 0])
         paint(big, {0: SKY})
-        k1 = T("respects the supports", size=34)
-        k2 = T("a few unknown numbers", size=34)
-        k3 = T("infinite problem becomes a small one", size=34)
+        k1 = T("respects the supports", size=36)
+        k2 = T("a few unknown numbers", size=36)
+        k3 = T("infinite problem becomes a small one", size=36)
         keys = VGroup(k1, k2, k3).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
         fit(keys, 6.4, 3)
         keys.move_to([RX, -1.4, 0])
@@ -195,7 +195,7 @@ class S27_Assume_Shape(VScene):
                   "one.",
                   [FadeOut(VGroup(notes, e_tip, a_grp)), FadeIn(big)],
                   [FadeIn(k1), Indicate(odot)], [FadeIn(k2), Indicate(a_lab)], FadeIn(k3),
-                  self.spotlight(big, live_line), .15,
+                  self.spotlight(big, live_line, keys), .15,
                   w=(.12, .15, .15, .15, .2), style="slower and deliberate, stressing the key words")
         knob.clear_updaters()
         self.wipe()
