@@ -64,8 +64,8 @@ class S37_Load_Vector(VScene):
         t2 = E(r"u_2|Q_2", size=52)
         t1.move_to([-2.4, -0.55, 0]); t2.move_to([3.4, -0.55, 0]); pl.move_to([0.5, -0.55, 0])
         lhs.next_to(t1, LEFT, buff=0.3)
-        def1 = E(r"Q_1|=|\int_0^1|f|(1-s)|l\,ds", size=42).move_to([-2.4, -2.25, 0])
-        def2 = E(r"Q_2|=|\int_0^1|f|s|l\,ds", size=42).move_to([3.4, -2.25, 0])
+        def1 = E(r"Q_1|=|\int_0^1|f|(1-s)|l\,ds", size=48).move_to([-2.4, -2.25, 0])
+        def2 = E(r"Q_2|=|\int_0^1|f|s|l\,ds", size=48).move_to([3.4, -2.25, 0])
         br1 = Brace(t1, DOWN, buff=0.15, color=INK2)
         br2 = Brace(t2, DOWN, buff=0.15, color=INK2)
         with self.say("Split it in two. The part multiplying u one is the integral of f times one minus s times l. Call it Q one. The part multiplying u two is the integral of f times s times l. Call it Q two.") as d:

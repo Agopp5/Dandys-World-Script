@@ -36,7 +36,7 @@ class S32_Local_Coord(VScene):
         # ---- beat 1: the bar's energy splits element by element
         xs = [XL + WID * i / 3 for i in range(4)]
         fb = fem_bar(xs, y=YB, h=0.6)
-        wl = wall(np.array([XL, YB, 0]), side=LEFT, h=1.6)
+        wl = wall(np.array([XL, YB, 0]), side=LEFT, h=1.0)
         ends = VGroup(M("0", size=36, color=INK2).move_to([XL, YB + 0.7, 0]),
                       M("L", size=36, color=INK2).move_to([XR, YB + 0.7, 0]))
         ulab = VGroup(*[M("U_%d" % (i + 1), size=44, color=MINT).move_to([(xs[i] + xs[i + 1]) / 2, YB - 0.85, 0])
@@ -128,6 +128,6 @@ class S32_Local_Coord(VScene):
             self.play(GrowFromCenter(bds), FadeIn(lds), run_time=.08 * d)
             self.play(GrowFromCenter(bdx), FadeIn(ldx), run_time=.08 * d)
             self.play(Write(deq), run_time=.16 * d)
-            self.play(Create(box), FadeIn(glow(deq, LIME)), run_time=.1 * d)
+            self.play(Create(box), run_time=.1 * d)
             self.wait(.16 * d)
         self.wipe()

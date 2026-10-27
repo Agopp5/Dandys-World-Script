@@ -53,7 +53,7 @@ class S34_Strain(VScene):
         elem = VGroup(bar0, n1, n2, drop1)
 
         # ---- right half: the chain rule
-        eq1 = E(r"\frac{du}{dx}|=|\frac{du}{ds}|\qquad\cdot\qquad|\frac{ds}{dx}", size=56).move_to([4.0, 2.5, 0])
+        eq1 = E(r"\frac{du}{dx}|=|\frac{du}{ds}|\quad\cdot\quad|\frac{ds}{dx}", size=56).move_to([4.0, 2.5, 0])
 
         self.beat("Strain is d u d x. Our u is written in s, so use the chain rule: d u d x equals d u d s, "
                   "times d s d x.",

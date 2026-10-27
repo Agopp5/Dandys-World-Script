@@ -15,7 +15,7 @@ N_NODES, N_ELEMS = len(XS), len(XS) - 1
 assert (N_NODES, N_ELEMS) == (4, 3)
 ELEM2 = (2, 3)                         # element 2: global nodes (u1, u2) -> (q2, q3)
 assert ELEM2 == (2, 2 + 1)
-QV = [0.0, 1.3, 2.1, 2.5]              # sketch heights of the node values (illustrative only)
+QV = [0.0, 1.0, 1.65, 2.0]              # sketch heights of the node values (illustrative only)
 
 
 def p(x, y):
@@ -42,21 +42,23 @@ class S31_Discretize(VScene):
     def construct(self):
         # ---- beat 1: wall, bar chopped into 3 elements, nodes ----
         wl = wall(p(XS[0], YB), side=LEFT, h=1.8)
-        fb = fem_bar(XS, y=YB, h=H)
+        fb = fem_bar(XS, y=YB, h=H, elem_labels=False)
+        tags = VGroup(*[VGroup(Circle(radius=0.3, color=INK2, stroke_width=3), T(str(i + 1), size=36))
+                        .move_to(p((XS[i] + XS[i + 1]) / 2, YB + H / 2 + 0.45)) for i in range(3)])
         tip = force(p(XS[3], YB), d=RIGHT, length=1.2, color=ROSE)
         tip_l = M("P", size=44, color=ROSE).next_to(tip, UP, buff=0.12)
         load = VGroup(tip, tip_l)
 
-        el_t = T("element", size=40, color=INK).move_to(p((XS[1] + XS[2]) / 2, YB + 1.75))
-        el_a = Arrow(el_t.get_bottom(), p((XS[1] + XS[2]) / 2, YB + H / 2), buff=0.12, color=INK2,
+        el_t = T("element", size=40, color=INK).move_to(p((XS[1] + XS[2]) / 2, YB + 2.3))
+        el_a = Arrow(el_t.get_bottom(), tags[1].get_top(), buff=0.12, color=INK2,
                      stroke_width=4)
         nd_t = T("nodes", size=40, color=INK).move_to(p(-1.5, YB - 2.2))
         nd_a = VGroup(*[Arrow(nd_t.get_top(), p(x, YB - 0.1), buff=0.15, color=INK2, stroke_width=3,
                               max_tip_length_to_length_ratio=0.08) for x in XS])
         self.beat("Take the bar fixed to a wall, and chop it into three pieces. Each piece is called an element. "
                   "The points where they join, and the two ends, are called nodes.",
-                  [FadeIn(wl), FadeIn(fb)], FadeIn(load), .1,
-                  [FadeIn(el_t), GrowArrow(el_a), Indicate(fb.elems[1], color=LILAC)], .1,
+                  [FadeIn(wl), FadeIn(fb), FadeIn(tags)], FadeIn(load), .1,
+                  [FadeIn(el_t), GrowArrow(el_a), Indicate(VGroup(fb.elems[1], tags[1]), color=LILAC)], .1,
                   [FadeIn(nd_t), LaggedStart(*[GrowArrow(a) for a in nd_a], lag_ratio=.2)],
                   w=(.25, .1, .3, .35))
 
@@ -75,15 +77,14 @@ class S31_Discretize(VScene):
                   w=(.08, .42, .22, .28))
 
         # ---- beat 3: straight lines between node values ----
-        y0 = YB + H / 2 + 0.45
+        y0 = YB + 1.35
         base = Line(p(XS[0], y0), p(XS[3], y0), color=AXIS, stroke_width=2)
         pts = [p(x, y0 + v) for x, v in zip(XS, QV)]
         dots = VGroup(*[Dot(q, radius=0.09, color=SKY) for q in pts])
         sticks = VGroup(*[DashedLine(p(x, y0), q, color=MUTED, stroke_width=2) for x, q in zip(XS, pts)])
         broken = VMobject(color=SKY, stroke_width=6).set_points_as_corners(pts)
         u_l = M("u(x)", size=44, color=SKY).next_to(pts[3], RIGHT, buff=0.25)
-        note = T("node values: a sketch", size=30, color=MUTED).next_to(base, UP, buff=0.12)
-        note.align_to(base, LEFT).shift(0.15 * RIGHT)
+        note = T("node values: a sketch", size=30, color=MUTED).move_to(p(-3.6, 3.4))
         plot = VGroup(base, sticks, dots, broken, u_l, note)
         self.beat("Between the nodes, we assume the displacement is a straight line. So once we know the four "
                   "node values, we know u everywhere.",
@@ -94,7 +95,7 @@ class S31_Discretize(VScene):
         # ---- beat 4: explode, equal end displacements at each gap, reassemble ----
         ends = VGroup(*[VGroup(Dot(p(XS[i], YB), radius=0.09, color=INK),
                                Dot(p(XS[i + 1], YB), radius=0.09, color=INK)) for i in range(3)])
-        pieces = [VGroup(fb.elems[i], fb.tags[i], ends[i]) for i in range(3)]
+        pieces = [VGroup(fb.elems[i], tags[i], ends[i]) for i in range(3)]
         SH = [0.0, 1.0, 2.0]                     # how far each element slides right
         ya = YB - 0.62
         gaps = VGroup()
@@ -108,15 +109,18 @@ class S31_Discretize(VScene):
         same = T("same end displacement", size=32, color=INK2).move_to(p(-0.6, YB - 2.3))
         fb.nodes.set_opacity(0)                  # shared node dots hide; each element shows its own end dots
         self.add(ends)
-        self.beat("Neighbors share a node, so the displacement can't jump: the right end of element one moves "
-                  "exactly as much as the left end of element two.",
-                  [FadeOut(plot), FadeOut(qs), FadeOut(dof), FadeOut(dof_s), FadeOut(dof_g)],
-                  [pieces[1].animate.shift(SH[1] * RIGHT), pieces[2].animate.shift(SH[2] * RIGHT),
-                   load.animate.shift(SH[2] * RIGHT)],
-                  [FadeIn(gaps), FadeIn(same)], Circumscribe(gaps[0], color=SKY), .05,
-                  [FadeOut(gaps), FadeOut(same), pieces[1].animate.shift(-SH[1] * RIGHT),
-                   pieces[2].animate.shift(-SH[2] * RIGHT), load.animate.shift(-SH[2] * RIGHT)],
-                  w=(.08, .2, .17, .25, .25))
+        with self.say("Neighbors share a node, so the displacement can't jump: the right end of element one "
+                      "moves exactly as much as the left end of element two.") as d:
+            self.play(FadeOut(plot), FadeOut(qs), FadeOut(dof), FadeOut(dof_s), FadeOut(dof_g), run_time=.08 * d)
+            self.play(pieces[1].animate.shift(SH[1] * RIGHT), pieces[2].animate.shift(SH[2] * RIGHT),
+                      load.animate.shift(SH[2] * RIGHT), run_time=.2 * d)
+            self.play(FadeIn(gaps), FadeIn(same), run_time=.15 * d)
+            self.play(Circumscribe(gaps[0], color=SKY), run_time=.25 * d)
+            self.snap("exploded")
+            self.wait(.05 * d)
+            self.play(FadeOut(gaps), FadeOut(same), pieces[1].animate.shift(-SH[1] * RIGHT),
+                      pieces[2].animate.shift(-SH[2] * RIGHT), load.animate.shift(-SH[2] * RIGHT),
+                      run_time=.25 * d)
         self.remove(ends)
         fb.nodes.set_opacity(1)
 

@@ -29,7 +29,7 @@ gap = max(((ue(a) + (ue(b) - ue(a)) * (t - a) / (b - a)) - ue(t))
           for a, b in zip([0] + XS[:-1], XS) for t in np.linspace(a, b, 2001))
 assert np.isclose(gap, 1 / 36, rtol=1e-4)
 
-FEMC = interpolate_color(SKY, WHITE, 0.5)
+FEMC = interpolate_color(ManimColor(SKY), ManimColor(WHITE), 0.5)
 
 
 class S44_Compare_u(VScene):
@@ -57,7 +57,7 @@ class S44_Compare_u(VScene):
 
         self.beat("This column has an exact answer: u of x equals rho g over E, times x squared over two minus L x. Let's plot it.",
                   Write(eq), [Create(ax), FadeIn(xt), FadeIn(xl), FadeIn(yl)], Create(curve), .1,
-                  w=(.4, .2, .25, .15))
+                  w=(.45, .2, .35))
 
         # ---- node values ---------------------------------------------------------------------------
         dots, guides, labs = VGroup(), VGroup(), VGroup()
@@ -70,7 +70,7 @@ class S44_Compare_u(VScene):
 
         self.beat("At x over L equal to one third, two thirds and one, it gives minus five ninths, minus eight ninths and minus one. The exact values at the nodes.",
                   *[[Create(guides[i]), GrowFromCenter(dots[i]), FadeIn(labs[i], shift=0.2 * DOWN)] for i in range(3)],
-                  .2, w=(.27, .27, .26, .2))
+                  .2, w=(1, 1, 1))
 
         # ---- FEM broken line -----------------------------------------------------------------------
         pts = [ax.c2p(0, 0)] + [ax.c2p(x, v) for x, v in zip(XS, VALS)]
@@ -86,7 +86,7 @@ class S44_Compare_u(VScene):
         legend.move_to(ax.c2p(0.74, -0.28)).align_to(ax.c2p(0.7, 0), LEFT)
 
         self.beat("Now the finite element answer: straight lines between those same node values.",
-                  Create(fem), FadeIn(legend), .2, w=(.55, .25, .2))
+                  Create(fem), FadeIn(legend), .2, w=(.7, .3))
 
         # ---- nodes exact, interior gaps ------------------------------------------------------------
         rings = VGroup(*[Circle(radius=0.24, color=GOOD, stroke_width=5).move_to(d) for d in dots])
