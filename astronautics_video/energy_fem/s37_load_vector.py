@@ -18,7 +18,7 @@ assert np.isclose(_Q1, _c * _l / 2) and np.isclose(_Q2, _c * _l / 2)
 assert np.isclose(_Q1 + _Q2, _c * _l)             # half the element's total load c l to each node
 assert np.isclose(_c * _l / 2, -50)
 
-X1, X2, YB, HB = -4.5, 4.5, 1.9, 0.6               # element ends, bar centre height, bar height
+X1, X2, YB, HB = -4.5, 4.5, 1.9, 0.75               # element ends, bar centre height, bar height
 WE = {"W_e": EMBER, "c": ROSE, "l": INK}
 
 
@@ -100,20 +100,20 @@ class S37_Load_Vector(VScene):
 
         # ---- beat 4: f constant = c ----
         fc = M(r"f=c", size=44, color=ROSE).move_to(f_lab)
-        eqQ1 = E(r"Q_1|=|c\,l\int_0^1(1-s)\,ds|=|\frac{cl}{2}", size=48, cmap=WE)
-        eqQ2 = E(r"Q_2|=|c\,l\int_0^1 s\,ds|=|\frac{cl}{2}", size=48, cmap=WE)
+        eqQ1 = E(r"Q_1|=|c|\,l\int_0^1(1-s)\,ds|=|\frac{cl}{2}", size=48, cmap=WE)
+        eqQ2 = E(r"Q_2|=|c|\,l\int_0^1 s\,ds|=|\frac{cl}{2}", size=48, cmap=WE)
         eqQ1.move_to([2.0, -0.75, 0])
         eqQ2.move_to([2.0, -2.6, 0])
         eqQ2.align_to(eqQ1, LEFT)
         with self.say("Now take the common case, f constant, equal to c. The integral of one minus s from zero to one is one half, and so is the integral of s. So Q one and Q two are both c l over two.") as d:
             self.play(ReplacementTransform(f_lab, fc), vcard.animate.scale(0.9).move_to([-4.6, -1.7, 0]),
                       FadeOut(VGroup(qa1, qa2, q1l, q2l)), run_time=.16 * d)
-            self.play(Write(eqQ1[:3]), run_time=.14 * d)
-            self.play(Circumscribe(eqQ1[2], color=LIME), run_time=.12 * d)
-            self.play(Write(eqQ2[:3]), run_time=.14 * d)
-            self.play(Circumscribe(eqQ2[2], color=LIME), run_time=.12 * d)
-            self.play(Write(eqQ1[3:]), Write(eqQ2[3:]), run_time=.16 * d)
-            self.play(FadeIn(glow(eqQ1[4], ROSE)), FadeIn(glow(eqQ2[4], ROSE)), run_time=.1 * d)
+            self.play(Write(eqQ1[:4]), run_time=.14 * d)
+            self.play(Circumscribe(eqQ1[3], color=LIME), run_time=.12 * d)
+            self.play(Write(eqQ2[:4]), run_time=.14 * d)
+            self.play(Circumscribe(eqQ2[3], color=LIME), run_time=.12 * d)
+            self.play(Write(eqQ1[4:]), Write(eqQ2[4:]), run_time=.16 * d)
+            self.play(FadeIn(glow(eqQ1[5], ROSE)), FadeIn(glow(eqQ2[5], ROSE)), run_time=.1 * d)
             self.wait(.06 * d)
 
         # ---- beat 5: total c l, half to each node ----
@@ -133,6 +133,6 @@ class S37_Load_Vector(VScene):
                       *[a.animate.scale(0.3).move_to([X2 + 0.8, YB, 0]).set_opacity(0) for a in right_arrows],
                       GrowArrow(big1), GrowArrow(big2), run_time=.3 * d)
             self.play(FadeIn(h1, shift=DOWN * 0.2), FadeIn(h2, shift=DOWN * 0.2),
-                      Circumscribe(eqQ1[4], color=ROSE), Circumscribe(eqQ2[4], color=ROSE), run_time=.2 * d)
+                      Circumscribe(eqQ1[5], color=ROSE), Circumscribe(eqQ2[5], color=ROSE), run_time=.2 * d)
             self.wait(.17 * d)
         self.wipe()

@@ -33,7 +33,7 @@ for _ in range(5):
     grad = np.array([(Pi(uv + h * e) - Pi(uv - h * e)) / (2 * h) for e in np.eye(2)])
     assert np.allclose(grad, k @ uv - Q, atol=1e-5)
 
-X1, X2, YB = -5.6, -1.2, -1.0          # node positions and bar axis (left half of the frame)
+X1, X2, YB = -5.85, -1.05, -1.2          # node positions and bar axis (left half of the frame)
 RX = 3.7                               # centre of the right-hand column
 
 
@@ -47,7 +47,7 @@ class S38_Element_Recap(VScene):
         rod = bar(X1, X2, y=YB, h=0.5)
         n1, n2 = node(p1, r=0.11), node(p2, r=0.11)
         top = YB + 0.25
-        h1, h2 = 0.55, 2.45
+        h1, h2 = 0.7, 3.0
         a1, a2 = np.array([X1, top + h1, 0]), np.array([X2, top + h2, 0])
         uline = Line(a1, a2, color=SKY, stroke_width=7)
         d1 = DashedLine(np.array([X1, top, 0]), a1, color=SKY, stroke_width=3)
@@ -77,16 +77,16 @@ class S38_Element_Recap(VScene):
 
         # ---- beat 2: the element is a spring; spread load -> two nodal forces
         spr = spring(p1, p2, coils=6, amp=0.32)
-        lk = E(r"k|=|\frac{EA}{l}", size=44).move_to([(X1 + X2) / 2, YB + 1.25, 0])
+        lk = E(r"k|=|\frac{EA}{l}", size=44).move_to([(X1 + X2) / 2, YB + 2.35, 0])
         nd = 7
         xs = np.linspace(X1 + 0.3, X2 - 0.75, nd)
         spread = VGroup(*[Arrow(np.array([x, YB + 0.62, 0]), np.array([x + 0.48, YB + 0.62, 0]), buff=0,
                                 color=ROSE, stroke_width=5, max_tip_length_to_length_ratio=0.4) for x in xs])
         lc = M("f = c", size=40, color=ROSE).next_to(spread, UP, buff=0.12)
-        fL = Arrow(p1 + LEFT * 1.25, p1, buff=0, color=ROSE, stroke_width=7)
-        fR = Arrow(p2, p2 + RIGHT * 1.25, buff=0, color=ROSE, stroke_width=7)
-        lfL = M(r"\frac{cl}{2}", size=42, color=ROSE).next_to(fL, UP, buff=0.15)
-        lfR = M(r"\frac{cl}{2}", size=42, color=ROSE).next_to(fR, UP, buff=0.15)
+        fL = Arrow(p1 + LEFT * 1.05, p1, buff=0, color=ROSE, stroke_width=7)
+        fR = Arrow(p2, p2 + RIGHT * 1.05, buff=0, color=ROSE, stroke_width=7)
+        lfL = M(r"\frac{cl}{2}", size=46, color=ROSE).next_to(fL, UP, buff=0.15)
+        lfR = M(r"\frac{cl}{2}", size=46, color=ROSE).next_to(fR, UP, buff=0.15)
 
         eq_k = E(r"k|=|\frac{EA}{l}", size=50).move_to([RX, 0.4, 0])
         eq_Q = E(r"Q_1|=|Q_2|=|\frac{cl}{2}", size=50, cmap=EXTRA).move_to([RX, -1.4, 0])
@@ -122,11 +122,11 @@ class S38_Element_Recap(VScene):
             self.wait(.2 * d)
 
         # ---- beat 4: the summary card
-        box = key_box(E(r"u|(|s|)|=|(1-|s|)|u_1|+|s|u_2", size=46),
-                      E(r"k|=|\frac{EA}{l}|\begin{bmatrix}1&-1\\-1&1\end{bmatrix}", size=46),
-                      E(r"Q_1|=|Q_2|=|\frac{cl}{2}|\quad (f = c)", size=46, cmap=EXTRA),
+        box = key_box(E(r"u|(|s|)|=|(1-|s|)|u_1|+|s|u_2", size=54),
+                      E(r"k|=|\frac{EA}{l}|\begin{bmatrix}1&-1\\-1&1\end{bmatrix}", size=54),
+                      E(r"Q_1|=|Q_2|=|\frac{cl}{2}|\quad (f = c)", size=54, cmap=EXTRA),
                       label="ONE ELEMENT")
-        fit(box, 12.5, 7.0)
+        fit(box, 12.5, 7.2)
         box.move_to(ORIGIN + DOWN * 0.1)
         self.beat("Here's everything about one element in one place.",
                   [FadeOut(VGroup(spr, n1, n2, dim, ll, lk, fL, fR, lfL, lfR, eq_pi, eq_kq, halo, note))], FadeIn(box, shift=UP * 0.2), .4,

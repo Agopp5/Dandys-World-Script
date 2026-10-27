@@ -58,7 +58,7 @@ class S31_Discretize(VScene):
                   [FadeIn(wl), FadeIn(fb)], FadeIn(load), .1,
                   [FadeIn(el_t), GrowArrow(el_a), Indicate(fb.elems[1], color=LILAC)], .1,
                   [FadeIn(nd_t), LaggedStart(*[GrowArrow(a) for a in nd_a], lag_ratio=.2)],
-                  w=(.25, .1, .05, .25, .05, .3))
+                  w=(.25, .1, .3, .35))
 
         # ---- beat 2: q1..q4 under the nodes, 4 degrees of freedom ----
         qs = VGroup(*[qlab(i) for i in range(1, 5)])
@@ -72,7 +72,7 @@ class S31_Discretize(VScene):
                   [FadeOut(nd_t), FadeOut(nd_a)],
                   LaggedStart(*[FadeIn(q, shift=.2 * DOWN) for q in qs], lag_ratio=.5), .1,
                   [FadeIn(dof), FadeIn(dof_s)], FadeIn(dof_g),
-                  w=(.08, .4, .05, .2, .27))
+                  w=(.08, .42, .22, .28))
 
         # ---- beat 3: straight lines between node values ----
         y0 = YB + H / 2 + 0.45
@@ -116,7 +116,7 @@ class S31_Discretize(VScene):
                   [FadeIn(gaps), FadeIn(same)], Circumscribe(gaps[0], color=SKY), .05,
                   [FadeOut(gaps), FadeOut(same), pieces[1].animate.shift(-SH[1] * RIGHT),
                    pieces[2].animate.shift(-SH[2] * RIGHT), load.animate.shift(-SH[2] * RIGHT)],
-                  w=(.08, .2, .15, .25, .07, .25))
+                  w=(.08, .2, .17, .25, .25))
         self.remove(ends)
         fb.nodes.set_opacity(1)
 
@@ -126,7 +126,7 @@ class S31_Discretize(VScene):
                     Dot(p(XS[2], YB), radius=0.1, color=INK))
         u1 = M("u_1", size=44, color=SKY).move_to(p(XS[1], YB + LIFT + 0.75))
         u2 = M("u_2", size=44, color=SKY).move_to(p(XS[2], YB + LIFT + 0.75))
-        e2_t = T("element 2", size=36, color=INK).next_to(p(XS[1], YB + LIFT, 0), LEFT, buff=0.5)
+        e2_t = T("element 2", size=36, color=INK).next_to(p(XS[1], YB + LIFT), LEFT, buff=0.5)
         links = VGroup(*[Arrow(p(x, YB + LIFT - H / 2), p(x, YB + H / 2), buff=0.12, color=SKY, stroke_width=4,
                                max_tip_length_to_length_ratio=0.12) for x in (XS[1], XS[2])])
         qs2 = VGroup(qlab(2), qlab(3))
@@ -136,6 +136,6 @@ class S31_Discretize(VScene):
                   "For element two, its u one is the bar's q two, and its u two is q three.",
                   FadeIn(e2), e2.animate.shift(LIFT * UP), [FadeIn(e2_t), FadeIn(u1), FadeIn(u2)], .1,
                   [GrowArrow(links[0]), GrowArrow(links[1]), FadeIn(qs2)], FadeIn(eqs[0]), FadeIn(eqs[1]),
-                  w=(.05, .12, .18, .05, .2, .2, .2))
+                  w=(.05, .13, .2, .22, .2, .2))
         self.wait(1)
         self.wipe()

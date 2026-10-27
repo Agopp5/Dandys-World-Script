@@ -16,8 +16,8 @@ assert np.isclose(((_x1 + _l + _u2) - (_x1 + _u1)) - _l, _u2 - _u1)
 
 U1, U2 = 0.45, 1.15          # drawn nodal displacements (illustrative, data units of the u axis)
 X0 = -6.4                    # s = 0: node 1 of the element
-YB = -1.55                   # element bar height
-YD = -3.15                   # the stretched copy
+YB = -1.45                   # element bar height
+YD = -3.2                   # the stretched copy
 
 
 def tex(s, size=36, color=INK):
@@ -29,22 +29,22 @@ class S34_Strain(VScene):
 
     def construct(self):
         # ---- left half: the u(s) line above, the element below, aligned (s = 0 at node 1, s = 1 at node 2)
-        ax = Axes(x_range=[0, 1.15, 1], y_range=[0, 1.4, 1], x_length=5.0, y_length=2.6, tips=True,
+        ax = Axes(x_range=[0, 1.15, 1], y_range=[0, 1.4, 1], x_length=5.6, y_length=3.0, tips=True,
                   axis_config={"color": AXIS, "include_numbers": False, "stroke_width": 3})
-        ax.move_to([X0 + 2.5, 1.35, 0], aligned_edge=ORIGIN)
+        ax.move_to([X0 + 2.8, 1.75, 0])
         ax.shift([X0 - ax.c2p(0, 0)[0], 0, 0])
         X1 = ax.c2p(1, 0)[0]
-        s_lab = tex("s", 40, LIME).next_to(ax.x_axis.get_end(), DOWN, buff=.18)
-        u_lab = tex("u", 40, SKY).next_to(ax.y_axis.get_end(), LEFT, buff=.18)
-        t0 = tex("0", 36, INK2).next_to(ax.c2p(0, 0), DOWN, buff=.15)
-        t1 = tex("1", 36, INK2).next_to(ax.c2p(1, 0), DOWN, buff=.15)
+        s_lab = tex("s", 44, LIME).next_to(ax.x_axis.get_end(), DOWN, buff=.18)
+        u_lab = tex("u", 44, SKY).next_to(ax.y_axis.get_end(), LEFT, buff=.18)
+        t0 = tex("0", 40, INK2).next_to(ax.c2p(0, 0), DOWN, buff=.15)
+        t1 = tex("1", 40, INK2).next_to(ax.c2p(1, 0), DOWN, buff=.15)
         tick1 = Line(ax.c2p(1, 0) + .1 * DOWN, ax.c2p(1, 0) + .1 * UP, color=AXIS, stroke_width=3)
         frame = VGroup(ax, s_lab, u_lab, t0, t1, tick1)
 
         line = Line(ax.c2p(0, U1), ax.c2p(1, U2), color=SKY, stroke_width=6)
         d1, d2 = Dot(ax.c2p(0, U1), color=SKY, radius=.09), Dot(ax.c2p(1, U2), color=SKY, radius=.09)
-        l1 = tex("u_1", 36, SKY).next_to(d1, LEFT, buff=.15)
-        l2 = tex("u_2", 36, SKY).next_to(d2, UL, buff=.12)
+        l1 = tex("u_1", 40, SKY).next_to(d1, LEFT, buff=.15)
+        l2 = tex("u_2", 40, SKY).next_to(d2, UL, buff=.12)
         uline = VGroup(line, d1, d2, l1, l2)
 
         bar0 = bar(X0, X1, y=YB)
@@ -53,7 +53,7 @@ class S34_Strain(VScene):
         elem = VGroup(bar0, n1, n2, drop1)
 
         # ---- right half: the chain rule
-        eq1 = E(r"\frac{du}{dx}|=|\frac{du}{ds}|\cdot|\frac{ds}{dx}", size=54).move_to([3.7, 2.45, 0])
+        eq1 = E(r"\frac{du}{dx}|=|\frac{du}{ds}|\qquad\cdot\qquad|\frac{ds}{dx}", size=56).move_to([4.0, 2.5, 0])
 
         self.beat("Strain is d u d x. Our u is written in s, so use the chain rule: d u d x equals d u d s, "
                   "times d s d x.",
@@ -61,16 +61,18 @@ class S34_Strain(VScene):
                   Write(eq1), w=(.25, .25, .5))
 
         # ---- beat 2: each factor below its spot; the slope triangle on the plot; the length l under the bar
-        f1 = E(r"u_2|-|u_1", size=48).next_to(eq1[2], DOWN, buff=.9)
-        f2 = E(r"\frac{1}{l}", size=48).next_to(eq1[4], DOWN, buff=.75)
+        f1 = E(r"u_2|-|u_1", size=50)
+        f1.move_to([eq1[2].get_center()[0], 0, 0])
+        f2 = E(r"\frac{1}{l}", size=50)
+        f2.move_to([eq1[4].get_center()[0], 0, 0])
         a1 = Arrow(eq1[2].get_bottom(), f1.get_top(), buff=.12, color=MUTED, stroke_width=4,
                    max_tip_length_to_length_ratio=.3)
         a2 = Arrow(eq1[4].get_bottom(), f2.get_top(), buff=.12, color=MUTED, stroke_width=4,
                    max_tip_length_to_length_ratio=.3)
         run = DashedLine(ax.c2p(0, U1), ax.c2p(1, U1), color=MUTED, stroke_width=3)
         rise = Line(ax.c2p(1, U1), ax.c2p(1, U2), color=SKY, stroke_width=5)
-        run_l = tex("1", 36, INK2).next_to(run, DOWN, buff=.12)
-        rise_l = tex(r"u_2 - u_1", 36, SKY).next_to(rise, RIGHT, buff=.15)
+        run_l = tex("1", 40, INK2).next_to(run, DOWN, buff=.12)
+        rise_l = tex(r"u_2 - u_1", 40, SKY).next_to(rise, RIGHT, buff=.15)
         span_l = VGroup(Line([X0, YB - .5, 0], [X1, YB - .5, 0], color=INK2, stroke_width=3),
                         Line([X0, YB - .38, 0], [X0, YB - .62, 0], color=INK2, stroke_width=3),
                         Line([X1, YB - .38, 0], [X1, YB - .62, 0], color=INK2, stroke_width=3))
@@ -85,7 +87,7 @@ class S34_Strain(VScene):
             self.wait(.16 * d)
 
         # ---- beat 3: the strain, boxed; the element stretches by u2 - u1
-        eq3 = E(r"\varepsilon|=|\frac{u_2 - u_1}{l}", size=56).move_to([3.7, -1.25, 0])
+        eq3 = E(r"\varepsilon|=|\frac{u_2 - u_1}{l}", size=56).move_to([4.0, -1.55, 0])
         tint(eq3[2], [((0, 2), SKY), ((3, 5), SKY)])
         box = SurroundingRectangle(eq3, color=ACCENT, buff=.22, corner_radius=.1, stroke_width=4)
         DX1, STR = .35, .55   # drawn: rigid shift u1, extra length u2 - u1
@@ -96,7 +98,7 @@ class S34_Strain(VScene):
         ext = VGroup(Line([X1 + DX1, YD + .42, 0], [X1 + DX1 + STR, YD + .42, 0], color=SKY, stroke_width=4),
                      Line([X1 + DX1, YD + .3, 0], [X1 + DX1, YD + .54, 0], color=SKY, stroke_width=3),
                      Line([X1 + DX1 + STR, YD + .3, 0], [X1 + DX1 + STR, YD + .54, 0], color=SKY, stroke_width=3))
-        ext_l = tex(r"u_2 - u_1", 36, SKY).next_to(ext, UP, buff=.1)
+        ext_l = tex(r"u_2 - u_1", 40, SKY).next_to(ext, UP, buff=.1)
         with self.say("So the strain is u two minus u one, over l. The element's change in length, over its length. "
                       "Exactly what strain means.") as d:
             self.play(Write(eq3), run_time=.2 * d)
@@ -108,7 +110,7 @@ class S34_Strain(VScene):
             self.wait(.16 * d)
 
         # ---- beat 4: constant in s: a flat ACCENT line across the element; a probe slides along both
-        YF = -.85
+        YF = -.75
         flat = Line([X0, YF, 0], [X1, YF, 0], color=ACCENT, stroke_width=7)
         eps_l = tex(r"\varepsilon", 44, ACCENT).next_to(flat, UP, buff=.12)
         note = T("constant in each element", size=34, color=INK2).next_to(box, DOWN, buff=.4)

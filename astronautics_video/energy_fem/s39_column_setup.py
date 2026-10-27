@@ -15,9 +15,9 @@ rho, A_, g = 2.7e-9, 100.0, 9810.0               # any positive values: the sign
 assert -rho * A_ * g < 0
 
 # geometry (frame units)
-BASE, TOP = -3.0, 2.3
+BASE, TOP = -3.1, 2.5
 H = TOP - BASE
-CX_L, CX_R, WID = -4.0, 2.0, 0.72
+CX_L, CX_R, WID = -3.9, 1.9, 1.0
 
 
 def column(cx):
@@ -70,11 +70,11 @@ class S39_Column_Setup(VScene):
 
         # ---- beat 3: the weight as a distributed load, f = c = -rho A g
         ys = np.linspace(BASE + 0.75, TOP - 0.05, 7)
-        arrows = VGroup(*[force(np.array([CX_L + WID / 2 + 0.35, y, 0]), d=DOWN, length=0.55)
+        arrows = VGroup(*[force(np.array([CX_L + WID / 2 + 0.35, y, 0]), d=DOWN, length=0.65)
                           for y in ys])
         f_lab = M("f", size=44, color=ROSE).next_to(arrows, RIGHT, buff=0.25)
         rag = E(r"\rho A g", size=56).move_to([2.6, 1.3, 0])
-        note = TX(r"density $\times$ area $\times$ gravity", size=32).set_color(MUTED)
+        note = M(r"\text{density} \times \text{area} \times \text{gravity}", size=36, color=MUTED)
         eqA = E(r"f|=|-|\rho A g", size=56).move_to([2.6, 1.3, 0])
         eqB = E(r"f|=|c|=|-|\rho A g", size=56).move_to([2.6, 1.3, 0])
         note.next_to(eqB, DOWN, buff=0.55)
@@ -93,18 +93,18 @@ class S39_Column_Setup(VScene):
             self.play(Indicate(eqA[2], color=ACCENT, scale_factor=1.4), run_time=.08 * d)
             self.wait(.04 * d)
             self.play(*morph(eqA, eqB, [(0, 0), (1, 1), (2, 4), (3, 5)]), run_time=.1 * d)
-            self.play(FadeIn(glow(eqB[2], ACCENT)), run_time=.06 * d)
+            self.play(Indicate(eqB[2], color=ACCENT, scale_factor=1.4), run_time=.06 * d)
             self.wait(.02 * d)
 
         # ---- beat 4: three equal elements, nodes 1..4, q1..q4, l = L/3
-        floor_r = wall(np.array([CX_R, BASE, 0]), side=DOWN, h=2.4)
+        floor_r = wall(np.array([CX_R, BASE, 0]), side=DOWN, h=WID + 0.9)
         whole_r = column(CX_R)
         ny = [BASE + k * H / N_EL for k in range(N_EL + 1)]
         elems = VGroup(*[Rectangle(width=WID, height=H / N_EL, stroke_color=INK2, stroke_width=3,
                                    fill_color=SURFACE, fill_opacity=1).move_to([CX_R, (ny[k] + ny[k + 1]) / 2, 0])
                          for k in range(N_EL)])
         dots = VGroup(*[node(np.array([CX_R, y, 0]), r=0.11) for y in ny]).set_z_index(3)
-        nums = VGroup(*[M(str(k + 1), size=44).next_to([CX_R - WID / 2, y, 0], LEFT, buff=0.35)
+        nums = VGroup(*[M(str(k + 1), size=44).next_to([CX_R - WID / 2, y + (0.3 if k == 0 else 0), 0], LEFT, buff=0.55)
                         for k, y in enumerate(ny)])
         q_arr = VGroup(*[Arrow([CX_R + WID / 2 + 0.25, y - 0.05, 0], [CX_R + WID / 2 + 0.25, y + 0.6, 0],
                                buff=0, color=SKY, stroke_width=5, max_tip_length_to_length_ratio=0.35)
