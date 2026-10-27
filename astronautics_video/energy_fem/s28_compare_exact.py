@@ -143,7 +143,7 @@ class S28_Compare_Exact(VScene):
                   [FadeIn(d_ex), FadeIn(v_ex), Write(m2)], GrowFromCenter(gap),
                   [FadeIn(area), FadeIn(n1)], .05,
                   [Circumscribe(tip, color=GOLD, shape=Circle), FadeIn(n2)], .1,
-                  w=(.05, .17, .03, .17, .08, .2, .05, .15, .1))
+                  w=(.05, .2, .2, .1, .22, .15))
 
         # ---------- beat 5: a real structure ----------
         pts, camber, half = rib_outline(0.0, 6.2)
@@ -174,5 +174,5 @@ class S28_Compare_Exact(VScene):
                   [FadeOut(figure), FadeOut(m1), FadeOut(m2), FadeOut(n1), FadeOut(n2)], FadeIn(s1), .05,
                   FadeIn(s2), .05, [FadeIn(s3), FadeIn(s4), DrawBorderThenFill(rib), FadeIn(rib_lab)],
                   [FadeIn(holes), Create(spar)], FadeIn(qm, scale=0.5), .15,
-                  w=(.08, .1, .05, .15, .05, .2, .1, .1, .17))
+                  w=(.08, .12, .15, .22, .1, .1))
         self.wipe()

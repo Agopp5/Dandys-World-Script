@@ -196,6 +196,6 @@ class S27_Assume_Shape(VScene):
                   [FadeOut(VGroup(notes, e_tip, a_grp)), FadeIn(big)],
                   [FadeIn(k1), Indicate(odot)], [FadeIn(k2), Indicate(a_lab)], FadeIn(k3),
                   self.spotlight(big, live_line), .15,
-                  w=(.12, .15, .15, .15, .2, .23), style="slower and deliberate, stressing the key words")
+                  w=(.12, .15, .15, .15, .2), style="slower and deliberate, stressing the key words")
         knob.clear_updaters()
         self.wipe()

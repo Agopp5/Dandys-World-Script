@@ -21,7 +21,7 @@ assert np.all(np.diff(ushape(np.linspace(0, 1, 201))) > 0)  # every point moves 
 
 X0, X1 = -5.0, 5.0        # bar ends on screen (x = 0 and x = L)
 YB, BH = -0.9, 0.62       # bar centre line and height
-Y0, HU = 0.05, 2.45       # u(x) plot: baseline and height of the tip value
+Y0, HU = 0.35, 2.3        # u(x) plot: baseline and height of the tip value
 YA = -2.35                # x axis
 
 
@@ -110,16 +110,16 @@ class S23_Bar_Problem(VScene):
         s16, s32, s64 = stems(16), stems(32), stems(64, width=3)
         pts = [[cx(t), cy(t), 0] for t in np.linspace(0, 1, 120)] + [[X1, Y0, 0], [X0, Y0, 0]]
         band = Polygon(*pts, stroke_width=0, fill_color=SKY, fill_opacity=0.45)
-        ql = E(r"q_1|,\ |q_2|,\ |q_3|,\ |\dots", size=52).move_to([-3.4, 3.25, 0])
+        ql = E(r"q_1|,\ |q_2|,\ |q_3|,\ |\dots", size=52).move_to([-3.6, 3.35, 0])
         qx = strike(ql)
-        inf = T("infinitely many unknowns", size=42, color=INK).move_to([-2.2, 2.0, 0])
+        inf = T("infinitely many unknowns", size=42, color=INK).move_to([-3.3, 2.45, 0])
         with self.say("So how many unknowns is that? Every point has its own displacement: infinitely many. We can't "
                       "list them as q one, q two, q three.") as d:
             self.play(FadeOut(st8), FadeIn(s16), run_time=.1 * d)
             self.play(FadeOut(s16), FadeIn(s32), FadeOut(arrs), FadeOut(dots), run_time=.1 * d)
             self.play(FadeOut(s32), FadeIn(s64), run_time=.1 * d)
             self.play(FadeOut(s64), FadeIn(band), run_time=.12 * d)
-            self.play(FadeIn(backed(inf)), run_time=.12 * d)
+            self.play(FadeIn(inf), run_time=.12 * d)
             self.play(Write(ql), run_time=.16 * d)
             self.play(Create(qx), run_time=.1 * d)
             self.wait(.2 * d)
@@ -133,9 +133,9 @@ class S23_Bar_Problem(VScene):
         r2 = VGroup(badge(2), T("Turn infinitely many unknowns into just a few", size=40)).arrange(RIGHT, buff=0.22)
         rows = VGroup(r1, r2).arrange(DOWN, aligned_edge=LEFT, buff=0.6)
         fit(rows, 13.4, 3)
-        rows.move_to([0, -1.35, 0])
+        rows.move_to([0, 2.3, 0])
         self.beat("Here's the plan. First, find the strain energy and work potential of a bar. Then, find a clever "
                   "way to turn infinitely many unknowns into just a few.",
-                  fig.animate.scale(0.62).move_to([0, 2.1, 0]), FadeIn(r1, shift=UP * .2), .15,
-                  FadeIn(r2, shift=UP * .2), w=(.15, .3, .4))
+                  FadeIn(r1, shift=UP * .2), .15,
+                  FadeIn(r2, shift=UP * .2), w=(.35, .45))
         self.wipe()

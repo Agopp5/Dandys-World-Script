@@ -54,7 +54,7 @@ class S25_Bar_U(VScene):
                   "cross-sectional area, times d x. So it stores one half E epsilon squared, times A d x.",
                   [FadeIn(w), FadeIn(b)], .1, FadeIn(sl), [FadeIn(cross), FadeIn(a_lab), Create(a_ptr)],
                   [GrowFromCenter(br), FadeIn(dx_lab)], Write(eq1),
-                  w=(.12, .1, .12, .2, .16, .3))
+                  w=(.14, .14, .22, .18, .32))
 
         # ---- strain of a slice ------------------------------------------------------------------
         ya = Y + H / 2 + .4

@@ -11,7 +11,7 @@ CM = {"U^*": MINT, "E": LILAC, r"\varepsilon^2": ACCENT, "q^2": SKY}
 # facts: the triangle under sigma = E eps, from 0 to eps0, has area (1/2) eps0 (E eps0) = (1/2) E eps0^2
 for Ev, e0 in [(70000.0, 1e-3), (2.0, 0.75)]:
     xs = np.linspace(0, e0, 2001)
-    assert np.isclose(np.trapz(Ev * xs, xs), 0.5 * e0 * (Ev * e0))
+    assert np.isclose(np.trapezoid(Ev * xs, xs), 0.5 * e0 * (Ev * e0))
     assert np.isclose(0.5 * e0 * (Ev * e0), 0.5 * Ev * e0 ** 2)
 # rescaling: (sigma A)(eps dx) = (sigma eps) A dx, so the force-stretch triangle is the stress-strain one times A dx
 A_, dx_, Ev, e0 = 3.0, 0.2, 5.0, 0.4
