@@ -27,7 +27,7 @@ def mat(rows, color, curly=False):
 
 
 def tick(m):
-    return M(r"\checkmark", size=44, color=GOOD).next_to(m, RIGHT, buff=.3)
+    return M(r"\checkmark", size=48, color=GOOD).next_to(m, RIGHT, buff=.3)
 
 
 class S12_Two_Matrix(VScene):
@@ -51,8 +51,8 @@ class S12_Two_Matrix(VScene):
         self.add(fig)
 
         # beat 1: equations -> matrix rows
-        eq1 = E(r"(k_1+k_2)|q_1|-k_2|q_2|=|F_1", size=46)
-        eq2 = E(r"-k_2|q_1|+k_2|q_2|=|F_2", size=46)
+        eq1 = E(r"(k_1+k_2)|q_1|-k_2|q_2|=|F_1", size=48)
+        eq2 = E(r"-k_2|q_1|+k_2|q_2|=|F_2", size=48)
         paint(eq1, {0: LILAC, 2: LILAC})
         paint(eq2, {0: LILAC, 2: LILAC})
         eq1.move_to([0, 1.15, 0])
@@ -66,8 +66,8 @@ class S12_Two_Matrix(VScene):
         sym = VGroup(Km, qv, es, Fv).arrange(RIGHT, buff=.3).move_to([-.9, -.2, 0])   # beat-2 home
         Ke, qe, Fe = Km.get_entries(), qv.get_entries(), Fv.get_entries()
         box = SurroundingRectangle(Km, color=LILAC, buff=.15)
-        box_lbl = T("stiffness matrix", size=32, color=LILAC).next_to(box, DOWN, buff=.25)
-        echo = E(r"K|q|=|F", size=44).next_to(sym, RIGHT, buff=1.0)
+        box_lbl = T("stiffness matrix", size=36, color=LILAC).next_to(box, DOWN, buff=.25)
+        echo = E(r"K|q|=|F", size=48).next_to(sym, RIGHT, buff=1.0)
         home = sym.get_center()
         sym.move_to([0, -1.75, 0])
 
@@ -91,8 +91,8 @@ class S12_Two_Matrix(VScene):
                   w=(.25, .4, .35))
 
         # beat 3: numbers
-        cards = VGroup(E(r"k_1|=|40\text{ N/mm}", size=34), E(r"k_2|=|20\text{ N/mm}", size=34),
-                       E(r"F_1|=|40\text{ N}", size=34), E(r"F_2|=|20\text{ N}", size=34))
+        cards = VGroup(E(r"k_1|=|40\text{ N/mm}", size=36), E(r"k_2|=|20\text{ N/mm}", size=36),
+                       E(r"F_1|=|40\text{ N}", size=36), E(r"F_2|=|20\text{ N}", size=36))
         cards.arrange_in_grid(2, 2, buff=(.5, .25), cell_alignment=LEFT)
         card = panel(cards).move_to([3.95, y0, 0])
         Nm = mat([["60", "-20"], ["-20", "20"]], LILAC)
@@ -115,8 +115,8 @@ class S12_Two_Matrix(VScene):
 
         # beat 5: solve by adding rows
         X0 = 3.4
-        r1 = E(r"60|q_1|-20|q_2|=|40", size=44)
-        r2 = E(r"-20|q_1|+20|q_2|=|20", size=44)
+        r1 = E(r"60|q_1|-20|q_2|=|40", size=48)
+        r2 = E(r"-20|q_1|+20|q_2|=|20", size=48)
         paint(r1, {0: LILAC, 2: LILAC, 5: ROSE})
         paint(r2, {0: LILAC, 2: LILAC, 5: ROSE})
 
@@ -127,27 +127,27 @@ class S12_Two_Matrix(VScene):
 
         at_eq(r1, 1.0, 4)
         at_eq(r2, .2, 4)
-        plus = M("+", size=44).next_to(r2, LEFT, buff=.35)
+        plus = M("+", size=48).next_to(r2, LEFT, buff=.35)
         rule = Line([plus.get_left()[0], -.25, 0], [r1.get_right()[0], -.25, 0], color=INK2, stroke_width=3)
-        sm = E(r"40|q_1|=|60", size=44)
+        sm = E(r"40|q_1|=|60", size=48)
         paint(sm, {0: LILAC, 3: ROSE})
         at_eq(sm, -.8, 2)
-        q1r = E(r"q_1|=|1.5\text{ mm}", size=44)
+        q1r = E(r"q_1|=|1.5\text{ mm}", size=48)
         at_eq(q1r, -1.75, 1)
         g1 = glow(q1r, SKY)
         st1, st2 = strike(VGroup(r1[2], r1[3])), strike(VGroup(r2[2], r2[3]))
-        q1_home = np.array([-3.7, -1.25, 0])
-        q2_home = np.array([-3.7, -2.25, 0])
+        q1_home = np.array([-4.2, -1.3, 0])
+        q2_home = np.array([-4.2, -2.3, 0])
 
-        r2b = E(r"20|(|q_2|-|1.5|)|=|20", size=44)
+        r2b = E(r"20|(|q_2|-|1.5|)|=|20", size=48)
         paint(r2b, {0: LILAC, 4: SKY, 7: ROSE})
         at_eq(r2b, 1.0, 6)
-        q2r = E(r"q_2|=|2.5\text{ mm}", size=44)
+        q2r = E(r"q_2|=|2.5\text{ mm}", size=48)
         at_eq(q2r, .1, 1)
         g2 = glow(q2r, SKY)
 
         with self.say("Add the two equations: the q two terms cancel, leaving forty q one equals sixty, so q one is one point five millimeters. Then the second equation: twenty times q two minus one point five equals twenty, so q two is two point five millimeters.") as d:
-            self.play(num.animate.scale(.8).move_to([-3.7, .5, 0]), run_time=.05 * d)
+            self.play(num.animate.move_to([-4.2, .5, 0]), run_time=.05 * d)
             self.play(TransformFromCopy(VGroup(Ne[0], Ne[1], Fn.get_entries()[0]), r1),
                       TransformFromCopy(VGroup(Ne[2], Ne[3], Fn.get_entries()[1]), r2), run_time=.09 * d)
             self.play(Indicate(VGroup(r1[2], r1[3]), color=SKY), Indicate(VGroup(r2[2], r2[3]), color=SKY),
@@ -170,12 +170,12 @@ class S12_Two_Matrix(VScene):
         # beat 6: Newton check
         xc = (wp[0] + n1p[0]) / 2
         cut = DashedLine([xc, y0 + .75, 0], [xc, y0 - .75, 0], color=ACCENT, stroke_width=4)
-        L0 = E(r"F_1|+|F_2|=|60\text{ N}", size=40)
-        L1 = E(r"\text{spring 1:}\ \ 60/40|=|1.5\text{ mm}", size=40)
-        L2 = E(r"\text{spring 2:}\ \ 20/20|=|1.0\text{ mm}", size=40)
-        L3 = E(r"q_2-q_1|=|2.5-1.5|=|1.0\text{ mm}", size=40)
+        L0 = E(r"F_1|+|F_2|=|60\text{ N}", size=48)
+        L1 = E(r"\text{spring 1:}\ \ 60/40|=|1.5\text{ mm}", size=48)
+        L2 = E(r"\text{spring 2:}\ \ 20/20|=|1.0\text{ mm}", size=48)
+        L3 = E(r"q_2-q_1|=|2.5-1.5|=|1.0\text{ mm}", size=48)
         lines = VGroup(L0, L1, L2, L3).arrange(DOWN, buff=.42, aligned_edge=LEFT).move_to([2.9, -.3, 0])
-        lines.align_to(np.array([-.3, 0, 0]), LEFT)
+        lines.align_to(np.array([-1.1, 0, 0]), LEFT)
         ticks = [tick(L) for L in (L1, L2, L3)]
         self.beat("Quick check with Newton. Cut through spring one: everything to its right carries forty plus twenty, sixty newtons, so it stretches sixty over forty, one point five. Spring two carries only F two, twenty, so it stretches one. Two point five minus one point five is one. It all agrees.",
                   [Create(cut), Indicate(VGroup(f1, f2), color=ROSE, scale_factor=1.15)],

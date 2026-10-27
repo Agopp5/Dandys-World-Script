@@ -35,7 +35,7 @@ class S26_Bar_W(VScene):
         eqP = E(r"P|u(L)", size=60).move_to(np.array([0, -1.1, 0]))
         paint(eqP, {1: SKY})
         self.beat("The work potential is load times displacement, as always. The tip load P acts where the bar moves u of L, so it gives P times u at L.",
-                  [GrowArrow(fP), FadeIn(lP)], Create(tipbox), [GrowArrow(uL), FadeIn(luL)], .1,
+                  [GrowFromPoint(fP, tip), FadeIn(lP)], Create(tipbox), [GrowArrow(uL), FadeIn(luL)], .1,
                   Write(eqP), w=(.25, .15, .25, .1, .25))
 
         # the spread-out load: a row of small f arrows, and one slice dx
@@ -55,8 +55,8 @@ class S26_Bar_W(VScene):
         lus = M("u", size=44, color=SKY).next_to(us, DOWN, buff=.15)
         eqI = E(r"\int_0^L|f|u|\,dx", size=60).move_to(np.array([0, -2.6, 0]))
         self.beat("The spread-out load acts everywhere. A slice d x carries f d x, and moves u, so add up f u d x along the bar.",
-                  [FadeOut(tipbox), LaggedStart(*[GrowArrow(a) for a in fl], lag_ratio=.12), FadeIn(lf)],
-                  [FadeIn(slc), FadeIn(sdx)], [GrowArrow(fdx), FadeIn(lfdx)], [GrowArrow(us), FadeIn(lus)],
+                  [FadeOut(tipbox), LaggedStart(*[FadeIn(a, shift=.2 * RIGHT) for a in fl], lag_ratio=.12), FadeIn(lf)],
+                  [FadeIn(slc), FadeIn(sdx)], [GrowFromPoint(fdx, fdx.get_left()), FadeIn(lfdx)], [GrowArrow(us), FadeIn(lus)],
                   Write(eqI), w=(.25, .15, .15, .15, .3))
 
         # assemble W, then Pi

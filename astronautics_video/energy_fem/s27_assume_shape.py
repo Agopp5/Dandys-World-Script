@@ -9,9 +9,10 @@ colors(**{"U": MINT, "U_e": MINT, "W": EMBER, r"\Pi": GOLD, "q": SKY, "q_1": SKY
 # facts: check the symbolic results on sample numbers (EA, L, f arbitrary)
 _EA, _L, _f = 2.3, 1.7, 0.9
 _x = np.linspace(0, _L, 20001)
+_trap = getattr(np, "trapezoid", None) or np.trapz
 def _Pi(a):
-    U = np.trapz(0.5 * _EA * a ** 2 * np.ones_like(_x), _x)       # (1/2) int EA (du/dx)^2 dx, du/dx = a
-    W = np.trapz(_f * a * _x, _x)                                  # int f u dx, u = a x
+    U = _trap(0.5 * _EA * a ** 2 * np.ones_like(_x), _x)       # (1/2) int EA (du/dx)^2 dx, du/dx = a
+    W = _trap(_f * a * _x, _x)                                  # int f u dx, u = a x
     assert np.isclose(U, 0.5 * _EA * a ** 2 * _L) and np.isclose(W, 0.5 * _f * a * _L ** 2)
     return U - W
 _a_star = _f * _L / (2 * _EA)

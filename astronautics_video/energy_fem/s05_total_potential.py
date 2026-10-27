@@ -51,24 +51,33 @@ class S05_Total_Potential(VScene):
         nu = T("stored by the spring", 32, INK2).next_to(tu, DOWN, buff=0.15)
         nw = T("given up by the load", 32, INK2).next_to(tw, DOWN, buff=0.15)
         tot = E(r"U|-|W", size=60).move_to(np.array([1.6, 3.0, 0]))
+        wsh = tw[1]
+        start = DashedLine(wsh.get_corner(UL) + 0.25 * LEFT, wsh.get_corner(UR) + 0.25 * RIGHT,
+                           color=EMBER, stroke_width=4)
+        wspan = span(wsh.get_corner(DR) + 0.35 * RIGHT, wsh.get_corner(UR) + 0.35 * RIGHT, "W", side=RIGHT)
+        wspan.set_color(EMBER)
+        ush = tu[1]
+        uspan = span(ush.get_corner(DL) + 0.35 * LEFT, ush.get_left() + 0.35 * LEFT, "U", side=LEFT)
+        uspan.set_color(MINT)
         self.beat("Now combine them. As the spring stretches, it stores energy, U. And the weight gives energy up, "
                   "W. So the total energy of the whole system, spring plus load, is U minus W.",
-                  [FadeIn(fig), FadeIn(tu), FadeIn(tw)], [FadeIn(nu), FadeIn(nw)],
-                  t.animate(rate_func=linear).set_value(1), Write(tot), w=(.12, .1, .53, .25))
+                  [FadeIn(fig), FadeIn(tu), FadeIn(tw), Create(start)], [FadeIn(nu), FadeIn(nw)],
+                  t.animate(rate_func=linear).set_value(1), [FadeIn(uspan), FadeIn(wspan)], Write(tot),
+                  w=(.12, .08, .47, .13, .2))
         for m in (spr, mass, load, tu[0], tw[0]):
             m.clear_updaters()
 
         # ---- beat 2: the definition, spotlit
-        eq = E(r"\Pi|=|U|-|W", size=60).move_to(UP * 0.3)
-        words = T("total potential is strain energy minus work potential", 32, INK2).next_to(eq, DOWN, buff=0.6)
+        eq = E(r"\Pi|=|U|-|W", size=80).move_to(UP * 0.5)
+        words = T("total potential is strain energy minus work potential", 32, INK2).next_to(eq, DOWN, buff=0.7)
         self.beat("This is the definition everything else rests on, so let it land. The total potential energy, "
                   "capital Pi, is strain energy minus work potential. Pi equals U minus W.",
-                  [FadeOut(VGroup(fig, tu, tw, nu, nw))], ReplacementTransform(tot, eq[2:]), FadeIn(eq[:2]),
-                  FadeIn(words), self.spotlight(eq), .3,
+                  [FadeOut(VGroup(fig, tu, tw, nu, nw, start, uspan, wspan))], ReplacementTransform(tot, eq[2:]), FadeIn(eq[:2]),
+                  FadeIn(words), self.spotlight(eq, words), .3,
                   w=(.15, .15, .1, .15, .15), style="slower and deliberate, stressing the key words")
 
         # ---- beat 3: plug in the spring
-        gen = E(r"\Pi|=|\tfrac12|K|q^2|-|F|q", size=60, cmap=CMAP).move_to(UP * 1.5)
+        gen = E(r"\Pi|=|\frac12|K|q^2|-|F|q", size=60, cmap=CMAP).move_to(UP * 1.5)
         num = E(r"\Pi|=|10|q^2|-|100|q", size=60, cmap=CMAP).next_to(gen, DOWN, buff=0.7)
         vals = E(r"K|=|20|,\quad|F|=|100", size=40).next_to(num, DOWN, buff=0.7)
         self.beat("For our spring, that's one half K q squared, minus F q. With twenty and one hundred, Pi equals "
@@ -79,12 +88,13 @@ class S05_Total_Potential(VScene):
                   w=(.08, .2, .12, .15, .2, .25))
 
         # ---- beat 4: the three curves
-        ax = axes([0, 10, 1], [-300, 1000, 100], width=8.4, height=5.8, xlabel="q", ylabel="energy")
+        ax = axes([0, 10, 1], [-300, 1000, 100], width=8.4, height=5.8, xlabel="q", ylabel="")
         ax.to_edge(LEFT, buff=0.9).shift(0.1 * DOWN)
-        ticks = VGroup(*[M(str(v), size=26, color=MUTED).next_to(ax.c2p(0, v), LEFT, buff=0.15)
-                         for v in (500,)],
-                       *[M(str(v), size=26, color=MUTED).next_to(ax.c2p(v, 0), UP + LEFT, buff=0.08)
-                         for v in (5, 10)])
+        ylab = T("energy", 34, INK2).next_to(ax.c2p(0, 1000), RIGHT, buff=0.2)
+        ticks = VGroup(M("500", size=32, color=MUTED).next_to(ax.c2p(0, 500), LEFT, buff=0.15),
+                       M("5", size=32, color=MUTED).next_to(ax.c2p(5, 0), UP, buff=0.12),
+                       M("10", size=32, color=MUTED).next_to(ax.c2p(10, 0), UP, buff=0.12).shift(0.45 * LEFT),
+                       ylab)
         cu = ax.plot(U_, x_range=[0, 10], color=MINT, stroke_width=5)
         cw = ax.plot(W_, x_range=[0, 10], color=EMBER, stroke_width=5)
         cp = ax.plot(Pi_, x_range=[0, 10], color=GOLD, stroke_width=6)
@@ -106,16 +116,16 @@ class S05_Total_Potential(VScene):
 
         # ---- beat 5: values on the bowl
         dots, cards = VGroup(), VGroup()
-        for qq, side_dir in [(0, UP + RIGHT), (3, DOWN), (7, DOWN), (10, UP + LEFT)]:
+        for qq, side_dir in [(0, UP + RIGHT), (3, DOWN), (7, DOWN), (10, UP)]:
             p = ax.c2p(qq, Pi_(qq))
             d = Dot(p, color=GOLD, radius=0.09)
             txt = M(r"%d" % round(Pi_(qq)), size=34, color=GOLD)
-            c = panel(txt, color=GOLD).scale(0.95).next_to(d, side_dir, buff=0.2)
+            c = panel(txt, color=GOLD).scale(0.95).next_to(d, side_dir, buff=0.75 if qq == 10 else 0.2)
             dots.add(d)
             cards.add(c)
         cards[0].shift(0.2 * RIGHT)
         link = DashedLine(ax.c2p(3, -210), ax.c2p(7, -210), color=GOLD, stroke_width=3)
-        sym = T("same height", 28, MUTED).next_to(link, UP, buff=0.12)
+        sym = T("same height", 32, MUTED).next_to(link, UP, buff=0.12)
         self.beat("Look at a few values. At q equals zero, Pi is zero. At three, minus two hundred ten. At seven, "
                   "also minus two hundred ten. At ten, back to zero.",
                   [FadeOut(VGroup(cu, cw, lu, lw)), cp.animate.set_stroke(width=6)],
