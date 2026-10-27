@@ -38,7 +38,7 @@ class S07_Principle(VScene):
         ax = axes([0, 10, 2], [-300, 50, 100], width=6, height=4.6, xlabel="", ylabel="")
         ax.move_to([-3.4, -0.3, 0])
         ax_lab = VGroup(M(r"\Pi", size=40, color=GOLD).next_to(ax.y_axis.get_top(), RIGHT, buff=.15),
-                        M("q", size=40, color=SKY).next_to(ax.x_axis.get_right(), DOWN, buff=.15))
+                        M("q", size=40, color=SKY).next_to(ax.x_axis.get_right(), RIGHT, buff=.25))
         bowl = ax.plot(Pi, x_range=[0, 10], color=GOLD, stroke_width=5)
         dots, tags, drops, ticks = {}, {}, {}, {}
         for q, tex, side in TRIALS:

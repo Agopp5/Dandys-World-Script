@@ -61,7 +61,7 @@ class S23_Bar_Problem(VScene):
         self.beat("So far every structure had a handful of points that move. Now take a bar: fixed to a wall at the "
                   "left, pulled along its length by a load spread over it, f per unit length, and a load P at the tip.",
                   [FadeIn(wl), FadeIn(barr)], Create(axg), .1, [FadeIn(dl, lag_ratio=.2), FadeIn(flab)],
-                  [FadeIn(parr, shift=RIGHT * .3), FadeIn(plab)], w=(.25, .15, .1, .25, .25))
+                  [FadeIn(parr, shift=RIGHT * .3), FadeIn(plab)], w=(.25, .15, .25, .25))
 
         # ---- beat 2: a bar stretches; a beam bends
         bl = T("bar: stretches", size=40, color=INK).move_to([-3.3, 2.75, 0])
@@ -104,7 +104,7 @@ class S23_Bar_Problem(VScene):
                   "Call it u of x. At the wall, u is zero.",
                   [FadeIn(dots), LaggedStart(*[GrowArrow(a) for a in arrs], lag_ratio=.15)], .05,
                   [Create(base), Create(curve), LaggedStart(*[Create(s) for s in st8], lag_ratio=.1)],
-                  FadeIn(ulab), [FadeIn(wdot), FadeIn(u0)], w=(.3, .05, .3, .12, .23))
+                  FadeIn(ulab), [FadeIn(wdot), FadeIn(u0)], w=(.3, .3, .12, .23))
 
         # ---- beat 4: the arrows multiply into a continuous band
         s16, s32, s64 = stems(16), stems(32), stems(64, width=3)
@@ -137,5 +137,5 @@ class S23_Bar_Problem(VScene):
         self.beat("Here's the plan. First, find the strain energy and work potential of a bar. Then, find a clever "
                   "way to turn infinitely many unknowns into just a few.",
                   fig.animate.scale(0.62).move_to([0, 2.1, 0]), FadeIn(r1, shift=UP * .2), .15,
-                  FadeIn(r2, shift=UP * .2), w=(.15, .3, .15, .4))
+                  FadeIn(r2, shift=UP * .2), w=(.15, .3, .4))
         self.wipe()

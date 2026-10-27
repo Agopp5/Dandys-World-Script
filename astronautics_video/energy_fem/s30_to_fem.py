@@ -37,19 +37,22 @@ class S30_To_FEM(VScene):
         yb = 2.35
         wl = wall(np.array([X(0), yb, 0]), side=LEFT, h=1.3)
         one = bar(X(0), X(1), y=yb, h=0.5)
-        fl = dist_load(X(0) + 0.3, X(1) - 0.2, yb + 0.55, n=9, d=RIGHT)
+        fl = dist_load(X(0) + 0.3, X(1) - 0.2, yb + 0.95, n=9, d=RIGHT)
         flab = M("f", size=40, color=ROSE).next_to(fl, RIGHT, buff=0.15)
 
         ex = dashed(ax.plot(exact, color=INK2, stroke_width=5))
-        exlab = T("exact", size=34, color=INK2).next_to(ax.c2p(0.62, exact(0.62)), UL, buff=0.15)
+        exlab = VGroup(DashedLine(ORIGIN, RIGHT * 0.7, color=INK2, stroke_width=5), T("exact", size=34, color=INK2))
+        exlab.arrange(RIGHT, buff=0.2).move_to(ax.c2p(0.14, 0.44))
+        xl = M("x", size=40, color=INK2).next_to(ax.c2p(1, 0), RIGHT, buff=0.2)
+        ul = M("u", size=40, color=SKY).next_to(ax.c2p(0, 0.5), LEFT, buff=0.2)
         line = ax.plot(assumed, color=SKY, stroke_width=6)
         llab = M(r"u = a\,x", size=40, color=SKY).next_to(ax.c2p(0.7, assumed(0.7)), DR, buff=0.15)
         gap = Line(ax.c2p(0.5, assumed(0.5)), ax.c2p(0.5, exact(0.5)), color=BAD, stroke_width=7)
-        miss = T("missed", size=32, color=BAD).next_to(gap, RIGHT, buff=0.15).shift(DOWN * 0.1)
+        miss = T("missed", size=32, color=BAD).next_to(gap, RIGHT, buff=0.25).shift(DOWN * 0.1)
 
         self.beat("So assumed shapes work, but one shape for the whole structure is hard to choose, "
                   "and our single straight line missed the curve inside the bar.",
-                  [FadeIn(wl), FadeIn(one), FadeIn(fl), FadeIn(flab), Create(ax)],
+                  [FadeIn(wl), FadeIn(one), FadeIn(fl), FadeIn(flab), Create(ax), FadeIn(xl), FadeIn(ul)],
                   [Create(ex), FadeIn(exlab)], [Create(line), FadeIn(llab)], [Create(gap), FadeIn(miss)],
                   Indicate(gap, color=BAD), w=(.2, .2, .2, .2, .2))
 
@@ -84,8 +87,8 @@ class S30_To_FEM(VScene):
             lb = M("q_%d" % i, size=44, color=SKY)
             lb.add_updater(lambda m, i=i: m.next_to(ax.c2p(i / 4, v[i].get_value()), UL, buff=0.12))
             qlab.add(lb)
-        dq = VGroup(*[disp(np.array([xs4[i], yb - 0.25, 0]), label="q_%d" % i, length=0.7, below=0.3)
-                      for i in range(1, 5)])
+        dq = VGroup(*[DashedLine([xs4[i], yb - 0.3, 0], ax.c2p(i / 4, ex4[i]) + UP * 0.15, color=MUTED,
+                                 stroke_width=3) for i in range(1, 5)])
         with self.say("And now the unknowns are just the displacements of those shared points: q one, q two, "
                       "q three, q four. A handful of numbers again, exactly like our springs.") as d:
             self.play(FadeIn(dq), run_time=.1 * d)

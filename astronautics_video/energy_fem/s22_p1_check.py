@@ -101,7 +101,7 @@ class S22_P1_Check(VScene):
                   "in your guide.",
                   FadeIn(fig), .15, FadeIn(card[0]), FadeIn(kv), Indicate(springs, color=LILAC, scale_factor=1.05),
                   FadeIn(pv), Indicate(VGroup(lP1, lP2, lP3, lP4), color=ROSE),
-                  w=(.12, .1, .06, .12, .18, .12, .2))
+                  w=(.12, .06, .12, .18, .12, .2))
         self.checkpoint("3.2", "HW 1 check: all K = 100 N/mm, all P = 30 N")
 
         # 2
@@ -109,7 +109,7 @@ class S22_P1_Check(VScene):
                   "zero point seven millimeters.",
                   Write(e2[:3]), Indicate(VGroup(lP2, lP3, lP4), color=ROSE), .1,
                   Write(e2[3:]), [Create(b2), Indicate(lq2, color=SKY, scale_factor=1.4)],
-                  w=(.3, .15, .1, .2, .15))
+                  w=(.3, .15, .2, .15))
 
         # 3
         with self.say("q one: P one plus K two q two is thirty plus seventy, one hundred, over two hundred: "

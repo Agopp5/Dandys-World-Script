@@ -12,9 +12,9 @@ EI_, L_, P_, vB_ = 3.0, 2.0, 5.0, 0.7
 zz = np.linspace(0, L_, 20001)
 vpp = -vB_ * (np.pi / L_) ** 2 * np.sin(np.pi * zz / L_)          # v'' of v = vB sin(pi z / L)
 M_ = -EI_ * vpp
-U_num = np.trapz(M_ ** 2 / (2 * EI_), zz)
+U_num = np.trapezoid(M_ ** 2 / (2 * EI_), zz)
 assert np.isclose(U_num, np.pi ** 4 * EI_ * vB_ ** 2 / (4 * L_ ** 3), rtol=1e-6)
-assert np.isclose(np.trapz(np.sin(np.pi * zz / L_) ** 2, zz), L_ / 2, rtol=1e-6)
+assert np.isclose(np.trapezoid(np.sin(np.pi * zz / L_) ** 2, zz), L_ / 2, rtol=1e-6)
 vB_star = 2 * P_ * L_ ** 3 / (np.pi ** 4 * EI_)                     # d Pi / d vB = 0
 dPi = lambda v: np.pi ** 4 * EI_ * v / (2 * L_ ** 3) - P_
 assert np.isclose(dPi(vB_star), 0)
@@ -66,7 +66,7 @@ class S29_Beam(VScene):
         self.beat("The course slides use the same trick on a beam, so let's see it once. A beam of length L, "
                   "stiffness E I, supported at both ends, with a point load at the middle. The slides call that "
                   "load W; we'll call it P, so it doesn't clash with work potential.",
-                  [FadeIn(beam), FadeIn(sup)], FadeIn(span_l), FadeIn(ei), .1, GrowArrow(p_arr), FadeIn(p_lab),
+                  [FadeIn(beam), FadeIn(sup)], FadeIn(span_l), FadeIn(ei), .1, GrowArrow(p_arr[0]), FadeIn(p_lab),
                   .1, FadeIn(note_w), w=(.2, .15, .1, .05, .15, .1, .05, .2))
 
         # ---- beat 2: z along the beam, v down, point B -------------------------------------------

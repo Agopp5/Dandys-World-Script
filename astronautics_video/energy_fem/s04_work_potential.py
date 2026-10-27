@@ -55,9 +55,7 @@ class S04_Work_Potential(VScene):
         w_eq2 = E(r"W|=|F|\,q", size=56)
         pair = VGroup(u_eq, w_eq2).arrange(RIGHT, buff=1.2).move_to(np.array([2.6, 2.2, 0]))
         home = pair.copy()                          # the top-right spot they return to in beat 4
-        big = pair.copy().scale(72 / 56).arrange(RIGHT, buff=1.6).move_to(np.array([.9, .3, 0]))
-        self.add(pair)
-        self.remove(pair)
+        big = pair.copy().scale(72 / 56).arrange(RIGHT, buff=1.6).move_to(np.array([1.9, .3, 0]))
         with self.say("Pay close attention here, because this is the step everybody trips on. Strain energy has a one "
                       "half, and the work potential doesn't. Why?",
                       style="slower and deliberate, stressing the key words") as d:

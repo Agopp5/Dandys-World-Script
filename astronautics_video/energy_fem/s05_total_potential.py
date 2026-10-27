@@ -52,13 +52,15 @@ class S05_Total_Potential(VScene):
         nw = T("given up by the load", 32, INK2).next_to(tw, DOWN, buff=0.15)
         tot = E(r"U|-|W", size=60).move_to(np.array([1.6, 3.0, 0]))
         wsh = tw[1]
-        start = DashedLine(wsh.get_corner(UL) + 0.25 * LEFT, wsh.get_corner(UR) + 0.25 * RIGHT,
-                           color=EMBER, stroke_width=4)
-        wspan = span(wsh.get_corner(DR) + 0.35 * RIGHT, wsh.get_corner(UR) + 0.35 * RIGHT, "W", side=RIGHT)
+        start = DashedLine(wsh.get_corner(UL) + 0.45 * LEFT, wsh.get_corner(UR) + 0.45 * RIGHT,
+                           color=EMBER, stroke_width=5).set_z_index(3)
+        wspan = span(wsh.get_corner(DR) + 0.35 * RIGHT, wsh.get_corner(UR) + 0.35 * RIGHT, "", side=RIGHT)
         wspan.set_color(EMBER)
+        wspan.add(M("W", size=48, color=EMBER).next_to(wspan, RIGHT, buff=0.15))
         ush = tu[1]
-        uspan = span(ush.get_corner(DL) + 0.35 * LEFT, ush.get_left() + 0.35 * LEFT, "U", side=LEFT)
+        uspan = span(ush.get_corner(DL) + 0.35 * LEFT, ush.get_left() + 0.35 * LEFT, "", side=LEFT)
         uspan.set_color(MINT)
+        uspan.add(M("U", size=48, color=MINT).next_to(uspan, LEFT, buff=0.15))
         self.beat("Now combine them. As the spring stretches, it stores energy, U. And the weight gives energy up, "
                   "W. So the total energy of the whole system, spring plus load, is U minus W.",
                   [FadeIn(fig), FadeIn(tu), FadeIn(tw), Create(start)], [FadeIn(nu), FadeIn(nw)],

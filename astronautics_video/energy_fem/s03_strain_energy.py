@@ -75,6 +75,7 @@ class S03_Strain_Energy(VScene):
         yl = M("U", size=40, color=MINT).next_to(ax.c2p(0, 250), UP, buff=.15)
         curve = ax.plot(U_of, x_range=[0, 5], color=MINT, stroke_width=5)
         kl = TX(r"$K = 20$ N/mm", size=30, color=INK2).move_to(ax.c2p(1.45, 210))
+        kl.align_to(ax.c2p(.2, 0), LEFT)
         units = T("U in N mm,  q in mm", size=30, color=MUTED).next_to(kl, DOWN, buff=.2, aligned_edge=LEFT)
         qt = ValueTracker(0)
         dot = always_redraw(lambda: Dot(ax.c2p(qt.get_value(), U_of(qt.get_value())), radius=.1, color=MINT))

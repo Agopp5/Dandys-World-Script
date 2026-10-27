@@ -36,7 +36,7 @@ class S26_Bar_W(VScene):
         paint(eqP, {1: SKY})
         self.beat("The work potential is load times displacement, as always. The tip load P acts where the bar moves u of L, so it gives P times u at L.",
                   [GrowFromPoint(fP, tip), FadeIn(lP)], Create(tipbox), [GrowArrow(uL), FadeIn(luL)], .1,
-                  Write(eqP), w=(.25, .15, .25, .1, .25))
+                  Write(eqP), w=(.25, .15, .25, .25))
 
         # the spread-out load: a row of small f arrows, and one slice dx
         fl = dist_load(X0 + .3, X1 - .3, Y + .62, n=11, d=RIGHT)
@@ -83,5 +83,5 @@ class S26_Bar_W(VScene):
                   [FadeOut(VGroup(fl, lf, fdx, lfdx, slc, sdx)), LaggedStart(*[GrowFromCenter(p) for p in dots], lag_ratio=.08)],
                   FadeIn(note),
                   Write(q), [FadeIn(qm, scale=1.4), FadeIn(glow(qm, ACCENT))], .15,
-                  w=(.15, .25, .1, .2, .15, .15))
+                  w=(.15, .25, .1, .2, .15))
         self.wipe()

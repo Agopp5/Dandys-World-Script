@@ -10,15 +10,15 @@ colors(**{"U": MINT, "U_e": MINT, "W": EMBER, r"\Pi": GOLD, "q": SKY, "q_1": SKY
 # strain energy density: integral of E eps d eps from 0 to eps = 1/2 E eps^2 (triangle)
 _E, _eps = 70000.0, 1e-3
 _e = np.linspace(0, _eps, 2001)
-assert np.isclose(np.trapz(_E * _e, _e), 0.5 * _E * _eps ** 2)
+assert np.isclose(np.trapezoid(_E * _e, _e), 0.5 * _E * _eps ** 2)
 # uniform stretch u = q x / L: du/dx = q/L everywhere, U = 1/2 int_0^L EA (q/L)^2 dx = 1/2 (EA/L) q^2
 _EA, _L, _q = 2e6, 1000.0, 0.3
 _x = np.linspace(0, _L, 2001)
 _dudx = np.gradient(_q * _x / _L, _x)
 assert np.allclose(_dudx, _q / _L)
-assert np.isclose(0.5 * np.trapz(_EA * _dudx ** 2, _x), 0.5 * _EA / _L * _q ** 2)
+assert np.isclose(0.5 * np.trapezoid(_EA * _dudx ** 2, _x), 0.5 * _EA / _L * _q ** 2)
 # rigid slide u = c: du/dx = 0, U = 0
-assert np.isclose(0.5 * np.trapz(_EA * np.gradient(0 * _x + 0.4, _x) ** 2, _x), 0.0)
+assert np.isclose(0.5 * np.trapezoid(_EA * np.gradient(0 * _x + 0.4, _x) ** 2, _x), 0.0)
 
 LAB = 40   # figure labels
 EQ = 54    # main equations

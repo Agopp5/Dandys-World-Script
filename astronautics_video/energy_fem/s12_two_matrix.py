@@ -18,9 +18,9 @@ assert np.isclose(20 * (qs[1] - 1.5), 20)
 assert np.isclose(F2 / k2, 1.0) and np.isclose(qs[1] - qs[0], 1.0)
 
 
-def mat(rows, color, curly=False):
+def mat(rows, color, curly=False, hb=1.5):
     m = Matrix(rows, left_bracket="\\{" if curly else "[", right_bracket="\\}" if curly else "]",
-               h_buff=1.5 if not curly else 1.0)
+               h_buff=hb if not curly else 1.0)
     m.get_entries().set_color(color)
     m.get_brackets().set_color(INK)
     return m
@@ -95,7 +95,7 @@ class S12_Two_Matrix(VScene):
                        E(r"F_1|=|40\text{ N}", size=36), E(r"F_2|=|20\text{ N}", size=36))
         cards.arrange_in_grid(2, 2, buff=(.5, .25), cell_alignment=LEFT)
         card = panel(cards).move_to([3.95, y0, 0])
-        Nm = mat([["60", "-20"], ["-20", "20"]], LILAC)
+        Nm = mat([["60", "-20"], ["-20", "20"]], LILAC, hb=1.15)
         qv2 = mat([["q_1"], ["q_2"]], SKY, curly=True)
         es2 = M("=", size=48)
         Fn = mat([["40"], ["20"]], ROSE, curly=True)
@@ -114,7 +114,7 @@ class S12_Two_Matrix(VScene):
         self.checkpoint("2.1", "Solve the two-spring system for q1 and q2")
 
         # beat 5: solve by adding rows
-        X0 = 3.4
+        X0 = 4.1
         r1 = E(r"60|q_1|-20|q_2|=|40", size=48)
         r2 = E(r"-20|q_1|+20|q_2|=|20", size=48)
         paint(r1, {0: LILAC, 2: LILAC, 5: ROSE})
@@ -147,7 +147,7 @@ class S12_Two_Matrix(VScene):
         g2 = glow(q2r, SKY)
 
         with self.say("Add the two equations: the q two terms cancel, leaving forty q one equals sixty, so q one is one point five millimeters. Then the second equation: twenty times q two minus one point five equals twenty, so q two is two point five millimeters.") as d:
-            self.play(num.animate.move_to([-4.2, .5, 0]), run_time=.05 * d)
+            self.play(num.animate.move_to([-3.95, .5, 0]), run_time=.05 * d)
             self.play(TransformFromCopy(VGroup(Ne[0], Ne[1], Fn.get_entries()[0]), r1),
                       TransformFromCopy(VGroup(Ne[2], Ne[3], Fn.get_entries()[1]), r2), run_time=.09 * d)
             self.play(Indicate(VGroup(r1[2], r1[3]), color=SKY), Indicate(VGroup(r2[2], r2[3]), color=SKY),
@@ -178,7 +178,7 @@ class S12_Two_Matrix(VScene):
         lines.align_to(np.array([-1.1, 0, 0]), LEFT)
         ticks = [tick(L) for L in (L1, L2, L3)]
         self.beat("Quick check with Newton. Cut through spring one: everything to its right carries forty plus twenty, sixty newtons, so it stretches sixty over forty, one point five. Spring two carries only F two, twenty, so it stretches one. Two point five minus one point five is one. It all agrees.",
-                  [Create(cut), Indicate(VGroup(f1, f2), color=ROSE, scale_factor=1.15)],
+                  [FadeOut(num), Create(cut), Indicate(VGroup(f1, f2), color=ROSE, scale_factor=1.15)],
                   Write(L0),
                   [Write(L1), Indicate(sp1, color=LILAC)],
                   [FadeIn(ticks[0])],
