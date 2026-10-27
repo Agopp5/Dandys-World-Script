@@ -45,7 +45,9 @@ class S02_Work(VScene):
             self.play(box.animate.shift(RIGHT * 3), run_time=.35 * d, rate_func=linear)
             rect.clear_updaters()
             push.clear_updaters()
-            dist = span(np.array([x0, GY, 0]), np.array([x0 + 3, GY, 0]), "d", side=DOWN)
+            darr = DoubleArrow([x0, GY - 0.45, 0], [x0 + 3, GY - 0.45, 0], buff=0, color=INK2, stroke_width=3,
+                               tip_length=.18)
+            dist = VGroup(darr, E("d", size=44, color=INK).next_to(darr, DOWN, buff=.15))
             fd = E(r"F|\cdot|d", size=44).move_to(Polygon(ax1.c2p(0, 0), ax1.c2p(3, 0), ax1.c2p(3, 2),
                                                           ax1.c2p(0, 2)).get_center())
             self.play(FadeIn(dist), run_time=.15 * d)
@@ -61,7 +63,9 @@ class S02_Work(VScene):
             return np.array([REST + SC * ut.get_value(), SY, 0])
 
         wl = wall(np.array([WX, SY, 0]), side=LEFT, h=1.3)
-        spr = always_redraw(lambda: spring(np.array([WX, SY, 0]), npos(), label="K"))
+        spr = always_redraw(lambda: spring(np.array([WX, SY, 0]), npos()))
+        klab = E("K", size=40).add_updater(
+            lambda m: m.move_to((np.array([WX, SY, 0]) + npos()) / 2 + UP * .6))
         nd = always_redraw(lambda: node(npos(), r=.11))
         pull = always_redraw(lambda: force(npos(), RIGHT, length=0.2 + 1.1 * ut.get_value() / QV))
         rest_tick = DashedLine([REST, SY - 0.35, 0], [REST, SY - 0.85, 0], color=MUTED)
@@ -89,13 +93,13 @@ class S02_Work(VScene):
                       "We want the slow, settled stretch, so we pull gently, and the force grows as the spring "
                       "stretches.") as d:
             self.play(FadeOut(beat1), run_time=.1 * d)
-            self.play(FadeIn(wl), FadeIn(spr), FadeIn(nd), FadeIn(pull), FadeIn(rest_tick), Create(ax), FadeIn(ax_lab),
+            self.play(FadeIn(wl), FadeIn(spr), FadeIn(klab), FadeIn(nd), FadeIn(pull), FadeIn(rest_tick), Create(ax), FadeIn(ax_lab),
                       run_time=.2 * d)
             self.add(sarr, gline, gdot)
             self.wait(.15 * d)
             self.play(ut.animate.set_value(QV), run_time=.45 * d, rate_func=smooth)
             self.wait(.1 * d)
-        for m in (spr, nd, pull, sarr, gline, gdot):
+        for m in (spr, klab, nd, pull, sarr, gline, gdot):
             m.clear_updaters()
 
         # ---------- beat 3: K u, q, F = K q ----------
@@ -128,7 +132,7 @@ class S02_Work(VScene):
         # ---------- beat 5: strips merge into the triangle ----------
         tri = Polygon(ax.c2p(0, 0), ax.c2p(QV, 0), top, color=MINT, stroke_width=3, fill_color=MINT,
                       fill_opacity=.55)
-        eq = E(r"\int_0^{q} K u\,du|=|\tfrac12|\,q|\cdot|Kq|=|\tfrac12 K q^2", size=46)
+        eq = E(r"\int_0^{q} K u\,du|=|\frac12|\,q|\cdot|Kq|=|\frac12 K q^2", size=46)
         paint(eq, {3: SKY, 5: ROSE, 7: MINT})
         fit(eq, 7.0, 1.5)
         eq.move_to([3.2, 0.0, 0])
@@ -147,7 +151,7 @@ class S02_Work(VScene):
             self.wait(.08 * d)
 
         # ---------- beat 6: numbers ----------
-        eq2 = E(r"\tfrac12|(20)|(5)^2|=|250\text{ N mm}", size=46)
+        eq2 = E(r"\frac12|(20)|(5)^2|=|250\text{ N mm}", size=46)
         paint(eq2, {1: LILAC, 2: SKY, 4: MINT})
         fit(eq2, 7.0, 1.2)
         eq2.next_to(eq, DOWN, buff=.7)

@@ -36,17 +36,18 @@ class S12_Two_Matrix(VScene):
     def construct(self):
         # the two-spring figure, small at the top
         y0 = 2.75
-        wp = np.array([-6.2, y0, 0])
-        n1p = np.array([-4.2, y0, 0])
-        n2p = np.array([-2.2, y0, 0])
+        wp = np.array([-6.4, y0, 0])
+        n1p = np.array([-3.8, y0, 0])
+        n2p = np.array([-1.2, y0, 0])
         W0 = wall(wp, side=LEFT, h=1.2)
         sp1 = spring(wp, n1p, label="k_1")
         sp2 = spring(n1p, n2p, label="k_2")
         N1, N2 = node(n1p), node(n2p)
-        f1 = force(n1p + UP * .62, RIGHT, length=.7, label="F_1")
+        f1 = force(n1p + UP * .95, RIGHT, length=.8, label="F_1")
+        lead = Line(n1p, n1p + UP * .95, color=ROSE, stroke_width=2)
         f2 = force(n2p, RIGHT, length=.9, label="F_2")
         d1, d2 = disp(n1p, "q_1"), disp(n2p, "q_2")
-        fig = VGroup(W0, sp1, sp2, N1, N2, f1, f2, d1, d2)
+        fig = VGroup(W0, sp1, sp2, lead, N1, N2, f1, f2, d1, d2)
         self.add(fig)
 
         # beat 1: equations -> matrix rows
@@ -93,7 +94,7 @@ class S12_Two_Matrix(VScene):
         cards = VGroup(E(r"k_1|=|40\text{ N/mm}", size=34), E(r"k_2|=|20\text{ N/mm}", size=34),
                        E(r"F_1|=|40\text{ N}", size=34), E(r"F_2|=|20\text{ N}", size=34))
         cards.arrange_in_grid(2, 2, buff=(.5, .25), cell_alignment=LEFT)
-        card = panel(cards).move_to([3.7, y0, 0])
+        card = panel(cards).move_to([3.95, y0, 0])
         Nm = mat([["60", "-20"], ["-20", "20"]], LILAC)
         qv2 = mat([["q_1"], ["q_2"]], SKY, curly=True)
         es2 = M("=", size=48)
@@ -104,8 +105,8 @@ class S12_Two_Matrix(VScene):
                   FadeIn(card, shift=.2 * LEFT),
                   [FadeOut(VGroup(box, box_lbl, echo)), ReplacementTransform(sym, num)],
                   LaggedStart(*[Indicate(Ne[i], color=LILAC, scale_factor=1.25) for i in range(4)], lag_ratio=.6),
-                  .25,
-                  w=(.45, .15, .25, .15))
+                  .15,
+                  w=(.45, .15, .25))
 
         # beat 4: checkpoint cue
         self.beat("Your turn: pause and do checkpoint two point one in your guide, and solve for q one and q two.",
@@ -154,11 +155,13 @@ class S12_Two_Matrix(VScene):
             self.play(Create(st1), Create(st2), run_time=.05 * d)
             self.play(FadeIn(plus), Create(rule), Write(sm), run_time=.09 * d)
             self.play(Write(q1r), FadeIn(g1), run_time=.08 * d)
+            self.snap("rows added")
             self.wait(.04 * d)
             self.play(FadeOut(VGroup(r1, st1, st2, plus, rule, sm)), r2.animate.shift(.8 * UP),
                       VGroup(g1, q1r).animate.move_to(q1_home), run_time=.07 * d)
             self.play(*morph(r2, r2b, [(2, 0), (3, 2), (4, 6), (5, 7)]),
                       Indicate(q1r[2], color=SKY), run_time=.13 * d)
+            self.snap("second equation")
             self.wait(.1 * d)
             self.play(Write(q2r), FadeIn(g2), run_time=.09 * d)
             self.wait(.06 * d)
@@ -183,5 +186,5 @@ class S12_Two_Matrix(VScene):
                   [Write(L3), Indicate(VGroup(q1r, q2r), color=SKY)],
                   [FadeIn(ticks[2]), FadeIn(glow(L3, GOOD))],
                   .1,
-                  w=(.12, .1, .18, .05, .2, .17, .1, .08))
+                  w=(.12, .1, .18, .05, .2, .17, .1))
         self.wipe()

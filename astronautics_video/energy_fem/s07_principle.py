@@ -18,7 +18,7 @@ assert np.isclose(Pi(2), -160) and np.isclose(Pi(8), -160) and np.isclose(Pi(5),
 assert np.isclose(Pi(0), 0) and np.isclose(Pi(10), 0)
 assert np.isclose(F_S / K_S, 5)                       # minimum at q = 5 mm: K q = F
 assert np.isclose(K_S * 5 - F_S, 0)                   # dPi/dq = K q - F vanishes there
-TRIALS = [(2, r"\Pi|=-160", LEFT), (8, r"\Pi|=-160", RIGHT), (5, r"\Pi|=-250", DOWN)]
+TRIALS = [(2, r"\Pi|=-160", RIGHT), (8, r"\Pi|=-160", RIGHT), (5, r"\Pi|=-250", DOWN)]
 
 
 def lock_icon(color=GOLD):
@@ -35,8 +35,10 @@ class S07_Principle(VScene):
 
     def construct(self):
         # ---- left: the bowl Pi(q) -------------------------------------------------------------
-        ax = axes([0, 10, 2], [-300, 50, 100], width=6, height=4.6, xlabel="q", ylabel=r"\Pi")
-        ax.move_to([-3.5, -0.2, 0])
+        ax = axes([0, 10, 2], [-300, 50, 100], width=6, height=4.6, xlabel="", ylabel="")
+        ax.move_to([-3.4, -0.3, 0])
+        ax_lab = VGroup(M(r"\Pi", size=40, color=GOLD).next_to(ax.y_axis.get_top(), RIGHT, buff=.15),
+                        M("q", size=40, color=SKY).next_to(ax.x_axis.get_right(), DOWN, buff=.15))
         bowl = ax.plot(Pi, x_range=[0, 10], color=GOLD, stroke_width=5)
         dots, tags, drops, ticks = {}, {}, {}, {}
         for q, tex, side in TRIALS:
@@ -48,7 +50,7 @@ class S07_Principle(VScene):
 
         with self.say("Let's say what just happened in general. Imagine trying every stretch the spring could "
                       "possibly have: two millimeters, eight, five. Each one gives a value of Pi.") as d:
-            self.play(Create(ax), run_time=.12 * d)
+            self.play(Create(ax), FadeIn(ax_lab), run_time=.12 * d)
             self.play(Create(bowl), run_time=.13 * d)
             for q, _, _ in TRIALS:
                 self.add(dots[q])
@@ -78,7 +80,7 @@ class S07_Principle(VScene):
         eq_a[0][1].set_fill(GOLD, 1).set_stroke(GOLD)
         eq_a[0][4].set_fill(SKY, 1).set_stroke(SKY)
         eq_b = E(r"K|q|=|F", size=52)
-        same = M("=", size=72, color=ACCENT)
+        same = M(r"\Longleftrightarrow", size=60, color=ACCENT)
         pair = VGroup(eq_a, same, eq_b).arrange(RIGHT, buff=.6)
         pair.move_to([3.85, -1.9, 0])
         lab_a = T("bottom of the bowl", size=30, color=MUTED).next_to(eq_a, DOWN, buff=.3)

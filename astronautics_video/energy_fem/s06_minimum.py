@@ -23,11 +23,14 @@ class S06_Minimum(VScene):
 
     def construct(self):
         # ---- the bowl (left) ----
-        ax = axes((0, 10.5, 5), (-300, 60, 100), width=6.0, height=5.0, xlabel="q", ylabel=r"\Pi")
-        ax.move_to(LEFT * 3.0 + DOWN * 0.4)
-        ticks = VGroup(*[M(str(v), size=28, color=INK2).next_to(ax.c2p(v, 0), UP, buff=.12) for v in (5, 10)],
-                       *[M(str(v), size=28, color=INK2).next_to(ax.c2p(0, v), LEFT, buff=.12)
+        ax = axes((0, 10.5, 5), (-300, 60, 100), width=6.0, height=5.0, xlabel="", ylabel="")
+        ax.move_to(LEFT * 2.8 + DOWN * 0.4)
+        ticks = VGroup(*[M(str(v), size=32, color=INK2).next_to(ax.c2p(v, 0), UP, buff=.12) for v in (5, 10)],
+                       *[M(str(v), size=32, color=INK2).next_to(ax.c2p(0, v), LEFT, buff=.12)
                          for v in (-100, -200)])
+        ax_lab = VGroup(M("q", size=40, color=SKY).next_to(ax.c2p(10.5, 0), RIGHT, buff=.15),
+                        M(r"\Pi", size=40, color=GOLD).next_to(ax.c2p(0, 60), UP, buff=.12))
+        ticks.add(*ax_lab)
         bowl = ax.plot(Pi, x_range=[0, 10], color=GOLD, stroke_width=5)
         tk = ValueTracker(1.3)
         dot = always_redraw(lambda: Dot(ax.c2p(tk.get_value(), Pi(tk.get_value())), color=SKY, radius=0.1)
@@ -91,7 +94,7 @@ class S06_Minimum(VScene):
             self.play(Indicate(card[1], color=GOLD), run_time=.13 * d)
 
         # the same with letters
-        pi_l = E(r"\Pi|=|\tfrac{1}{2}|K|q^2|-|F|q", size=48)
+        pi_l = E(r"\Pi|=|\frac12|K|q^2|-|F|q", size=48)
         paint(pi_l, {4: SKY})
         pi_l.move_to(RIGHT * X + UP * 2.4)
         eqL = E(r"\frac{d\Pi}{dq}|=|K|q|-|F|=|0", size=52).move_to(RIGHT * X + UP * 0.8)
@@ -112,22 +115,21 @@ class S06_Minimum(VScene):
             self.wait(.05 * d)
 
         # energy result next to force balance
-        blk = Square(0.7, color=INK2, fill_color=SURFACE, fill_opacity=1, stroke_width=3)
-        up = force(blk.get_top(), d=UP, length=0.9, label="Kq", color=LILAC)
-        dn = force(blk.get_bottom(), d=DOWN, length=0.9, label="F")
-        fbd = VGroup(blk, up, dn)
+        nd = node(ORIGIN, r=0.1)
+        pull = force(nd.get_center(), d=LEFT, length=1.2, label="Kq", color=LILAC)
+        push = force(nd.get_center(), d=RIGHT, length=1.2, label="F")
+        fbd = VGroup(pull, push, nd)
         kqf_force = E(r"K|q|=|F", size=56)
-        fb = VGroup(fbd, kqf_force).arrange(RIGHT, buff=.6)
         lab_e = T("from energy", size=30, color=MUTED)
         lab_f = T("from forces", size=30, color=MUTED)
         with self.say("This is the key step, so take it in slowly: setting the slope of the energy to zero gave us exactly Newton's force balance. Same equation, reached without drawing a single force.",
                       style="slower and deliberate, stressing the key words") as d:
-            self.play(FadeOut(VGroup(pi_l, eqL)), kqf.animate.move_to(RIGHT * 1.4 + UP * 0.2),
+            self.play(FadeOut(VGroup(pi_l, eqL)), kqf.animate.move_to(RIGHT * 1.6 + DOWN * 0.5),
                       run_time=.12 * d)
+            kqf_force.move_to(RIGHT * 5.0).match_y(kqf)
+            fbd.next_to(kqf_force, UP, buff=.6)
+            fb = VGroup(fbd, kqf_force)
             lab_e.next_to(kqf, DOWN, buff=.45)
-            fb.next_to(kqf, RIGHT, buff=1.0)
-            kqf_force.align_to(kqf, DOWN)
-            fbd.set_y(kqf.get_y())
             lab_f.next_to(kqf_force, DOWN, buff=.45)
             self.play(FadeIn(lab_e), run_time=.08 * d)
             self.play(FadeIn(fb, shift=LEFT * 1.5), run_time=.2 * d)

@@ -42,8 +42,8 @@ def _check_derivs():
 
 _check_derivs()
 
-PI_Y, D_Y, W_Y = 3.4, 1.6, 0.35         # Pi (two lines from here down), derivative line, working line
-TX, TY = 1.2, [-0.95, -1.95, -2.95]      # tray: results stacked, "=" aligned at x = TX
+PI_Y, D_Y, W_Y = 3.4, 1.35, 0.1         # Pi (two lines from here down), derivative line, working line
+TX, TY = 2.0, [-1.15, -2.1, -3.05]      # tray: results stacked, "=" aligned at x = TX
 
 
 class S19_P1_Derivs(VScene):
@@ -52,8 +52,8 @@ class S19_P1_Derivs(VScene):
     def construct(self):
         # Pi on two lines (strain energy, then the loads); pi[i] numbers the parts across both lines
         la = E(r"\Pi|=|\tfrac12 K_1 q_2^2|+|\tfrac12 K_2 q_1^2|+|\tfrac12 K_2(q_2-q_1)^2|+|\tfrac12 K_3(q_3-q_2)^2",
-               size=44)
-        lb = E(r"-|P_1 q_1|-|(P_2+P_3)\,q_2|-|P_4 q_3|", size=44)
+               size=48)
+        lb = E(r"-|P_1 q_1|-|(P_2+P_3)\,q_2|-|P_4 q_3|", size=48)
         la.move_to([0, PI_Y, 0])
         lb.next_to(la, DOWN, buff=.25).align_to(la[2], LEFT)
         pi = VGroup(*la, *lb)
@@ -84,7 +84,7 @@ class S19_P1_Derivs(VScene):
             return m.move_to([0, y, 0])
 
         def tray_target(r, eq_i, k):
-            t = r.copy().scale(.85)
+            t = r.copy()
             t.shift([TX - t[eq_i].get_center()[0], TY[k] - t[eq_i].get_center()[1], 0])
             return t
 

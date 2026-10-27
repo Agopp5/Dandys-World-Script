@@ -60,7 +60,7 @@ class S03_Strain_Energy(VScene):
 
         # --- the name and the formula
         title = T("strain energy", size=44, color=MINT, weight=BOLD).move_to([-3.6, .45, 0])
-        eq = E(r"U|=|\tfrac12|K|q^2", size=60).move_to([-3.6, -1.05, 0])
+        eq = E(r"U|=|\frac12|K|q^2", size=60).move_to([-3.6, -1.05, 0])
         paint(eq, {4: SKY})
         self.beat("Energy stored in a deformed elastic body is called strain energy. We'll call it capital U. "
                   "For a spring, U equals one half K q squared.",
@@ -69,20 +69,22 @@ class S03_Strain_Energy(VScene):
                   w=(.2, .1, .2, .05))
 
         # --- the parabola U(q)
-        ax = axes((0, 5, 1), (0, 250, 50), width=5.2, height=3.0, xlabel="q", ylabel="U")
-        ax.move_to([3.35, -1.6, 0])
+        ax = axes((0, 5, 1), (0, 250, 50), width=5.2, height=3.0, xlabel="", ylabel="")
+        ax.move_to([3.2, -1.6, 0])
+        xl = M("q", size=40, color=SKY).next_to(ax.c2p(5, 0), RIGHT, buff=.2)
+        yl = M("U", size=40, color=MINT).next_to(ax.c2p(0, 250), UP, buff=.15)
         curve = ax.plot(U_of, x_range=[0, 5], color=MINT, stroke_width=5)
         kl = TX(r"$K = 20$ N/mm", size=30, color=INK2).move_to(ax.c2p(1.45, 210))
-        units = T("U in N mm,  q in mm", size=26, color=MUTED).next_to(kl, DOWN, buff=.2, aligned_edge=LEFT)
+        units = T("U in N mm,  q in mm", size=30, color=MUTED).next_to(kl, DOWN, buff=.2, aligned_edge=LEFT)
         qt = ValueTracker(0)
         dot = always_redraw(lambda: Dot(ax.c2p(qt.get_value(), U_of(qt.get_value())), radius=.1, color=MINT))
         drop_line = always_redraw(lambda: Line(ax.c2p(qt.get_value(), 0),
                                                ax.c2p(qt.get_value(), U_of(qt.get_value())),
                                                color=SKY, stroke_width=3, stroke_opacity=.7))
-        zero_mark = Circle(radius=.2, color=GOLD, stroke_width=3).move_to(ax.c2p(0, 0))
+        zero_mark = Circle(radius=.2, color=INK2, stroke_width=3).move_to(ax.c2p(0, 0))
         self.beat("Here's a picture to keep. Plot U against q. It's a parabola that opens upward: zero at q equals "
                   "zero, and growing faster and faster as you stretch.",
-                  [Create(ax), FadeIn(units)], .05, [Create(curve), FadeIn(kl)], [FadeIn(dot), Create(zero_mark), FadeIn(drop_line)],
+                  [Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(units)], .05, [Create(curve), FadeIn(kl)], [FadeIn(dot), Create(zero_mark), FadeIn(drop_line)],
                   [qt.animate(rate_func=rush_into).set_value(5)], .1,
                   w=(.17, .22, .1, .36))
         self.wipe()

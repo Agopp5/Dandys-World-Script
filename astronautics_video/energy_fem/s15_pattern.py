@@ -104,9 +104,10 @@ class S15_Pattern(VScene):
         # ---- block rectangles ----
         def block_rect(b, tint):
             r0 = min(i for i, _, _ in BLOCKS[b]); c0 = min(j for _, j, _ in BLOCKS[b])
-            # fixed-pitch cells: grid centers are the mean entry position of each row / column
-            w = 2.15 * 2 - 0.2; h = 1.0 * 2 - 0.22
-            cx = (col_x[c0] + col_x[c0 + 1]) / 2
+            # height from the row pitch; width hugs the block's own entries
+            grp = VGroup(e(r0, c0), e(r0, c0 + 1), e(r0 + 1, c0), e(r0 + 1, c0 + 1))
+            w = grp.width + 0.3; h = 1.0 * 2 - 0.22
+            cx = grp.get_center()[0]
             cy = (row_y[r0] + row_y[r0 + 1]) / 2
             return RoundedRectangle(width=w, height=h, corner_radius=0.12, stroke_color=tint, stroke_width=3,
                                     fill_color=tint, fill_opacity=0.12).move_to([cx, cy, 0])
@@ -141,7 +142,7 @@ class S15_Pattern(VScene):
         r3_box = SurroundingRectangle(row3, color=ACCENT, buff=0.16, corner_radius=0.1, stroke_width=4)
         sums = VGroup(*[M(r"\to 0", size=38, color=GOOD).set_y(e(i, 0).get_y()).set_x(mat.get_right()[0] + 0.75)
                         for i in range(4)])
-        rigid = T("no stretch, so no force", size=30, color=MUTED).move_to([5.0, -2.0, 0])
+        rigid = T("no stretch, so no force", size=30, color=MUTED).move_to([4.6, -1.65, 0])
         with self.say("Row three: minus two k two, then two k two plus k three, then minus k three. And notice: "
                       "every row adds up to zero. Shift every node by the same amount, and no spring stretches, "
                       "so no force is needed. That's what a zero row sum says.") as d:
@@ -187,7 +188,7 @@ class S15_Pattern(VScene):
 
         kb = key_box(r"\text{stretch} = q_j - q_i", r"\frac{\partial \Pi}{\partial q_i} = 0\ \text{for every free node}",
                      r"\text{each spring adds } k\begin{bmatrix}1&-1\\-1&1\end{bmatrix}", label="KEY IDEA")
-        kb.scale_to_fit_width(min(10.5, kb.width * 1.35)).move_to(ORIGIN)
+        kb.scale_to_fit_width(12.4).move_to(ORIGIN)
         everything = VGroup(mat, col_lab, row_lab, node_tag, chain, wl, q1z, s_row, s_col, box3, old_grp)
         self.beat("So, stepping back: write U and W, take one partial derivative per free node, and the stiffness "
                   "matrix builds itself from little blocks. Next, your first homework problem.",
