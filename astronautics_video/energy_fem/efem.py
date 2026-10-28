@@ -285,6 +285,48 @@ def stepped_bar(x0=-6.0, x3=6.0, y=2.0, h1=1.4, h2=0.6, f1=0.37, f2=0.37):
     return g
 
 
+# ---- HW 6 problem 2 bar, shared by S54-S59 so it looks the same in every scene ----
+class hw2_bar(VGroup):
+    """hw2_bar(y=1.6, x0=-6.0, x1=4.4, h=0.6): the homework bar, 40 in long, wall at x = 0 in.
+    .X(inches) -> screen x.  Parts: .wall .bar .farr (13 LEFT-pointing ROSE arrows just BELOW the bar) .flab
+    ("f = 5 lb/in", ROSE, 38, under the arrows between nodes 1 and 2) .nodes (dots at 0, 20, 40 in on the axis)
+    .rings (circled 0, 1, 2 below the arrows, size 36) .tick3 (dashed MUTED tick across the bar at 10 in)
+    .ring3 (dashed MUTED circled 3 on the ring row) .P1 .P2 (ROSE arrows from nodes 1 and 2, pointing right,
+    labels "P_1 = 50 lb" / "P_2 = 100 lb" at size 38 ABOVE the bar)."""
+    def __init__(self, y=1.6, x0=-6.0, x1=4.4, h=0.6):
+        super().__init__()
+        self.X = lambda inch: x0 + (x1 - x0) * inch / 40.0
+        X = self.X
+        self.wall = wall([x0, y, 0], side=LEFT, h=1.5)
+        self.bar = bar(x0, x1, y=y, h=h)
+        yf = y - h / 2 - 0.3
+        xs = np.linspace(x0 + 0.45, x1 - 0.25, 13)
+        self.farr = VGroup(*[Arrow([x + 0.22, yf, 0], [x - 0.22, yf, 0], buff=0, color=ROSE, stroke_width=4,
+                                   max_tip_length_to_length_ratio=0.35) for x in xs])
+        yr = yf - 0.6
+        self.nodes = VGroup(*[node([X(i), y, 0], r=0.1).set_z_index(3) for i in (0, 20, 40)])
+
+        def ring(n, xx, dashed=False):
+            c = Circle(radius=0.27, color=MUTED if dashed else INK2, stroke_width=3)
+            if dashed:
+                c = DashedVMobject(c, num_dashes=12)
+            c.move_to([xx, yr, 0])
+            return VGroup(c, T(str(n), size=36, color=MUTED if dashed else INK).move_to(c))
+        self.rings = VGroup(ring(0, X(0) + 0.35), ring(1, X(20)), ring(2, X(40)))
+        self.ring3 = ring(3, X(10), dashed=True)
+        self.tick3 = DashedLine([X(10), y + h / 2 + 0.15, 0], [X(10), y - h / 2 - 0.15, 0], color=MUTED,
+                                stroke_width=3, dash_length=0.08)
+        self.flab = M(r"f = 5\text{ lb/in}", size=38, color=ROSE).move_to([X(30), yr, 0])
+        self.P1 = VGroup(Arrow([X(20), y, 0], [X(20) + 1.0, y, 0], buff=0, color=ROSE, stroke_width=6,
+                               max_tip_length_to_length_ratio=0.3))
+        self.P1.add(M(r"P_1 = 50\text{ lb}", size=38, color=ROSE).next_to(self.P1[0], UP, buff=h / 2 + 0.12))
+        self.P2 = VGroup(Arrow([X(40), y, 0], [X(40) + 1.0, y, 0], buff=0, color=ROSE, stroke_width=6,
+                               max_tip_length_to_length_ratio=0.3))
+        self.P2.add(M(r"P_2 = 100\text{ lb}", size=38, color=ROSE).next_to(self.P2[0], UP, buff=h / 2 + 0.12))
+        self.add(self.wall, self.bar, self.farr, self.flab, self.nodes, self.rings, self.tick3, self.ring3,
+                 self.P1, self.P2)
+
+
 # ---- facts (the full derivations are in solve.py) ----
 assert (20 * 5 == 100) and (0.5 * 20 * 5**2 == 250) and (100 * 5 == 500)                 # one spring
 assert np.allclose(np.linalg.solve([[60, -20], [-20, 20]], [40, 20]), [1.5, 2.5])           # two springs
