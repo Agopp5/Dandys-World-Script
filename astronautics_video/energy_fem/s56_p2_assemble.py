@@ -70,9 +70,10 @@ class S56_P2_Assemble(VScene):
         assert all(np.isclose(hb.X(xi), xs) for xi, xs in zip((0, 20, 40), XN))
         wall_m, fl, rings = hb.wall, hb.farr, hb.rings
         p1g, p2g = hb.P1, hb.P2
-        work_y = rings[0].get_y() - 0.7
+        work_y = rings[0].get_y() - 0.62
         elabs = VGroup(*[T("element %d" % (i + 1), size=36, color=INK2).move_to((x, 0, 0))
                          .set_y(BY + BH / 2 + 0.4) for i, x in enumerate((MID1, MID2))])
+        elabs[1].set_x((p1g.get_right()[0] + p2g.get_left()[0]) / 2)   # between the P1 and P2 labels
 
         # element highlights (solid = element 1, dashed = element 2, same as their blocks in K)
         el1 = span_rect(XN[0], XN[1], LILAC, 0.28, stroke=6)
@@ -109,7 +110,7 @@ class S56_P2_Assemble(VScene):
         Flhs.next_to(Fmat, LEFT, buff=0.25)
         Funit.next_to(Fmat, RIGHT, buff=0.25)
         Fgrp = VGroup(Flhs, Fmat, Funit)
-        row = VGroup(Kgrp, Fgrp).arrange(RIGHT, buff=1.0).move_to((0, -1.95, 0))
+        row = VGroup(Kgrp, Fgrp).arrange(RIGHT, buff=1.0).move_to((0, -2.3, 0))
         fit(row, 13.6, 3.2)
         ents = Kmat.get_entries()
 

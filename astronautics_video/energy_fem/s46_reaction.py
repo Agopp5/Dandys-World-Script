@@ -36,7 +36,7 @@ def column_figure():
     wlab = M(r"\rho g A", size=40, color=ROSE).next_to(wts, LEFT, buff=0.2)
     react = Arrow([cx, y0 - 1.3, 0], [cx, y0 - 0.05, 0], buff=0, color=ROSE, stroke_width=8,
                   max_tip_length_to_length_ratio=0.3).set_z_index(5)
-    rlab = M("R", size=48, color=ROSE).next_to(react, LEFT, buff=0.2).set_z_index(5)
+    rlab = M("R", size=48, color=ROSE).next_to(react, LEFT, buff=0.45).set_z_index(5)
     body = VGroup(ground, elems, ticks, nodes, qlab, wts, wlab)
     return body, react, rlab, qlab
 

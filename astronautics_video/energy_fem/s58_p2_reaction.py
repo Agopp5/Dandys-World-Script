@@ -30,17 +30,9 @@ assert np.isclose(-c * L_bar, 200) and np.isclose(5 * 40, 200)
 assert np.isclose(R + P1 + P2 + c * L_bar, 0)      # 50 + 50 + 100 - 200 = 0
 
 # ---- the homework bar, drawn as in S54/S55 ----
-YB = 2.35            # bar centerline
-XW, XT = -5.9, 4.3   # wall face, tip (bar 10.2 units long)
-XM = (XW + XT) / 2   # node 1 (x = 20 in)
+YB = 2.6             # bar centerline (hw2_bar y)
+XW = -6.0            # wall face (hw2_bar x0)
 HB = 0.6
-
-
-def tag(n, p):
-    """Circled node number, size 44."""
-    t = M(str(n), size=44, color=INK)
-    ring = Circle(radius=0.32, color=INK2, stroke_width=3).move_to(t)
-    return VGroup(ring, t).move_to(p)
 
 
 def load(x, label, y=YB, length=1.0):
@@ -53,26 +45,11 @@ def load(x, label, y=YB, length=1.0):
     return VGroup(a, lab)
 
 
-def hw_bar():
-    w = wall([XW, YB, 0], side=LEFT, h=1.5)
-    b = Rectangle(width=XT - XW, height=HB, color=INK2, stroke_width=3,
-                  fill_color=SURFACE, fill_opacity=1).move_to([(XW + XT) / 2, YB, 0])
-    xs = np.linspace(XW + 0.45, XT - 0.25, 13)
-    yf = YB - HB / 2 - 0.3
-    farr = VGroup(*[Arrow([x + 0.22, yf, 0], [x - 0.22, yf, 0], buff=0, color=ROSE, stroke_width=4,
-                          max_tip_length_to_length_ratio=0.35) for x in xs])
-    flab = M(r"f = 5\text{ lb/in}", size=36, color=ROSE).next_to(farr, DOWN, buff=0.12).align_to(farr, RIGHT)
-    tags = VGroup(*[tag(i, [x, YB + HB / 2 + 0.55, 0]) for i, x in enumerate([XW, XM, XT])])
-    p1 = load(XM, r"P_1 = 50\text{ lb}")
-    p2 = load(XT, r"P_2 = 100\text{ lb}")
-    return VGroup(w, b, farr, flab, tags, p1, p2)
-
-
 class S58_P2_Reaction(VScene):
     budget = 131
 
     def construct(self):
-        fig = hw_bar()
+        fig = hw2_bar(y=YB, x0=XW)
         self.add(fig)
 
         # beat 1: the set-aside row 0 slides back
@@ -113,10 +90,10 @@ class S58_P2_Reaction(VScene):
             self.play(FadeOut(VGroup(rowg, zeros)), VGroup(l1, l2).animate.shift(1.9 * UP), run_time=.15 * d)
             box = SurroundingRectangle(l1, color=ACCENT, buff=0.15).shift(1.9 * UP)
             self.play(Create(box), run_time=.12 * d)
-            self.wait(.33 * d)
+            self.wait(.2 * d)
             self.play(FadeOut(box), Write(res), run_time=.15 * d)
             self.play(self.spotlight(res), run_time=.1 * d)
-            self.wait(.14 * d)
+            self.wait(max(2.1, .27 * d))   # hold the spotlight at least 2 s
 
         # beat 4: the wall pushes right; global check
         ra = load(XW, r"R = 50\text{ lb}")

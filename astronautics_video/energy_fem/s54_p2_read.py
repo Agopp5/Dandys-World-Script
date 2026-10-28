@@ -16,17 +16,8 @@ assert (x1_in, x2_in, x3_in) == (20, 40, 10)
 c = -5                              # lb/in, f points in -x
 assert c < 0 and abs(c) == 5
 
-# figure geometry: bar from screen X0 (wall face) to X1 (tip)
-X0, X1, YB, HB = -6.0, 4.4, -1.2, 0.6
-def X(xin):
-    return X0 + (X1 - X0) * xin / L_
-
-
-def circ(n, p, color=INK2):
-    lab = M(str(n), size=36, color=color)
-    ring = Circle(radius=0.3, color=color, stroke_width=3).move_to(p)
-    lab.move_to(p)
-    return VGroup(ring, lab)
+# figure: the shared homework bar (efem.hw2_bar), placed in the lower half
+YB = -0.6
 
 
 class S54_P2_Read(VScene):
@@ -48,24 +39,13 @@ class S54_P2_Read(VScene):
                      size=36).to_edge(UP, buff=0.35)
 
         # ---------- figure ----------
-        w = wall(np.array([X0, YB, 0]), side=LEFT, h=1.8)
-        b = bar(X0, X1, y=YB, h=HB)
-        fl = dist_load(X0 + 0.25, X1 - 0.05, YB + HB / 2 + 0.32, n=15, d=LEFT, color=ROSE, length=0.42)
-        f_lab = M("f", size=40, color=ROSE).move_to([X0 + 0.9, YB + HB / 2 + 0.95, 0])
-        a1 = force(np.array([X(20), YB, 0]), d=RIGHT, length=1.1, color=ROSE).set_z_index(3)
-        a2 = force(np.array([X1, YB, 0]), d=RIGHT, length=1.1, color=ROSE).set_z_index(3)
-        p1_lab = M(r"P_1 = 50\text{ lb}", size=36, color=ROSE).move_to([X(20) + 0.55, YB + HB / 2 + 1.0, 0])
-        p2_lab = M(r"P_2 = 100\text{ lb}", size=36, color=ROSE).move_to([X1 + 0.55, YB + HB / 2 + 1.0, 0])
-        p2_lab.shift(LEFT * max(0, p2_lab.get_right()[0] - 6.8))
-        d1 = Dot([X(20), YB, 0], radius=0.07, color=INK).set_z_index(4)
-        d2 = Dot([X1, YB, 0], radius=0.07, color=INK).set_z_index(4)
-        mark3 = DashedLine([X(10), YB - 0.55, 0], [X(10), YB + 0.55, 0], color=MUTED,
-                           stroke_width=4, dash_length=0.1).set_z_index(2)
-        yc = YB - HB / 2 - 0.5
-        c1 = circ(1, [X(20), yc, 0])
-        c2 = circ(2, [X1, yc, 0])
-        c3 = circ(3, [X(10), yc, 0], color=MUTED)
-        fig = VGroup(w, b, fl, f_lab, a1, a2, p1_lab, p2_lab, d1, d2, mark3, c1, c2, c3)
+        hb = hw2_bar(y=YB)
+        X = hb.X
+        X0, X1 = X(0), X(40)
+        fig = hb
+        fl, f_lab = hb.farr, hb.flab
+        a1, a2 = hb.P1, hb.P2
+        c1, c2 = hb.rings[1], hb.rings[2]
 
         self.beat("Problem two. Using at least two elements, analyze this bar. Find the global stiffness matrix "
                   "and load vector, then the displacements at points one and two, then the reaction at the wall, "
@@ -84,7 +64,7 @@ class S54_P2_Read(VScene):
         card.move_to([-4.6, 1.75, 0])
         ea = E(r"EA|=|10{,}000 \times 2|=|20{,}000\text{ lb}", size=48).move_to([2.6, 2.6, 0])
         soft = T("far softer than real metal: round numbers", size=30, color=MUTED).next_to(ea, DOWN, buff=0.3)
-        ly = YB - HB / 2 - 1.35
+        ly = min(hb.rings.get_bottom()[1], hb.flab.get_bottom()[1]) - 0.55
         span_l = DoubleArrow([X0, ly, 0], [X1, ly, 0], buff=0, color=INK2, stroke_width=3,
                              tip_length=0.2)
         span_lab = backed(M(r"L = 40\text{ in}", size=36).move_to([X(20), ly, 0]))
@@ -104,14 +84,19 @@ class S54_P2_Read(VScene):
         self.beat("Point one is at the middle, twenty inches out, with a load P one of fifty pounds to the right. "
                   "Point two is the tip, forty inches out, with P two, one hundred pounds to the right.",
                   FadeOut(span_g), [Indicate(c1, color=ROSE), FadeIn(xl1, shift=UP * 0.2)],
-                  [Indicate(a1, color=ROSE, scale_factor=1.3), Indicate(p1_lab, color=ROSE)], .1,
+                  Indicate(a1, color=ROSE, scale_factor=1.2), .1,
                   [Indicate(c2, color=ROSE), FadeIn(xl2, shift=UP * 0.2)],
-                  [Indicate(a2, color=ROSE, scale_factor=1.3), Indicate(p2_lab, color=ROSE)], .1,
+                  Indicate(a2, color=ROSE, scale_factor=1.2), .1,
                   w=(.05, .15, .2, .15, .2))
 
         # ---------- distributed load ----------
-        feq = E(r"f|=|c|=|-|5\text{ lb/in}", size=52).move_to([2.6, 1.6, 0])
+        feq = E(r"f|=|c|=\\;|-5|\\text{ lb/in}", size=52).move_to([2.6, 1.6, 0])
         paint(feq, {2: ROSE})
+        w0 = feq[4].width
+        feq[4].scale(60 / 52, about_edge=LEFT).set_color(ACCENT)
+        feq[5].shift(RIGHT * (feq[4].width - w0))
+        feq.move_to([2.6, 1.6, 0])
+        mbox = SurroundingRectangle(feq[4], color=ACCENT, buff=0.1, stroke_width=3)
         warn = T("the sign: most common mistake", size=30, color=ACCENT).next_to(feq, DOWN, buff=0.3)
         self.beat("And the spread load f, five pounds per inch: this is what we called c in our element formulas. "
                   "Watch its direction. Its arrows point left, against x. So c equals minus five. Getting that sign "
@@ -119,7 +104,7 @@ class S54_P2_Read(VScene):
                   FadeOut(soft), [Indicate(fl, color=ROSE, scale_factor=1.25), Indicate(f_lab, color=ROSE)],
                   Write(feq[0:3]), .05,
                   Wiggle(fl, scale_value=1.15), Indicate(fl, color=ACCENT, scale_factor=1.2),
-                  [Write(feq[3:]), feq[4].animate.set_color(ACCENT)], FadeIn(glow(feq[4], ACCENT)),
+                  Write(feq[3:]), Create(mbox),
                   FadeIn(warn), .1,
                   w=(.03, .12, .1, .12, .12, .12, .08, .08))
 
@@ -128,6 +113,6 @@ class S54_P2_Read(VScene):
         later.shift(LEFT * max(0, later.get_right()[0] - (xl1.get_left()[0] - 0.3)))
         self.beat("The figure also marks a point three at a quarter of the length. The questions don't ask about "
                   "it, but we'll use it at the end to learn something.",
-                  [FadeIn(glow(mark3, MUTED)), Indicate(c3, color=INK2)], .1, FadeIn(later, shift=UP * 0.2), .3,
+                  [Indicate(hb.tick3, color=MUTED, scale_factor=1.3), Indicate(hb.ring3, color=INK2)], .1, FadeIn(later, shift=UP * 0.2), .3,
                   w=(.3, .2))
         self.wipe()

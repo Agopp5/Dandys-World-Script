@@ -53,16 +53,17 @@ class S43_Solve(VScene):
                              fill_color=SURFACE, fill_opacity=1).move_to([cx, (ya + yb) / 2, 0])
 
         elems = VGroup(*[elem(ys[i], ys[i + 1]) for i in range(3)])
-        ground = Line([cx - 1.1, y0, 0], [cx + 1.1, y0, 0], color=INK2, stroke_width=4)
-        hatch = VGroup(*[Line([cx - 1.0 + 0.25 * k, y0, 0], [cx - 1.2 + 0.25 * k, y0 - 0.3, 0],
-                              color=INK2, stroke_width=2.5) for k in range(9)])
+        ground = wall([cx, y0, 0], side=DOWN, h=2.4)
         nodes = VGroup(*[node([cx, y, 0], r=0.1) for y in ys])
-        qlab = VGroup(*[M("q_%d" % (i + 1), size=44, color=SKY).next_to(nodes[i], LEFT, buff=1.05)
-                        for i in range(4)])
-        xarr = Arrow([cx + 1.3, y0 + 0.15, 0], [cx + 1.3, y0 + 1.5, 0], buff=0, color=INK2, stroke_width=4)
-        xlab = M("x", size=40, color=INK2).next_to(xarr, RIGHT, buff=0.12)
-        column = VGroup(ground, hatch, elems, nodes, qlab, xarr, xlab)
-        qlab[0].shift(0.4 * UP)
+        qlab = VGroup(*[M("q_%d" % (i + 1), size=44, color=SKY)
+                        .next_to([cx + W / 2, ys[i], 0], RIGHT, buff=0.3) for i in range(4)])
+        nnum = VGroup(*[T(str(i + 1), size=36, color=INK2)
+                        .next_to([cx - W / 2, ys[i], 0], LEFT, buff=0.3) for i in range(4)])
+        xarr = Arrow([cx - 1.65, y0 + 0.15, 0], [cx - 1.65, y0 + 1.5, 0], buff=0, color=INK2, stroke_width=4)
+        xlab = M("x", size=40, color=INK2).next_to(xarr, LEFT, buff=0.12)
+        column = VGroup(ground, elems, nodes, qlab, nnum, xarr, xlab)
+        qlab[0].shift(0.25 * UP)
+        nnum[0].shift(0.25 * UP)
         for m in qlab:
             m.set_z_index(3)
         nodes.set_z_index(2)
@@ -82,7 +83,7 @@ class S43_Solve(VScene):
         self.beat("To keep the numbers clean, measure every q in units of c l squared over two E A. Then the system is just: two, minus one, zero; minus one, two, minus one; zero, minus one, one, times the q's, equals two, two, one.",
                   FadeIn(column), Write(note), FadeIn(note_t), .05, FadeIn(sysm), w=(.15, .25, .1, .45))
 
-        def rowbox(k, color=GOLD):
+        def rowbox(k, color=LILAC):
             return VGroup(*[SurroundingRectangle(mx.get_rows()[k], buff=0.1, color=color, stroke_width=3)
                             for mx in (Km, Xv, Fv)])
 
@@ -111,10 +112,10 @@ class S43_Solve(VScene):
         sols.move_to([RX, -3.4, 0])
         sboxes = VGroup(*[SurroundingRectangle(s, buff=0.14, color=SKY, stroke_width=3) for s in sols])
         with self.say("Add that result to the first row, and you get x two equals five. Then x three is eight, and x four is nine.") as d:
-            self.play(FadeOut(box2), FadeOut(box3), Create(box1), Indicate(lineB, color=GOLD), run_time=.2 * d)
+            self.play(FadeOut(box2), FadeOut(box3), Create(box1), Indicate(lineB, color=INK), run_time=.2 * d)
             self.play(Write(sols[0]), Create(sboxes[0]), run_time=.25 * d)
-            self.play(Indicate(lineB, color=GOLD), Write(sols[1]), Create(sboxes[1]), run_time=.22 * d)
-            self.play(Indicate(lineA, color=GOLD), Write(sols[2]), Create(sboxes[2]), run_time=.22 * d)
+            self.play(Indicate(lineB, color=INK), Write(sols[1]), Create(sboxes[1]), run_time=.22 * d)
+            self.play(Indicate(lineA, color=INK), Write(sols[2]), Create(sboxes[2]), run_time=.22 * d)
             self.wait(.11 * d)
 
         # ---------- beat 5: units back ----------
@@ -126,7 +127,7 @@ class S43_Solve(VScene):
         fin[0].set_color(SKY)
         fin[3].set_color(SKY)
         fit(fin, 6.4, 3.0)
-        finbox = SurroundingRectangle(fin, buff=0.22, color=GOLD, stroke_width=4)
+        finbox = SurroundingRectangle(fin, buff=0.22, color=SKY, stroke_width=4)
         with self.say("Now put the units back. c l squared over two E A, with c equal to minus rho A g and l equal to L over three, is minus rho g L squared over eighteen E. So the q's are rho g L squared over two E, times minus five ninths, minus eight ninths, and minus one.") as d:
             self.play(FadeOut(VGroup(note, note_t, sysm, box1, lineA, tagA, lineB, tagB)),
                       xrow.animate.scale(.85).move_to([RX, 2.95, 0]), run_time=.1 * d)
@@ -139,7 +140,7 @@ class S43_Solve(VScene):
             self.play(Write(scl[1:]), run_time=.17 * d)
             self.wait(.05 * d)
             self.play(Write(fin), run_time=.25 * d)
-            halo = glow(fin, GOLD)
+            halo = glow(fin, SKY)
             self.play(Create(finbox), FadeIn(halo), run_time=.1 * d)
             self.wait(.13 * d)
 
@@ -148,20 +149,15 @@ class S43_Solve(VScene):
         new_ys = [ys[i] - S * DROP[i] for i in range(4)]
         ghost = DashedVMobject(Rectangle(width=W, height=y3 - y0, color=MUTED, stroke_width=2.5)
                                .move_to([cx, (y0 + y3) / 2, 0]), num_dashes=40)
-        ax_ = cx + 1.3
+        ax_ = cx + 2.0
         arrows = VGroup(*[Arrow([ax_, ys[i], 0], [ax_, ys[i] - S * DROP[i], 0], buff=0, color=SKY,
                                 stroke_width=6, max_tip_length_to_length_ratio=.45) for i in (1, 2, 3)])
         alab = VGroup(*[M(t, size=40, color=SKY).next_to(arrows[k], RIGHT, buff=0.15)
                         for k, t in enumerate(("-5/9", "-8/9", "-1"))])
         exag = T("sinking exaggerated", size=30, color=MUTED).move_to([cx + 0.4, y0 - 0.65, 0])
-        card = panel(VGroup(T("FIRST QUESTION", size=32, color=GOLD, weight=BOLD),
-                            T("How much does the flagpole", size=40),
-                            T("shorten?", size=40)).arrange(DOWN, buff=0.25))
-        fit(card, 5.6, 2.6)
-        card.move_to([RX, -2.6, 0])
-        tick = M(r"\checkmark", size=72, color=GOOD).next_to(card, RIGHT, buff=0.15)
-        if tick.get_right()[0] > 6.9:
-            tick.next_to(card, UP, buff=0.1).align_to(card, RIGHT)
+        card = panel(T("How much does it shorten?", size=36))
+        card.move_to([RX - 0.7, -2.6, 0])
+        tick = M(r"\checkmark", size=48, color=GOOD).next_to(card, RIGHT, buff=0.15)
         with self.say("All negative: every point sinks. The top sinks most, by rho g L squared over two E. That answers our first question: that's how much the flagpole shortens.") as d:
             self.play(FadeOut(xrow), FadeOut(subs), FadeOut(scl),
                       VGroup(halo, fin, finbox).animate.move_to([RX, 1.2, 0]), run_time=.08 * d)
@@ -170,10 +166,11 @@ class S43_Solve(VScene):
                       *[Transform(elems[i], elem(new_ys[i], new_ys[i + 1])) for i in range(3)],
                       *[nodes[i].animate.move_to([cx, new_ys[i], 0]) for i in range(4)],
                       *[qlab[i].animate.shift((new_ys[i] - ys[i]) * UP) for i in range(4)],
+                      *[nnum[i].animate.shift((new_ys[i] - ys[i]) * UP) for i in range(4)],
                       FadeOut(xarr), FadeOut(xlab),
                       LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=.3),
                       FadeIn(alab), FadeIn(exag), run_time=.3 * d)
-            self.play(Indicate(arrows[2], color=GOLD), Indicate(alab[2], color=GOLD), run_time=.17 * d)
+            self.play(Indicate(arrows[2], color=INK), Indicate(alab[2], color=INK), run_time=.17 * d)
             self.play(FadeIn(card, shift=.2 * UP), run_time=.15 * d)
             self.play(Write(tick), Flash(tick, color=GOOD), run_time=.15 * d)
             self.wait(.15 * d)

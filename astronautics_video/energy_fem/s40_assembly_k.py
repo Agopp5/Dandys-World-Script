@@ -31,7 +31,8 @@ CS = 1.2                                   # global cell size
 G0 = np.array([-6.1, 2.0, 0.])             # top-left corner of the 4 by 4 grid
 SC = .7                                    # element blocks wait at 70 % size, then grow as they land
 BX, BY = [1.05, 3.5, 5.95], .85            # where the three element blocks wait
-HUES = [LILAC, interpolate_color(LILAC, INK, .45), interpolate_color(LILAC, BG, .35)]  # stiffness shades
+HUES = [LILAC, interpolate_color(ManimColor(LILAC), ManimColor(INK), .45),
+        interpolate_color(ManimColor(LILAC), ManimColor(BG), .35)]  # stiffness shades
 FC, C2 = np.array([1.3, -.4, 0.]), 1.05    # the finished matrix: centre and entry pitch
 UC = {"U_1": MINT, "U_2": MINT, "U_3": MINT}
 
