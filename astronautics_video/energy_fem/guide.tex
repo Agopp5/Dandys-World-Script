@@ -44,8 +44,9 @@ row 3 of the $4\times4$ stiffness matrix.}
 
 \section*{Episode 3: Homework Problem 1}
 
-\checkpoint[4cm]{3.1}{The derivative for the bar}{%
-For homework problem 1,
+\checkpoint[4cm]{3.1}{The derivative for the rigid bar}{%
+For homework problem 1 (a rigid bar, displacement $q_2$, carries $P_2$ and $P_3$; it sits on $K_1$ and on a
+$K_2$--$K_2$ chain whose junction moves $q_1$; $K_3$ joins it to node 3),
 $\Pi = \tfrac12 K_1 q_2^2 + \tfrac12 K_2 q_1^2 + \tfrac12 K_2 (q_2-q_1)^2 + \tfrac12 K_3 (q_3-q_2)^2
 - P_1 q_1 - (P_2+P_3) q_2 - P_4 q_3$.
 Find $\partial \Pi / \partial q_2$, set it to zero, and collect the terms by $q_1$, $q_2$, $q_3$.}
@@ -58,7 +59,7 @@ Then check one spring with Newton: does $K_3$ carry exactly $P_4$?}
 \section*{Episode 4: From Springs to Bars}
 
 \checkpoint[3cm]{4.1}{How good is the straight line?}{%
-A bar fixed at $x = 0$ carries a uniform load $f$ per unit length. The assumed shape $u = a x$ gave
+A bar of length $L$, fixed at $x = 0$ and free at $x = L$, carries a uniform load $f$ per unit length along $+x$. The assumed shape $u = a x$ gave
 $a = \dfrac{fL}{2EA}$. The exact answer is $u(x) = \dfrac{f}{EA}\left(Lx - \dfrac{x^2}{2}\right)$. Compare the two at
 the middle, $x = L/2$, in units of $fL^2/EA$.}
 
@@ -72,7 +73,7 @@ $EA/l$?}
 
 \checkpoint[3.5cm]{6.1}{The column's load vector}{%
 A column of height $L$ stands on the ground and carries its own weight, $c = -\rho A g$ per unit length. It is split
-into three equal elements ($l = L/3$), nodes 1 (base) to 4 (top). Each element sends $cl/2$ to each of its nodes, and
+into three equal elements ($l = L/3$), nodes 1 (base) to 4 (top), with $x$ measured upward (so $c<0$ means down and $R>0$ means up). Each element sends $cl/2$ to each of its nodes, and
 the ground pushes on node 1 with a reaction $R$. Write the global load vector $\{F_1, F_2, F_3, F_4\}$.}
 
 \checkpoint[3cm]{6.2}{Stress in element 2}{%
@@ -88,7 +89,7 @@ element 2 joins nodes 1 and 2 with $k_2 = 14\,000\Nmm$; a spring $K = 14\,000\Nm
 $4\times4$ global stiffness matrix.}
 
 \checkpoint[2.5cm]{7.2}{Stress in the thin piece}{%
-With $E = 70\,000\ \mathrm{N/mm^2}$, $l = 500\mm$, $q_1 = 0.2\mm$ and $q_2 = 0.1\mm$, find the stress in element 2
+Both elements are $l = 500\mm$ long; element 1 has $A = 200\mm^2$ and element 2 (the thin piece) $A = 100\mm^2$. With $E = 70\,000\ \mathrm{N/mm^2}$, $q_1 = 0.2\mm$ and $q_2 = 0.1\mm$, find the stress in element 2
 (nodes 1 to 2). Tension or compression?}
 
 \section*{Episode 8: Homework Problem 2}
@@ -112,7 +113,7 @@ $\partial\Pi/\partial q_2 = 0$ and solve. (c) Find the force each wall exerts, a
 
 \textbf{Practice B (finite elements, like homework problem 2).} A steel bar, $E = 200\,000\ \mathrm{N/mm^2}$,
 $A = 60\mm^2$, $L = 1200\mm$, is fixed at $x = 0$. A uniform load $f = 1.5\Nmm$ acts along $+x$, and a tip load
-$P = 300\ \mathrm{N}$ acts along $+x$. Use three equal elements. (a) Find each element's stiffness and load vector.
+$P = 300\ \mathrm{N}$ acts along $+x$. Use three equal elements, nodes 0 (wall) to 3 (tip). (a) Find each element's stiffness and load vector.
 (b) Assemble $K$ and $F$. (c) Apply the support and solve for the three free node displacements. (d) Find the stress
 in each element. (e) Use the constrained equation to find the wall reaction.
 
@@ -130,8 +131,8 @@ in each element. (e) Use the constrained equation to find the wall reaction.
 \hintfor{7.1} Each spring or element drops a $2\times2$ block on its two nodes; where blocks meet on the diagonal,
 add.
 \hintfor{7.2} $\sigma = E\,(q_b - q_a)/l$ with $q_b$ the right node.
-\hintfor{8.1} Each element sends $cl/2 = (-5)(20)/2$ to each of its nodes; add the point loads at their nodes.
-\hintfor{8.2} Row 0 reads $1000\,q_0 - 1000\,q_1 = R - 50$.
+\hintfor{8.1} Each element sends $cl/2$, with $c = -5$ lb/in, to each of its nodes; add the point loads at their nodes.
+\hintfor{8.2} Row 0 of $K$ is $1000\,[1,\ -1,\ 0]$, and $F_0$ includes $R$; put in $q_0 = q_1 = 0$.
 
 \section*{Solutions}\label{solutions}
 
@@ -165,7 +166,7 @@ Assumed: $u(L/2) = aL/2 = fL^2/(4EA) = 0.25\,fL^2/EA$. Exact: $\dfrac{f}{EA}\lef
 $EA/l = 70\,000\times100/250 = 28\,000\Nmm$.
 
 \solutionfor{6.1}{The column's load vector}
-$F = \dfrac{cl}{2}\{1,\,2,\,2,\,1\} + \{R,\,0,\,0,\,0\}$: the shared middle nodes get $cl/2$ from each side.
+$F = \dfrac{cl}{2}\{1,\,2,\,2,\,1\} + \{R,\,0,\,0,\,0\} = -\dfrac{\rho A g L}{6}\{1,\,2,\,2,\,1\} + \{R,\,0,\,0,\,0\}$: the shared middle nodes get $cl/2$ from each side.
 
 \solutionfor{6.2}{Stress in element 2}
 $q_3 - q_2 = (-8/9 + 5/9)\,\rho g L^2/(2E) = -\tfrac13\,\rho g L^2/(2E)$. Times $E/l = 3E/L$:
@@ -199,7 +200,7 @@ $= -\tfrac12(60)(3.0)$.
 
 \subsection*{Practice B}
 (a) $l = 400\mm$, $k = EA/l = 200\,000\times60/400 = 30\,000\Nmm$; each element's load vector is
-$cl/2 = 1.5\times400/2 = 300$ N at each node.
+$fl/2 = 1.5\times400/2 = 300$ N at each node.
 (b) $K = 30\,000\begin{bmatrix}1&-1&0&0\\-1&2&-1&0\\0&-1&2&-1\\0&0&-1&1\end{bmatrix}$,
 $F = \{300 + R,\ 600,\ 600,\ 300 + 300\} = \{300 + R,\ 600,\ 600,\ 600\}$ N.
 (c) Remove row and column 0. Last row: $30\,000(q_3 - q_2) = 600$, so $q_3 - q_2 = 0.02$. Adding it to row 2:
