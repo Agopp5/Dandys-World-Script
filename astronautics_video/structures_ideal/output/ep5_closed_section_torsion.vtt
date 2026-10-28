@@ -1,0 +1,142 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.277
+Now a different load: a pure twist.
+
+00:00:02.277 --> 00:00:05.920
+A torque T is applied to the wing box, and nothing else.
+
+00:00:06.233 --> 00:00:14.648
+In a single closed cell under pure torque, the shear flow is the same all the way around.
+
+00:00:14.648 --> 00:00:15.593
+Call it q.
+
+00:00:16.000 --> 00:00:20.643
+Each little piece of wall carries a force q d s.
+
+00:00:20.643 --> 00:00:26.640
+Its moment about the middle is that force times its lever arm.
+
+00:00:26.933 --> 00:00:32.182
+Lever arm times d s is twice the area of the thin triangle it sweeps.
+
+00:00:32.182 --> 00:00:36.745
+Going all the way around, the triangles fill the whole cell.
+
+00:00:36.745 --> 00:00:40.853
+So the torque is two times the enclosed area, times q.
+
+00:00:42.333 --> 00:00:51.225
+For a five hundred by two fifty cell, A is one hundred twenty five thousand square millimeters.
+
+00:00:51.225 --> 00:01:01.333
+Under ten kilonewton meters, q is ten million over two hundred fifty thousand: forty newtons per millimeter.
+
+00:01:03.433 --> 00:01:07.120
+The torque also twists the box a little.
+
+00:01:07.120 --> 00:01:14.953
+The twist per unit length along the span is called the rate of twist, d theta by d z.
+
+00:01:15.233 --> 00:01:22.673
+How much it twists depends on the material's shear stiffness, the shear modulus G, and on how thin the walls are.
+
+00:01:23.000 --> 00:01:32.480
+The formula is: d theta by d z equals one over two A G, times the integral of q d s over t, all the way around.
+
+00:01:32.766 --> 00:01:37.929
+We'll call the integral of d s over t, for a wall, delta.
+
+00:01:37.929 --> 00:01:48.526
+For our cell, every wall is two millimeters thick, so delta around the cell is fifteen hundred over two: seven fifty.
+
+00:01:49.666 --> 00:02:01.246
+So the rate of twist is forty times seven fifty, over two times one twenty five thousand times twenty seven thousand.
+
+00:02:01.246 --> 00:02:12.826
+That's four point four four times ten to the minus six radians per millimeter: about a quarter of a degree per meter.
+
+00:02:16.633 --> 00:02:20.522
+Real wings often have several cells side by side.
+
+00:02:20.522 --> 00:02:26.713
+With pure torque, there's no bending stress, so the booms don't matter at all.
+
+00:02:27.066 --> 00:02:32.746
+Each cell still carries its own constant shear flow: q one, q two, q three.
+
+00:02:33.033 --> 00:02:38.907
+A wall shared by two cells has both flows on it, in opposite directions.
+
+00:02:38.907 --> 00:02:41.273
+So it carries the difference.
+
+00:02:41.566 --> 00:02:48.726
+The torque is the sum of two A q for every cell.
+
+00:02:49.566 --> 00:02:56.215
+But that's only one equation, and there's one unknown shear flow for every cell.
+
+00:02:56.215 --> 00:02:58.126
+We need more equations.
+
+00:02:59.500 --> 00:03:02.567
+The extra equations come from one simple fact.
+
+00:03:02.567 --> 00:03:08.100
+The whole wing box rotates as one piece, so every cell must twist at the same rate.
+
+00:03:09.433 --> 00:03:19.633
+For each cell, the rate of twist is the same formula as before: one over two A G, times the integral of q d s over t around that cell.
+
+00:03:24.033 --> 00:03:24.851
+Your turn.
+
+00:03:24.851 --> 00:03:29.593
+Pause here and do checkpoint five point one in your guide.
+
+00:03:32.767 --> 00:03:44.193
+Going around cell one, every wall carries q one, except the shared wall, which carries q one minus q two.
+
+00:03:44.193 --> 00:03:46.152
+Collect the terms.
+
+00:03:46.152 --> 00:03:53.007
+You get q one times delta one, minus q two times delta one two.
+
+00:03:54.567 --> 00:03:57.876
+Set cell one's rate equal to cell two's.
+
+00:03:57.876 --> 00:04:04.247
+Together with the torque equation, that's two equations for the two unknowns.
+
+00:04:06.799 --> 00:04:12.022
+Sometimes the skins and the spars are made of different materials.
+
+00:04:12.022 --> 00:04:17.799
+Then G is different on each wall, and it has to move inside the integral.
+
+00:04:21.099 --> 00:04:22.244
+Here's the trick.
+
+00:04:22.244 --> 00:04:23.658
+Pick one reference G.
+
+00:04:23.658 --> 00:04:28.170
+Then scale each wall's thickness by its own G over the reference G.
+
+00:04:28.170 --> 00:04:31.739
+That's called the modulus weighted thickness, t star.
+
+00:04:34.666 --> 00:04:37.631
+Now use t star wherever you had t.
+
+00:04:37.631 --> 00:04:41.643
+Delta becomes the integral of d s over t star.
+
+00:04:41.643 --> 00:04:44.346
+Everything else stays the same.
+
+00:04:47.866 --> 00:04:55.466
+Your slides' three cell example, worked this way, gives seven point one, eight point nine, and four point two newtons per millimeter.

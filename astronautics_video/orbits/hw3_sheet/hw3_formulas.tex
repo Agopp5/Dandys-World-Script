@@ -1,0 +1,83 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.6in]{geometry}
+\usepackage{amsmath,amssymb,bm,xcolor,enumitem}
+\usepackage[T1]{fontenc}
+\usepackage{multicol}
+\setlength{\parindent}{0pt}\setlength{\parskip}{2pt}
+\pagestyle{empty}
+\newcommand{\hsec}[1]{\vspace{4pt}{\large\bfseries\color{blue!50!black}#1}\par\vspace{-2pt}\hrule\vspace{3pt}}
+\newcommand{\note}[1]{{\small\color{gray}#1}}
+\begin{document}
+{\LARGE\bfseries AERSP 309 --- HW 3 formula sheet}\hfill{\small $\mu_\oplus = 3.986\times10^{5}\ \text{km}^3/\text{s}^2,\ R_\oplus = 6378\ \text{km}$}
+
+\hsec{Orbit geometry}
+\begin{multicols}{2}
+\[ r=\frac{p}{1+e\cos\theta}\qquad p=\frac{h^{2}}{\mu}=a(1-e^{2})=\frac{b^{2}}{a} \]
+\[ r_p=a(1-e),\quad r_a=a(1+e),\quad a=\tfrac12(r_p+r_a) \]
+\[ e=\frac{r_a-r_p}{r_a+r_p},\quad c=ae,\quad b=a\sqrt{1-e^{2}} \]
+\[ h=\sqrt{\mu p}=r\,v\cos\gamma=r_pv_p=r_av_a \]
+\end{multicols}
+\note{$\theta$ is the true anomaly (called $f$ in the HW). Check any formula for $p$ with a circle: $r_p=r_a=r$ must give $p=r$.}
+
+\hsec{Energy, speed, period}
+\begin{multicols}{2}
+\[ \varepsilon=\frac{v^{2}}{2}-\frac{\mu}{r}=-\frac{\mu}{2a} \]
+\[ v^{2}=\mu\left(\frac{2}{r}-\frac{1}{a}\right)\ \text{(vis-viva)} \]
+\[ v_c=\sqrt{\frac{\mu}{r}},\qquad v_{esc}=\sqrt{\frac{2\mu}{r}} \]
+\[ T=2\pi\sqrt{\frac{a^{3}}{\mu}},\qquad n=\frac{2\pi}{T}=\sqrt{\frac{\mu}{a^{3}}} \]
+\end{multicols}
+\note{$\varepsilon<0$: ellipse; $\varepsilon=0$: parabola; $\varepsilon>0$: hyperbola.}
+
+\hsec{Velocity and flight-path angle}
+\begin{multicols}{2}
+\[ v_r=\frac{\mu}{h}\,e\sin\theta,\qquad v_\theta=\frac{\mu}{h}\,(1+e\cos\theta) \]
+\[ \tan\gamma=\frac{v_r}{v_\theta}=\frac{e\sin\theta}{1+e\cos\theta} \]
+\[ \cos\gamma=\frac{h}{rv} \]
+\[ \dot\theta=\frac{h}{r^{2}}=\sqrt{\frac{\mu}{p^{3}}}\,(1+e\cos\theta)^{2} \]
+\end{multicols}
+\note{Finding $\theta$ from $r$: $\cos\theta=\dfrac{p/r-1}{e}$. Quadrant: $\gamma>0$ (moving away from the planet) means $0<\theta<180^\circ$; $\gamma<0$ (approaching) means $180^\circ<\theta<360^\circ$.}
+
+\hsec{Time on the orbit (Kepler's equation)}
+\begin{multicols}{2}
+\[ M=E-e\sin E=n\,(t-t_p) \]
+\[ r=a\,(1-e\cos E) \]
+\[ \cos E=\frac{e+\cos\theta}{1+e\cos\theta} \]
+\[ \Delta t=\frac{M_2-M_1}{n} \]
+\end{multicols}
+\note{Time is proportional to swept area, not to angle. $E$ lies in the same half-plane as $\theta$ (both in $0$--$180^\circ$ or both in $180^\circ$--$360^\circ$). For time spent over a symmetric arc about periapsis, double the one-sided time.}
+
+\hsec{Parabola ($e=1$) and hyperbola ($e>1$)}
+\begin{multicols}{2}
+\textbf{Parabola}
+\[ v=\sqrt{\frac{2\mu}{r}},\qquad r_p=\frac{p}{2},\qquad \gamma=\frac{\theta}{2} \]
+\textbf{Hyperbola} ($a<0$)
+\[ r_p=a(1-e),\qquad p=a(1-e^{2}) \]
+\[ v_\infty=\sqrt{-\frac{\mu}{a}}=\sqrt{2\varepsilon} \]
+\[ \theta_\infty=\cos^{-1}\!\left(-\frac1e\right),\qquad \delta=2\sin^{-1}\!\frac1e=2\theta_\infty-180^\circ \]
+\end{multicols}
+
+\hsec{Problem 1: velocity frame $\mathcal V$ vs.\ orbit frame $\mathcal O$}
+\[ \tan\beta=\frac{e\sin f}{1+e\cos f},\quad \sin\beta=\frac{e\sin f}{k},\quad \cos\beta=\frac{1+e\cos f}{k},\quad k=\sqrt{1+2e\cos f+e^{2}} \]
+\[ \underbrace{C^{\mathcal{VO}}}_{\text{rows: }\mathcal V\text{ axes in }\mathcal O}\text{ is a single rotation about }\hat\imath_h\text{ by }\pm\beta\ \ (\text{get the sign from the figure}) \]
+\[ \vec\omega^{\mathcal V/\mathcal P}=\vec\omega^{\mathcal V/\mathcal O}+\vec\omega^{\mathcal O/\mathcal P},\qquad \vec\omega^{\mathcal O/\mathcal P}=\dot f\,\hat\imath_h,\qquad \dot f=\sqrt{\frac{\mu}{p^{3}}}\,(1+e\cos f)^{2} \]
+\[ \vec\alpha=\frac{d\omega}{dt}\,\hat\imath_h=\dot f\,\frac{d\omega}{df}\,\hat\imath_h\ \ (\hat\imath_h\text{ is fixed in both frames});\qquad \dot\beta=\dot f\,\frac{d\beta}{df}\ \text{from differentiating }\tan\beta \]
+
+\hsec{Problem 4: orbital elements from $\vec r_1,\vec r_2$}
+\[ \hat h=\frac{\vec r_1\times\vec r_2}{|\vec r_1\times\vec r_2|},\qquad \cos i=\hat h_3,\qquad \vec n=\hat n_3\times\hat h=(-\hat h_2,\ \hat h_1,\ 0),\qquad \Omega=\operatorname{atan2}(n_2,n_1) \]
+\[ \cos\Delta f=\frac{\vec r_1\cdot\vec r_2}{r_1r_2},\qquad f_2=f_1+\Delta f \qquad(\text{assumes the short way, }\Delta f<180^\circ) \]
+\[ e\cos f_1=\frac{p}{r_1}-1,\qquad e\cos(f_1+\Delta f)=\frac{p}{r_2}-1 \ \Longrightarrow\ \text{expand to get } e\sin f_1 \]
+\[ e=\sqrt{(e\cos f_1)^2+(e\sin f_1)^2},\quad f_1=\operatorname{atan2}(e\sin f_1,\ e\cos f_1),\quad a=\frac{p}{1-e^{2}} \]
+\[ \cos u=\hat n\cdot\hat r\ \ (u\to360^\circ-u\ \text{if }r_3<0),\qquad \omega=u-f \]
+\note{Ascending vs.\ descending: sign of $\gamma$ (i.e.\ of $\sin f$) says moving away from or toward the planet; sign of $\dot r_3$ says north or south. State which you mean.}
+
+\hsec{Problem 3 (proofs) and textbook problems}
+\textbf{P3:} start from $r_p=a(1-e)$, $r_a=a(1+e)$, $b=a\sqrt{1-e^2}$, $p=b^2/a$.\quad
+\textbf{2.16:} $\varepsilon\to a$, $h\to p\to e$, compare $r_p$ with $R_\oplus$.\quad
+\textbf{2.17:} same $r_p$; $T_B/T_A$ from the angle A must cover; $a\propto T^{2/3}$; $r_a=2a-r_p$.\quad
+\textbf{2.19, 2.20:} parabola formulas.\quad
+\textbf{2.21:} $\gamma=0$ means perigee; $h,p,e$; vis-viva; $\cos\gamma=h/rv$; $v_\infty=\sqrt{2\varepsilon}$.\quad
+\textbf{2.22:} $r_p=a(1-e)$, $p=a(1-e^2)$, $v_r,v_\theta$, $\theta_\infty$, $\delta$.\quad
+\textbf{2.28:} $a,e$ from $r_p,r_a$, then $T$.\quad
+\textbf{2.32:} $a$ from $\varepsilon$, $p$ from $h$, then $e$; use the Moon's $\mu$ and radius.\quad
+\textbf{2.42:} $v_\infty$ from $a$; $r_p=a(1-e)$; use Jupiter's $\mu$.
+\end{document}

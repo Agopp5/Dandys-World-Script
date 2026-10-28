@@ -1,0 +1,109 @@
+WEBVTT
+
+00:00:00.500 --> 00:00:06.962
+Here's homework problem two: a two cell wing box under a counterclockwise torque.
+
+00:00:06.962 --> 00:00:14.780
+The problem doesn't give the size of the torque, so we'll find each shear flow per unit of torque.
+
+00:00:15.100 --> 00:00:17.041
+The table also lists boom areas.
+
+00:00:17.041 --> 00:00:21.227
+In pure torsion there's no direct stress, so the booms carry nothing.
+
+00:00:21.227 --> 00:00:22.380
+We can ignore them.
+
+00:00:22.700 --> 00:00:25.701
+The walls have two different G values.
+
+00:00:25.701 --> 00:00:30.281
+Take the reference G as twenty seven thousand six hundred.
+
+00:00:30.281 --> 00:00:34.940
+The webs already have that G, so they keep their thickness.
+
+00:00:35.300 --> 00:00:38.662
+The skins have G of twenty four thousand two hundred.
+
+00:00:38.662 --> 00:00:46.020
+So their thickness is scaled by twenty four two hundred over twenty seven six hundred: zero point eight seven seven.
+
+00:00:47.333 --> 00:00:51.693
+Now each wall's delta is its length over t star.
+
+00:00:54.767 --> 00:00:57.584
+Around cell one: one nineteen sixty nine.
+
+00:00:57.584 --> 00:01:00.469
+Around cell two: thirty five twenty eight.
+
+00:01:00.469 --> 00:01:04.247
+And the shared spar alone: one ninety nine point eight.
+
+00:01:08.000 --> 00:01:09.901
+First equation, equal twist.
+
+00:01:09.901 --> 00:01:19.680
+Cell one's rate: q one times nineteen sixty nine, minus q two times one ninety nine point eight, over two times two hundred thirty two thousand.
+
+00:01:20.433 --> 00:01:35.313
+That must equal cell two's rate: minus q one times one ninety nine point eight, plus q two times thirty five twenty eight, over two times two hundred fifty eight thousand.
+
+00:01:35.700 --> 00:01:38.622
+Cross multiply and collect.
+
+00:01:38.622 --> 00:01:47.389
+Five hundred fifty four million q one equals eight hundred seventy million q two.
+
+00:01:47.389 --> 00:01:52.260
+So q one is one point five seven times q two.
+
+00:01:52.567 --> 00:01:55.507
+Second equation, the torque.
+
+00:01:55.507 --> 00:02:08.527
+T equals two times two hundred thirty two thousand times q one, plus two times two hundred fifty eight thousand times q two.
+
+00:02:09.200 --> 00:02:11.223
+Substitute q one.
+
+00:02:11.223 --> 00:02:18.840
+That gives T equals one point two four four million times q two.
+
+00:02:20.200 --> 00:02:25.484
+So q two is zero point eight zero four times ten to the minus six, T.
+
+00:02:25.484 --> 00:02:32.760
+And q one is one point two six one times ten to the minus six, T, with T in newton millimeters.
+
+00:02:33.733 --> 00:02:50.093
+For a torque of one kilonewton meter: one point two six in cell one, zero point eight zero in cell two, and the spar carries the difference, zero point four six newtons per millimeter.
+
+00:02:51.400 --> 00:02:52.327
+Your turn.
+
+00:02:52.327 --> 00:02:59.560
+Pause here and do checkpoint six point one: a two cell box with a real torque.
+
+00:03:03.366 --> 00:03:04.187
+Let's recap.
+
+00:03:04.187 --> 00:03:08.155
+Booms carry the direct stress, and the skin carries shear.
+
+00:03:08.155 --> 00:03:15.886
+Any direct stress the skin does carry is added to the booms with t D b over six, times two plus the stress ratio.
+
+00:03:16.799 --> 00:03:23.447
+Shear flow is constant between booms, and jumps at each one.
+
+00:03:23.447 --> 00:03:30.759
+For a closed section: cut, march around, then close with q s zero.
+
+00:03:32.366 --> 00:03:35.432
+In torsion, a single cell has T equals two A q.
+
+00:03:35.432 --> 00:03:45.086
+With several cells, each has its own q: the torque gives one equation, equal twist gives the rest, and different materials just scale the thickness.

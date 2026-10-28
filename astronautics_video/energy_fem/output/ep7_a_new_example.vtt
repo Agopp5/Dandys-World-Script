@@ -1,0 +1,199 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.972
+Let's do a brand new problem from start to finish, with real numbers.
+
+00:00:03.972 --> 00:00:09.440
+An aluminum bar, fixed to a wall on the left, made of two pieces: a thick one, then a thin one.
+
+00:00:09.740 --> 00:00:15.545
+Then a spring connects the end of the thin piece to a second wall on the right.
+
+00:00:15.545 --> 00:00:21.864
+And a load of seven thousand newtons pushes right, at the step between the two pieces.
+
+00:00:21.864 --> 00:00:26.420
+The question: how does that load divide between the two walls?
+
+00:00:26.753 --> 00:00:28.107
+The material first.
+
+00:00:28.107 --> 00:00:32.524
+Aluminum: E is seventy thousand newtons per square millimeter.
+
+00:00:32.524 --> 00:00:38.793
+The thick piece has an area of two hundred square millimeters, the thin one one hundred.
+
+00:00:39.153 --> 00:00:42.948
+Each piece is five hundred millimeters long.
+
+00:00:42.948 --> 00:00:49.073
+And the spring's stiffness is fourteen thousand newtons per millimeter.
+
+00:00:49.387 --> 00:00:57.662
+Number the nodes: zero at the left wall, one at the step, two at the end of the thin piece, three at the right wall.
+
+00:00:57.662 --> 00:01:02.227
+We want the displacements, the stresses, and the wall reactions.
+
+00:01:06.533 --> 00:01:14.493
+Each piece of bar is an element, and each element is a spring with stiffness E A over l.
+
+00:01:14.793 --> 00:01:23.609
+Thick piece: seventy thousand times two hundred, over five hundred: twenty eight thousand newtons per millimeter.
+
+00:01:23.609 --> 00:01:28.913
+Thin piece: half the area, so half the stiffness, fourteen thousand.
+
+00:01:29.246 --> 00:01:33.870
+And the real spring is already a spring, fourteen thousand.
+
+00:01:33.870 --> 00:01:38.886
+So the whole thing is three springs in a row, between two walls.
+
+00:01:39.932 --> 00:01:42.463
+Four nodes, so a four by four matrix.
+
+00:01:42.463 --> 00:01:46.292
+Each of the three springs drops in its two by two block.
+
+00:01:46.592 --> 00:01:51.952
+Your turn first: pause and do checkpoint seven point one in your guide, and assemble it yourself.
+
+00:01:55.185 --> 00:02:05.305
+Element one, nodes zero and one: twenty eight thousand on the diagonal at zero and one, minus twenty eight thousand between them.
+
+00:02:05.685 --> 00:02:09.255
+Element two, nodes one and two: fourteen thousand.
+
+00:02:09.255 --> 00:02:15.965
+At spot one-one it adds to the twenty eight thousand already there, making forty two thousand.
+
+00:02:16.352 --> 00:02:21.748
+The spring, nodes two and three: fourteen thousand again.
+
+00:02:21.748 --> 00:02:27.712
+At spot two-two, fourteen plus fourteen, twenty eight thousand.
+
+00:02:28.152 --> 00:02:40.832
+The load vector: the reaction R zero at node zero, seven thousand at node one, nothing at node two, and the reaction R three at node three.
+
+00:02:41.899 --> 00:02:46.591
+Both walls are fixed, so q zero and q three are both zero.
+
+00:02:46.591 --> 00:02:52.739
+Same move as last time: cross out their columns, because they multiply zero.
+
+00:02:53.013 --> 00:02:58.263
+And set their rows aside, because those rows hold the unknown reactions.
+
+00:02:58.263 --> 00:03:00.013
+We'll come back to them.
+
+00:03:00.313 --> 00:03:09.434
+What's left is two by two: forty two thousand, minus fourteen thousand; minus fourteen thousand, twenty eight thousand.
+
+00:03:09.434 --> 00:03:13.113
+Times q one, q two, equals seven thousand, zero.
+
+00:03:14.166 --> 00:03:15.676
+Two equations.
+
+00:03:15.676 --> 00:03:26.896
+Start with the second one: minus fourteen thousand q one, plus twenty eight thousand q two, equals zero.
+
+00:03:26.896 --> 00:03:29.486
+So q one is twice q two.
+
+00:03:29.786 --> 00:03:40.040
+Put that into the first: forty two thousand times two q two, minus fourteen thousand q two, equals seven thousand.
+
+00:03:40.040 --> 00:03:48.946
+That's eighty four thousand minus fourteen thousand, seventy thousand q two, equals seven thousand.
+
+00:03:49.246 --> 00:03:56.886
+So q two is zero point one millimeters, and q one, twice that, is zero point two millimeters.
+
+00:03:57.186 --> 00:03:58.057
+Picture it.
+
+00:03:58.057 --> 00:04:02.414
+The step moves two tenths of a millimeter to the right.
+
+00:04:02.414 --> 00:04:04.712
+The end moves only one tenth.
+
+00:04:04.712 --> 00:04:09.386
+So the thin piece got shorter, and the spring got squeezed.
+
+00:04:10.499 --> 00:04:18.925
+Stress in each element is E times its strain: the displacement of its right node minus its left node, over its length.
+
+00:04:18.925 --> 00:04:21.139
+The same formula as the column.
+
+00:04:21.439 --> 00:04:29.522
+Thick piece: seventy thousand times zero point two minus zero, over five hundred.
+
+00:04:29.522 --> 00:04:33.813
+Twenty eight newtons per square millimeter.
+
+00:04:33.813 --> 00:04:38.303
+That unit is also called a megapascal, M P a.
+
+00:04:38.303 --> 00:04:40.399
+Positive, so tension.
+
+00:04:40.706 --> 00:04:49.026
+Your turn: pause and do checkpoint seven point two in your guide, and find the stress in the thin piece.
+
+00:04:52.206 --> 00:05:01.547
+Thin piece: seventy thousand times zero point one minus zero point two, over five hundred.
+
+00:05:01.547 --> 00:05:05.698
+Minus fourteen megapascals: compression.
+
+00:05:05.698 --> 00:05:11.406
+The load pulls the thick piece and pushes the thin one.
+
+00:05:14.266 --> 00:05:16.596
+Now the rows we set aside.
+
+00:05:16.596 --> 00:05:25.649
+Row zero: twenty eight thousand times q zero, minus twenty eight thousand times q one, equals R zero.
+
+00:05:25.649 --> 00:05:33.626
+That's minus twenty eight thousand times zero point two: minus fifty six hundred newtons.
+
+00:05:33.926 --> 00:05:41.566
+Row three: minus fourteen thousand times q two, equals R three.
+
+00:05:41.566 --> 00:05:45.326
+Minus fourteen hundred newtons.
+
+00:05:45.626 --> 00:05:51.169
+Pay close attention to this move, because problem two of your homework tests exactly this.
+
+00:05:51.169 --> 00:05:56.466
+The rows we set aside to solve the system are the ones that give back the wall forces.
+
+00:05:56.766 --> 00:05:58.724
+Both reactions point left.
+
+00:05:58.724 --> 00:06:04.373
+At the left wall, the thick piece is in tension, so the wall pulls it back.
+
+00:06:04.373 --> 00:06:09.646
+At the right wall, the spring is squeezed, so the wall pushes it back.
+
+00:06:09.979 --> 00:06:14.932
+Together, fifty six hundred plus fourteen hundred is seven thousand.
+
+00:06:14.932 --> 00:06:17.117
+They balance the load exactly.
+
+00:06:17.117 --> 00:06:26.659
+So four fifths of the load goes to the left wall, through the stiff thick piece, and one fifth goes right, through the softer path.
+
+00:06:26.979 --> 00:06:32.819
+So, stepping back: the same recipe as the column, now with real numbers and two supports.

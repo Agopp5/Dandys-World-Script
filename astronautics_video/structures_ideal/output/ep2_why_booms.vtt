@@ -1,0 +1,121 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.253
+Now the main idea.
+
+00:00:01.253 --> 00:00:05.080
+Each stringer is small compared with the whole section.
+
+00:00:05.667 --> 00:00:09.127
+So the bending stress across one stringer hardly changes.
+
+00:00:09.127 --> 00:00:10.827
+We can treat it as constant.
+
+00:00:11.467 --> 00:00:19.651
+That means we can replace the stringer by a single point, with the same area, at the same place.
+
+00:00:19.651 --> 00:00:21.867
+We call that point a boom.
+
+00:00:22.900 --> 00:00:30.420
+Here's the key assumption of this whole topic: the booms carry all of the direct stress, and the skin between them carries only shear.
+
+00:00:31.067 --> 00:00:38.640
+With that, the bending part of the problem only needs the boom areas and where they are.
+
+00:00:38.640 --> 00:00:44.147
+I x x is just each boom area times its height squared, added up.
+
+00:00:46.532 --> 00:00:50.741
+Sometimes the skin does carry real direct stress.
+
+00:00:50.741 --> 00:00:55.292
+Then we give its share to the booms at its two edges.
+
+00:00:56.632 --> 00:01:04.152
+Say the stress is sigma one at boom one and sigma two at boom two, changing in a straight line between them.
+
+00:01:04.432 --> 00:01:10.992
+The two booms must do exactly what the panel did: give the same total force, and the same moment.
+
+00:01:13.165 --> 00:01:15.839
+To find B one, take moments about boom two.
+
+00:01:15.839 --> 00:01:18.885
+Split the stress into a rectangle and a triangle.
+
+00:01:20.932 --> 00:01:25.025
+The rectangle's force is sigma two times t D times b.
+
+00:01:25.025 --> 00:01:28.732
+It acts at the middle, b over two from boom two.
+
+00:01:29.032 --> 00:01:39.683
+The triangle's force is one half times sigma one minus sigma two, times t D times b.
+
+00:01:39.683 --> 00:01:48.432
+It acts two thirds of the way across, two b over three from boom two.
+
+00:01:48.732 --> 00:01:55.612
+Their moments add up to the moment of the boom force, sigma one B one, times b.
+
+00:01:57.332 --> 00:02:04.172
+Divide both sides by sigma one times b, and collect terms.
+
+00:02:04.172 --> 00:02:13.252
+You get B one equals t D b over six, times two plus sigma two over sigma one.
+
+00:02:14.532 --> 00:02:21.892
+The boom at the other end, B two, uses the same formula with one and two swapped: two plus sigma one over sigma two.
+
+00:02:23.865 --> 00:02:29.438
+So the boom area depends on the ratio of the two stresses.
+
+00:02:29.438 --> 00:02:32.705
+Two cases come up again and again.
+
+00:02:33.032 --> 00:02:35.411
+First case: a top skin, in bending.
+
+00:02:35.411 --> 00:02:40.237
+Both of its edges are at the same height, so they have the same stress.
+
+00:02:40.237 --> 00:02:41.392
+The ratio is one.
+
+00:02:42.565 --> 00:02:48.839
+Two plus one is three, and three over six is one half.
+
+00:02:48.839 --> 00:02:52.325
+Each boom gets t D b over two.
+
+00:02:52.632 --> 00:03:00.991
+Second case: a web that crosses the neutral axis, with its ends equally far above and below.
+
+00:03:00.991 --> 00:03:04.262
+The stresses are equal and opposite.
+
+00:03:04.262 --> 00:03:06.352
+The ratio is minus one.
+
+00:03:07.332 --> 00:03:09.432
+Two minus one is one.
+
+00:03:09.432 --> 00:03:12.932
+Each boom gets only t D b over six.
+
+00:03:13.265 --> 00:03:13.910
+Your turn.
+
+00:03:13.910 --> 00:03:17.585
+Pause here and do checkpoint two point one in your guide.
+
+00:03:20.832 --> 00:03:25.491
+Ten times three hundred, over six, is five hundred.
+
+00:03:25.491 --> 00:03:30.149
+So five hundred square millimeters go to each boom.
+
+00:03:30.149 --> 00:03:33.712
+We'll use exactly this in the homework.

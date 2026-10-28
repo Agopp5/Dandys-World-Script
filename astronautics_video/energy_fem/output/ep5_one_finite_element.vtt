@@ -1,0 +1,265 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.335
+Take the bar fixed to a wall, and chop it into three pieces.
+
+00:00:04.335 --> 00:00:06.648
+Each piece is called an element.
+
+00:00:06.648 --> 00:00:11.200
+The points where they join, and the two ends, are called nodes.
+
+00:00:13.740 --> 00:00:19.151
+The displacements of the nodes, q one, q two, q three, q four, are our unknowns.
+
+00:00:19.151 --> 00:00:22.262
+Just four numbers, instead of infinitely many.
+
+00:00:22.262 --> 00:00:27.740
+Each one is called a degree of freedom: a number the structure is free to choose.
+
+00:00:29.440 --> 00:00:33.906
+Between the nodes, we assume the displacement is a straight line.
+
+00:00:33.906 --> 00:00:37.960
+So once we know the four node values, we know u everywhere.
+
+00:00:38.260 --> 00:00:46.220
+Neighbors share a node, so the displacement can't jump: the right end of element one moves exactly as much as the left end of element two.
+
+00:00:46.494 --> 00:00:54.801
+When we study one element on its own, we'll call its two end displacements u one and u two.
+
+00:00:54.801 --> 00:01:01.374
+For element two, its u one is the bar's q two, and its u two is q three.
+
+00:01:05.032 --> 00:01:07.646
+Why can we study one element alone?
+
+00:01:07.646 --> 00:01:16.158
+The bar's energy is an integral along the bar, and an integral along the bar splits into one integral per element.
+
+00:01:16.158 --> 00:01:20.712
+Work out one element's energy, and the bar's is just the sum.
+
+00:01:21.012 --> 00:01:23.782
+So lift out one element.
+
+00:01:23.782 --> 00:01:28.053
+It starts at x one and ends at x two.
+
+00:01:28.053 --> 00:01:32.092
+Its length is l, x two minus x one.
+
+00:01:32.392 --> 00:01:38.415
+Measuring from the global x is clumsy, so give the element its own ruler, called s.
+
+00:01:38.415 --> 00:01:44.872
+It runs from zero at the left end to one at the right end, whatever the element's length.
+
+00:01:45.205 --> 00:01:49.735
+The conversion is s equals x minus x one, over l.
+
+00:01:49.735 --> 00:01:53.525
+Halfway along the element, s is one half.
+
+00:01:53.839 --> 00:01:58.091
+Flip it around: x equals x one plus s times l.
+
+00:01:58.091 --> 00:02:02.898
+So as s moves a tiny step d s, x moves l times that.
+
+00:02:02.898 --> 00:02:04.469
+d x equals l d s.
+
+00:02:04.469 --> 00:02:07.519
+We'll need that inside integrals.
+
+00:02:09.166 --> 00:02:13.603
+Inside the element, we said u is a straight line.
+
+00:02:13.603 --> 00:02:20.486
+Write it as b one times s, plus b two, and choose the b's to match the ends.
+
+00:02:20.768 --> 00:02:27.744
+At s equals zero, u must be u one, so b two is u one.
+
+00:02:27.744 --> 00:02:40.248
+At s equals one, u must be u two, so b one plus b two is u two, and b one is u two minus u one.
+
+00:02:40.544 --> 00:02:50.904
+Put them back and rearrange: u of s equals one minus s, times u one, plus s, times u two.
+
+00:02:51.175 --> 00:02:57.369
+This is the key picture of the whole method, so let's go slowly.
+
+00:02:57.369 --> 00:03:04.435
+One minus s is a ramp that is one at the left node and zero at the right.
+
+00:03:04.435 --> 00:03:10.049
+s is a ramp that is zero at the left and one at the right.
+
+00:03:10.049 --> 00:03:14.695
+They're called shape functions, N one and N two.
+
+00:03:16.989 --> 00:03:22.913
+In other words, each node gets a ramp that is one at its own node and zero at the other.
+
+00:03:22.913 --> 00:03:29.309
+Multiply each ramp by its node's displacement, add, and you get the straight line between them.
+
+00:03:32.532 --> 00:03:34.671
+Strain is d u d x.
+
+00:03:34.671 --> 00:03:44.652
+Our u is written in s, so use the chain rule: d u d x equals d u d s, times d s d x.
+
+00:03:44.952 --> 00:03:52.327
+d u d s is u two minus u one: the slope of our straight line in s.
+
+00:03:52.327 --> 00:03:55.232
+And d s d x is one over l.
+
+00:03:55.532 --> 00:04:00.016
+So the strain is u two minus u one, over l.
+
+00:04:00.016 --> 00:04:05.021
+The element's change in length, over its length.
+
+00:04:05.021 --> 00:04:07.732
+Exactly what strain means.
+
+00:04:08.065 --> 00:04:10.291
+Notice it doesn't depend on s at all.
+
+00:04:10.291 --> 00:04:12.877
+Inside one element, the strain is constant.
+
+00:04:12.877 --> 00:04:16.185
+Remember that; it will matter when we look at stresses.
+
+00:04:17.299 --> 00:04:25.450
+Now the strain energy of one element: one half, the integral of E A times strain squared, d x.
+
+00:04:25.450 --> 00:04:30.219
+Change to s: d x is l d s, and s runs from zero to one.
+
+00:04:30.519 --> 00:04:37.827
+Everything inside is constant, and the integral of d s from zero to one is one.
+
+00:04:37.827 --> 00:04:43.839
+So U e is one half, E A over l, times u two minus u one, squared.
+
+00:04:44.139 --> 00:04:49.203
+Pay close attention, because you've seen this before.
+
+00:04:49.203 --> 00:04:50.540
+It's a spring!
+
+00:04:50.540 --> 00:05:00.859
+An element of a bar behaves exactly like a spring with stiffness E A over l, stretched by u two minus u one.
+
+00:05:01.306 --> 00:05:04.546
+Now write it with a matrix.
+
+00:05:04.546 --> 00:05:17.386
+Expand the square: u two minus u one, squared, is u one squared, minus two u one u two, plus u two squared.
+
+00:05:17.739 --> 00:05:33.250
+Here's a row, times a matrix, times a column, that gives exactly that: the row u one, u two, times the matrix one, minus one, minus one, one, times the column u one, u two.
+
+00:05:33.250 --> 00:05:37.579
+Multiply it out and the same three terms appear.
+
+00:05:37.972 --> 00:05:46.476
+So U e is one half, the row, times E A over l times that matrix, times the column.
+
+00:05:46.476 --> 00:05:56.225
+That matrix, E A over l times one, minus one, minus one, one, is the element stiffness matrix.
+
+00:05:56.225 --> 00:06:00.892
+The same block a spring added in episode two.
+
+00:06:01.306 --> 00:06:14.346
+A quick number: if E A is two million newtons and the element is five hundred millimeters long, its stiffness is four thousand newtons per millimeter.
+
+00:06:15.366 --> 00:06:19.126
+Your turn: pause and do checkpoint five point one in your guide.
+
+00:06:22.326 --> 00:06:29.966
+Seventy thousand times one hundred, over two hundred fifty: twenty eight thousand newtons per millimeter.
+
+00:06:31.030 --> 00:06:32.206
+And a sanity check.
+
+00:06:32.206 --> 00:06:36.541
+Move both ends the same amount: the element slides without stretching.
+
+00:06:36.541 --> 00:06:41.990
+Each row of the matrix adds to zero, so that motion takes no force and stores no energy.
+
+00:06:43.066 --> 00:06:49.003
+Last piece: the work potential of a spread-out load f on one element.
+
+00:06:49.003 --> 00:06:52.100
+It's the integral of f times u, d x.
+
+00:06:52.100 --> 00:06:55.026
+Put in our u and d x equals l d s.
+
+00:06:55.301 --> 00:06:56.672
+Split it in two.
+
+00:06:56.672 --> 00:07:03.015
+The part multiplying u one is the integral of f times one minus s times l.
+
+00:07:03.015 --> 00:07:04.215
+Call it Q one.
+
+00:07:04.215 --> 00:07:09.701
+The part multiplying u two is the integral of f times s times l.
+
+00:07:09.701 --> 00:07:10.901
+Call it Q two.
+
+00:07:11.189 --> 00:07:15.444
+Q one and Q two together are called the element load vector.
+
+00:07:15.444 --> 00:07:21.189
+They're the forces at the two nodes that do the same work as the spread-out load.
+
+00:07:21.489 --> 00:07:25.097
+Now take the common case, f constant, equal to c.
+
+00:07:25.097 --> 00:07:31.430
+The integral of one minus s from zero to one is one half, and so is the integral of s.
+
+00:07:31.430 --> 00:07:34.449
+So Q one and Q two are both c l over two.
+
+00:07:34.855 --> 00:07:43.055
+In plain words: the element carries a total load of c times l, and half of it goes to each end node.
+
+00:07:44.166 --> 00:07:45.325
+So, stepping back.
+
+00:07:45.325 --> 00:07:51.446
+An element is a short piece of bar whose displacement is a straight line between its two nodes.
+
+00:07:51.964 --> 00:07:56.713
+Its stiffness is E A over l, exactly a spring.
+
+00:07:56.713 --> 00:08:05.284
+And a uniform spread load becomes two equal forces, c l over two, one at each node.
+
+00:08:06.250 --> 00:08:09.100
+Its energy is one half u k u, minus u Q.
+
+00:08:09.100 --> 00:08:16.297
+Take a derivative for each end, and you'd get k times u equals Q: a spring equation, for one element.
+
+00:08:16.297 --> 00:08:23.850
+Next time, we join elements together, add up their energies, apply the supports, and solve a real problem.
+
+00:08:24.150 --> 00:08:27.590
+Here's everything about one element in one place.

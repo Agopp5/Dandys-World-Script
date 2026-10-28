@@ -1,0 +1,67 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.715
+Sometimes we need the reverse: start from the elements and find r and v in E C I.
+
+00:00:05.715 --> 00:00:08.960
+It takes two steps, and the first one is easy.
+
+00:00:09.293 --> 00:00:12.999
+In the perifocal frame the orbit is flat.
+
+00:00:12.999 --> 00:00:21.133
+The position is r cosine theta, r sine theta, zero, where r comes from the orbit equation.
+
+00:00:21.527 --> 00:00:26.838
+The velocity is mu over h, times minus sine theta, e plus cosine theta, zero.
+
+00:00:26.838 --> 00:00:30.287
+That's the hodograph result from the last chapter.
+
+00:00:30.627 --> 00:00:46.307
+For the Molniya at theta equals two eighty: p is eleven thousand nine hundred seventy four kilometers, h is sixty nine thousand eighty six, and r is ten thousand six hundred nine.
+
+00:00:46.760 --> 00:01:02.560
+So the position is one thousand eight hundred forty two, minus ten thousand four hundred forty eight, zero kilometers, and the velocity is five point six eight two, five point two seven eight, zero kilometers per second.
+
+00:01:03.667 --> 00:01:06.325
+Step two: rotate into E C I.
+
+00:01:06.325 --> 00:01:13.827
+The rows of C P N are p hat, q hat and h hat, so going back uses the transpose.
+
+00:01:14.104 --> 00:01:21.313
+In words: r is its p component times p hat, plus its q component times q hat.
+
+00:01:21.313 --> 00:01:26.744
+The transpose just adds those arrows in E C I coordinates.
+
+00:01:27.038 --> 00:01:35.939
+Multiply it out, and we get nine thousand thirty one, minus five thousand three hundred seventeen, minus one thousand six hundred forty seven kilometers.
+
+00:01:35.939 --> 00:01:42.398
+The velocity comes out minus two point eight six four, five point one one one, minus five point zero eight one.
+
+00:01:45.371 --> 00:01:49.171
+Those are exactly the measured r and v we started from.
+
+00:01:49.171 --> 00:01:50.691
+The round trip closes.
+
+00:01:50.971 --> 00:01:51.778
+Your turn.
+
+00:01:51.778 --> 00:01:59.611
+Pause here and do checkpoint five point one: take your practice orbit's elements back to r and v.
+
+00:02:03.238 --> 00:02:06.775
+And here's why elements are worth the trouble.
+
+00:02:06.775 --> 00:02:11.696
+To move the satellite forward in time, five numbers stay frozen.
+
+00:02:11.696 --> 00:02:15.156
+Only theta advances, using Kepler's equation.
+
+00:02:15.156 --> 00:02:18.078
+Then one rotation gives r and v again.

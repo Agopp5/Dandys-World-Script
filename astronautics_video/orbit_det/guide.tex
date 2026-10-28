@@ -1,0 +1,237 @@
+% The study guide for the orbit-determination series: a compact handout worked while the video pauses.
+% Build: `mtk guide` (after `mtk episodes`, so every checkpoint shows its time in the video).
+% Every number here is computed and asserted in check_guide.py.
+\documentclass[11pt]{article}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{mtkguide}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.4em}
+\newcommand{\km}{\ \mathrm{km}}
+\newcommand{\kms}{\ \mathrm{km/s}}
+\newcommand{\dpd}{^\circ/\mathrm{day}}
+
+\begin{document}
+{\LARGE\bfseries Orbit Determination: Practice Guide}\par
+{\color{mtkmuted} AERSP 309, Kluever Ch.~3 \textperiodcentered{} a guide to work through with the video}\par\medskip
+
+\textbf{How to use it.} The video pauses at each checkpoint. Work it here, on paper or a tablet, before you
+press play. Checkpoints 2.1, 3.1, 4.3(a) and 6.2(a) are answered by the video as soon as you resume. The
+others use a \emph{practice orbit} that the video never solves, so you get real practice; check
+those against the full solutions on page~\pageref{solutions}. Stuck for five minutes? Read the hint on
+page~\pageref{hints}.
+
+\textbf{The practice orbit.} A tracking station measures, in the ECI frame,
+\[
+\vec r_0 = (-5404.7,\ -9275.9,\ 2171.6)\km, \qquad \vec v_0 = (3.4111,\ -2.2048,\ 4.8031)\kms .
+\]
+Use $\mu = 3.986\times10^5\ \mathrm{km^3/s^2}$, $R = 6378.137\km$, $J_2 = 1.08263\times10^{-3}$. Carry four
+significant digits; your last digit may differ from the solutions by rounding.
+
+\section*{Episode 2: Placing the Orbit in Space}
+
+\checkpoint[3cm]{2.1}{Inclination over ninety}{%
+An orbit has $i = 120^\circ$. (a) At the ascending node, is the satellite crossing the equator heading north
+or heading south? (b) Is its motion over the Earth eastward or westward? (c) Does $\hat h$ point above or
+below the equatorial plane? Give a one-line reason for each.}
+
+\section*{Episode 3: The Perifocal Frame}
+
+\checkpoint[5cm]{3.1}{The third row of $C_{PN}$}{%
+With the course's rotations
+$C_1(x) = \begin{bmatrix}1&0&0\\0&\cos x&\sin x\\0&-\sin x&\cos x\end{bmatrix}$ and
+$C_3(x) = \begin{bmatrix}\cos x&\sin x&0\\-\sin x&\cos x&0\\0&0&1\end{bmatrix}$,
+$C_{PN} = C_3(\omega)\,C_1(i)\,C_3(\Omega)$. Find the third row of $C_{PN}$ in terms of $i$ and $\Omega$.
+Why does $\omega$ not appear in it?}
+
+\section*{Episode 4: From $\vec r$ and $\vec v$ to the Elements}
+
+\checkpoint[7cm]{4.1}{Practice orbit: $a$, $\vec h$, $\vec e$}{%
+For the practice orbit above, find (a) the energy $\mathcal E = v_0^2/2 - \mu/r_0$ and the semi-major axis $a$;
+(b) $\vec h = \vec r_0\times\vec v_0$, one component at a time, and $h = |\vec h|$;
+(c) $\vec e = \dfrac{\vec v_0\times\vec h}{\mu} - \dfrac{\vec r_0}{r_0}$ and $e = |\vec e|$;
+(d) the perigee and apogee radii. Check $e$ a second way with $e = \sqrt{1 + 2\mathcal E h^2/\mu^2}$.
+Keep five digits in the two pieces of $\vec e$: its $Y$ component is a small difference of nearly equal numbers.}
+
+\checkpoint[7cm]{4.2}{Practice orbit: $C_{PN}$, then $i$, $\Omega$, $\omega$}{%
+Using your $\vec e$ and $\vec h$ from 4.1, build $\hat p = \vec e/e$, $\hat h = \vec h/h$ and
+$\hat q = \hat h\times\hat p$, and stack them as the rows of $C_{PN}$. Then read off
+$i = \arccos C_{33}$, $\Omega = \operatorname{atan2}(C_{31}, -C_{32})$ and
+$\omega = \operatorname{atan2}(C_{13}, C_{23})$, each in $[0^\circ, 360^\circ)$.
+Confirm $\Omega$ and $\omega$ with the textbook route: $\vec n = \hat K\times\vec h$, $\cos\Omega = n_X/n$,
+$\cos\omega = \vec n\cdot\vec e/(n\,e)$. Arc cosine only returns $0^\circ$ to $180^\circ$: if $n_Y < 0$,
+$\Omega = 360^\circ - \arccos(n_X/n)$, and if $e_Z < 0$, $\omega = 360^\circ - \arccos(\cdot)$. Which checks fire here?}
+
+\checkpoint[5cm]{4.3}{Which side of perigee?}{%
+(a) For the Molniya, $\cos\theta_0 = 0.1736$, so $\theta_0$ is $80^\circ$ or $280^\circ$. Predict: which quantity,
+computed straight from $\vec r_0$ and $\vec v_0$, decides between them, and how?
+(b) Find $\theta_0$ for the practice orbit.}
+
+\section*{Episode 5: Going Back}
+
+\checkpoint[7cm]{5.1}{Practice orbit: back to $\vec r$ and $\vec v$}{%
+Take the practice orbit's elements $a = 12{,}000\km$, $e = 0.2$, $i = 50^\circ$, $\Omega = 230^\circ$,
+$\omega = 300^\circ$, $\theta_0 = 75^\circ$ (your answers to 4.1--4.3, so do those first). (a) Find
+$p = a(1-e^2)$, $h = \sqrt{\mu p}$ and $r = p/(1+e\cos\theta_0)$, then $\vec r_P$ and $\vec v_P$ in the perifocal frame. (b) Build $C_{PN} = C_3(\omega)C_1(i)C_3(\Omega)$ from the angles and compare it with your
+$C_{PN}$ from 4.2. (c) Rotate back with $\vec r_N = C_{PN}^T\vec r_P$, $\vec v_N = C_{PN}^T\vec v_P$ and
+compare with the measured $\vec r_0$, $\vec v_0$.}
+
+\section*{Episode 6: Earth Is Not a Sphere}
+
+\checkpoint[5cm]{6.1}{Node drift}{%
+(a) For the practice orbit ($a = 12{,}000\km$, $e = 0.2$, $i = 50^\circ$), find the mean motion
+$n = \sqrt{\mu/a^3}$ and the node drift
+$\dot\Omega = -\dfrac{3nJ_2R^2}{2a^2(1-e^2)^2}\cos i$ in degrees per day. Which way does the node move?
+(b) A circular orbit ($e = 0$, $a = R + 600\km$) must be sun-synchronous: $\dot\Omega = +360^\circ$ per
+$365.24$ days. What inclination does it need? (Put both rates in the same units first.)}
+
+\checkpoint[5cm]{6.2}{Where the perigee stops turning}{%
+$\dot\omega = -\dfrac{3nJ_2R^2}{2a^2(1-e^2)^2}\left(\tfrac52\sin^2 i - 2\right)$.
+(a) Find every inclination in $[0^\circ, 180^\circ]$ where $\dot\omega = 0$.
+(b) Find $\dot\omega$ for the practice orbit in degrees per day. Does its perigee advance ($\dot\omega > 0$, turning
+with the motion) or regress ($\dot\omega < 0$)? Watch the two minus signs.}
+
+\clearpage
+\section*{Hints}\label{hints}
+\hintfor{2.1} Which way the satellite crosses at the ascending node is part of the node's definition, not of $i$.
+For the motion, think about the extreme case $i = 180^\circ$. For $\hat h$, look at its $K$ component, $\cos i$.
+\hintfor{3.1} The third row of a product $ABC$ is (third row of $A$) times $BC$. What is the third row of
+$C_3(\omega)$?
+\hintfor{4.1} Work $\vec h$ as $h_X = y v_z - z v_y$, $h_Y = z v_x - x v_z$, $h_Z = x v_y - y v_x$, and $\vec v_0\times\vec h$
+the same way. Your $a$ should come out a round number.
+\hintfor{4.2} atan2 returns an angle in $(-180^\circ, 180^\circ]$; add $360^\circ$ to a negative result. For
+the node route: arccos alone only reaches $0^\circ$ to $180^\circ$.
+\hintfor{4.3} Is the satellite moving away from Earth or toward it? Which half of the orbit does that put it in?
+\hintfor{5.1} Each column of $C_{PN}^T$ is $\hat p$, $\hat q$, $\hat h$, so $\vec r_N = r_{P,x}\hat p + r_{P,y}\hat q$.
+\hintfor{6.1} Convert rad/s to degrees per day with $\times\,180/\pi\times 86{,}400$. For (b), solve for $\cos i$.
+\hintfor{6.2} Set the bracket to zero and solve for $\sin i$; remember $\sin i = \sin(180^\circ - i)$.
+
+\clearpage
+\section*{Solutions}\label{solutions}
+
+\solutionfor{2.1}{Inclination over ninety}
+(a) North. The ascending node is \emph{defined} as the northbound equator crossing, whatever $i$ is.
+(b) Westward. Below $90^\circ$ the orbit runs with Earth's spin (prograde, eastward); past $90^\circ$ it runs
+against it (retrograde); at $i = 180^\circ$ it would run due west along the equator.
+(c) Below. $\hat h\cdot\hat K = \cos 120^\circ = -0.5 < 0$, so $\hat h$ leans below the equatorial plane.
+
+\solutionfor{3.1}{The third row of $C_{PN}$}
+The third row of $C_3(\omega)$ is $(0,0,1)$, so the third row of the product is the third row of
+$C_1(i)C_3(\Omega)$, which is (third row of $C_1(i)$)$\,C_3(\Omega)$:
+\[
+(0,\ -\sin i,\ \cos i)\begin{bmatrix}\cos\Omega&\sin\Omega&0\\-\sin\Omega&\cos\Omega&0\\0&0&1\end{bmatrix}
+= (\sin i\sin\Omega,\ -\sin i\cos\Omega,\ \cos i).
+\]
+$\omega$ drops out because the last turn, $C_3(\omega)$, spins about $\hat h$ itself: it moves $\hat p$ and
+$\hat q$ but leaves the third row, $\hat h$, alone. Check: $C_{33} = \cos i = \hat h\cdot\hat K$, as in the picture.
+
+\solutionfor{4.1}{Practice orbit: $a$, $\vec h$, $\vec e$}
+(a) $r_0 = \sqrt{5404.7^2 + 9275.9^2 + 2171.6^2} = 10{,}953.0\km$ and $v_0 = 6.2902\kms$.
+$\mathcal E = 19.7833 - 36.3917 = -16.6085\ \mathrm{km^2/s^2}$, so $a = -\mu/(2\mathcal E) = 12{,}000\km$.
+
+(b) \begin{align*}
+h_X &= (-9275.9)(4.8031) - (2171.6)(-2.2048) = -44{,}553.1 + 4{,}787.9 = -39{,}765\\
+h_Y &= (2171.6)(3.4111) - (-5404.7)(4.8031) = 7{,}407.5 + 25{,}959.3 = 33{,}367\\
+h_Z &= (-5404.7)(-2.2048) - (-9275.9)(3.4111) = 11{,}916.3 + 31{,}641.0 = 43{,}557
+\end{align*}
+$\vec h = (-39{,}765,\ 33{,}367,\ 43{,}557)\ \mathrm{km^2/s}$, $h = 67{,}763\ \mathrm{km^2/s}$.
+
+(c) \begin{align*}
+(\vec v_0\times\vec h)_X &= (-2.2048)(43{,}557) - (4.8031)(33{,}367) = -96{,}034.5 - 160{,}265.0 = -256{,}299.5\\
+(\vec v_0\times\vec h)_Y &= (4.8031)(-39{,}765) - (3.4111)(43{,}557) = -190{,}995.3 - 148{,}577.3 = -339{,}572.6\\
+(\vec v_0\times\vec h)_Z &= (3.4111)(33{,}367) - (-2.2048)(-39{,}765) = 113{,}818.2 - 87{,}673.9 = 26{,}144.3
+\end{align*}
+Divided by $\mu$: $(-0.64300,\ -0.85192,\ 0.06559)$. And $\vec r_0/r_0 = (-0.49344,\ -0.84688,\ 0.19826)$. So
+\[
+\vec e = (-0.14956,\ -0.00504,\ -0.13268), \qquad e = \sqrt{0.14956^2 + 0.00504^2 + 0.13268^2} = 0.2000 .
+\]
+(d) $r_p = a(1-e) = 9{,}600\km$ (altitude $3{,}222\km$) and $r_a = a(1+e) = 14{,}400\km$.
+Check: $\sqrt{1 + 2(-16.6085)(67{,}763)^2/(398{,}600)^2} = 0.2000$. \checkmark
+
+\solutionfor{4.2}{Practice orbit: $C_{PN}$, then $i$, $\Omega$, $\omega$}
+$\hat p = \vec e/e = (-0.7478,\ -0.0252,\ -0.6634)$ and $\hat h = \vec h/h = (-0.5868,\ 0.4924,\ 0.6428)$.
+\begin{align*}
+q_X &= (0.4924)(-0.6634) - (0.6428)(-0.0252) = -0.3267 + 0.0162 = -0.3105\\
+q_Y &= (0.6428)(-0.7478) - (-0.5868)(-0.6634) = -0.4807 - 0.3893 = -0.8700\\
+q_Z &= (-0.5868)(-0.0252) - (0.4924)(-0.7478) = 0.0148 + 0.3682 = 0.3830
+\end{align*}
+\[
+C_{PN} = \begin{bmatrix}-0.7478 & -0.0252 & -0.6634\\ -0.3105 & -0.8700 & 0.3830\\ -0.5868 & 0.4924 & 0.6428\end{bmatrix}
+\]
+$i = \arccos(0.6428) = 50.0^\circ$.
+$\Omega = \operatorname{atan2}(-0.5868,\ -0.4924) = -130.0^\circ$, so $\Omega = 230.0^\circ$ (sine and cosine
+both negative: third quadrant).
+$\omega = \operatorname{atan2}(-0.6634,\ 0.3830) = -60.0^\circ$, so $\omega = 300.0^\circ$ (fourth quadrant).
+
+Textbook route: $\vec n = \hat K\times\vec h = (-h_Y,\ h_X,\ 0) = (-33{,}367,\ -39{,}765,\ 0)$, $n = 51{,}910$.
+$\cos\Omega = -33{,}367/51{,}910 = -0.6428$, and $\arccos$ gives $130^\circ$; but $n_Y < 0$, so
+$\Omega = 360^\circ - 130^\circ = 230^\circ$.
+$\vec n\cdot\vec e = (-33{,}367)(-0.14956) + (-39{,}765)(-0.00504) + 0 = 4{,}990.4 + 200.4 = 5{,}190.8$, and
+$\cos\omega = 5{,}190.8/(51{,}910 \times 0.2000) = 0.5000$, so $\arccos$ gives $60^\circ$; but $e_Z < 0$
+(perigee is below the equator), so $\omega = 300^\circ$. Both routes agree. \checkmark
+
+\solutionfor{4.3}{Which side of perigee?}
+(a) The sign of $\vec r_0\cdot\vec v_0 = r\dot r$. Negative means $r$ is shrinking, so the satellite is falling
+toward perigee and $\theta_0$ is in $(180^\circ, 360^\circ)$: $280^\circ$ for the Molniya. Positive means it is
+climbing away from perigee and $\theta_0$ is in $(0^\circ, 180^\circ)$.
+
+(b) \begin{align*}
+\vec e\cdot\vec r_0 &= (-0.14956)(-5404.7) + (-0.00504)(-9275.9) + (-0.13268)(2171.6)\\
+&= 808.33 + 46.75 - 288.13 = 566.95
+\end{align*}
+and $e\,r_0 = 0.2000\times 10{,}953.0 = 2{,}190.6$, so $\cos\theta_0 = 566.95/2{,}190.6 = 0.2588$ and
+$\arccos$ gives $75.0^\circ$.
+\begin{align*}
+\vec r_0\cdot\vec v_0 &= (-5404.7)(3.4111) + (-9275.9)(-2.2048) + (2171.6)(4.8031)\\
+&= -18{,}436.0 + 20{,}451.5 + 10{,}430.4 = 12{,}445.9 > 0 ,
+\end{align*}
+so the satellite is climbing away from perigee and $\theta_0 = 75.0^\circ$. (This is the opposite case to the
+Molniya.)
+
+\solutionfor{5.1}{Practice orbit: back to $\vec r$ and $\vec v$}
+(a) $p = a(1-e^2) = 12{,}000(0.96) = 11{,}520\km$, $h = \sqrt{\mu p} = 67{,}763\ \mathrm{km^2/s}$,
+$r = p/(1 + e\cos\theta_0) = 11{,}520/1.05176 = 10{,}953.0\km$.
+\[
+\vec r_P = (r\cos\theta_0,\ r\sin\theta_0,\ 0) = (2{,}834.9,\ 10{,}579.8,\ 0)\km
+\]
+\[
+\vec v_P = \tfrac{\mu}{h}(-\sin\theta_0,\ e + \cos\theta_0,\ 0) = 5.8822\,(-0.9659,\ 0.4588,\ 0) = (-5.6818,\ 2.6989,\ 0)\kms
+\]
+(b) $C_1(50^\circ)C_3(230^\circ) = \begin{bmatrix}-0.6428&-0.7660&0\\0.4924&-0.4132&0.7660\\-0.5868&0.4924&0.6428\end{bmatrix}$;
+then $C_3(300^\circ)$, with rows $(0.5,\ -0.8660,\ 0)$, $(0.8660,\ 0.5,\ 0)$, $(0,0,1)$, gives row 1
+$= 0.5(\text{row }1) - 0.8660(\text{row }2) = (-0.7478,\ -0.0252,\ -0.6634)$ and row 2
+$= 0.8660(\text{row }1) + 0.5(\text{row }2) = (-0.3105,\ -0.8700,\ 0.3830)$; row 3 is unchanged. This is the
+$C_{PN}$ of 4.2. \checkmark
+
+(c) $\vec r_N = r_{P,x}\hat p + r_{P,y}\hat q$:
+\begin{align*}
+x &: 2834.9(-0.7478) + 10579.8(-0.3105) = -2{,}119.9 - 3{,}285.0 \approx -5{,}404.9\\
+y &: 2834.9(-0.0252) + 10579.8(-0.8700) = -71.4 - 9{,}204.4 \approx -9{,}275.9\\
+z &: 2834.9(-0.6634) + 10579.8(0.3830) = -1{,}880.7 + 4{,}052.1 \approx 2{,}171.4
+\end{align*}
+and the same with $\vec v_P$: $\vec v_N \approx (3.4108,\ -2.2049,\ 4.8030)\kms$. Both match the measured
+$\vec r_0$, $\vec v_0$ to within the four-digit rounding of $\hat p$, $\hat q$. \checkmark
+
+\solutionfor{6.1}{Node drift}
+(a) $n = \sqrt{398{,}600/12{,}000^3} = 4.8028\times10^{-4}\ \mathrm{rad/s}$. The factor
+$\dfrac{3nJ_2R^2}{2a^2(1-e^2)^2} = 2.3908\times10^{-7}\ \mathrm{rad/s}$, so
+$\dot\Omega = -2.3908\times10^{-7}\cos 50^\circ = -1.5368\times10^{-7}\ \mathrm{rad/s} = -0.761\dpd$.
+Negative: prograde orbit, the node slides west.
+
+(b) $a = 6378.137 + 600 = 6{,}978.1\km$, $n = 1.0831\times10^{-3}\ \mathrm{rad/s}$, and
+$\dfrac{3nJ_2R^2}{2a^2} = 1.4694\times10^{-6}\ \mathrm{rad/s} = 7.274\dpd$ ($e = 0$). Setting
+$-7.274\cos i = +0.9856$ gives $\cos i = -0.1355$, so $i = 97.79^\circ$. Check: between the video's
+$97.4^\circ$ at $500\km$ and $98.2^\circ$ at $700\km$. \checkmark
+
+\solutionfor{6.2}{Where the perigee stops turning}
+(a) $\tfrac52\sin^2 i = 2 \Rightarrow \sin^2 i = \tfrac45 \Rightarrow \sin i = \sqrt{4/5} = 0.8944
+\Rightarrow i = 63.43^\circ$ or $180^\circ - 63.43^\circ = 116.57^\circ$.
+
+(b) $\tfrac52\sin^2 50^\circ - 2 = \tfrac52(0.5868) - 2 = -0.5330$. With the factor from 6.1,
+\[
+\dot\omega = -(2.3908\times10^{-7})(-0.5330) = +1.274\times10^{-7}\ \mathrm{rad/s} = +0.631\dpd .
+\]
+Positive: $i = 50^\circ$ is below the critical inclination, so the perigee advances (turns in the direction of
+motion), just as the video's $50^\circ$ example showed.
+\end{document}

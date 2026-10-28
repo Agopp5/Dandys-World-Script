@@ -1,0 +1,297 @@
+{
+ "intro_1": {
+  "file": "intro_1.wav",
+  "duration": 8.88,
+  "fp": "82780bbe501986789a542ef5c9d47906deeef34b"
+ },
+ "intro_2": {
+  "file": "intro_2.wav",
+  "duration": 13.64,
+  "fp": "db10d827f11f56f0b7a30d49f6d7a93bece8ce09"
+ },
+ "intro_3": {
+  "file": "intro_3.wav",
+  "duration": 12.04,
+  "fp": "3909184c3701ef656e66ab9a82d54ce966320ca7"
+ },
+ "intro_4": {
+  "file": "intro_4.wav",
+  "duration": 17.48,
+  "fp": "b00f7672994c229c473d602a44ed306dc94aa450"
+ },
+ "frames_1": {
+  "file": "frames_1.wav",
+  "duration": 11.84,
+  "fp": "9737e3d2ebc0010673db65c25e0cdc8838adf85f"
+ },
+ "frames_2": {
+  "file": "frames_2.wav",
+  "duration": 13.04,
+  "fp": "a469be8ab4c95c7d3037608f000a1f58924f4c82"
+ },
+ "frames_3": {
+  "file": "frames_3.wav",
+  "duration": 13.72,
+  "fp": "6f1524f806665564f0bf70d17d268e2ad7baef9f"
+ },
+ "frames_4": {
+  "file": "frames_4.wav",
+  "duration": 10.64,
+  "fp": "48021a2a66a382897d98d1db8e333e9972d027a6"
+ },
+ "frames_5": {
+  "file": "frames_5.wav",
+  "duration": 14.44,
+  "fp": "b57cf8544067c8afee13c902ab0c159778f86408"
+ },
+ "dcm_1": {
+  "file": "dcm_1.wav",
+  "duration": 10.96,
+  "fp": "2d4d797078cc57377245cecb71698eae8952cdf3"
+ },
+ "dcm_2": {
+  "file": "dcm_2.wav",
+  "duration": 15.72,
+  "fp": "b749bf33fd0dcd328e95e2ca0e1cb5e1b13d6bb8"
+ },
+ "dcm_3": {
+  "file": "dcm_3.wav",
+  "duration": 10.88,
+  "fp": "0ea2556b7e60545050dcc61eaecfaf68a211a696"
+ },
+ "dcm_4": {
+  "file": "dcm_4.wav",
+  "duration": 14.48,
+  "fp": "c7e61e7ca14b20ee652939706fec39763d1f9108"
+ },
+ "dcm_5": {
+  "file": "dcm_5.wav",
+  "duration": 10.16,
+  "fp": "4be259a3156ce4047638076faa6cb9088c1fd536"
+ },
+ "dcm_6": {
+  "file": "dcm_6.wav",
+  "duration": 16.2,
+  "fp": "cdbc37759df9d1d9153ba15b6de62ae840d4368a"
+ },
+ "dcm_7": {
+  "file": "dcm_7.wav",
+  "duration": 15.08,
+  "fp": "3d491bcd29c721521be6282446a19bc0674428a3"
+ },
+ "dcm_8": {
+  "file": "dcm_8.wav",
+  "duration": 16.48,
+  "fp": "b776b497dc6c01898f354a8a190ca1eb60b9b0ae"
+ },
+ "dcm_9": {
+  "file": "dcm_9.wav",
+  "duration": 20.4,
+  "fp": "f2703252255abeac617123ba43487a81cc502082"
+ },
+ "euler_1": {
+  "file": "euler_1.wav",
+  "duration": 14.04,
+  "fp": "7ceea1ba2cf40298cb94d42af2abaa093fe0b2be"
+ },
+ "euler_2": {
+  "file": "euler_2.wav",
+  "duration": 11.96,
+  "fp": "6968b7e7ddda807ea7ee05371a9e2ef4abd9c27d"
+ },
+ "euler_3": {
+  "file": "euler_3.wav",
+  "duration": 6.12,
+  "fp": "0dd655ea63c823b9bec575b49618203c457058de"
+ },
+ "euler_4": {
+  "file": "euler_4.wav",
+  "duration": 6.2,
+  "fp": "698e2c97d1037abc8ae1f0d1134f52f1db310f49"
+ },
+ "euler_5": {
+  "file": "euler_5.wav",
+  "duration": 13.68,
+  "fp": "e1b50ef05acac285c27d7aa64ea5e7d254f17b5a"
+ },
+ "euler_6": {
+  "file": "euler_6.wav",
+  "duration": 17.0,
+  "fp": "24b1551a735627408c932600ffffab8c9812c9b8"
+ },
+ "euler_7": {
+  "file": "euler_7.wav",
+  "duration": 11.84,
+  "fp": "39fcdaee5ed5ab39b0c94592f7962881f1a2e04c"
+ },
+ "euler_8": {
+  "file": "euler_8.wav",
+  "duration": 17.12,
+  "fp": "d488a08bcacbd05a0c0e7557116eb68edfbf1469"
+ },
+ "euler_9": {
+  "file": "euler_9.wav",
+  "duration": 16.72,
+  "fp": "5c1c52466f274a053959e2a006894df2b05c0a77"
+ },
+ "omega_1": {
+  "file": "omega_1.wav",
+  "duration": 9.8,
+  "fp": "fbbab5b60bbe57e5885a74d07e020da9462b234a"
+ },
+ "omega_2": {
+  "file": "omega_2.wav",
+  "duration": 15.24,
+  "fp": "83fcb31cfae957cfc0be21403a1a7d01a22789cc"
+ },
+ "omega_3": {
+  "file": "omega_3.wav",
+  "duration": 16.2,
+  "fp": "ea62a9e679e769dcba61fe3e8bd668235fbaefb3"
+ },
+ "omega_4": {
+  "file": "omega_4.wav",
+  "duration": 15.16,
+  "fp": "90334a2e7dd085f9316b323e9d6810907681298c"
+ },
+ "omega_5": {
+  "file": "omega_5.wav",
+  "duration": 14.04,
+  "fp": "7836fdedd011072e5728438ce1750d108e0f4449"
+ },
+ "omega_6": {
+  "file": "omega_6.wav",
+  "duration": 9.6,
+  "fp": "ff850bfa7a556516bbfe407cde649121542c6da1"
+ },
+ "omega_7": {
+  "file": "omega_7.wav",
+  "duration": 18.08,
+  "fp": "e7c127287bf9294a1855fe6798f00cf35695b596"
+ },
+ "trans_1": {
+  "file": "trans_1.wav",
+  "duration": 8.2,
+  "fp": "fb54490fc59a17894e22ec4a49d876fc74e5084e"
+ },
+ "trans_2": {
+  "file": "trans_2.wav",
+  "duration": 14.0,
+  "fp": "3f89b126919834f5d1efaa655d96ba8080a4e526"
+ },
+ "trans_3": {
+  "file": "trans_3.wav",
+  "duration": 18.4,
+  "fp": "ac62a210e74581431425c2f0bf18f330157813a1"
+ },
+ "trans_4": {
+  "file": "trans_4.wav",
+  "duration": 13.24,
+  "fp": "7b83f55e25e24b8b60fef63f61d41fdf7c72bf55"
+ },
+ "trans_5": {
+  "file": "trans_5.wav",
+  "duration": 21.24,
+  "fp": "50ce1fb740a2ef8806fb191b1f59fd14be821df1"
+ },
+ "trans_6": {
+  "file": "trans_6.wav",
+  "duration": 12.76,
+  "fp": "47ad60f21d923d62f0b7fd247fcb5e3007cb2e99"
+ },
+ "trans_7": {
+  "file": "trans_7.wav",
+  "duration": 12.04,
+  "fp": "410ab5bbe81cc2a0546f25bf0e1f8c1b6d030efb"
+ },
+ "trans_8": {
+  "file": "trans_8.wav",
+  "duration": 20.76,
+  "fp": "7ab4f984bbdf0ca11c4ee838b0d6c693b2fffa27"
+ },
+ "ufo_1": {
+  "file": "ufo_1.wav",
+  "duration": 13.24,
+  "fp": "1b418a5669616215b1a51519591777bf993a0b3d"
+ },
+ "ufo_2": {
+  "file": "ufo_2.wav",
+  "duration": 13.36,
+  "fp": "5f69d6815274d3b84e3901ffaa31cb83e0c53dc6"
+ },
+ "ufo_3": {
+  "file": "ufo_3.wav",
+  "duration": 14.12,
+  "fp": "3da448d051d22e39a3b31446d8d5d497c2631d75"
+ },
+ "ufo_4": {
+  "file": "ufo_4.wav",
+  "duration": 18.4,
+  "fp": "e89ca6a6f23c27e1c04d27aca86286804494d265"
+ },
+ "acc_1": {
+  "file": "acc_1.wav",
+  "duration": 13.2,
+  "fp": "02207a2215f639cab79c221820b09381310cf161"
+ },
+ "acc_2": {
+  "file": "acc_2.wav",
+  "duration": 6.64,
+  "fp": "851389907855b36f27d8ec445b8c8f73249eb324"
+ },
+ "acc_3": {
+  "file": "acc_3.wav",
+  "duration": 5.04,
+  "fp": "f3f05bf97e1a814e758c43357684bf15d6a55554"
+ },
+ "acc_5": {
+  "file": "acc_5.wav",
+  "duration": 10.72,
+  "fp": "fa0fd966257c155ba984d43473522aa1efdfa0f8"
+ },
+ "acc_4": {
+  "file": "acc_4.wav",
+  "duration": 13.24,
+  "fp": "95df07f6f00e10701a6cae691efd2f7d2b35bf22"
+ },
+ "acc_6": {
+  "file": "acc_6.wav",
+  "duration": 7.36,
+  "fp": "df3dd00791dde08c2ac18ab9953401df8032f9cd"
+ },
+ "acc_7": {
+  "file": "acc_7.wav",
+  "duration": 18.68,
+  "fp": "10060fbb2c272ea5a85799ed76a0141adaaa1401"
+ },
+ "acc_8": {
+  "file": "acc_8.wav",
+  "duration": 16.44,
+  "fp": "b77a39c069f09a85054dcf4e5d387ccda9966c65"
+ },
+ "acc_9": {
+  "file": "acc_9.wav",
+  "duration": 14.68,
+  "fp": "869d0c26d91126678bb0059622b4295a8e509ff7"
+ },
+ "outro_1": {
+  "file": "outro_1.wav",
+  "duration": 15.52,
+  "fp": "13967b21f63ca46ef5f80cdb64bb7d631e6df1dc"
+ },
+ "acc_10": {
+  "file": "acc_10.wav",
+  "duration": 26.88,
+  "fp": "80e6488d8ffef53bcc69a4dd8699bbb0ebea90fc"
+ },
+ "outro_3": {
+  "file": "outro_3.wav",
+  "duration": 3.36,
+  "fp": "11d20f341257580b76f731abe0095cec87ae6eba"
+ },
+ "outro_2": {
+  "file": "outro_2.wav",
+  "duration": 19.04,
+  "fp": "14708e9d714383c02ca17c264d0aea452779413c"
+ }
+}
