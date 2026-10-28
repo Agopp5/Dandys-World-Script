@@ -41,14 +41,14 @@ class S30_To_FEM(VScene):
         flab = M("f", size=40, color=ROSE).next_to(fl, RIGHT, buff=0.15)
 
         ex = ax.plot(exact, color=SKY, stroke_width=6)
-        exlab = VGroup(Line(ORIGIN, RIGHT * 0.7, color=SKY, stroke_width=6), M(r"u_{\text{exact}}", size=40, color=SKY))
+        exlab = VGroup(Line(ORIGIN, RIGHT * 0.7, color=SKY, stroke_width=6), M(r"u_{\text{exact}}", size=50, color=SKY))
         exlab.arrange(RIGHT, buff=0.2).move_to(ax.c2p(0.15, 0.44))
         xl = M("x", size=40, color=INK2).next_to(ax.c2p(1, 0), RIGHT, buff=0.2)
         ul = M("u", size=40, color=SKY).next_to(ax.c2p(0, 0.5), LEFT, buff=0.2)
         line = dashed(ax.plot(assumed, color=SKY, stroke_width=6))
         llab = M(r"u = a\,x", size=40, color=SKY).next_to(ax.c2p(0.7, assumed(0.7)), DR, buff=0.15)
         gap = Line(ax.c2p(0.5, assumed(0.5)), ax.c2p(0.5, exact(0.5)), color=BAD, stroke_width=7)
-        miss = T("missed", size=40, color=BAD).next_to(gap, RIGHT, buff=0.25).shift(UP * 0.18)
+        miss = T("missed", size=40, color=BAD).next_to(ax.c2p(0.5, exact(0.5)), UP, buff=0.35)
 
         self.beat("So assumed shapes work, but one shape for the whole structure is hard to choose, "
                   "and our single straight line missed the curve inside the bar.",
