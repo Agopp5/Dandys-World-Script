@@ -43,7 +43,7 @@ class S26_Bar_W(VScene):
         lf = M("f", size=50, color=ROSE).next_to(fl[0], UP, buff=.15)
         sx0, sx1 = -0.35, 0.35
         slc = Rectangle(width=sx1 - sx0, height=H, stroke_color=INK, stroke_width=4,
-                        fill_color=GOLD, fill_opacity=.45).move_to(np.array([(sx0 + sx1) / 2, Y, 0]))
+                        fill_color=INK2, fill_opacity=.45).move_to(np.array([(sx0 + sx1) / 2, Y, 0]))
         br = Brace(slc, DOWN, buff=.08, color=INK2)
         sdx = VGroup(br, M("dx", size=46).next_to(br, DOWN, buff=.1))
         fdx = force(np.array([sx0 - .1, Y + H / 2 + 1.0, 0]), d=RIGHT, length=.9, label=None)
@@ -75,13 +75,16 @@ class S26_Bar_W(VScene):
         # the problem: Pi depends on a whole function
         dots = VGroup(*[Dot(np.array([x, Y, 0]), radius=.09, color=SKY)
                         for x in np.linspace(X0 + .4, X1, 22)])
-        q = M(r"\frac{\partial \Pi}{\partial\, u(x)}", size=60).move_to(np.array([-1.0, -2.2, 0]))
-        qm = M("?", size=110, color=ACCENT).next_to(q, RIGHT, buff=.5)
+        qn = E(r"\partial|\Pi", size=60)
+        qd = E(r"\partial|u|(x)", size=60)
+        qline = Line(LEFT, RIGHT, color=INK, stroke_width=4).set_width(max(qn.width, qd.width) + .2)
+        q = VGroup(qn, qline, qd).arrange(DOWN, buff=.14).move_to(np.array([-1.0, -2.2, 0]))
+        qm = M("?", size=110, color=INK).next_to(q, RIGHT, buff=.5)
         note = T("a value at every point", size=36, color=MUTED).next_to(dots, UP, buff=.8)
         self.beat("But here's the problem. Pi now depends on a whole function, u of x. We can't take a partial derivative with respect to every point. We need a trick.",
                   [FadeOut(wl), FadeOut(gpl), pl.animate.move_to(np.array([0, -.9, 0])).scale(.85)],
                   [FadeOut(VGroup(fl, lf, fdx, lfdx, slc, sdx, us, lus)), LaggedStart(*[GrowFromCenter(p) for p in dots], lag_ratio=.08)],
                   FadeIn(note),
-                  Write(q), [FadeIn(qm, scale=1.4), FadeIn(glow(qm, ACCENT))], .15,
+                  Write(q), FadeIn(qm, scale=1.4), .15,
                   w=(.15, .25, .1, .2, .15))
         self.wipe()

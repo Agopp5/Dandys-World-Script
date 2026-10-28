@@ -72,7 +72,7 @@ class S25_Bar_U(VScene):
                   "so it grows by d u. Its length is d x. Change in length over length: d u over d x.",
                   [FadeOut(a_lab), FadeOut(a_ptr), FadeOut(cross)],
                   [Create(tl), GrowArrow(al), FadeIn(ul)], [Create(tr), GrowArrow(ar), FadeIn(ur)],
-                  Indicate(dx_lab, color=GOLD), Write(eq2),
+                  Indicate(dx_lab, color=INK2), Write(eq2),
                   w=(.1, .2, .25, .15, .3))
 
         # ---- add up the slices --------------------------------------------------------------------
@@ -96,7 +96,7 @@ class S25_Bar_U(VScene):
             self.wait(.28 * d)
             self.play(Circumscribe(U[4], color=LILAC), run_time=.12 * d)
             self.play(Circumscribe(U[5], color=ACCENT), run_time=.14 * d)
-            self.play(Circumscribe(U[2], color=GOLD), run_time=.12 * d)
+            self.play(Circumscribe(U[2], color=INK2), run_time=.12 * d)
             self.wait(.22 * d)
 
         # ---- even stretch: a spring ----------------------------------------------------------------
@@ -111,16 +111,15 @@ class S25_Bar_U(VScene):
         eq3.move_to([-4.0, -2.3, 0])
         eq4 = E(r"U|=|\tfrac12|\frac{EA}{L}|q^2", size=EQ, cmap={r"\frac{EA}{L}": LILAC})
         eq4.move_to([2.6, -2.3, 0])
-        kg = glow(eq4[3], LILAC)
         kbr = Brace(eq4[3], DOWN, color=LILAC, buff=.1)
-        klab = T("a spring's K", size=34, color=LILAC).next_to(kbr, DOWN, buff=.08)
+        klab = T("a spring's K", size=40, color=LILAC).next_to(kbr, DOWN, buff=.08)
         self.beat("In fact, if the bar stretches evenly, so its tip moves q, then d u d x is q over L "
                   "everywhere, and U becomes one half, E A over L, q squared. A spring with stiffness E A "
                   "over L.",
                   [self.unspot(), FadeOut(eq1), FadeOut(eq2), U.animate.move_to([0, -0.75, 0])],
                   [FadeIn(tdash), bar_grp.animate.stretch(STR, 0, about_point=lp), GrowArrow(tq),
                    FadeIn(tql)],
-                  Write(eq3), Write(eq4), [FadeIn(kg), GrowFromCenter(kbr), FadeIn(klab)],
+                  Write(eq3), Write(eq4), [GrowFromCenter(kbr), FadeIn(klab)],
                   w=(.14, .2, .2, .22, .24))
 
         # ---- rigid slide: no energy ----------------------------------------------------------------
@@ -135,7 +134,7 @@ class S25_Bar_U(VScene):
         eq6 = E(r"U|=|0", size=EQ).move_to([3.0, -2.3, 0])
         self.beat("And if the bar just slides along without stretching, d u d x is zero, and so is U. "
                   "No stretch, no stored energy.",
-                  [FadeOut(VGroup(eq3, eq4, kg, kbr, klab, tq, tql, tdash)),
+                  [FadeOut(VGroup(eq3, eq4, kbr, klab, tq, tql, tdash)),
                    bar_grp.animate.stretch(1 / STR, 0, about_point=lp), FadeOut(w)],
                   [bar_grp.animate.shift(RIGHT * sh), GrowArrow(sq1), GrowArrow(sq2), FadeIn(sl1), FadeIn(sl2)],
                   Write(eq5), [Write(eq6), FadeIn(glow(eq6, MINT))],

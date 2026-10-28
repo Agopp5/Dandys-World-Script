@@ -21,7 +21,7 @@ assert np.all(np.diff(ushape(np.linspace(0, 1, 201))) > 0)  # every point moves 
 
 X0, X1 = -5.0, 5.0        # bar ends on screen (x = 0 and x = L)
 YB, BH = -0.9, 0.62       # bar centre line and height
-Y0, HU = 0.35, 2.3        # u(x) plot: baseline and height of the tip value
+Y0, HU = 0.6, 2.2         # u(x) plot: baseline and height of the tip value
 YA = -2.35                # x axis
 
 
@@ -45,8 +45,8 @@ class S23_Bar_Problem(VScene):
         # ---- beat 1: the bar, its loads, the x axis
         wl = wall([X0, YB, 0], side=LEFT, h=2.0)
         barr = bar(X0, X1, y=YB, h=BH)
-        dl = dist_load(X0 + 0.35, X1 - 0.35, YB, n=9, d=RIGHT, length=0.5)
-        flab = E("f", size=48).next_to(barr, UP, buff=0.18).shift(LEFT * 3.4)
+        dl = dist_load(X0 + 0.35, X1 - 0.35, YB + BH / 2 + 0.25, n=9, d=RIGHT, length=0.5)
+        flab = E("f", size=48).next_to(dl, UP, buff=0.1).shift(LEFT * 3.4)
         barg = VGroup(barr, dl, flab)
         parr = force([X1, YB, 0], d=RIGHT, length=1.3)
         plab = E("P", size=48).next_to(parr, UP, buff=0.12)

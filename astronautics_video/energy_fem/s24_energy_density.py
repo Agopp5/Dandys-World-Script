@@ -48,9 +48,9 @@ class S24_Energy_Density(VScene):
         sgR = M(r"\sigma", size=52, color=ACCENT).next_to(aR, UP, buff=0.15)
         brc = BraceBetweenPoints([lft, -1.75, 0], [lft + w0, -1.75, 0], DOWN, color=INK2)
         dxl = M(r"dx", size=48).next_to(brc, DOWN, buff=0.12)
-        epl = VGroup(T("strain", size=34, color=ACCENT), M(r"\varepsilon", size=52, color=ACCENT)) \
+        epl = VGroup(T("strain", size=40, color=ACCENT), M(r"\varepsilon", size=52, color=ACCENT)) \
             .arrange(RIGHT, buff=0.2).next_to(big_s, UP, buff=0.3)
-        stl = T("stress", size=34, color=ACCENT).next_to(aR, DOWN, buff=0.2)
+        stl = T("stress", size=40, color=ACCENT).next_to(aR, DOWN, buff=0.2)
         with self.say("To find the energy in the bar, zoom in on a tiny slice, of length d x. Inside it, the "
                       "material is stretched by a strain epsilon, and carries a stress sigma.") as d:
             self.play(FadeIn(wl), FadeIn(br), run_time=.12 * d)
@@ -89,10 +89,10 @@ class S24_Energy_Density(VScene):
 
         # ---------- beat 3: rescale to the spring graph ----------
         Al = M("A", size=52, color=INK).move_to(big_s)
-        alab = T("area", size=32, color=INK2).next_to(Al, DOWN, buff=0.15)
-        xl2 = VGroup(T("stretch", size=34, color=SKY), M(r"\varepsilon\,dx", size=48, color=SKY)) \
+        alab = T("area", size=38, color=INK2).next_to(Al, DOWN, buff=0.15)
+        xl2 = VGroup(T("stretch", size=40, color=SKY), M(r"\varepsilon\,dx", size=48, color=SKY)) \
             .arrange(RIGHT, buff=0.2).next_to(ax.c2p(1, 0), DOWN, buff=0.3).align_to(ax.c2p(1, 0), RIGHT)
-        yl2 = VGroup(T("force", size=34, color=ROSE), M(r"\sigma A", size=48, color=ROSE)) \
+        yl2 = VGroup(T("force", size=40, color=ROSE), M(r"\sigma A", size=48, color=ROSE)) \
             .arrange(RIGHT, buff=0.2).next_to(ax.c2p(0, 1), UP, buff=0.25).align_to(ax.c2p(0, 1), LEFT)
         g_old = Polygon(ax.c2p(0, 0), ax.c2p(0.5, 0), ax.c2p(0.5, 0.5 * 1.7), color=INK2, stroke_width=4)
         g_old = DashedVMobject(g_old, num_dashes=36)
@@ -112,7 +112,7 @@ class S24_Energy_Density(VScene):
         tri = Polygon(ax.c2p(0, 0), ax.c2p(E0, 0), ax.c2p(E0, SL * E0), stroke_width=0,
                       fill_color=MINT, fill_opacity=0.5)
         vline = DashedLine(ax.c2p(E0, 0), ax.c2p(E0, SL * E0), color=INK2, stroke_width=3)
-        bl = M(r"\varepsilon", size=48, color=ACCENT).next_to(ax.c2p(E0 / 2, 0), UP, buff=0.15)
+        bl = M(r"\varepsilon", size=48, color=ACCENT).next_to(ax.c2p(E0 / 2, 0), DOWN, buff=0.2)
         hl = E(r"E|\varepsilon", size=48, cmap=CM).next_to(vline, RIGHT, buff=0.15)
         xl3 = M(r"\varepsilon", size=52, color=ACCENT).next_to(ax.c2p(1, 0), DOWN, buff=0.3)
         yl3 = M(r"\sigma", size=52, color=ACCENT).next_to(ax.c2p(0, 1), UP, buff=0.25)
