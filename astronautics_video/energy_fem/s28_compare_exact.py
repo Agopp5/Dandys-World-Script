@@ -46,7 +46,7 @@ class S28_Compare_Exact(VScene):
         wl = wall(np.array([xa, y0, 0]), side=LEFT, h=1.8)
         br = bar(xa, xb, y=y0, h=0.8)
         ld = dist_load(xa + 0.2, xb - 0.1, y0 + 0.8, n=9, d=RIGHT, length=0.5)
-        fl = M("f", size=52, color=ROSE).next_to(ld, UP, buff=0.15)
+        fl = M("f", size=52, color=ROSE).move_to([(xa + xc) / 2, y0 + 1.45, 0])
         sketch = VGroup(wl, br, ld, fl)
         cut = DashedLine([xc, y0 - 1.0, 0], [xc, y0 + 1.4, 0], color=INK, stroke_width=4)
         outer = Rectangle(width=xb - xc, height=0.8, stroke_color=ROSE, stroke_width=6,
@@ -79,19 +79,21 @@ class S28_Compare_Exact(VScene):
         with self.say("How good is that guess? This simple bar has an exact answer. Cut it at x: the piece beyond "
                       "the cut carries f times L minus x, so the strain there is f times L minus x, over E A. "
                       "Integrate that, and you get u of x equals f over E A, times L x minus x squared over two.") as d:
+            # intro ~0.20 of the line, the cut ~0.25, the strain ~0.19, the integral ~0.36
             self.play(FadeIn(sketch), run_time=.08 * d)
-            self.wait(.06 * d)
-            self.play(Create(cut), FadeIn(outer), run_time=.07 * d)
+            self.wait(.12 * d)
+            self.play(Create(cut), FadeIn(outer), run_time=.08 * d)
             self.play(GrowFromCenter(b_x), FadeIn(l_x), run_time=.05 * d)
             self.play(GrowFromCenter(b_out), Write(l_out), run_time=.08 * d)
             self.wait(.04 * d)
             self.snap("cut")
-            self.play(Write(eps), run_time=.12 * d)
-            self.wait(.05 * d)
-            self.play(Write(uex), run_time=.13 * d)
-            self.play(FadeOut(sketch), FadeOut(cutgrp), run_time=.06 * d)
-            self.play(Create(ax), FadeIn(xt), FadeIn(xl), FadeIn(yl), run_time=.1 * d)
-            self.play(Create(ex), FadeIn(ex_lab), run_time=.12 * d)
+            self.play(Write(eps), run_time=.1 * d)
+            self.wait(.09 * d)
+            self.play(Write(uex), run_time=.12 * d)
+            self.play(FadeOut(sketch), FadeOut(cutgrp), Create(ax), FadeIn(xt), FadeIn(xl), FadeIn(yl),
+                      run_time=.07 * d)
+            self.play(Create(ex), FadeIn(ex_lab), run_time=.1 * d)
+            self.wait(.03 * d)
 
         # ---------- beat 2: the straight line meets the curve at the tip ----------
         ln = dashed(ax.plot(lambda t: t / 2, x_range=[0, 1], color=SKY, stroke_width=6))
@@ -116,7 +118,7 @@ class S28_Compare_Exact(VScene):
         # ---------- beat 3: checkpoint ----------
         mid_guide = DashedLine(ax.c2p(0.5, 0), ax.c2p(0.5, 0.58), color=MUTED, stroke_width=3)
         self.beat("Your turn: pause and do checkpoint four point one in your guide. Compare the two at the "
-                  "middle of the bar.", .3, Create(mid_guide), Indicate(xt[1], color=GOLD, scale_factor=1.3), .2)
+                  "middle of the bar.", .3, Create(mid_guide), Indicate(xt[1], color=SKY, scale_factor=1.3), .2)
         self.checkpoint("4.1", "Assumed u = a x: compare u at the middle with exact")
 
         # ---------- beat 4: the gap at the middle ----------
@@ -135,9 +137,11 @@ class S28_Compare_Exact(VScene):
         m2.next_to(m1, DOWN, buff=0.6)
         m2.shift((m1[1].get_x() - m2[1].get_x()) * RIGHT)
         VGroup(m1, m2).shift((RX - VGroup(m1, m2).get_center()[0]) * RIGHT)
-        n1 = T("Too low everywhere inside the bar", size=32, color=BAD).move_to([RX, -1.2, 0])
+        n1 = T("Too low everywhere inside the bar", size=36, color=BAD).move_to([RX, -1.2, 0])
         fit(n1, 6.4, 1)
-        n2 = T("Tip match: a coincidence, not a rule", size=32, color=MUTED).next_to(n1, DOWN, buff=0.45)
+        n2 = T("Tip match: a coincidence, not a rule", size=36, color=MUTED)
+        fit(n2, 6.4, 1)
+        n2.next_to(n1, DOWN, buff=0.45)
         self.beat("At the middle, the straight line gives one quarter f L squared over E A. The exact answer is "
                   "three eighths. The line sits too low everywhere inside the bar. The tip matching was a lucky "
                   "coincidence, not a rule.",
@@ -145,7 +149,7 @@ class S28_Compare_Exact(VScene):
                   [FadeIn(d_ln), FadeIn(v_ln), Write(m1)], .05,
                   [FadeIn(d_ex), FadeIn(v_ex), Write(m2)], GrowFromCenter(gap),
                   [FadeIn(area), FadeIn(n1)], .05,
-                  [Circumscribe(tip, color=GOLD, shape=Circle), FadeIn(n2)], .1,
+                  [Circumscribe(tip, color=SKY, shape=Circle), FadeIn(n2)], .1,
                   w=(.05, .2, .2, .1, .22, .15))
 
         # ---------- beat 5: a real structure ----------
@@ -160,8 +164,8 @@ class S28_Compare_Exact(VScene):
                              color=INK2, stroke_width=5) for c in (0.3, 0.72)])
         ribg = VGroup(rib, holes, spar)
         fit(ribg, 6.5, 4).move_to([RX - 0.05, -0.6, 0])
-        qm = T("?", size=130, color=GOLD, weight=BOLD).move_to([RX + 2.2, 2.0, 0])
-        rib_lab = T("a wing rib", size=32, color=MUTED).next_to(ribg, DOWN, buff=0.35)
+        qm = T("?", size=130, color=INK, weight=BOLD).move_to([RX + 2.2, 2.0, 0])
+        rib_lab = T("a wing rib", size=40, color=MUTED).next_to(ribg, DOWN, buff=0.35)
         s1 = T("Assumed shapes are approximate.", size=40)
         s2 = T("Better shape, better answer.", size=40)
         s3 = T("One good shape for a whole", size=40, color=INK2)

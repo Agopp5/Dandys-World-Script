@@ -40,15 +40,15 @@ class S30_To_FEM(VScene):
         fl = dist_load(X(0) + 0.3, X(1) - 0.2, yb + 0.95, n=9, d=RIGHT)
         flab = M("f", size=40, color=ROSE).next_to(fl, RIGHT, buff=0.15)
 
-        ex = dashed(ax.plot(exact, color=INK2, stroke_width=5))
-        exlab = VGroup(DashedLine(ORIGIN, RIGHT * 0.7, color=INK2, stroke_width=5), T("exact", size=34, color=INK2))
-        exlab.arrange(RIGHT, buff=0.2).move_to(ax.c2p(0.14, 0.44))
+        ex = ax.plot(exact, color=SKY, stroke_width=6)
+        exlab = VGroup(Line(ORIGIN, RIGHT * 0.7, color=SKY, stroke_width=6), M(r"u_{\text{exact}}", size=40, color=SKY))
+        exlab.arrange(RIGHT, buff=0.2).move_to(ax.c2p(0.15, 0.44))
         xl = M("x", size=40, color=INK2).next_to(ax.c2p(1, 0), RIGHT, buff=0.2)
         ul = M("u", size=40, color=SKY).next_to(ax.c2p(0, 0.5), LEFT, buff=0.2)
-        line = ax.plot(assumed, color=SKY, stroke_width=6)
+        line = dashed(ax.plot(assumed, color=SKY, stroke_width=6))
         llab = M(r"u = a\,x", size=40, color=SKY).next_to(ax.c2p(0.7, assumed(0.7)), DR, buff=0.15)
         gap = Line(ax.c2p(0.5, assumed(0.5)), ax.c2p(0.5, exact(0.5)), color=BAD, stroke_width=7)
-        miss = T("missed", size=32, color=BAD).next_to(gap, RIGHT, buff=0.25).shift(UP * 0.18)
+        miss = T("missed", size=40, color=BAD).next_to(gap, RIGHT, buff=0.25).shift(UP * 0.18)
 
         self.beat("So assumed shapes work, but one shape for the whole structure is hard to choose, "
                   "and our single straight line missed the curve inside the bar.",
@@ -63,6 +63,8 @@ class S30_To_FEM(VScene):
 
         xs4 = [X(i / 4) for i in range(5)]
         fb4 = fem_bar(xs4, y=yb, h=0.5)
+        for i, tg in enumerate(fb4.tags):
+            tg.next_to(fb4.elems[i], DOWN, buff=0.15)
         ex4 = [exact(i / 4) for i in range(5)]
         v = [ValueTracker(val) for val in ex4]
         broken = always_redraw(lambda: VMobject(color=SKY, stroke_width=7).set_points_as_corners(
@@ -74,11 +76,13 @@ class S30_To_FEM(VScene):
         with self.say("Here's the way out, and it's the whole idea of finite elements. Chop the bar into short "
                       "pieces. In each piece, use the simplest shape there is, a straight line. "
                       "The pieces join at shared points.") as d:
-            self.play(FadeOut(line), FadeOut(llab), FadeOut(gap), FadeOut(miss), run_time=.12 * d)
+            self.play(FadeOut(line), FadeOut(llab), FadeOut(gap), FadeOut(miss),
+                      ex.animate.set_stroke(width=16, opacity=0.35), exlab[0].animate.set_stroke(width=16, opacity=0.35),
+                      run_time=.12 * d)
             self.play(FadeOut(one), FadeIn(fb4), run_time=.2 * d)
             self.play(Create(broken), run_time=.3 * d)
             self.play(FadeIn(dots[1:4], scale=1.6), run_time=.13 * d)
-            self.play(Indicate(dots[1:4], color=GOLD, scale_factor=1.6), run_time=.17 * d)
+            self.play(Indicate(dots[1:4], color=SKY, scale_factor=1.6), run_time=.17 * d)
         broken.set_z_index(2)
 
         # ---- beat 3: the unknowns q_1..q_4 at the joints; the broken line follows each one
@@ -96,7 +100,7 @@ class S30_To_FEM(VScene):
                 self.play(FadeIn(qlab[i - 1]), v[i].animate.set_value(ex4[i] + 0.11),
                           run_time=.08 * d, rate_func=smooth)
                 self.play(v[i].animate.set_value(ex4[i]), run_time=.08 * d)
-            self.play(Indicate(qlab, color=GOLD), run_time=.18 * d)
+            self.play(Indicate(qlab, color=SKY), run_time=.18 * d)
             self.wait(.08 * d)
 
         # ---- beat 4: 8 elements hug the curve
@@ -117,8 +121,8 @@ class S30_To_FEM(VScene):
             self.play(FadeOut(fb4), FadeIn(fb8), Transform(frozen, broken8), FadeOut(dots),
                       FadeIn(dots8), FadeIn(note), run_time=.35 * d)
             el = fb8.elems[3]
-            self.play(Circumscribe(el, color=GOLD), Indicate(
-                Line(ax.c2p(3 / 8, ex8[3]), ax.c2p(4 / 8, ex8[4]), color=GOLD, stroke_width=9)),
+            self.play(Circumscribe(el, color=INK2), Indicate(
+                Line(ax.c2p(3 / 8, ex8[3]), ax.c2p(4 / 8, ex8[4]), color=SKY, stroke_width=9)),
                 run_time=.3 * d)
             self.wait(.23 * d)
 

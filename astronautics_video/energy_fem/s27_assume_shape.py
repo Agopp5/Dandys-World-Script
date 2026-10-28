@@ -27,7 +27,7 @@ OX, OY, LW = -6.0, -1.0, 5.0
 O = np.array([OX, OY, 0])
 BAR_Y = -2.55
 A_LO, A_HI, A_BEST = 0.12, 0.66, 0.46      # display slopes (screen units)
-RX = 3.75                                  # right column centre
+RX = 3.6                                   # right column centre
 
 
 def slope_line(t, color=SKY, width=6):
@@ -90,16 +90,16 @@ class S27_Assume_Shape(VScene):
         self.beat("Let's try it. Only the spread load f, no tip load. Assume u equals a times x. It's zero at the "
                   "wall, so it respects the support. Then d u d x is just a.",
                   [FadeOut(tease), FadeOut(tease_note)],
-                  [FadeIn(barfig), Indicate(flab, color=ROSE)],
+                  FadeIn(barfig), Indicate(flab, color=ROSE),
                   Write(e_u), [FadeIn(odot, scale=2), FadeIn(flag), Indicate(wl)],
                   Write(e_du),
-                  w=(.08, .22, .2, .3, .2))
+                  w=(.08, .12, .1, .2, .3, .2))
 
         # ---- U and W
         e_U0 = E(r"U|=|\tfrac12\int_0^L EA\,a^2\,dx", size=52)
         e_U = E(r"U|=|\tfrac12 EA\,a^2 L", size=52)
         e_W = E(r"W|=|\int_0^L|f|\,a x\,dx|=|\tfrac12|f|a L^2", size=52)
-        fit(e_W, 6.4, 2)
+        fit(e_W, 6.0, 2)
         e_U0.move_to([RX, 0.5, 0]); e_U.move_to([RX, 0.5, 0]).align_to(e_U0, LEFT)
         e_W.move_to([RX, -1.6, 0])
         with self.say("U is one half, E A a squared, integrated over the length: one half E A a squared L. W is "
@@ -114,7 +114,7 @@ class S27_Assume_Shape(VScene):
 
         # ---- Pi(a) and the bowl
         e_Pi = E(r"\Pi|(a)|=|\tfrac12 EA\,a^2 L|-|\tfrac12|f|a L^2", size=52)
-        fit(e_Pi, 6.4, 2)
+        fit(e_Pi, 6.0, 2)
         e_Pi.move_to([RX, 2.6, 0])
         bc = np.array([RX, 1.0, 0])                       # a-axis level (Pi = 0) for the bowl
         bw, bh = 4.2, 1.35                                  # Pi = a^2 - 2a on a in [-0.15, 2.15]
@@ -137,11 +137,11 @@ class S27_Assume_Shape(VScene):
 
         # ---- derivative, minimum
         e_d = E(r"\frac{d\Pi}{da}|=|EA\,a L|-|\tfrac12|f|L^2|=|0", size=50)
-        fit(e_d, 6.4, 2)
+        fit(e_d, 6.0, 2)
         e_d.move_to([RX, -1.55, 0])
         e_a = E(r"a|=|\frac{fL}{2EA}", size=56).move_to([RX, -3.05, 0])
         tint(e_a[2], [((0, 1), ROSE)])
-        box_a = SurroundingRectangle(e_a, color=GOLD, buff=0.18, stroke_width=4)
+        box_a = SurroundingRectangle(e_a, color=SKY, buff=0.18, stroke_width=4)
         bot = Dot(b2p(1), radius=0.12, color=GOLD)
         tang = DashedLine(b2p(0.45) * [1, 0, 0] + [0, b2p(1)[1], 0], b2p(1.55) * [1, 0, 0] + [0, b2p(1)[1], 0],
                           color=GOLD, stroke_width=3)
@@ -175,7 +175,7 @@ class S27_Assume_Shape(VScene):
                       run_time=.08 * d)
             self.play(FadeIn(n1, shift=UP * 0.2), run_time=.12 * d)
             self.play(FadeIn(n2, shift=UP * 0.2), FadeOut(fam), tr.animate.set_value(A_BEST), run_time=.2 * d)
-            self.play(Indicate(live_line, color=GOLD, scale_factor=1.0), run_time=.12 * d)
+            self.play(Indicate(live_line, color=SKY, scale_factor=1.0), run_time=.12 * d)
             self.play(Create(aL_mark), FadeIn(aL_lab), GrowArrow(tip_arr), FadeIn(tip_lab), run_time=.12 * d)
             self.play(Write(VGroup(*e_tip[:4])), run_time=.12 * d)
             self.play(Write(VGroup(*e_tip[4:])), FadeIn(glow(tip_arr, SKY)), run_time=.14 * d)
@@ -194,8 +194,8 @@ class S27_Assume_Shape(VScene):
                   "respects the supports, with a few unknown numbers in it, and the infinite problem becomes a small "
                   "one.",
                   [FadeOut(VGroup(notes, e_tip, a_grp)), FadeIn(big)],
-                  [FadeIn(k1), Indicate(odot)], [FadeIn(k2), Indicate(a_lab)], FadeIn(k3),
-                  self.spotlight(big, live_line), .15,
-                  w=(.12, .15, .15, .15, .2), style="slower and deliberate, stressing the key words")
+                  self.spotlight(big, live_line, keys),
+                  [FadeIn(k1), Indicate(odot)], [FadeIn(k2), Indicate(a_lab)], FadeIn(k3), .15,
+                  w=(.12, .2, .15, .15, .15), style="slower and deliberate, stressing the key words")
         knob.clear_updaters()
         self.wipe()
