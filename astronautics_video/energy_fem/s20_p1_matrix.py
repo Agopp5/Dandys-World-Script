@@ -30,24 +30,6 @@ _K = np.array([[200, -100, 0], [-100, 300, -100], [0, -100, 100]])
 assert np.allclose(_K @ np.array([.5, .7, 1.0]), [30, 60, 30])
 
 
-def _figure():
-    w = wall(ORIGIN, side=LEFT, h=2.4)
-    s1 = spring(np.array([0, .7, 0]), np.array([2.6, .7, 0]), label="K_1")
-    s2a = spring(np.array([0, -.7, 0]), np.array([1.3, -.7, 0]), coils=3, label="K_2")
-    s2b = spring(np.array([1.3, -.7, 0]), np.array([2.6, -.7, 0]), coils=3, label="K_2")
-    jn = node(np.array([1.3, -.7, 0]))
-    rod = Rectangle(width=.2, height=2.2).move_to([2.7, 0, 0])
-    rod.set_fill(SURFACE, 1).set_stroke(INK2, 2)
-    s3 = spring(np.array([2.8, 0, 0]), np.array([4.2, 0, 0]), coils=3, label="K_3")
-    n3 = node(np.array([4.2, 0, 0]))
-    f1 = force(np.array([1.3, -1.15, 0]), RIGHT, length=.7, label="P_1")
-    f2 = force(np.array([2.8, .9, 0]), RIGHT, length=.7, label="P_2")
-    f3 = force(np.array([2.8, -.9, 0]), RIGHT, length=.7, label="P_3")
-    f4 = force(np.array([4.2, 0, 0]), RIGHT, length=.7, label="P_4")
-    fig = VGroup(w, s1, s2a, s2b, rod, s3, jn, n3, f1, f2, f3, f4)
-    return fig, (s1, s2a, s2b, s3)
-
-
 def _ent(s):
     return E(s, size=44)
 
@@ -56,8 +38,9 @@ class S20_P1_Matrix(VScene):
     budget = 73
 
     def construct(self):
-        fig, (s1, s2a, s2b, s3) = _figure()
-        fig.scale(.95).to_corner(UL, buff=.35)
+        fig = hw_figure(k2b_label=True)
+        fig.scale(.5).to_corner(UL, buff=.3)
+        s1, s2a, s2b, s3 = fig.k1, fig.k2a, fig.k2b, fig.k3
 
         Kmx = Matrix([["2|K_2", "-|K_2", "0"],
                       ["-|K_2", "K_1|+|K_2|+|K_3", "-|K_3"],
@@ -90,17 +73,21 @@ class S20_P1_Matrix(VScene):
             return VGroup(*[SurroundingRectangle(m, buff=.1, color=LILAC, stroke_width=3)
                             .set_fill(LILAC, .22) for m in mobs])
 
+        # (1,1) shown briefly as K_2 + K_2: one K_2 from each spring
+        k11 = E(r"K_2|+|K_2", size=44)
+        k11.match_height(ent[0]).align_to(ent[0], LEFT).align_to(ent[0], DOWN)
         groups = [
-            (s2b, [ent[0], ent[1], ent[3], ent[4][2]]),
+            (s2b, [k11[2], ent[1], ent[3], ent[4][2]]),
             (s3, [ent[4][4], ent[5], ent[7], ent[8]]),
             (s1, [ent[4][0]]),
-            (s2a, [ent[0]]),
+            (s2a, [k11[0]]),
         ]
         with self.say("Check it against the pattern from last episode. Each spring adds plus k on the diagonal "
                       "of each free node it touches, and minus k between them. Springs tied to the wall only add "
                       "to one diagonal, because the wall's row and column are left out.") as d:
-            self.play(FadeIn(card), run_time=.12 * d)
-            self.wait(.04 * d)
+            self.play(FadeIn(card), run_time=.1 * d)
+            self.wait(.02 * d)
+            self.play(ent[0].animate.set_opacity(0), FadeIn(k11), run_time=.04 * d)
             for n, (sp, mobs) in enumerate(groups):
                 if n == 2:
                     self.play(FadeOut(pat), FadeIn(pat2), run_time=.05 * d)
@@ -110,17 +97,18 @@ class S20_P1_Matrix(VScene):
                 self.snap("spring %d" % n)
                 self.wait((.08 if n < 2 else .05) * d)
                 self.play(FadeOut(bx), FadeOut(g), run_time=.03 * d)
+            self.play(FadeOut(k11), ent[0].animate.set_opacity(1), run_time=.04 * d)
             self.wait(.02 * d)
 
-        mirror = DashedLine(ent[0].get_center() + (ent[0].get_center() - ent[8].get_center()) * .06,
-                            ent[8].get_center() + (ent[8].get_center() - ent[0].get_center()) * .06,
-                            color=INK2, stroke_width=4)
         sym = E(r"K|=|K^{T}", size=48).move_to(card)
         paint(sym, {2: LILAC})
+        diag = VGroup(*[SurroundingRectangle(ent[i], buff=.12, stroke_width=0).set_fill(INK2, .13)
+                        for i in (0, 4, 8)])
+        pair1, pair2 = boxes([ent[1], ent[3]]), boxes([ent[5], ent[7]])
         self.beat("And it's symmetric: each spring puts the same minus k in both of its off-diagonal spots. "
                   "Now let's solve it.",
-                  [FadeOut(pat2), FadeOut(card), Create(mirror)],
-                  [Indicate(ent[1], color=LILAC), Indicate(ent[3], color=LILAC)],
-                  [Indicate(ent[5], color=LILAC), Indicate(ent[7], color=LILAC)],
-                  FadeIn(sym), .2, w=(.25, .2, .2, .15))
+                  [FadeOut(pat2), FadeOut(card), FadeIn(diag)],
+                  [FadeIn(pair1), Indicate(ent[1], color=LILAC), Indicate(ent[3], color=LILAC)],
+                  [FadeOut(pair1), FadeIn(pair2), Indicate(ent[5], color=LILAC), Indicate(ent[7], color=LILAC)],
+                  FadeIn(sym), .2, w=(.2, .22, .22, .16))
         self.wipe()

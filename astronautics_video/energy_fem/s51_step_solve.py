@@ -23,7 +23,7 @@ assert np.isclose(7000 / 70000, 0.1) and np.isclose(2 * 0.1, 0.2)
 Y = 1.7
 X0, X1, X2, X3 = -5.6, -1.6, 2.4, 5.4
 SC = 5.0            # screen units per mm: displacements exaggerated
-LABY = 0.5          # row of node labels and element tags
+LABY = 0.35         # row of node labels and element tags
 
 
 def etag(n, x):
@@ -33,18 +33,18 @@ def etag(n, x):
 
 def figure(d1=0.0, d2=0.0):
     x1, x2 = X1 + d1, X2 + d2
-    e1 = bar(X0, x1, y=Y, h=1.0)
-    e2 = bar(x1, x2, y=Y, h=0.5)
-    spr = spring(np.array([x2, Y, 0]), np.array([X3, Y, 0]), coils=6, amp=0.28)
+    e1 = bar(X0, x1, y=Y, h=1.2)
+    e2 = bar(x1, x2, y=Y, h=0.6)
+    spr = spring(np.array([x2, Y, 0]), np.array([X3, Y, 0]), coils=6, amp=0.32)
     xs = [X0, x1, x2, X3]
     dots = VGroup(*[node(np.array([x, Y, 0]), r=0.1) for x in xs])
     nl = VGroup(*[M(str(i), size=40, color=INK).move_to([x, LABY, 0]) for i, x in enumerate(xs)])
     tags = VGroup(etag(1, (X0 + x1) / 2), etag(2, (x1 + x2) / 2))
-    arr = force(np.array([x1, 2.22, 0]), RIGHT, length=1.2)
-    pl = E(r"P|=|7000\text{ N}", size=36)
+    arr = force(np.array([x1, 2.16, 0]), RIGHT, length=1.2)
+    pl = E(r"P|=|7000\text{ N}", size=40)
     paint(pl, {2: ROSE})
     pl.next_to(arr, UP, buff=.12).align_to(arr, LEFT)
-    kl = M("K", size=40, color=LILAC).move_to([(x2 + X3) / 2, Y + 0.62, 0])
+    kl = M("K", size=40, color=LILAC).move_to([(x2 + X3) / 2, Y + 0.7, 0])
     return VGroup(e1, e2, spr, dots, nl, tags, arr, pl, kl)
 
 
@@ -58,15 +58,15 @@ class S51_Step_Solve(VScene):
     budget = 109
 
     def construct(self):
-        walls = VGroup(wall(np.array([X0, Y, 0]), side=LEFT, h=1.9),
-                       wall(np.array([X3, Y, 0]), side=RIGHT, h=1.9))
+        walls = VGroup(wall(np.array([X0, Y, 0]), side=LEFT, h=2.1),
+                       wall(np.array([X3, Y, 0]), side=RIGHT, h=2.1))
         fig = figure()
 
         Km = vec([["42{,}000", "-14{,}000"], ["-14{,}000", "28{,}000"]], LILAC)
         qv = vec([["q_1"], ["q_2"]], SKY)
         rhs = vec([["7000"], ["0"]], ROSE)
         system = VGroup(Km, qv, M("=", size=48), rhs).arrange(RIGHT, buff=.25)
-        system.move_to([0, -0.95, 0]).to_edge(LEFT, buff=.6)
+        system.move_to([0, -1.1, 0]).to_edge(LEFT, buff=.6)
 
         def rowbox(r):
             return VGroup(*[SurroundingRectangle(m.get_rows()[r], color=INK, buff=.1, stroke_width=3)
@@ -76,27 +76,27 @@ class S51_Step_Solve(VScene):
 
         eqA = E(r"-14{,}000\,|q_1|+|28{,}000\,|q_2|=|0", size=48)
         paint(eqA, {0: LILAC, 3: LILAC, 6: ROSE})
-        eqA.move_to([0, -2.6, 0])
-        eqB = E(r"q_1|=|2\,|q_2", size=48).move_to([0, -3.45, 0])
+        eqA.move_to([0, -2.7, 0])
+        eqB = E(r"q_1|=|2\,|q_2", size=48).move_to([0, -3.55, 0])
 
         self.beat("Two equations. Start with the second one: minus fourteen thousand q one, plus twenty eight "
                   "thousand q two, equals zero. So q one is twice q two.",
                   [FadeIn(walls), FadeIn(fig), FadeIn(system)], Create(box2), Write(eqA), .1, Write(eqB),
-                  w=(.12, .1, .4, .1, .28))
+                  w=(.12, .1, .42, .26))
 
         # beat 2: substitute into row 1
-        memo_pos = np.array([(system.get_right()[0] + 7.1) / 2, -0.95, 0])
+        memo_pos = np.array([(system.get_right()[0] + 7.1) / 2, -1.1, 0])
         memo_box = SurroundingRectangle(eqB.copy().move_to(memo_pos), color=INK2, buff=.22)
         box1 = rowbox(0)
         eqC = E(r"42{,}000\,|(2|q_2|)|-|14{,}000\,|q_2|=|7000", size=48)
         paint(eqC, {0: LILAC, 1: INK, 3: INK, 5: LILAC, 8: ROSE})
-        eqC.move_to([0, -2.6, 0])
+        eqC.move_to([0, -2.7, 0])
         eqC2 = E(r"84{,}000\,|q_2|-|14{,}000\,|q_2|=|7000", size=48)
         paint(eqC2, {0: LILAC, 3: LILAC, 6: ROSE})
-        eqC2.move_to([0, -2.6, 0])
+        eqC2.move_to([0, -2.7, 0])
         eqD = E(r"70{,}000\,|q_2|=|7000", size=48)
         paint(eqD, {0: LILAC, 3: ROSE})
-        eqD.move_to([0, -3.45, 0])
+        eqD.move_to([0, -3.55, 0])
 
         self.beat("Put that into the first: forty two thousand times two q two, minus fourteen thousand q two, "
                   "equals seven thousand. That's eighty four thousand minus fourteen thousand, seventy thousand "
@@ -110,31 +110,31 @@ class S51_Step_Solve(VScene):
         # beat 3: the answers
         res2 = E(r"q_2|=|0.1\text{ mm}", size=56)
         res1 = E(r"q_1|=|0.2\text{ mm}", size=56)
-        VGroup(res1, res2).arrange(RIGHT, buff=1.6).move_to([0, -2.45, 0])
+        VGroup(res1, res2).arrange(RIGHT, buff=1.6).move_to([0, -2.6, 0])
         b2 = SurroundingRectangle(res2, color=INK, buff=.25)
         b1 = SurroundingRectangle(res1, color=INK, buff=.25)
         self.beat("So q two is zero point one millimeters, and q one, twice that, is zero point two millimeters.",
                   [FadeOut(system), FadeOut(box1), FadeOut(eqC2), FadeOut(memo_box)],
                   ReplacementTransform(eqD, res2), Create(b2), .1, ReplacementTransform(eqB, res1), Create(b1),
-                  w=(.15, .25, .1, .1, .25, .15))
+                  w=(.15, .25, .1, .25, .15))
 
         # beat 4: the bar deforms (exaggerated)
         d1, d2 = SC * QSOL[0], SC * QSOL[1]
         ghost = VGroup(*[DashedVMobject(Rectangle(width=abs(b - a), height=h).move_to([(a + b) / 2, Y, 0]),
                                         num_dashes=40).set_stroke(MUTED, 2.5)
-                         for a, b, h in [(X0, X1, 1.0), (X1, X2, 0.5)]]).set_z_index(3)
+                         for a, b, h in [(X0, X1, 1.2), (X1, X2, 0.6)]]).set_z_index(3)
         note = T("displacements exaggerated", size=30, color=MUTED).move_to([3.6, 3.45, 0])
         target = figure(d1, d2)
-        a1 = Arrow([X1, 0.02, 0], [X1 + d1, 0.02, 0], buff=0, color=SKY, stroke_width=7,
+        a1 = Arrow([X1, -0.15, 0], [X1 + d1, -0.15, 0], buff=0, color=SKY, stroke_width=7,
                    max_tip_length_to_length_ratio=.3)
-        a2 = Arrow([X2, 0.02, 0], [X2 + d2, 0.02, 0], buff=0, color=SKY, stroke_width=7,
+        a2 = Arrow([X2, -0.15, 0], [X2 + d2, -0.15, 0], buff=0, color=SKY, stroke_width=7,
                    max_tip_length_to_length_ratio=.5)
-        l1 = M(r"0.2\text{ mm}", size=36, color=SKY).next_to(a1, DOWN, buff=.12)
-        l2 = M(r"0.1\text{ mm}", size=36, color=SKY).next_to(a2, DOWN, buff=.12)
+        l1 = M(r"0.2\text{ mm}", size=40, color=SKY).next_to(a1, DOWN, buff=.12)
+        l2 = M(r"0.1\text{ mm}", size=40, color=SKY).next_to(a2, DOWN, buff=.12)
         self.beat("Picture it. The step moves two tenths of a millimeter to the right. The end moves only one tenth. "
                   "So the thin piece got shorter, and the spring got squeezed.",
                   [FadeIn(ghost), FadeIn(note)], Transform(fig, target),
                   [GrowArrow(a1), FadeIn(l1)], [GrowArrow(a2), FadeIn(l2)],
                   Indicate(fig[1], color=GOLD, scale_factor=1.06), Indicate(fig[2], color=LILAC, scale_factor=1.1),
-                  .1, w=(.06, .16, .18, .16, .17, .17, .1))
+                  .1, w=(.06, .18, .18, .16, .16, .16))
         self.wipe()

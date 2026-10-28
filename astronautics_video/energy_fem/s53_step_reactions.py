@@ -61,8 +61,11 @@ class S53_Step_Reactions(VScene):
         row3 = E(r"-14{,}000\,|q_2|+|14{,}000\,|q_3|=|R_3", size=48, cmap=CM).move_to([3.55, -1.15, 0])
         r3 = E(r"R_3|=|-14{,}000 \times 0.1|=|-1400\text{ N}", size=48, cmap=CM)
         r3.move_to([3.55, -2.45, 0])
-        for m in (row0, r0, row3, r3):
+        for m in (row0, row3):
             fit(m, 6.7, 1.2)
+        for m in (r0, r3):      # result on two lines: the final "= value" sits under the first "="
+            m[3:].next_to(m[1], DOWN, buff=0.45, aligned_edge=LEFT)
+            m.move_to([m.get_center()[0], -2.55, 0])
 
         self.beat("Now the rows we set aside. Row zero: twenty eight thousand times q zero, minus twenty eight "
                   "thousand times q one, equals R zero. That's minus twenty eight thousand times zero point two: "
@@ -105,8 +108,8 @@ class S53_Step_Reactions(VScene):
         n_l = M(r"5600\text{ N}", size=40, color=ROSE).next_to(seg_l, DOWN, buff=0.15)
         n_r = M(r"1400\text{ N}", size=40, color=ROSE).next_to(seg_r, DOWN, buff=0.15)
         split = VGroup(seg_l, seg_r, f_l, f_r, n_l, n_r)
-        card = qcard("Q", T("Where does the", 32), T("7000 N go?", 32))
-        fit(card, 5.4, 3.0)
+        # S47's question card (a panel); the top-right corner holds the figure here, so it sits bottom-right
+        card = panel(VGroup(T("how does the", 36), T("load split?", 36)).arrange(DOWN, buff=0.15))
         card.move_to([3.9, -1.75, 0])
         ctick = M(r"\checkmark", size=72, color=GOOD).next_to(card, DOWN, buff=0.2)
         self.beat("Together, fifty six hundred plus fourteen hundred is seven thousand. They balance the load "
@@ -124,7 +127,7 @@ class S53_Step_Reactions(VScene):
         l3 = E(r"R_0|=|-5600,\ |R_3|=|-1400\text{ N}", size=48, cmap=CM)
         body = VGroup(head, l1, l2, l3).arrange(DOWN, buff=0.45)
         summ = panel(body, color=ACCENT)
-        fit(summ, 12.5, 6.4)
+        summ.scale(min(11.5 / summ.width, 6.2 / summ.height))
         summ.move_to(DOWN * 0.3)
         everything = VGroup(fig, a0, a3, t0, t3, m0, m3, tot, tick, split, card, ctick)
         self.beat("So, stepping back: the same recipe as the column, now with real numbers and two supports.",

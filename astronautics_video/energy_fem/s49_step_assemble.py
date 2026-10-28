@@ -23,7 +23,7 @@ P = 7000
 YB = 2.45                                      # bar axis
 XN = [-6.0, -2.0, 2.0, 6.0]                    # nodes 0..3
 CW, CH = 1.9, 0.85                             # grid cell
-GX, GTOP = -2.4, 0.4                           # grid centre x, grid top y
+GX, GTOP = -2.4, 0.1                           # grid centre x, grid top y
 VX, VW = 2.6, 1.4                              # load-vector column
 
 
@@ -57,7 +57,7 @@ def sum_card(a, b, c, spot):
     line.next_to(rows, DOWN, buff=.2).align_to(rows, RIGHT)
     bot = M(c, size=48, color=LILAC).next_to(line, DOWN, buff=.25).align_to(rows, RIGHT)
     tag.next_to(VGroup(rows, line), UP, buff=.35)
-    g = VGroup(tag, top, mid, line, bot).move_to([5.5, -1.3, 0])
+    g = VGroup(tag, top, mid, line, bot).move_to([5.5, -1.6, 0])
     return g
 
 
@@ -72,10 +72,11 @@ class S49_Step_Assemble(VScene):
         e2 = bar(XN[1], XN[2], y=YB, h=0.45)
         sp = spring([XN[2], YB, 0], [XN[3], YB, 0], coils=6, amp=0.22, color=LILAC)
         dots = VGroup(*[node([x, YB, 0]) for x in XN]).set_z_index(3)
-        nlab = VGroup(*[M(str(n), size=40, color=INK).move_to([x, YB - .85, 0]) for n, x in enumerate(XN)])
-        klab = VGroup(M(r"k_1 = 28\,000", size=36, color=LILAC).move_to([(XN[0] + XN[1]) / 2, YB - .85, 0]),
-                      M(r"k_2 = 14\,000", size=36, color=LILAC).move_to([(XN[1] + XN[2]) / 2, YB - .85, 0]),
-                      M(r"k_3 = 14\,000", size=36, color=LILAC).move_to([(XN[2] + XN[3]) / 2, YB - .85, 0]))
+        nlab = VGroup(*[M(str(n), size=40, color=INK).move_to([x + (.3, 0, 0, -.3)[n], YB - 1.15, 0])
+                        for n, x in enumerate(XN)])
+        klab = VGroup(M(r"k_1 = 28\,000", size=36, color=LILAC).move_to([(XN[0] + XN[1]) / 2, YB - 1.15, 0]),
+                      M(r"k_2 = 14\,000", size=36, color=LILAC).move_to([(XN[1] + XN[2]) / 2, YB - 1.15, 0]),
+                      M(r"k_3 = 14\,000", size=36, color=LILAC).move_to([(XN[2] + XN[3]) / 2, YB - 1.15, 0]))
         arr = Arrow([XN[1] + .02, YB + .33, 0], [XN[1] + 1.5, YB + .33, 0], buff=0, color=ROSE,
                     stroke_width=8, max_tip_length_to_length_ratio=.3)
         plab = M(r"P = 7000\ \mathrm{N}", size=40, color=ROSE).next_to(arr, UP, buff=.15)

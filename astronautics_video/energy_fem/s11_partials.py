@@ -25,16 +25,17 @@ LX = -6.6          # left edge of the derivation column
 ROW_A, ROW_B, ROW_C = 1.15, -0.1, -1.35
 
 
-def pair_box(a, b):
-    """GOOD frame (faint GOOD fill) around a Newton equation and its energy twin: they match."""
-    return SurroundingRectangle(VGroup(a, b), color=GOOD, stroke_width=4, buff=.14, corner_radius=.12,
+def good_frame(m):
+    """GOOD frame (faint GOOD fill) around an equation: a Newton row or its energy twin, lit as a match."""
+    return SurroundingRectangle(m, color=GOOD, stroke_width=4, buff=.08, corner_radius=.1,
                                 fill_color=GOOD, fill_opacity=.1).set_z_index(-1)
 
 
-def tick(box):
-    """check badge just left of a pair box"""
-    c = Circle(radius=.2, color=GOOD, stroke_width=3, fill_color=BG, fill_opacity=1)
-    return VGroup(c, M(r"\checkmark", size=30, color=GOOD).move_to(c)).next_to(box, LEFT, buff=.05).set_z_index(3)
+def tick(eq, card):
+    """check badge inside the Newton card's left padding, level with eq"""
+    c = Circle(radius=.2, color=GOOD, stroke_width=3, fill_color=SURFACE, fill_opacity=1)
+    b = VGroup(c, M(r"\checkmark", size=30, color=GOOD).move_to(c))
+    return b.move_to([card.get_left()[0] + .15 + .2, eq.get_y(), 0]).set_z_index(3)
 
 
 class S11_Partials(VScene):
@@ -43,19 +44,26 @@ class S11_Partials(VScene):
     def construct(self):
         # Pi at the top: term groups 0 Pi, 1 =, 2-4 spring 1, 5 +, 6-8 spring 2, 9 -, 10-11 F1 q1, 12 -, 13-14 F2 q2
         pi = E(r"\Pi|=|\tfrac{1}{2}|k_1|q_1^2|+|\tfrac{1}{2}|k_2|(q_2-q_1)^2|-|F_1|q_1|-|F_2|q_2",
-               size=52, cmap=SQ).move_to(UP * 2.95)
+               size=46, cmap=SQ)
         t_s1, t_s2, t_f1, t_f2 = pi[2:5], pi[6:9], pi[9:12], pi[12:15]
 
         # Newton panel (the force balances from S09)
-        n_title = T("Newton: node balances", size=32, color=INK2)
+        # compact box at the top right, as S09 ends: title "Newton", two equations 0.3 apart
+        n_title = T("Newton", size=32, color=INK2)
         N1 = E(r"(|k_1|+|k_2|)|q_1|-|k_2|q_2|=|F_1", size=40)
         N2 = E(r"-|k_2|q_1|+|k_2|q_2|=|F_2", size=40)
-        PX = 4.66
-        n_title.move_to([PX, 1.95, 0]); N1.move_to([PX, 1.15, 0]); N2.move_to([PX, -1.05, 0])
-        slot1, slot2 = np.array([PX, 0.3, 0]), np.array([PX, -1.9, 0])
-        card = RoundedRectangle(width=5.2, height=5.1, corner_radius=.15, stroke_color=HAIR, stroke_width=2,
-                                fill_color=SURFACE, fill_opacity=1).move_to([4.45, -0.3, 0]).set_z_index(-2)
-        newton = VGroup(card, n_title, N1, N2)
+        eqs = VGroup(N1, N2).arrange(DOWN, buff=.3, aligned_edge=LEFT)
+        body = VGroup(n_title, eqs).arrange(DOWN, buff=.25)
+        PAD, LPAD = .25, .15 + .4 + .2           # left padding holds the check badges (buff .15 from the border)
+        card = RoundedRectangle(width=body.width + PAD + LPAD, height=body.height + 2 * PAD, corner_radius=.15,
+                                stroke_color=HAIR, stroke_width=2, fill_color=SURFACE, fill_opacity=1)
+        card.move_to(body).shift(LEFT * (LPAD - PAD) / 2).set_z_index(-2)
+        newton = VGroup(card, body)
+        newton.shift(np.array([6.9, 3.8, 0]) - card.get_corner(UR))
+        pi.next_to(card, LEFT, buff=.3).set_y(card.get_y() + .1)
+        if pi.get_left()[0] < -6.85:
+            fit(pi, card.get_left()[0] - .3 + 6.85, 1.2)
+            pi.next_to(card, LEFT, buff=.3).set_y(card.get_y() + .1)
 
         # beat 1: the two stationarity conditions
         C1 = E(r"\frac{\partial \Pi}{\partial q_1}|=|0", size=48)
@@ -112,7 +120,7 @@ class S11_Partials(VScene):
         # beat 5: collect, compare with Newton row 1
         G = E(r"(|k_1|+|k_2|)|q_1|-|k_2|q_2|=|F_1", size=44)
         G.move_to([0, ROW_C, 0]).set_x(X.get_left()[0] + G.width / 2)
-        match1 = pair_box(N1, G.copy().scale(40 / 44).move_to(slot1))
+        G_end = G.copy().scale(40 / 44).next_to(card, DOWN, buff=.3).align_to(N1, LEFT)
         with self.say("Group the q one terms and move F one across: k one plus k two, times q one, minus k two q "
                       "two, equals F one. Exactly Newton's first equation.") as d:
             self.play(Indicate(X[0:2], color=SKY), Indicate(X[5:8], color=SKY), run_time=.12 * d)
@@ -122,8 +130,8 @@ class S11_Partials(VScene):
             self.play(Indicate(X[8:10], color=ROSE), run_time=.08 * d)
             self.play(FadeIn(G[9]), TransformFromCopy(X[9], G[10]), run_time=.12 * d)
             self.wait(.04 * d)
-            self.play(G.animate.scale(40 / 44).move_to(slot1), run_time=.14 * d)
-            self.play(FadeIn(match1), run_time=.12 * d)
+            self.play(G.animate.scale(40 / 44).move_to(G_end), run_time=.14 * d)
+            self.play(FadeIn(good_frame(N1)), FadeIn(good_frame(G)), run_time=.12 * d)
 
         # beat 6: d Pi / d q2
         # D2 parts: 0 dPi/dq2, 1 =, 2 k2, 3 (, 4 q2, 5 -, 6 q1, 7 ), 8 -, 9 F2, 10 =, 11 0
@@ -148,9 +156,9 @@ class S11_Partials(VScene):
             self.play(FadeIn(H[3]), TransformFromCopy(D2[2], H[4]), TransformFromCopy(D2[4], H[5]),
                       run_time=.08 * d)
             self.play(FadeIn(H[6]), TransformFromCopy(D2[9], H[7]), run_time=.07 * d)
-            self.play(H.animate.scale(40 / 44).move_to(slot2), run_time=.1 * d)
-            match2 = pair_box(N2, H)
-            ticks = VGroup(*[tick(b) for b in (match1, match2)])
-            self.play(FadeIn(match2), FadeIn(ticks, scale=1.4), run_time=.07 * d)
+            H_end = H.copy().scale(40 / 44).next_to(G, DOWN, buff=.3).align_to(N1, LEFT)
+            self.play(H.animate.scale(40 / 44).move_to(H_end), run_time=.1 * d)
+            ticks = VGroup(tick(N1, card), tick(N2, card))
+            self.play(FadeIn(good_frame(N2)), FadeIn(good_frame(H)), FadeIn(ticks, scale=1.4), run_time=.07 * d)
             self.play(FadeIn(note), run_time=.05 * d)
         self.wipe()

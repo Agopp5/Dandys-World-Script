@@ -115,6 +115,101 @@ def dist_load(x0, x1, y, n=7, d=RIGHT, color=ROSE, length=0.42):
     return g
 
 
+class two_spring_fig(VGroup):
+    """The Episode 2 figure, identical in S08-S12: wall - k1 - node 1 - k2 - node 2, loads F1/F2 and q1/q2.
+    two_spring_fig(left=(-6, 2.45), L=3.0, d1=0, d2=0, loads=True, disps=True, scale=1)
+      d1, d2: extra node displacements (scene units) for a stretched state; rebuild with a new figure to animate.
+    Parts: .wall .s1 .s2 .n1 .n2 .k1 .k2 (labels BELOW the springs' middles, size 40) .F1 .F2 (ROSE arrows starting 0.5
+    above each node, pointing right, label at the tip, size 40) .q1 .q2 (SKY disp arrows under the nodes, size 40)."""
+    def __init__(self, left=(-6, 2.45), L=3.0, d1=0.0, d2=0.0, loads=True, disps=True, scale=1.0):
+        super().__init__()
+        x0, y = left
+        p0 = np.array([x0, y, 0.0])
+        p1 = p0 + RIGHT * (L + d1)
+        p2 = p0 + RIGHT * (2 * L + d2)
+        self.wall = wall(p0, h=1.4)
+        self.s1, self.s2 = spring(p0, p1), spring(p1, p2)
+        self.n1, self.n2 = node(p1, r=0.1), node(p2, r=0.1)
+        self.k1 = M("k_1", size=40, color=LILAC).next_to(self.s1, DOWN, buff=0.18)
+        self.k2 = M("k_2", size=40, color=LILAC).next_to(self.s2, DOWN, buff=0.18)
+        self.add(self.wall, self.s1, self.s2, self.n1, self.n2, self.k1, self.k2)
+        if loads:
+            self.F1 = force(p1 + UP * 0.5, length=0.9, label="F_1")
+            self.F2 = force(p2 + UP * 0.5, length=0.9, label="F_2")
+            self.add(self.F1, self.F2)
+        if disps:
+            self.q1 = disp(p0 + RIGHT * L, "q_1", size=40)
+            self.q2 = disp(p0 + RIGHT * 2 * L, "q_2", size=40)
+            self.add(self.q1, self.q2)
+        self.scale(scale, about_point=p0)
+
+
+# ---- HW 6 problem 1 figure (from S16), shared by S16-S22 so it looks the same in every scene ----
+# hw_figure(at=ORIGIN, k2b_label=False) -> VGroup about 10.6 wide x 4.6 tall centred near `at`; scale/shift it as needed.
+# Layout: wall face at x=-5.8; K1 on the top row (y=+0.9) from the wall to a rigid bar (x 0.9..1.4, 4 tall); bottom row
+# (y=-1.1): K2 wall -> junction J (x=-2.6) -> second K2 (unlabeled unless k2b_label) -> bar; K3 on the middle row from
+# the bar's right face to the outer node O (x=4.4). Loads (ROSE, labels 40): P1 on a short stem below J, P2 (y=+1.7)
+# and P3 (y=-1.7) end on the bar's left face, P4 starts at O. SKY q1 under P1, q2 under the bar, q3 under O (labels 40).
+# Parts: .wall .k1 .k2a .k2b .k3 .bar .J .O .stem .P[i] .Plab[i] .q[i] .klab[...] .pts; .rebuild_springs(dq1, dq2, dq3)
+# returns new (k1, k2a, k2b, k3) springs for a displaced state.
+HW_WALL_X, HW_BAR_X0, HW_BAR_X1, HW_J_X, HW_O_X = -5.8, 0.9, 1.4, -2.6, 4.4
+HW_TOP_Y, HW_BOT_Y, HW_MID_Y, HW_BAR_H = 0.9, -1.1, 0.0, 4.0
+
+
+def qarrow(p, tex, below=0.45, length=0.7):
+    """A SKY displacement arrow drawn below p, with a readable label (the kit's disp label is small)."""
+    a = Arrow(p + below * DOWN, p + below * DOWN + length * RIGHT, buff=0, color=SKY, stroke_width=5,
+              max_tip_length_to_length_ratio=0.3)
+    return VGroup(a, E(tex, size=40).next_to(a, RIGHT, buff=0.1))
+
+
+def hw_figure(at=ORIGIN, k2b_label=False):
+    o = np.array(at, dtype=float)
+    P = lambda x, y: o + np.array([x, y, 0.0])
+    pts = dict(w_top=P(HW_WALL_X, HW_TOP_Y), w_bot=P(HW_WALL_X, HW_BOT_Y), b_top=P(HW_BAR_X0, HW_TOP_Y),
+               b_bot=P(HW_BAR_X0, HW_BOT_Y), b_mid=P(HW_BAR_X1, HW_MID_Y), J=P(HW_J_X, HW_BOT_Y),
+               O=P(HW_O_X, HW_MID_Y))
+    g = VGroup()
+    g.pts = pts
+    g.wall = wall(P(HW_WALL_X, 0), side=LEFT, h=HW_BAR_H)
+    g.k1 = spring(pts["w_top"], pts["b_top"], coils=7)
+    g.k2a = spring(pts["w_bot"], pts["J"], coils=5)
+    g.k2b = spring(pts["J"], pts["b_bot"], coils=5)
+    g.k3 = spring(pts["b_mid"], pts["O"], coils=5)
+    g.bar = bar(HW_BAR_X0, HW_BAR_X1, h=HW_BAR_H).shift(o)
+    g.J = node(pts["J"])
+    g.O = node(pts["O"])
+    lab = lambda tex, m: E(tex, size=40).next_to(m, UP, buff=0.12)
+    g.klab = {"K1": lab("K_1", g.k1), "K2a": lab("K_2", g.k2a), "K3": lab("K_3", g.k3)}
+    if k2b_label:
+        g.klab["K2b"] = lab("K_2", g.k2b)
+    # loads
+    g.stem = Line(pts["J"], pts["J"] + 0.5 * DOWN, color=INK2, stroke_width=3)
+    g.P = {1: force(pts["J"] + 0.5 * DOWN, RIGHT, length=0.8),
+           2: force(P(HW_BAR_X0, 1.7), RIGHT, length=0.9, tail=True),
+           3: force(P(HW_BAR_X0, -1.7), RIGHT, length=0.9, tail=True),
+           4: force(pts["O"], RIGHT, length=0.9)}
+    g.Plab = {1: E("P_1", size=40).next_to(g.P[1], RIGHT, buff=0.1),
+              2: E("P_2", size=40).next_to(g.P[2], LEFT, buff=0.1),
+              3: E("P_3", size=40).next_to(g.P[3], LEFT, buff=0.1),
+              4: E("P_4", size=40).next_to(g.P[4], RIGHT, buff=0.1)}
+    # displacements
+    g.q = {1: qarrow(pts["J"] + 0.5 * DOWN, "q_1", below=0.5),
+           2: qarrow(P((HW_BAR_X0 + HW_BAR_X1) / 2, -HW_BAR_H / 2), "q_2", below=0.4),
+           3: qarrow(pts["O"], "q_3", below=0.45)}
+    g.add(g.wall, g.k1, g.k2a, g.k2b, g.k3, g.bar, g.J, g.O, *g.klab.values(), g.stem,
+          *g.P.values(), *g.Plab.values(), *g.q.values())
+
+    def rebuild_springs(dq1=0.0, dq2=0.0, dq3=0.0):
+        s = lambda d: d * RIGHT
+        return (spring(pts["w_top"], pts["b_top"] + s(dq2), coils=7),
+                spring(pts["w_bot"], pts["J"] + s(dq1), coils=5),
+                spring(pts["J"] + s(dq1), pts["b_bot"] + s(dq2), coils=5),
+                spring(pts["b_mid"] + s(dq2), pts["O"] + s(dq3), coils=5))
+    g.rebuild_springs = rebuild_springs
+    return g
+
+
 # ---- facts (the full derivations are in solve.py) ----
 assert (20 * 5 == 100) and (0.5 * 20 * 5**2 == 250) and (100 * 5 == 500)                 # one spring
 assert np.allclose(np.linalg.solve([[60, -20], [-20, 20]], [40, 20]), [1.5, 2.5])           # two springs

@@ -6,75 +6,7 @@ colors(**{"U": MINT, "U_e": MINT, "W": EMBER, r"\Pi": GOLD, "q": SKY, "q_1": SKY
           "k": LILAC, "k_1": LILAC, "k_2": LILAC, "k_3": LILAC, "K_1": LILAC, "K_2": LILAC, "K_3": LILAC,
           "N_1": LIME, "N_2": LIME, "s": LIME, r"\sigma": ACCENT, r"\varepsilon": ACCENT})
 
-# ---------------------------------------------------------------------------------------------------------------
-# The HW P1 figure (S16-S22 all redraw it).  Layout, in frame units, before `at` shifts it:
-#   wall face x = -5.8 (hatching left of it), y in [-2, 2]
-#   top row    y = +0.9 : K1   wall -> bar left face (x = 0.9)
-#   bottom row y = -1.1 : K2a  wall -> junction J (x = -2.6, moves q1);  K2b  J -> bar left face
-#   middle row y =  0.0 : K3   bar right face (x = 1.4) -> outer node O (x = 4.4, moves q3)
-#   bar: rigid vertical rectangle x in [0.9, 1.4], y in [-2, 2] (moves q2)
-#   loads (ROSE, all +x): P1 starts below J on a short stem; P2 (y = +1.7) and P3 (y = -1.7) end on the bar's
-#   left face; P4 starts at O.  Displacements (SKY): q1 under the P1 stem, q2 under the bar, q3 under O.
-# Returned VGroup has named parts: wall, k1, k2a, k2b, k3, bar, J, O, stem, P (dict 1-4), Plab, q (dict 1-3),
-# klab (dict "K1","K2a","K3"; K2b has none: the figure leaves it unlabeled), and `pts` (anchor points, shifted).
-# `fig.rebuild_springs(dq2=0, dq1=0, dq3=0)` returns new spring mobjects for a displaced state.
-HW_WALL_X, HW_BAR_X0, HW_BAR_X1, HW_J_X, HW_O_X = -5.8, 0.9, 1.4, -2.6, 4.4
-HW_TOP_Y, HW_BOT_Y, HW_MID_Y, HW_BAR_H = 0.9, -1.1, 0.0, 4.0
-
-
-def qarrow(p, tex, below=0.45, length=0.7):
-    """A SKY displacement arrow drawn below p, with a readable label (the kit's disp label is small)."""
-    a = Arrow(p + below * DOWN, p + below * DOWN + length * RIGHT, buff=0, color=SKY, stroke_width=5,
-              max_tip_length_to_length_ratio=0.3)
-    return VGroup(a, E(tex, size=34).next_to(a, RIGHT, buff=0.1))
-
-
-def hw_figure(at=ORIGIN, k2b_label=False):
-    o = np.array(at, dtype=float)
-    P = lambda x, y: o + np.array([x, y, 0.0])
-    pts = dict(w_top=P(HW_WALL_X, HW_TOP_Y), w_bot=P(HW_WALL_X, HW_BOT_Y), b_top=P(HW_BAR_X0, HW_TOP_Y),
-               b_bot=P(HW_BAR_X0, HW_BOT_Y), b_mid=P(HW_BAR_X1, HW_MID_Y), J=P(HW_J_X, HW_BOT_Y),
-               O=P(HW_O_X, HW_MID_Y))
-    g = VGroup()
-    g.pts = pts
-    g.wall = wall(P(HW_WALL_X, 0), side=LEFT, h=HW_BAR_H)
-    g.k1 = spring(pts["w_top"], pts["b_top"], coils=7)
-    g.k2a = spring(pts["w_bot"], pts["J"], coils=5)
-    g.k2b = spring(pts["J"], pts["b_bot"], coils=5)
-    g.k3 = spring(pts["b_mid"], pts["O"], coils=5)
-    g.bar = bar(HW_BAR_X0, HW_BAR_X1, h=HW_BAR_H).shift(o)
-    g.J = node(pts["J"])
-    g.O = node(pts["O"])
-    lab = lambda tex, m: E(tex, size=36).next_to(m, UP, buff=0.12)
-    g.klab = {"K1": lab("K_1", g.k1), "K2a": lab("K_2", g.k2a), "K3": lab("K_3", g.k3)}
-    if k2b_label:
-        g.klab["K2b"] = lab("K_2", g.k2b)
-    # loads
-    g.stem = Line(pts["J"], pts["J"] + 0.5 * DOWN, color=INK2, stroke_width=3)
-    g.P = {1: force(pts["J"] + 0.5 * DOWN, RIGHT, length=0.8),
-           2: force(P(HW_BAR_X0, 1.7), RIGHT, length=0.9, tail=True),
-           3: force(P(HW_BAR_X0, -1.7), RIGHT, length=0.9, tail=True),
-           4: force(pts["O"], RIGHT, length=0.9)}
-    g.Plab = {1: E("P_1", size=36).next_to(g.P[1], RIGHT, buff=0.1),
-              2: E("P_2", size=36).next_to(g.P[2], LEFT, buff=0.1),
-              3: E("P_3", size=36).next_to(g.P[3], LEFT, buff=0.1),
-              4: E("P_4", size=36).next_to(g.P[4], RIGHT, buff=0.1)}
-    # displacements
-    g.q = {1: qarrow(pts["J"] + 0.5 * DOWN, "q_1", below=0.5),
-           2: qarrow(P((HW_BAR_X0 + HW_BAR_X1) / 2, -HW_BAR_H / 2), "q_2", below=0.4),
-           3: qarrow(pts["O"], "q_3", below=0.45)}
-    g.add(g.wall, g.k1, g.k2a, g.k2b, g.k3, g.bar, g.J, g.O, *g.klab.values(), g.stem,
-          *g.P.values(), *g.Plab.values(), *g.q.values())
-
-    def rebuild_springs(dq1=0.0, dq2=0.0, dq3=0.0):
-        s = lambda d: d * RIGHT
-        return (spring(pts["w_top"], pts["b_top"] + s(dq2), coils=7),
-                spring(pts["w_bot"], pts["J"] + s(dq1), coils=5),
-                spring(pts["J"] + s(dq1), pts["b_bot"] + s(dq2), coils=5),
-                spring(pts["b_mid"] + s(dq2), pts["O"] + s(dq3), coils=5))
-    g.rebuild_springs = rebuild_springs
-    return g
-
+# The HW P1 figure comes from the kit: efem.hw_figure (S16-S22 all redraw it).
 
 # facts: the figure as the brief reads it (4 loads, 3 unknowns, stretches) and the brief's sanity solution
 K1 = K2 = K3 = 100.0
@@ -93,7 +25,10 @@ class S16_P1_Read(VScene):
     budget = 191
 
     def construct(self):
-        fig = hw_figure(at=0.35 * DOWN)
+        fig = hw_figure()
+        c0, S, at = fig.get_center(), min(1.2, (14.2 - 0.8) / fig.width), 0.3 * DOWN   # 0.4 margin each side
+        fig.scale(S).move_to(at)
+        mp = lambda m: m.scale(S, about_point=c0).shift(at - c0)      # kit coordinates -> on-screen figure
         head = T("Homework 6, Problem 1", size=36, color=ACCENT, weight=BOLD)
         task = TX(r"Stationary principle: find $q_1$, $q_2$, $q_3$ in terms of the $K$'s and $P$'s", size=32)
         stmt = VGroup(head, task).arrange(DOWN, buff=0.2).to_edge(UP, buff=0.35)
@@ -124,10 +59,10 @@ class S16_P1_Read(VScene):
 
         # 3: the bottom chain; the unlabeled spring gets an assumed K2 tag that resolves
         g_k2a, g_k2b = glow(fig.k2a, LILAC), glow(fig.k2b, LILAC)
-        guess = M(r"K_2\,?", size=36, color=MUTED).next_to(fig.k2b, UP, buff=0.12)
+        guess = M(r"K_2\,?", size=40 * S, color=MUTED).next_to(fig.k2b, UP, buff=0.25)
         box = DashedVMobject(SurroundingRectangle(guess, buff=0.1, color=MUTED, corner_radius=0.08), num_dashes=24)
         note = T("assumed", size=30, color=MUTED).next_to(box, UP, buff=0.08)
-        k2b_lab = E("K_2", size=36).move_to(guess, aligned_edge=LEFT)
+        k2b_lab = E("K_2", size=40 * S).move_to(guess, aligned_edge=LEFT)
         with self.say("Along the bottom, spring K two runs from the wall to a junction that moves q one. Then a "
                       "second spring runs from that junction to the bar. The figure doesn't label that second "
                       "spring. We'll take it to be another K two, since the label sits right between them. If your "
@@ -171,10 +106,10 @@ class S16_P1_Read(VScene):
         # 6: rigid bar slides as one piece; its three attachment points glow SKY with q2
         dq = 0.55
         movers = VGroup(fig.bar, fig.P[2], fig.P[3], fig.Plab[2], fig.Plab[3])
-        new = fig.rebuild_springs(dq2=dq)
+        new = [mp(m) for m in fig.rebuild_springs(dq2=dq / S)]
         ends = [fig.pts["b_top"], fig.pts["b_bot"], fig.pts["b_mid"]]
-        dots = VGroup(*[Dot(p + dq * RIGHT, radius=0.1, color=SKY).set_z_index(5) for p in ends])
-        dlabs = VGroup(*[E("q_2", size=34).next_to(dt, d_, buff=0.1).set_z_index(5)
+        dots = VGroup(*[Dot(at + S * (p - c0) + dq * RIGHT, radius=0.1, color=SKY).set_z_index(5) for p in ends])
+        dlabs = VGroup(*[E("q_2", size=40).next_to(dt, d_, buff=0.1).set_z_index(5)
                          for dt, d_ in zip(dots, (UL, UL, DR))])
         halos = VGroup(*[glow(dt, SKY) for dt in dots])
         with self.say("One assumption about the bar: it's rigid and slides without tilting. So every spring "

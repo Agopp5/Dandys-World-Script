@@ -19,36 +19,6 @@ assert np.isclose(-Kv * st["K3"] + Pv, 0)
 assert np.isclose(Kv * st["K1"] + Kv * st["K2a"], 4 * Pv)
 
 
-def figure():
-    """HW P1: wall - K1 - bar (top); wall - K2 - junction - K2 - bar (bottom); bar - K3 - outer node."""
-    xw, xj, xb, xo = -6.6, -5.15, -3.7, -1.9
-    yt, ym, yl = 1.05, 0.15, -0.75
-    bw = 0.22
-    w = wall(np.array([xw, 0.15, 0]), side=LEFT, h=2.9)
-    rigid = Rectangle(width=bw, height=2.7).move_to([xb, 0.15, 0])
-    rigid.set_fill(SURFACE, 1).set_stroke(INK2, 3)
-    s1 = spring([xw, yt, 0], [xb - bw / 2, yt, 0], label="K_1")
-    s2a = spring([xw, yl, 0], [xj, yl, 0], coils=3, label="K_2")
-    s2b = spring([xj, yl, 0], [xb - bw / 2, yl, 0], coils=3, label="K_2")
-    s3 = spring([xb + bw / 2, ym, 0], [xo, ym, 0], coils=4, label="K_3")
-    nj = node([xj, yl, 0])
-    no = node([xo, ym, 0])
-    dq1 = disp([xj, yl, 0], label="q_1", length=0.6, below=0.85)
-    dq2 = disp([xb, 0.15 - 1.35, 0], label="q_2", length=0.6, below=0.3)
-    dq3 = disp([xo, ym, 0], label="q_3", length=0.6)
-    loads = VGroup(
-        force([xj + 0.05, yl - 0.4, 0], length=0.55, label="P_1"),
-        force([xb + bw / 2, yt + 0.3, 0], length=0.7, label="P_2"),
-        force([xb + bw / 2, yl - 0.25, 0], length=0.7, label="P_3"),
-        force([xo + 0.08, ym, 0], length=0.7, label="P_4"),
-    ).set_opacity(0.55)
-    fig = VGroup(w, rigid, s1, s2a, s2b, s3, nj, no, dq1, dq2, dq3, loads)
-    fig.springs = [s1, s2a, s2b, s3]
-    fig.wall, fig.rigid, fig.nj, fig.no = w, rigid, nj, no
-    fig.dq = [dq1, dq2, dq3]
-    return fig
-
-
 def table():
     head_txt = ["spring", "left end", "right end", "stretch"]
     rows_tex = [["K_1", "0", "q_2", "q_2"],
@@ -76,12 +46,13 @@ class S17_P1_Stretches(VScene):
     budget = 130
 
     def construct(self):
-        fig = figure()
-        fig.scale_to_fit_width(6.5)
-        fig.move_to([-3.75, -0.35, 0])
+        fig = hw_figure(k2b_label=True)   # shared HW P1 figure (S16-S22); we treat the unlabeled spring as K2
+        fig.scale(0.6)
+        fig.move_to([-3.65, -0.2, 0]).align_to(np.array([-6.85, 0, 0]), LEFT)
         tab = table()
-        s1, s2a, s2b, s3 = fig.springs
-        dq1, dq2, dq3 = fig.dq
+        print('FIGX', fig.get_left()[0], fig.get_right()[0], 'TABX', tab.get_left()[0])
+        s1, s2a, s2b, s3 = fig.k1, fig.k2a, fig.k2b, fig.k3
+        dq1, dq2, dq3 = fig.q[1], fig.q[2], fig.q[3]
         rows = tab.rows
 
         # 1. header
@@ -122,7 +93,8 @@ class S17_P1_Stretches(VScene):
 
         # 5. the key step: spotlight the stretch column, hold
         col = VGroup(tab.head[3], *[r[3] for r in rows])
+        box = SurroundingRectangle(col, color=SKY, buff=0.18, corner_radius=0.08, stroke_width=4)
         self.beat("This is the step to get right, so let's say it once more: a spring between two moving points stretches by the difference of their displacements. Get these four right, and the rest is just algebra.",
-                  FadeOut(g3), self.spotlight(col), .1, Indicate(rows[2][3], color=SKY), Indicate(rows[3][3], color=SKY), .35,
-                  w=(.1, .3, .3, .3), style="slower and deliberate, stressing the key words")
+                  FadeOut(g3), Create(box), self.spotlight(box), .1, col.animate.set_opacity(1), .45,
+                  w=(.15, .25, .35, .25), style="slower and deliberate, stressing the key words")
         self.wipe()

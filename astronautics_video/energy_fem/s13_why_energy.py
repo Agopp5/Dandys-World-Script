@@ -47,7 +47,7 @@ class S13_Why_Energy(VScene):
 
         fb = np.array([-0.4, -0.6, 0])
         fhub = node(fb, r=0.11)
-        arrows = VGroup(*[Arrow(fb, fb + 1.35 * d, buff=0.1, color=ROSE, stroke_width=5,
+        arrows = VGroup(*[Arrow(fb, fb + 1.35 * d, buff=0.1, color=LILAC, stroke_width=5,
                                 max_tip_length_to_length_ratio=0.22) for d in dirs])
         qs = VGroup(*[T("sign?", 36, BAD).next_to(arrows[i].get_end(), dirs[i], buff=0.1) for i in (1, 3, 4)])
         newton_t = T("Newton: 5 arrows", 36, INK).move_to([-0.4, 2.0, 0])

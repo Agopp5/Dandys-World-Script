@@ -34,9 +34,39 @@ def down_arrow(x, y, length, sw=5):
                  max_tip_length_to_length_ratio=0.3, max_stroke_width_to_length_ratio=12)
 
 
+class CMat(VGroup):
+    """Column-aligned matrix with a fixed row pitch (rows line up across matrices built with the same pitch)."""
+    def __init__(self, rows, pitch=1.1, gap=0.75, color=INK):
+        super().__init__()
+        n, m = len(rows), len(rows[0])
+        widths = [max(rows[i][j].width for i in range(n)) for j in range(m)]
+        xs, x = [], 0.0
+        for w in widths:
+            xs.append(x + w / 2)
+            x += w + gap
+        self.ents = VGroup()
+        for i in range(n):
+            for j in range(m):
+                self.ents.add(rows[i][j].move_to([xs[j], (n - 1) / 2 * pitch - i * pitch, 0]))
+        h = (n - 1) * pitch + 1.25
+        lft, rgt = -0.3, x - gap + 0.3
+        bl = VMobject(color=color, stroke_width=3).set_points_as_corners(
+            [[lft + .15, h / 2, 0], [lft, h / 2, 0], [lft, -h / 2, 0], [lft + .15, -h / 2, 0]])
+        br = VMobject(color=color, stroke_width=3).set_points_as_corners(
+            [[rgt - .15, h / 2, 0], [rgt, h / 2, 0], [rgt, -h / 2, 0], [rgt - .15, -h / 2, 0]])
+        self.brk = VGroup(bl, br)
+        self.add(self.brk, self.ents)
+
+    def get_entries(self):
+        return self.ents
+
+    def get_brackets(self):
+        return self.brk
+
+
 def fvec(entries, y=-0.35):
     """F = {entries}, with MUTED node names beside the rows, left edge at VX."""
-    m = MobjectMatrix([[E(s, size=48)] for s in entries], v_buff=1.1)
+    m = CMat([[E(s, size=48)] for s in entries], pitch=1.15)
     head = E(r"F|=", size=56)
     head.next_to(m, LEFT, buff=0.3)
     labs = VGroup()
@@ -58,7 +88,7 @@ class S41_Assembly_F(VScene):
                          for i in range(3)])
         ground = wall(np.array([COLX, YN[0], 0]), side=DOWN, h=1.3)
         dots = VGroup(*[node(np.array([COLX, y, 0]), r=0.09) for y in YN])
-        nlabs = VGroup(*[T(str(i + 1), size=36, color=INK).move_to([COLX - 0.75, YN[i], 0]) for i in range(4)])
+        nlabs = VGroup(*[T(str(i + 1), size=36, color=INK).move_to([COLX - 0.85, YN[i] + 0.12, 0]) for i in range(4)])
         tags = VGroup()
         for i in range(3):
             ring = Circle(radius=0.34, color=INK2, stroke_width=3)
@@ -109,12 +139,11 @@ class S41_Assembly_F(VScene):
                    1: down_arrow(COLX + XS, YN[1], 2 * LA), 2: down_arrow(COLX + XS, YN[2], 2 * LA)}
         stex = [r"\frac{cl}{2}", r"cl", r"cl", r"\frac{cl}{2}"]
         slabs = [E(stex[n], size=40).next_to(stacked[n], RIGHT, buff=0.22) for n in range(4)]
-        work = [E(r"\text{node 1: }|\frac{cl}{2}", size=44),
-                E(r"\text{node 2: }|\frac{cl}{2}|+|\frac{cl}{2}|=|cl", size=44),
-                E(r"\text{node 3: }|\frac{cl}{2}|+|\frac{cl}{2}|=|cl", size=44),
-                E(r"\text{node 4: }|\frac{cl}{2}", size=44)]
-        for w_ in work:
-            w_.move_to([3.4, -3.25, 0])
+        work = []
+        for k, tx in enumerate([r"\frac{cl}{2}", r"\frac{cl}{2}|+|\frac{cl}{2}|=|cl",
+                                r"\frac{cl}{2}|+|\frac{cl}{2}|=|cl", r"\frac{cl}{2}"]):
+            wl = VGroup(T("node %d:" % (k + 1), size=36, color=INK2), E(tx, size=48)).arrange(RIGHT, buff=0.3)
+            work.append(wl.move_to([3.6, -3.3, 0]))
         ent = mat.get_entries()
         with self.say("Node one gets c l over two from element one. Node two is shared: c l over two from "
                       "element one, plus c l over two from element two. That's c l. Node three also gets c l. "
@@ -124,11 +153,11 @@ class S41_Assembly_F(VScene):
             self.play(Transform(above[0], stacked[0]), FadeIn(slabs[0]),
                       ReplacementTransform(qs[0], ent[0]), Indicate(rlabs[0], color=INK), run_time=.1 * d)
             # node 2: element one's half, then element two's half, then they stack
-            self.play(FadeOut(work[0]), FadeIn(work[1][:2]), Indicate(below[1], color=ROSE, scale_factor=1.4),
+            self.play(FadeOut(work[0]), FadeIn(VGroup(work[1][0], work[1][1][0])), Indicate(below[1], color=ROSE, scale_factor=1.4),
                       run_time=.12 * d)
-            self.play(FadeIn(work[1][2:4]), Indicate(above[1], color=ROSE, scale_factor=1.4), run_time=.14 * d)
+            self.play(FadeIn(work[1][1][1:3]), Indicate(above[1], color=ROSE, scale_factor=1.4), run_time=.14 * d)
             self.play(ReplacementTransform(VGroup(below[1], above[1]), stacked[1]), FadeIn(slabs[1]),
-                      FadeIn(work[1][4:]), ReplacementTransform(qs[1], ent[1]), run_time=.14 * d)
+                      FadeIn(work[1][1][3:]), ReplacementTransform(qs[1], ent[1]), run_time=.14 * d)
             self.wait(.04 * d)
             # node 3
             self.play(FadeOut(work[1]), FadeIn(work[2]),
@@ -141,10 +170,10 @@ class S41_Assembly_F(VScene):
         nodal = VGroup(above[0], stacked[1], stacked[2], below[3])
 
         # factored form, held under the vector
-        fac = E(r"F|=|\frac{cl}{2}|\{\,1,\;2,\;2,\;1\,\}^{T}", size=44).move_to([3.4, -3.25, 0])
-        fac_r = E(r"F|=|\frac{cl}{2}|\{\,1,\;2,\;2,\;1\,\}^{T}|+|\{\,|R|,\;0,\;0,\;0\,\}^{T}", size=44)
-        fit(fac_r, 6.4, 1.2)
-        fac_r.move_to([3.4, -3.25, 0])
+        fac = E(r"F|=|\frac{cl}{2}|\{1,2,2,1\}", size=48).move_to([3.6, -3.3, 0])
+        fac_r = E(r"F|=|\frac{cl}{2}|\{1,2,2,1\}|+|\{|R|,0,0,0\}", size=48)
+        fit(fac_r, 6.9, 1.2)
+        fac_r.move_to([3.55, -3.3, 0])
         self.play(FadeOut(work[3]), FadeIn(fac), run_time=1.2)
         self.wait(.8)
 
@@ -172,12 +201,11 @@ class S41_Assembly_F(VScene):
         kq = E(r"K|q|=|F", size=56).move_to([-0.6, 3.0, 0])
         qmark = M("?", size=110, color=GOLD).next_to(kq, RIGHT, buff=0.6)
         rows = [["1", "-1", "0", "0"], ["-1", "2", "-1", "0"], ["0", "-1", "2", "-1"], ["0", "0", "-1", "1"]]
-        kmat = MobjectMatrix([[E(x, size=44).set_color(LILAC) for x in r] for r in rows], h_buff=1.05, v_buff=1.1)
+        kmat = CMat([[E(x, size=44).set_color(LILAC) for x in r] for r in rows], pitch=1.15, gap=0.6)
         pre = E(r"\frac{EA}{l}", size=48).set_color(LILAC)
-        qv = MobjectMatrix([[E("q_%d" % i, size=44)] for i in range(1, 5)], v_buff=1.1)
+        qv = CMat([[E("q_%d" % i, size=44)] for i in range(1, 5)], pitch=1.15)
         eqs = E("=", size=48)
-        rhs = MobjectMatrix([[E(s, size=44)] for s in (r"\frac{cl}{2}+|R", r"cl", r"cl", r"\frac{cl}{2}")],
-                            v_buff=1.1)
+        rhs = CMat([[E(s, size=44)] for s in (r"\frac{cl}{2}+|R", r"cl", r"cl", r"\frac{cl}{2}")], pitch=1.15)
         system = VGroup(pre, kmat, qv, eqs, rhs).arrange(RIGHT, buff=0.3)
         fit(system, 13.2, 5.0)
         system.move_to([0, -0.4, 0])

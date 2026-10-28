@@ -34,21 +34,13 @@ class S09_Newton(VScene):
     def construct(self):
         self.section("Newton's way, node by node")
 
-        # the two-spring system, small, along the top left
-        y0 = 2.0
-        pw, p1, p2 = np.array([-6.6, y0, 0]), np.array([-4.3, y0, 0]), np.array([-2.0, y0, 0])
-        w = wall(pw, side=LEFT, h=1.0)
-        s1 = spring(pw, p1, coils=4, label="k_1")
-        s2 = spring(p1, p2, coils=4, label="k_2")
-        n1, n2 = node(p1), node(p2)
-        fa = arrow(p1 + UP * 0.75, p1 + UP * 0.75 + RIGHT * 0.8, ROSE)
-        f1 = VGroup(fa, E("F_1", size=32).next_to(fa, UP, buff=0.06))
-        f2 = force(p2, RIGHT, length=0.8, label="F_2")
-        d1, d2 = disp(p1, "q_1"), disp(p2, "q_2")
-        system = VGroup(w, s1, s2, n1, n2, f1, f2, d1, d2)
+        # the shared two-spring figure (same as S08, S10-S12), along the top left; labels stay size 40
+        system = two_spring_fig(left=(-6.4, 2.2), L=2.3)
+        s1, s2, n1, n2, f1, f2 = system.s1, system.s2, system.n1, system.n2, system.F1, system.F2
+        p1, p2 = n1.get_center(), n2.get_center()
 
         # node 1 cut out
-        c1 = np.array([-4.3, -0.1, 0])
+        c1 = np.array([p1[0], -0.1, 0])
         ring1_sys = cut_circle(p1, 0.4)
         ring1 = cut_circle(c1)
         fn1 = node(c1, r=0.11)
@@ -58,7 +50,7 @@ class S09_Newton(VScene):
         l1 = E("k_1|q_1", size=LAB).next_to(a1, UP, buff=0.15)
         l2 = E("k_2|(|q_2|-|q_1|)", size=LAB).next_to(a2, UP, buff=0.15).align_to(a2, LEFT)
         l3 = E("F_1", size=LAB).next_to(a3, DOWN, buff=0.15)
-        tag1 = T("node 1", size=30, color=MUTED).next_to(ring1, DOWN, buff=0.2)
+        tag1 = T("node 1", size=32, color=MUTED).next_to(ring1, DOWN, buff=0.2)
 
         with self.say("First, Newton's way, so we have something to compare with. "
                       "Cut out node one and list the forces on it.") as d:
@@ -115,7 +107,7 @@ class S09_Newton(VScene):
             self.wait(0.08 * d)
 
         # node 2: clear node 1's working, keep its result
-        c2 = np.array([-4.3, -2.55, 0])
+        c2 = np.array([p1[0], -2.55, 0])
         ring2_sys = cut_circle(p2, 0.4)
         ring2 = cut_circle(c2)
         fn2 = node(c2, r=0.11)
@@ -123,7 +115,7 @@ class S09_Newton(VScene):
         b2 = arrow(c2 + RIGHT * 0.5, c2 + RIGHT * 1.8, ROSE)
         m1 = E("k_2|(|q_2|-|q_1|)", size=LAB).next_to(b1, UP, buff=0.15).align_to(b1, RIGHT).shift(LEFT * 0.35)
         m2 = E("F_2", size=LAB).next_to(b2, UP, buff=0.15)
-        tag2 = T("node 2", size=30, color=MUTED).next_to(ring2, DOWN, buff=0.2)
+        tag2 = T("node 2", size=32, color=MUTED).next_to(ring2, DOWN, buff=0.2)
         bal2 = E("-|k_2|(|q_2|-|q_1|)|+|F_2|=|0", size=EQ).move_to([RX, -0.75, 0])
         co2 = E("-|k_2|q_1|+|k_2|q_2|=|F_2", size=EQ).move_to([RX, -1.95, 0])
         with self.say("Node two: spring two pulls it back with k two times q two minus q one, and F two pulls "

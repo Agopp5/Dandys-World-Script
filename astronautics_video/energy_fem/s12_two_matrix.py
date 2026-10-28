@@ -35,19 +35,10 @@ class S12_Two_Matrix(VScene):
 
     def construct(self):
         # the two-spring figure, small at the top
-        y0 = 2.75
-        wp = np.array([-6.4, y0, 0])
-        n1p = np.array([-3.8, y0, 0])
-        n2p = np.array([-1.2, y0, 0])
-        W0 = wall(wp, side=LEFT, h=1.2)
-        sp1 = spring(wp, n1p, label="k_1")
-        sp2 = spring(n1p, n2p, label="k_2")
-        N1, N2 = node(n1p), node(n2p)
-        f1 = force(n1p + UP * .95, RIGHT, length=.8, label="F_1")
-        lead = Line(n1p, n1p + UP * .95, color=ROSE, stroke_width=2)
-        f2 = force(n2p, RIGHT, length=.9, label="F_2")
-        d1, d2 = disp(n1p, "q_1"), disp(n2p, "q_2")
-        fig = VGroup(W0, sp1, sp2, lead, N1, N2, f1, f2, d1, d2)
+        fig = two_spring_fig(left=(-6.35, 2.45))            # shared Episode 2 figure (same in S08-S12)
+        sp1, sp2, f1, f2 = fig.s1, fig.s2, fig.F1, fig.F2
+        y0 = fig.n1.get_center()[1]
+        wx, n1x = fig.wall.get_right()[0], fig.n1.get_center()[0]
         self.add(fig)
 
         # beat 1: equations -> matrix rows
@@ -55,8 +46,8 @@ class S12_Two_Matrix(VScene):
         eq2 = E(r"-k_2|q_1|+k_2|q_2|=|F_2", size=48)
         paint(eq1, {0: LILAC, 2: LILAC})
         paint(eq2, {0: LILAC, 2: LILAC})
-        eq1.move_to([0, 1.15, 0])
-        eq2.move_to([0, .35, 0])
+        eq1.move_to([0, 1.0, 0])
+        eq2.move_to([0, .2, 0])
         eq2.shift((eq1[4].get_center()[0] - eq2[4].get_center()[0]) * RIGHT)
 
         Km = mat([["k_1+k_2", "-k_2"], ["-k_2", "k_2"]], LILAC)
@@ -69,7 +60,7 @@ class S12_Two_Matrix(VScene):
         box_lbl = T("stiffness matrix", size=36, color=LILAC).next_to(box, DOWN, buff=.25)
         echo = E(r"K|q|=|F", size=48).next_to(sym, RIGHT, buff=1.0)
         home = sym.get_center()
-        sym.move_to([0, -1.75, 0])
+        sym.move_to([0, -1.85, 0])
 
         self.beat("Stack the two equations into one matrix equation. Row one is node one's balance; row two is node two's. Each equation's coefficients drop into its row.",
                   FadeIn(VGroup(eq1, eq2), shift=.2 * DOWN),
@@ -91,10 +82,10 @@ class S12_Two_Matrix(VScene):
                   w=(.25, .4, .35))
 
         # beat 3: numbers
-        cards = VGroup(E(r"k_1|=|40\text{ N/mm}", size=36), E(r"k_2|=|20\text{ N/mm}", size=36),
-                       E(r"F_1|=|40\text{ N}", size=36), E(r"F_2|=|20\text{ N}", size=36))
-        cards.arrange_in_grid(2, 2, buff=(.5, .25), cell_alignment=LEFT)
-        card = panel(cards).move_to([3.95, y0, 0])
+        cards = VGroup(E(r"k_1|=|40,\;\;|k_2|=|20\text{ N/mm}", size=36),
+                       E(r"F_1|=|40,\;\;|F_2|=|20\text{ N}", size=36)).arrange(DOWN, buff=.25, aligned_edge=LEFT)
+        card = panel(cards)
+        card.move_to([6.65 - card.width / 2, y0, 0])   # right edge 0.45 inside the frame
         Nm = mat([["60", "-20"], ["-20", "20"]], LILAC, hb=1.15)
         qv2 = mat([["q_1"], ["q_2"]], SKY, curly=True)
         es2 = M("=", size=48)
@@ -114,7 +105,7 @@ class S12_Two_Matrix(VScene):
         self.checkpoint("2.1", "Solve the two-spring system for q1 and q2")
 
         # beat 5: solve by adding rows
-        X0 = 4.1
+        X0 = 4.7
         r1 = E(r"60|q_1|-20|q_2|=|40", size=48)
         r2 = E(r"-20|q_1|+20|q_2|=|20", size=48)
         paint(r1, {0: LILAC, 2: LILAC, 5: ROSE})
@@ -136,8 +127,8 @@ class S12_Two_Matrix(VScene):
         at_eq(q1r, -1.75, 1)
         g1 = glow(q1r, SKY)
         st1, st2 = strike(VGroup(r1[2], r1[3])), strike(VGroup(r2[2], r2[3]))
-        q1_home = np.array([-4.2, -1.3, 0])
-        q2_home = np.array([-4.2, -2.3, 0])
+        q1_home = np.array([-3.1, -1.3, 0])
+        q2_home = np.array([-3.1, -2.3, 0])
 
         r2b = E(r"20|(|q_2|-|1.5|)|=|20", size=48)
         paint(r2b, {0: LILAC, 4: SKY, 7: ROSE})
@@ -147,7 +138,7 @@ class S12_Two_Matrix(VScene):
         g2 = glow(q2r, SKY)
 
         with self.say("Add the two equations: the q two terms cancel, leaving forty q one equals sixty, so q one is one point five millimeters. Then the second equation: twenty times q two minus one point five equals twenty, so q two is two point five millimeters.") as d:
-            self.play(num.animate.move_to([-3.95, .5, 0]), run_time=.05 * d)
+            self.play(num.animate.move_to([-3.1, .5, 0]), run_time=.05 * d)
             self.play(TransformFromCopy(VGroup(Ne[0], Ne[1], Fn.get_entries()[0]), r1),
                       TransformFromCopy(VGroup(Ne[2], Ne[3], Fn.get_entries()[1]), r2), run_time=.09 * d)
             self.play(Indicate(VGroup(r1[2], r1[3]), color=SKY), Indicate(VGroup(r2[2], r2[3]), color=SKY),
@@ -168,7 +159,7 @@ class S12_Two_Matrix(VScene):
             self.play(VGroup(g2, q2r).animate.move_to(q2_home), FadeOut(r2b), run_time=.06 * d)
 
         # beat 6: Newton check
-        xc = .3 * wp[0] + .7 * n1p[0]   # clear of the k_1 label
+        xc = .3 * wx + .7 * n1x   # clear of the k_1 label
         cut = DashedLine([xc, y0 + .75, 0], [xc, y0 - .75, 0], color=ACCENT, stroke_width=4)
         L0 = E(r"F_1|+|F_2|=|60\text{ N}", size=48)
         L1 = E(r"\text{spring 1:}\ \ 60/40|=|1.5\text{ mm}", size=48)

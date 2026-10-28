@@ -22,24 +22,14 @@ class S10_Two_Energy(VScene):
 
     def construct(self):
         # ---- the two-spring figure (top) ----
-        y = 2.35
-        xw, x1, x2 = -5.4, -1.2, 3.0
-        w = wall(np.array([xw, y, 0]), side=LEFT, h=1.3)
-        s1 = spring(np.array([xw, y, 0]), np.array([x1, y, 0]), label="k_1")
-        s2 = spring(np.array([x1, y, 0]), np.array([x2, y, 0]), label="k_2")
-        n1 = node(np.array([x1, y, 0]))
-        n2 = node(np.array([x2, y, 0]))
-        f1 = force(np.array([x1, y + .5, 0]), d=RIGHT, length=.8, label="F_1")
-        f2 = force(np.array([x2, y, 0]), d=RIGHT, length=1.0, label="F_2")
-        d1 = disp(np.array([x1, y, 0]), label="q_1")
-        d2 = disp(np.array([x2, y, 0]), label="q_2")
-        fig = VGroup(w, s1, s2, n1, n2, f1, f2, d1, d2)
-        fig.scale(1.15).move_to(UP * 2.55)
+        fig = two_spring_fig()            # the shared Episode 2 figure (S08-S12)
+        w, s1, s2, n1, n2 = fig.wall, fig.s1, fig.s2, fig.n1, fig.n2
+        f1, f2, d1, d2 = fig.F1, fig.F2, fig.q1, fig.q2
 
         # per-spring energy tags under each spring's middle
         yt = fig.get_bottom()[1] - .35
-        m1 = np.array([(w.get_right()[0] + n1.get_x()) / 2, yt, 0])
-        m2 = np.array([(n1.get_x() + n2.get_x()) / 2, yt, 0])
+        m1 = np.array([s1.get_x(), yt, 0])
+        m2 = np.array([s2.get_x(), yt, 0])
         u1 = M(r"U_1", size=36, color=MINT).move_to(m1)
         u2 = M(r"U_2", size=36, color=MINT).move_to(m2)
 
@@ -78,17 +68,22 @@ class S10_Two_Energy(VScene):
             self.wait(.07 * d)
 
         # ---- beat 3: the crux, the stretch is a difference ----
+        # spotlight frames (not the dense math itself), with sharp copies of the math lifted above the dimmer
+        box_u = SurroundingRectangle(U[8:13], color=GOLD, buff=.12, corner_radius=.08)
+        box_s = SurroundingRectangle(st2, color=GOLD, buff=.08, corner_radius=.06)
+        sharp = VGroup(U[8:13].copy(), st2.copy()).set_z_index(1000)
         self.beat("Pay close attention to that second term, because this is where most mistakes happen. "
                   "It's the stretch, q two minus q one, that gets squared, not q two by itself.",
-                  self.spotlight(U[8:13], st2), .25, Circumscribe(U[8:13], color=GOLD), .45,
-                  w=(.15, .15), style="slower and deliberate, stressing the key words")
+                  self.spotlight(box_u, box_s), FadeIn(sharp), .2,
+                  Circumscribe(sharp[0], color=GOLD), .4,
+                  w=(.15, .1, .15), style="slower and deliberate, stressing the key words")
 
         # ---- beat 4: work potential ----
         W = E(r"W|=|F_1|q_1|+|F_2|q_2", size=50).move_to(DOWN * 1.4)
         W.align_to(U, LEFT)
         self.beat("The work potential is each load times the displacement of its own node: "
                   "F one q one plus F two q two.",
-                  self.unspot(), Write(W[0:2]),
+                  [self.unspot(), FadeOut(box_u), FadeOut(box_s), FadeOut(sharp)], Write(W[0:2]),
                   [Indicate(f1, color=ROSE), Indicate(d1, color=SKY), Write(W[2:4])],
                   [Indicate(f2, color=ROSE), Indicate(d2, color=SKY), Write(W[4:7])], .2,
                   w=(.1, .1, .3, .3))
@@ -111,7 +106,6 @@ class S10_Two_Energy(VScene):
                       ReplacementTransform(Pi[3], Pf[13]), FadeOut(Pi[2]), FadeOut(Pi[4]), FadeIn(Pf[16])]
             self.play(*moves, run_time=.24 * d)
             self.wait(.1 * d)
-            hl = glow(Pf, GOLD)
-            self.play(FadeIn(hl), Indicate(d1, color=SKY), Indicate(d2, color=SKY), run_time=.25 * d)
+            self.play(Circumscribe(Pf, color=GOLD), Indicate(d1, color=SKY), Indicate(d2, color=SKY), run_time=.25 * d)
             self.wait(.15 * d)
         self.wipe()

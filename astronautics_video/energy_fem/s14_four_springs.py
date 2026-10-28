@@ -45,11 +45,12 @@ class S14_Four_Springs(VScene):
         k1.add(E("k_1", size=36).next_to(k1, UP, buff=.1))
         k3.add(E("k_3", size=36).next_to(k3, UP, buff=.1))
         b1 = badge(1).move_to(p(X1 + .4, .95))
-        b2, b3, b4 = [badge(i).move_to(p(x, .95)) for i, x in ((2, X2), (3, X3), (4, X4))]
+        b3, b4 = [badge(i).move_to(p(x, .95)) for i, x in ((3, X3), (4, X4))]
+        b2 = badge(2).move_to(p(X2 - .42, .95))   # left of node 2: its top carries the F2 stem
         cL = Line(p(X2, -H), p(X2, H), color=INK, stroke_width=4)
         cR = Line(p(X3, -H), p(X3, H), color=INK, stroke_width=4)
         up = spring(p(X2, H), p(X3, H))
-        up_lab = E("k_2", size=36).next_to(up, UP, buff=.1)
+        up_lab = E("k_2", size=36).next_to(up, UP, buff=.1).shift(RIGHT * .8)   # clear of the F2 label
         lo = spring(p(X2, -H), p(X3, -H))
         lo_lab = E("k_2", size=36).next_to(lo, DOWN, buff=.12)
         pair = VGroup(cL, cR, up, lo, up_lab, lo_lab)
@@ -99,10 +100,11 @@ class S14_Four_Springs(VScene):
             self.play(FadeIn(U[17]), Write(t3), run_time=.25 * d)
 
         Wq = E(r"W|=|F_2|q_2|+|F_4|q_4", size=48, cmap={"F_4": ROSE}).move_to(DOWN * 1.0)
-        f2 = force(n2.get_center(), d=RIGHT, length=.85)
-        f2.add(E("F_2", size=34).next_to(f2, RIGHT, buff=.08))
+        top2 = cL.get_top() + UP * .6                     # F2 acts at node 2: stem up from the pair's link
+        f2 = VGroup(Line(cL.get_top(), top2, color=INK, stroke_width=4), force(top2, d=RIGHT, length=.8))
+        f2.add(E("F_2", size=40).next_to(f2[1], RIGHT, buff=.08))
         f4 = force(n4.get_center(), d=RIGHT, length=1.0)
-        f4.add(E("F_4", size=34, cmap={"F_4": ROSE}).next_to(f4, RIGHT, buff=.08))
+        f4.add(E("F_4", size=40, cmap={"F_4": ROSE}).next_to(f4, RIGHT, buff=.08))
         box1 = SurroundingRectangle(t1, color=ACCENT, buff=.08)
         box2 = SurroundingRectangle(t2, color=ACCENT, buff=.08)
         with self.say("The loads are F two and F four, so W is F two q two plus F four q four. Take the partial "

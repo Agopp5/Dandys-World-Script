@@ -45,7 +45,7 @@ class S54_P2_Read(VScene):
         fit(allt, 13.0, 5.0)
         allt.next_to(head, DOWN, buff=0.6)
         compact = TX(r"(a) $K$ and $F$ \qquad (b) $q$ at points 1, 2 \qquad (c) wall reaction $R$",
-                     size=32).to_edge(UP, buff=0.35)
+                     size=36).to_edge(UP, buff=0.35)
 
         # ---------- figure ----------
         w = wall(np.array([X0, YB, 0]), side=LEFT, h=1.8)
@@ -74,15 +74,15 @@ class S54_P2_Read(VScene):
                   Indicate(tn, color=ACCENT), .08,
                   [FadeOut(head), ReplacementTransform(allt, compact)],
                   FadeIn(fig, lag_ratio=0.05),
-                  w=(.03, .1, .08, .12, .03, .08, .07, .03, .08, .16))
+                  w=(.03, .1, .08, .12, .08, .07, .08, .16))
 
         # ---------- data ----------
         rows = VGroup(M(r"E = 10{,}000\text{ psi}", size=40),
                       M(r"A = 2\text{ in}^2", size=40),
                       M(r"L = 40\text{ in}", size=40)).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
         card = panel(rows)
-        card.move_to([-4.5, 1.6, 0])
-        ea = E(r"EA|=|10{,}000 \times 2|=|20{,}000\text{ lb}", size=48).move_to([2.6, 2.3, 0])
+        card.move_to([-4.6, 1.75, 0])
+        ea = E(r"EA|=|10{,}000 \times 2|=|20{,}000\text{ lb}", size=48).move_to([2.6, 2.6, 0])
         soft = T("far softer than real metal: round numbers", size=30, color=MUTED).next_to(ea, DOWN, buff=0.3)
         ly = YB - HB / 2 - 1.35
         span_l = DoubleArrow([X0, ly, 0], [X1, ly, 0], buff=0, color=INK2, stroke_width=3,
@@ -95,7 +95,7 @@ class S54_P2_Read(VScene):
                   "So E A is twenty thousand pounds.",
                   FadeIn(card[0]), Write(rows[0]), FadeIn(soft), .1, Write(rows[1]), Write(rows[2]),
                   GrowFromCenter(span_g), Write(ea[0:3]), Write(ea[3:]), FadeIn(glow(ea[4])),
-                  w=(.03, .08, .12, .2, .1, .1, .08, .1, .1, .09))
+                  w=(.03, .08, .12, .1, .1, .08, .1, .1, .09))
 
         # ---------- point loads ----------
         xl1 = M(r"x = 20\text{ in}", size=36).move_to([X(20), ly, 0])
@@ -107,11 +107,11 @@ class S54_P2_Read(VScene):
                   [Indicate(a1, color=ROSE, scale_factor=1.3), Indicate(p1_lab, color=ROSE)], .1,
                   [Indicate(c2, color=ROSE), FadeIn(xl2, shift=UP * 0.2)],
                   [Indicate(a2, color=ROSE, scale_factor=1.3), Indicate(p2_lab, color=ROSE)], .1,
-                  w=(.05, .15, .2, .05, .15, .2, .2))
+                  w=(.05, .15, .2, .15, .2))
 
         # ---------- distributed load ----------
-        feq = E(r"f|=|c|=|-|5\text{ lb/in}", size=52).move_to([2.6, 1.15, 0])
-        paint(feq, {2: LIME})
+        feq = E(r"f|=|c|=|-|5\text{ lb/in}", size=52).move_to([2.6, 1.6, 0])
+        paint(feq, {2: ROSE})
         warn = T("the sign: most common mistake", size=30, color=ACCENT).next_to(feq, DOWN, buff=0.3)
         self.beat("And the spread load f, five pounds per inch: this is what we called c in our element formulas. "
                   "Watch its direction. Its arrows point left, against x. So c equals minus five. Getting that sign "
@@ -121,7 +121,7 @@ class S54_P2_Read(VScene):
                   Wiggle(fl, scale_value=1.15), Indicate(fl, color=ACCENT, scale_factor=1.2),
                   [Write(feq[3:]), feq[4].animate.set_color(ACCENT)], FadeIn(glow(feq[4], ACCENT)),
                   FadeIn(warn), .1,
-                  w=(.03, .12, .1, .05, .12, .12, .12, .08, .08, .18))
+                  w=(.03, .12, .1, .12, .12, .12, .08, .08))
 
         # ---------- point 3 ----------
         later = T("point 3: later", size=32, color=MUTED).move_to([X(10), ly, 0])
@@ -129,5 +129,5 @@ class S54_P2_Read(VScene):
         self.beat("The figure also marks a point three at a quarter of the length. The questions don't ask about "
                   "it, but we'll use it at the end to learn something.",
                   [FadeIn(glow(mark3, MUTED)), Indicate(c3, color=INK2)], .1, FadeIn(later, shift=UP * 0.2), .3,
-                  w=(.3, .1, .2, .4))
+                  w=(.3, .2))
         self.wipe()

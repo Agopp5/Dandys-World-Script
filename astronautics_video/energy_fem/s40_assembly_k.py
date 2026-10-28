@@ -67,11 +67,17 @@ def parts(b):
     return [*b["fills"].values(), b["outline"], *b["ents"].values()]
 
 
-def land(b, e):
-    """Animations that grow element e's block onto rows and columns e+1, e+2 (build at play time)."""
+def land(b, e, shared=None):
+    """Animations that grow element e's block onto rows and columns e+1, e+2 (build at play time).
+    shared: the entry already in the block's (1,1) spot; it steps left and the new one lands beside it."""
     tgt = (gp(e + 1, e + 1) + gp(e + 2, e + 2)) / 2
-    return [m.animate.scale(1 / SC, about_point=b["ctr"]).shift(tgt - b["ctr"]) for m in parts(b)] + \
-        [FadeOut(b["labs"]), FadeOut(b["cap"])]
+    anims = [m.animate.scale(1 / SC, about_point=b["ctr"]).shift(tgt - b["ctr"]) for m in parts(b)
+             if shared is None or m is not b["ents"][(1, 1)]]
+    if shared is not None:
+        m = b["ents"][(1, 1)]
+        anims += [m.animate.scale(1 / SC, about_point=b["ctr"]).shift(tgt - b["ctr"] + RIGHT * .3),
+                  shared.animate.shift(LEFT * .3)]
+    return anims + [FadeOut(b["labs"]), FadeOut(b["cap"])]
 
 
 def trace(b, e):
@@ -119,7 +125,8 @@ class S40_Assembly_K(VScene):
         clab = {j: M(str(j), size=40, color=INK2).next_to(gcell[(1, j)], UP, buff=.15) for j in range(1, 5)}
         grid = VGroup(*gcell.values())
         labs = VGroup(*rlab.values(), *clab.values())
-        note2 = E(r"\text{each entry}|\times|EA/l", size=36, color=INK2).next_to(grid, DOWN, buff=.25)
+        note2 = VGroup(T("each entry times", size=34, color=INK2), M(r"EA/l", size=44, color=INK2))
+        note2.arrange(RIGHT, buff=.2).next_to(grid, DOWN, buff=.25)
         kqf = E("K|q|=|F", size=60).move_to([-3.7, 3.25, 0])
         keq = E(r"k|=|\frac{EA}{l}|\begin{bmatrix}1&-1\\-1&1\end{bmatrix}", size=48).move_to([3.5, -2.45, 0])
         blocks = [make_block(e) for e in range(3)]
@@ -134,3 +141,108 @@ class S40_Assembly_K(VScene):
                   [Create(grid), FadeIn(labs), FadeIn(note2)], .05,
                   Write(kqf), .1,
                   w=(.12, .2, .14, .2, .17))
+
+        # ------------------------------------------------ beat 3: element 1 lands on rows/columns 1, 2
+        b = blocks[0]
+        loc, glob, arr = trace(b, 0)
+        with self.say("Element one connects nodes one and two. Its local spot one-one goes to the big matrix's "
+                      "spot one-one, and its block fills rows and columns one and two.") as d:
+            self.play(Indicate(b["cap"], color=GOLD, scale_factor=1.1),
+                      *[l.animate.set_color(GOLD) for l in (rlab[1], rlab[2], clab[1], clab[2])], run_time=.2 * d)
+            self.wait(.03 * d)
+            self.play(Create(loc), run_time=.1 * d)
+            self.play(GrowArrow(arr), Create(glob), run_time=.17 * d)
+            self.wait(.1 * d)
+            self.play(*land(b, 0), FadeOut(loc), FadeOut(arr), run_time=.2 * d)
+            self.play(FadeOut(glob), Indicate(VGroup(rlab[1], rlab[2], clab[1], clab[2]), color=GOLD),
+                      run_time=.12 * d)
+            self.wait(.08 * d)
+
+        # ------------------------------------------------ beat 4: element 2 lands; spot (2,2) is shared
+        b = blocks[1]
+        loc, glob, arr = trace(b, 1)
+        with self.say("Element two connects nodes two and three. Its local spot one-one goes to the big matrix's "
+                      "spot two-two. But spot two-two is already taken by element one.") as d:
+            self.play(Indicate(b["cap"], color=MINT, scale_factor=1.1),
+                      *[l.animate.set_color(INK2) for l in (rlab[1], clab[1])],
+                      *[l.animate.set_color(MINT) for l in (rlab[2], rlab[3], clab[2], clab[3])], run_time=.2 * d)
+            self.wait(.04 * d)
+            self.play(Create(loc), run_time=.1 * d)
+            self.play(GrowArrow(arr), Create(glob), run_time=.17 * d)
+            self.wait(.06 * d)
+            self.snap("element 2: local (1,1) to global (2,2)")
+            a, bb = blocks[0]["ents"][(2, 2)], b["ents"][(1, 1)]
+            self.play(*land(b, 1, shared=a), FadeOut(loc), FadeOut(arr), run_time=.2 * d)
+            self.play(FadeOut(glob), Circumscribe(gcell[(2, 2)], color=INK), run_time=.1 * d)
+            self.play(Indicate(a, color=GOLD, scale_factor=1.4), run_time=.1 * d)
+            self.wait(.03 * d)
+
+        # ------------------------------------------------ beat 5 (crux): overlapping entries add
+        plus = M("+", size=48, color=INK).move_to(gp(2, 2)).set_z_index(30)
+        two = M("2", size=56, color=INK).move_to(gp(2, 2)).set_z_index(30)
+        L1 = E(r"U_1|=|\frac12|\frac{EA}{l}|\big(|q_2|-|q_1|\big)^2", size=48, cmap=UC)
+        L2 = E(r"U_2|=|\frac12|\frac{EA}{l}|\big(|q_3|-|q_2|\big)^2", size=48, cmap=UC)
+        Ls = VGroup(L1, L2).arrange(DOWN, buff=.35, aligned_edge=LEFT).move_to([3.5, -2.45, 0])
+        for m in (a, bb, plus, two, Ls):         # stay bright above the spotlight's dimming
+            m.set_z_index(500)
+        with self.say("This is the key step of assembly, so watch it closely. Where two blocks land on the same "
+                      "spot, their entries add. One plus one gives two. Why? Because q two appears in two elements' "
+                      "energies, so the derivative with respect to q two picks up a term from each.",
+                      style="slower and deliberate, stressing the key words") as d:
+            self.play(FadeOut(keq), run_time=.05 * d)
+            self.play(self.spotlight(gcell[(2, 2)], pi_eq[2], pi_eq[4]), run_time=.12 * d)
+            self.wait(.05 * d)
+            self.play(FadeIn(plus), Circumscribe(gcell[(2, 2)], color=INK), run_time=.15 * d)
+            self.snap("1 + 1 at spot (2,2)")
+            self.wait(.08 * d)
+            self.play(ReplacementTransform(a, two), FadeOut(bb, target_position=gp(2, 2)),
+                      FadeOut(plus, target_position=gp(2, 2)), run_time=.1 * d)
+            self.wait(.05 * d)
+            self.play(FadeIn(Ls), Indicate(pi_eq[2], color=MINT), Indicate(pi_eq[4], color=MINT), run_time=.14 * d)
+            self.play(Circumscribe(L1[5], color=SKY), Circumscribe(L2[7], color=SKY), run_time=.12 * d)
+            self.wait(.14 * d)
+
+        # ------------------------------------------------ beat 6: element 3, zeros, the finished K
+        b = blocks[2]
+        a3, b3 = blocks[1]["ents"][(2, 2)], b["ents"][(1, 1)]
+        plus3 = M("+", size=48, color=INK).move_to(gp(3, 3)).set_z_index(30)
+        two3 = M("2", size=56, color=INK).move_to(gp(3, 3)).set_z_index(30)
+        zeros = {(i, j): M("0", size=52, color=INK2).move_to(gp(i, j)).set_z_index(4)
+                 for (i, j) in [(1, 3), (1, 4), (2, 4), (3, 1), (4, 1), (4, 2)]}
+        e0, e1, e2 = (bl["ents"] for bl in blocks)
+        ent = {(1, 1): e0[(1, 1)], (1, 2): e0[(1, 2)], (2, 1): e0[(2, 1)], (2, 2): two,
+               (2, 3): e1[(1, 2)], (3, 2): e1[(2, 1)], (3, 3): two3,
+               (3, 4): e2[(1, 2)], (4, 3): e2[(2, 1)], (4, 4): e2[(2, 2)], **zeros}
+        assert all(ent[(i, j)].get_tex_string() == str(int(KG_TRUE[i - 1, j - 1]))
+                   for (i, j) in ent if (i, j) not in ((2, 2), (3, 3)))
+        brL, brR = bracket(-1), bracket(1)
+        prefix = E(r"K|=|\frac{EA}{l}", size=56).next_to(brL, LEFT, buff=.3)
+        box = SurroundingRectangle(VGroup(prefix, brL, brR), buff=.3, color=LILAC, stroke_width=4)
+        boxlab = VGroup(T("global stiffness matrix", size=38), M("K", size=48, color=LILAC)).arrange(RIGHT, buff=.2)
+        boxlab.next_to(box, DOWN, buff=.2)
+        rowbox = Rectangle(width=4 * C2 + .2, height=.8).set_stroke(LILAC, 3).move_to(FC + UP * 1.5 * C2)
+        with self.say("Element three goes into rows and columns three and four, adding at spot three-three. "
+                      "Everywhere no element touches, it's zero. The result: E A over l, times one, minus one, "
+                      "zero, zero; minus one, two, minus one, zero; zero, minus one, two, minus one; zero, zero, "
+                      "minus one, one.") as d:
+            self.play(self.unspot(), FadeOut(Ls), Indicate(b["cap"], color=SKY, scale_factor=1.1),
+                      *[l.animate.set_color(INK2) for l in (rlab[2], clab[2])],
+                      *[l.animate.set_color(SKY) for l in (rlab[3], rlab[4], clab[3], clab[4])], run_time=.1 * d)
+            self.play(*land(b, 2, shared=a3), run_time=.1 * d)
+            self.play(FadeIn(plus3), run_time=.04 * d)
+            self.play(ReplacementTransform(a3, two3), FadeOut(b3, target_position=gp(3, 3)),
+                      FadeOut(plus3, target_position=gp(3, 3)), run_time=.04 * d)
+            self.play(LaggedStart(*[FadeIn(z, scale=1.3) for z in zeros.values()], lag_ratio=.15), run_time=.11 * d)
+            self.play(*[m.animate.move_to(fp(i, j)).set_color(INK) for (i, j), m in ent.items()],
+                      FadeOut(grid), FadeOut(labs), FadeOut(note2), FadeOut(pi_eq),
+                      *[FadeOut(f) for bl in blocks for f in bl["fills"].values()],
+                      *[FadeOut(bl["outline"]) for bl in blocks], run_time=.08 * d)
+            self.play(FadeIn(brL), FadeIn(brR), Write(prefix), Create(box), FadeIn(boxlab), run_time=.06 * d)
+            self.play(Create(rowbox), run_time=.03 * d)
+            self.wait(.07 * d)
+            for r, hold in ((2, .1), (3, .11), (4, .05)):
+                self.play(rowbox.animate.move_to(FC + UP * (2.5 - r) * C2), run_time=.03 * d)
+                self.wait(hold * d)
+            self.play(FadeOut(rowbox), run_time=.02 * d)
+        self.wait(1.0)
+        self.wipe()

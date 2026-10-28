@@ -35,7 +35,7 @@ BLOCKS = [
     [(1, 1, [1, 2, 3]), (1, 2, None), (2, 1, None), (2, 2, [0, 1])],
     [(2, 2, [2, 3]), (2, 3, None), (3, 2, None), (3, 3, None)],
 ]
-TINTS = [LILAC, GOLD, LIME]
+TINTS = [LILAC, MUTED, interpolate_color(ManimColor(LILAC), ManimColor(INK), 0.55)]   # lilac shades / grey, no concept hues
 
 
 class S15_Pattern(VScene):
@@ -53,14 +53,14 @@ class S15_Pattern(VScene):
             m.set_opacity(0.22)
         row_y = [np.mean([e(i, j).get_y() for j in range(4)]) for i in range(4)]
         col_x = [np.mean([e(i, j).get_x() for i in range(4)]) for j in range(4)]
-        col_lab = VGroup(*[T(str(j + 1), size=30, color=MUTED).next_to(e(0, j), UP, buff=0.42)
+        col_lab = VGroup(*[T(str(j + 1), size=32, color=MUTED).next_to(e(0, j), UP, buff=0.42)
                            .set_x(e(0, j).get_x()) for j in range(4)])
         y_top = max(c.get_y() for c in col_lab)
         for c in col_lab:
             c.set_y(y_top)
-        row_lab = VGroup(*[T(str(i + 1), size=30, color=MUTED).set_y(e(i, 0).get_y())
+        row_lab = VGroup(*[T(str(i + 1), size=32, color=MUTED).set_y(e(i, 0).get_y())
                            .set_x(mat.get_left()[0] - 0.35) for i in range(4)])
-        node_tag = T("node", size=26, color=MUTED).next_to(col_lab, LEFT, buff=0.5)
+        node_tag = T("node", size=32, color=MUTED).next_to(col_lab, LEFT, buff=0.5)
 
         # ---- the four-node chain (node 1 drawn free for now) ----
         y0 = -2.7
@@ -72,11 +72,11 @@ class S15_Pattern(VScene):
         bar3 = Line(P[2] + dy * UP, P[2] + dy * DOWN, color=INK2, stroke_width=4)
         sp2a = spring(P[1] + dy * UP, P[2] + dy * UP, coils=4, amp=0.14, label="k_2")
         sp2b = spring(P[1] + dy * DOWN, P[2] + dy * DOWN, coils=4, amp=0.14)
-        lab2b = M("k_2", size=32, color=LILAC).move_to((P[1] + P[2]) / 2 + (dy + 0.42) * DOWN)
+        lab2b = M("k_2", size=36, color=LILAC).move_to((P[1] + P[2]) / 2 + (dy + 0.42) * DOWN)
         sp3 = spring(P[2], P[3], label="k_3")
         dots = VGroup(*[node(p) for p in P])
         badges = VGroup(*[badge(n + 1).move_to(P[n] + 0.85 * DOWN) for n in (0, 1, 2, 3)])
-        badges[1].shift(0.35 * LEFT); badges[2].shift(0.35 * RIGHT)
+        badges[0].shift(0.32 * RIGHT); badges[1].shift(0.35 * LEFT); badges[2].shift(0.35 * RIGHT)
         chain = VGroup(sp1, bar2, bar3, sp2a, sp2b, lab2b, sp3, dots, badges)
         spr = [VGroup(sp1), VGroup(sp2a, sp2b, lab2b), VGroup(sp3)]
 
@@ -86,15 +86,15 @@ class S15_Pattern(VScene):
         # ---- generic rule card ----
         gi = np.array([3.4, 2.35, 0]); gj = np.array([6.0, 2.35, 0])
         g_fig = VGroup(spring(gi, gj, coils=4, label="k"), node(gi), node(gj),
-                       M("i", size=34, color=INK2).next_to(gi, DOWN, buff=0.2),
-                       M("j", size=34, color=INK2).next_to(gj, DOWN, buff=0.2))
+                       M("i", size=36, color=INK2).next_to(gi, DOWN, buff=0.2),
+                       M("j", size=36, color=INK2).next_to(gj, DOWN, buff=0.2))
         gm = MobjectMatrix([[E("+|k", size=38), E("-|k", size=38)], [E("-|k", size=38), E("+|k", size=38)]],
                            h_buff=1.15, v_buff=0.85)
         gm.get_brackets().set_color(INK2)
         gm.move_to([5.0, 0.35, 0])
         ge = gm.get_entries()
-        g_cols = VGroup(*[M(c, size=30, color=MUTED).next_to(ge[k], UP, buff=0.3) for k, c in ((0, "i"), (1, "j"))])
-        g_rows = VGroup(*[M(c, size=30, color=MUTED).set_y(ge[k].get_y()).set_x(gm.get_left()[0] - 0.3)
+        g_cols = VGroup(*[M(c, size=32, color=MUTED).next_to(ge[k], UP, buff=0.3) for k, c in ((0, "i"), (1, "j"))])
+        g_rows = VGroup(*[M(c, size=32, color=MUTED).set_y(ge[k].get_y()).set_x(gm.get_left()[0] - 0.3)
                           for k, c in ((0, "i"), (2, "j"))])
         y_gc = max(c.get_y() for c in g_cols)
         for c in g_cols:
@@ -129,12 +129,19 @@ class S15_Pattern(VScene):
                   w=(.3, .23, .23, .24))
 
         d11, d22 = e(1, 1), e(2, 2)
+        # outline the shared diagonal entries (no glow on the glyphs themselves, so they stay sharp)
+        o11, o22 = [SurroundingRectangle(m, color=ACCENT, buff=0.12, corner_radius=0.08, stroke_width=4)
+                    for m in (d11, d22)]
+        # spotlight without glow: a BG veil over everything, the two entries and their outlines above it
+        dimmer = Rectangle(width=30, height=20, stroke_width=0, fill_color=BG, fill_opacity=0.72).set_z_index(50)
+        for m in (d11, d22, o11, o22):
+            m.set_z_index(60)
         self.beat("This is the key idea for everything that follows: each spring brings its own little two by two "
                   "block, and where blocks share a node, the entries simply add.",
-                  self.spotlight(d11, d22), .55, style="slower and deliberate, stressing the key words")
+                  [FadeIn(dimmer), Create(o11), Create(o22)], .55, style="slower and deliberate, stressing the key words")
 
         self.beat("Use the pattern: pause and do checkpoint two point two in your guide, and write row three.",
-                  [self.unspot(), FadeOut(card)])
+                  [FadeOut(dimmer), FadeOut(card), FadeOut(o11), FadeOut(o22)])
         self.checkpoint("2.2", "Four-node springs: write row 3 of the stiffness matrix")
 
         # ---- row three, row sums, rigid slide ----
@@ -158,15 +165,15 @@ class S15_Pattern(VScene):
 
         # ---- the wall node goes ----
         wl = wall(P[0], side=LEFT, h=1.4)
-        q1z = E(r"q_1|=|0", size=36).move_to(P[0] + 1.05 * UP + 0.1 * LEFT)
+        q1z = E(r"q_1|=|0", size=36).move_to(P[0] + 1.3 * UP + 0.55 * LEFT)
         r1 = VGroup(*[e(0, j) for j in range(4)])
         c1 = VGroup(*[e(i, 0) for i in range(4)])
         s_row = Line(r1.get_left() + 0.25 * LEFT, r1.get_right() + 0.25 * RIGHT, color=BAD, stroke_width=5)
         s_col = Line(c1.get_top() + 0.25 * UP, c1.get_bottom() + 0.25 * DOWN, color=BAD, stroke_width=5)
         rest = VGroup(*[e(i, j) for i in range(1, 4) for j in range(1, 4)])
         box3 = SurroundingRectangle(rest, color=GOOD, buff=0.2, corner_radius=0.1, stroke_width=4)
-        old = MobjectMatrix([[E("k_1|+|k_2", size=34), E("-|k_2", size=34)],
-                             [E("-|k_2", size=34), E("k_2", size=34)]], h_buff=1.9, v_buff=0.8)
+        old = MobjectMatrix([[E("k_1|+|k_2", size=36), E("-|k_2", size=36)],
+                             [E("-|k_2", size=36), E("k_2", size=36)]], h_buff=2.0, v_buff=0.8)
         old.get_brackets().set_color(INK2)
         old_head = T("two springs, earlier", size=30, color=INK2)
         old_note = T("wall node already left out", size=30, color=MUTED)

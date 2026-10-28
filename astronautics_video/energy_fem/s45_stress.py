@@ -57,7 +57,7 @@ class S45_Stress(VScene):
         tags = VGroup(*[badge(i + 1).scale(1.15).move_to([cx - 0.95, (ys[i] + ys[i + 1]) / 2, 0])
                         for i in range(3)])
         qtex = [r"0", r"-\frac59", r"-\frac89", r"-1"]
-        qlab = VGroup(*[E(r"q_%d|=|%s" % (i + 1, qtex[i]), size=40).next_to(dots[i], RIGHT, buff=0.75)
+        qlab = VGroup(*[E(r"q_%d|=|%s" % (i + 1, qtex[i]), size=44).next_to(dots[i], RIGHT, buff=0.75)
                         for i in range(4)])
         unit = TX(r"$q$ in units of $\dfrac{\rho g L^2}{2E}$", size=30, color=INK2)
         unit.next_to(ground, DOWN, buff=0.35).set_x(cx + 0.9)
@@ -65,11 +65,11 @@ class S45_Stress(VScene):
 
         # ---- beat 1: the stress formula ----
         gen = E(r"\sigma|=|E\,\frac{q_{\text{top}} - q_{\text{bottom}}}{l}", size=52).move_to([RX, 1.4, 0])
-        top_lab = T("top", 32, MUTED).next_to(dots[1], LEFT, buff=1.3)
-        bot_lab = T("bottom", 32, MUTED).next_to(dots[0], LEFT, buff=1.3)
+        top_lab = T("top", 32, MUTED).next_to(qlab[1], RIGHT, buff=0.35)
+        bot_lab = T("bottom", 32, MUTED).next_to(qlab[0], RIGHT, buff=0.35)
         self.beat("Now stress. In each element, sigma is E times strain, and the strain is the change in displacement over the length: q of the top node minus q of the bottom node, over l.",
                   FadeIn(col), Write(gen), .1, [FadeIn(top_lab), FadeIn(bot_lab), elems[0].animate.set_fill(ACCENT, 0.25)],
-                  w=(.3, .4, .05, .25))
+                  w=(.3, .4, .25))
 
         # ---- beat 2: element one, one step at a time ----
         l1 = E(r"q_2|-|q_1|=|-\frac59\,\frac{\rho g L^2}{2E}", size=48).move_to([RX, 2.2, 0])
@@ -102,13 +102,13 @@ class S45_Stress(VScene):
         self.beat("Element two: minus eight ninths plus five ninths is minus three ninths. The stress is minus one half rho g L. And element three, minus one sixth rho g L.",
                   Write(d2), .05, ReplacementTransform(d2, res2),
                   [elems[1].animate.set_fill(SURFACE, 1), elems[2].animate.set_fill(ACCENT, 0.25)],
-                  Write(res3), w=(.3, .03, .27, .1, .3))
+                  Write(res3), w=(.3, .27, .1, .3))
         res = VGroup(res1, res2, res3)
 
         # ---- beat 5: the plot, left half ----
-        ax = Axes(x_range=[0, 1, 1], y_range=[-1.2, 0, 1], x_length=5.9, y_length=5.6, tips=False,
+        ax = Axes(x_range=[0, 1, 1], y_range=[-1.2, 0, 1], x_length=5.5, y_length=5.6, tips=False,
                   axis_config=dict(color=AXIS, stroke_width=3, include_ticks=False))
-        ax.move_to([-3.25, -0.75, 0])
+        ax.move_to([-3.5, -0.75, 0])
         ticks = VGroup(*[Line(ax.c2p(Fr(k, 6), 0), ax.c2p(Fr(k, 6), 0) + 0.14 * UP, color=AXIS, stroke_width=3)
                          for k in range(1, 7)],
                        *[Line(ax.c2p(0, y), ax.c2p(0, y) + 0.14 * LEFT, color=AXIS, stroke_width=3)
@@ -164,12 +164,12 @@ class S45_Stress(VScene):
             self.play(LaggedStart(*[AnimationGroup(Create(g), FadeIn(m), FadeIn(dt), Create(r))
                                     for g, m, dt, r in zip(guides, mlab, mids, rings)], lag_ratio=.4),
                       run_time=.2 * d)
-            self.play(fr.animate.scale(0.55).move_to(p1 + 0.9 * RIGHT + 0.1 * DOWN), run_time=.15 * d)
+            self.play(fr.animate.scale(0.55).move_to(p1 + 0.9 * RIGHT + 0.1 * DOWN), FadeOut(legend), run_time=.15 * d)
             self.play(FadeIn(zl[0]), Indicate(st3[0][0], color=ACCENT), run_time=.15 * d)
             self.play(FadeIn(zl[1]), Indicate(ex, color=INK), run_time=.15 * d)
             self.snap("zoomed: -5/6 on both")
             self.wait(.15 * d)
-            self.play(fr.animate.scale(1 / 0.55).move_to(ORIGIN), FadeOut(zl), run_time=.1 * d)
+            self.play(fr.animate.scale(1 / 0.55).move_to(ORIGIN), FadeOut(zl), FadeIn(legend), run_time=.1 * d)
             self.play(*[Flash(dt, color=GOLD) for dt in mids], run_time=.1 * d)
 
         # ---- beat 7: the second question answered; finer steps ----
@@ -181,14 +181,12 @@ class S45_Stress(VScene):
         qbody = VGroup(qhead, qtext, VGroup(qans, qans2).arrange(DOWN, aligned_edge=LEFT, buff=0.15))
         qbody.arrange(DOWN, aligned_edge=LEFT, buff=0.3)
         card = panel(qbody, color=GOOD)
-        card.move_to([RX + 0.2, 1.7, 0])
-        tick.next_to(card, RIGHT, buff=0.15).align_to(card, UP).shift(0.1 * DOWN)
-        if tick.get_right()[0] > 6.9:
-            tick.next_to(qtext, UP, buff=0.1).align_to(card, RIGHT).shift(0.25 * LEFT)
+        card.move_to([RX + 0.05, 1.7, 0])
+        tick.next_to(qhead, RIGHT, buff=0.4)
         note1 = T("Stress is the slope of the", 30, INK2)
         note2 = T("straight-line guess:", 30, INK2)
         note3 = T("one order rougher than u", 30, INK2)
-        notes = VGroup(note1, note2, note3).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([RX + 0.2, -1.6, 0])
+        notes = VGroup(note1, note2, note3).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([RX + 0.05, -1.6, 0])
         base_dot = Dot(ax.c2p(0, -1), radius=0.14, color=GOOD).set_z_index(6)
         st6 = stairs(SIX)
         leg6 = T("FEM, 6 elements", 36, INK).move_to(leg_fem[1], aligned_edge=LEFT)
@@ -197,5 +195,5 @@ class S45_Stress(VScene):
                   [FadeIn(base_dot, scale=2), Flash(base_dot, color=GOOD), Write(tick)], .1,
                   FadeIn(notes, shift=0.2 * UP), .05,
                   [ReplacementTransform(st3, st6), ReplacementTransform(leg_fem[1], leg6)], .1,
-                  w=(.12, .15, .1, .25, .03, .2, .15))
+                  w=(.12, .15, .25, .2))
         self.wipe()

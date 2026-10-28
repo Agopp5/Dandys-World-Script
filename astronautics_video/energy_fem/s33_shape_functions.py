@@ -37,10 +37,10 @@ class S33_Shape_Functions(VScene):
         ax = axes([0, 1.12, 1], [0, 1.5, 5], width=5.6, height=3.3, xlabel="", ylabel="")
         ax.shift(np.array([-5.9, -0.55, 0]) - ax.c2p(0, 0))
         P = ax.c2p
-        s_lab = M("s", size=40, color=LIME).next_to(ax.x_axis.get_end(), RIGHT, buff=.15)
-        u_lab = M("u", size=40, color=SKY).next_to(ax.y_axis.get_end(), LEFT, buff=.2)
-        t0 = M("0", size=36, color=INK2).next_to(P(0, 0), DOWN, buff=.2)
-        t1 = M("1", size=36, color=INK2).next_to(P(1, 0), DOWN, buff=.2)
+        s_lab = M("s", size=48, color=LIME).next_to(ax.x_axis.get_end(), RIGHT, buff=.15)
+        u_lab = M("u", size=48, color=SKY).next_to(ax.y_axis.get_end(), LEFT, buff=.2)
+        t0 = M("0", size=40, color=INK2).next_to(P(0, 0), DOWN, buff=.2)
+        t1 = M("1", size=40, color=INK2).next_to(P(1, 0), DOWN, buff=.2)
         guide = DashedLine(P(1, 0), P(1, 1.42), color=MUTED, stroke_width=2)
 
         xa, xb, yb = P(0, 0)[0], P(1, 0)[0], -1.8
@@ -48,6 +48,10 @@ class S33_Shape_Functions(VScene):
         n1, n2 = node([xa, yb, 0], r=.1), node([xb, yb, 0], r=.1)
         d1 = disp([xa, yb, 0], label="u_1")
         d2 = disp([xb, yb, 0], label="u_2")
+        for dd, tx in ((d1, "u_1"), (d2, "u_2")):     # the kit's label is small: redraw it at 48
+            big = M(tx, size=48, color=SKY).next_to(dd[1], DOWN, buff=.1)
+            dd.remove(dd[2])
+            dd.add(big)
         nm1 = T("node 1", size=36, color=INK2).next_to(d1, DOWN, buff=.18).set_x(xa + .2)
         nm2 = T("node 2", size=36, color=INK2).next_to(d2, DOWN, buff=.18).set_x(xb + .2)
         element = VGroup(el, n1, n2, d1, d2, nm1, nm2)
@@ -58,8 +62,8 @@ class S33_Shape_Functions(VScene):
                                           color=SKY, stroke_width=7))
         tg1 = Circle(radius=.15, color=SKY, stroke_width=4).move_to(P(0, U1))
         tg2 = Circle(radius=.15, color=SKY, stroke_width=4).move_to(P(1, U2))
-        lu1 = M("u_1", size=40, color=SKY).next_to(P(0, U1), LEFT, buff=.3)
-        lu2 = M("u_2", size=40, color=SKY).next_to(P(1, U2), RIGHT, buff=.3)
+        lu1 = M("u_1", size=48, color=SKY).next_to(P(0, U1), LEFT, buff=.3)
+        lu2 = M("u_2", size=48, color=SKY).next_to(P(1, U2), RIGHT, buff=.3)
         pin1 = Dot(P(0, U1), radius=.11, color=SKY).set_z_index(3)
         pin2 = Dot(P(1, U2), radius=.11, color=SKY).set_z_index(3)
 
@@ -121,3 +125,71 @@ class S33_Shape_Functions(VScene):
             self.play(FadeIn(g3), run_time=.1 * d)
             self.play(ind(eqA3[5:9], LIME), run_time=.17 * d)
             self.play(ind(eqA3[10:12], LIME), run_time=.17 * d)
+
+        # ---------------- beat 4: the two ramps, drawn separately on the right
+        def nplot(oy):
+            a = axes([0, 1.12, 1], [0, 1.3, 5], width=5.0, height=1.7, xlabel="", ylabel="")
+            a.shift(np.array([1.0, oy, 0]) - a.c2p(0, 0))
+            sl = M("s", size=48, color=LIME).next_to(a.x_axis.get_end(), RIGHT, buff=.15)
+            return a, sl
+        a1, sl1 = nplot(-0.75)
+        a2, sl2 = nplot(-3.35)
+        r1n = Line(a1.c2p(0, 1), a1.c2p(1, 0), color=LIME, stroke_width=7)
+        r2n = Line(a2.c2p(0, 0), a2.c2p(1, 1), color=LIME, stroke_width=7)
+        dA1, dB1 = Dot(a1.c2p(0, 1), radius=.1, color=LIME), Dot(a1.c2p(1, 0), radius=.1, color=LIME)
+        dA2, dB2 = Dot(a2.c2p(0, 0), radius=.1, color=LIME), Dot(a2.c2p(1, 1), radius=.1, color=LIME)
+        vA1 = M("1", size=40, color=INK).next_to(a1.c2p(0, 1), LEFT, buff=.25)
+        vB1 = M("0", size=40, color=INK).next_to(a1.c2p(1, 0), UR, buff=.12)
+        vA2 = M("0", size=40, color=INK).next_to(a2.c2p(0, 0), LEFT, buff=.25)
+        vB2 = M("1", size=40, color=INK).next_to(a2.c2p(1, 1), RIGHT, buff=.25)
+        tN1 = E(r"N_1|=|1-|s", size=48)
+        tN1.move_to(a1.c2p(1, 1)).align_to(a1.c2p(1.12, 0), RIGHT).shift(UP * .05)
+        tN2 = E(r"N_2|=|s", size=48)
+        tN2.move_to(a2.c2p(0, 1)).align_to(a2.c2p(.1, 0), LEFT).shift(UP * .05)
+        plot1 = VGroup(a1, sl1, r1n, dA1, dB1, vA1, vB1, tN1)
+        plot2 = VGroup(a2, sl2, r2n, dA2, dB2, vA2, vB2, tN2)
+
+        with self.say("This is the key picture of the whole method, so let's go slowly. One minus s is a ramp "
+                      "that is one at the left node and zero at the right. s is a ramp that is zero at the left "
+                      "and one at the right. They're called shape functions, N one and N two.",
+                      style="slower and deliberate, stressing the key words") as d:
+            self.play(Create(a1), Create(a2), FadeIn(sl1), FadeIn(sl2), FadeOut(g3), run_time=.14 * d)
+            self.wait(.06 * d)
+            self.play(ind(eqA3[5:8], LIME), run_time=.08 * d)
+            self.play(Create(r1n), run_time=.1 * d)
+            self.play(FadeIn(dA1, scale=.4), FadeIn(vA1), ind(n1, LIME), ind(nm1, LIME), run_time=.07 * d)
+            self.play(FadeIn(dB1, scale=.4), FadeIn(vB1), ind(n2, LIME), run_time=.07 * d)
+            self.play(ind(eqA3[10], LIME), run_time=.07 * d)
+            self.play(Create(r2n), run_time=.09 * d)
+            self.play(FadeIn(dA2, scale=.4), FadeIn(vA2), ind(n1, LIME), run_time=.06 * d)
+            self.play(FadeIn(dB2, scale=.4), FadeIn(vB2), ind(n2, LIME), ind(nm2, LIME), run_time=.06 * d)
+            self.play(Write(tN1), Write(tN2), run_time=.1 * d)
+            self.play(self.spotlight(plot1, plot2), run_time=.07 * d)
+        self.wait(2)
+
+        # ---------------- beat 5: scale each ramp by its node's displacement, then add
+        r1 = Line(P(0, U1), P(1, 0), color=LIME, stroke_width=6)
+        r2 = Line(P(0, 0), P(1, U2), color=LIME, stroke_width=6)
+        total = Line(P(0, U1), P(1, U2), color=SKY, stroke_width=7).set_z_index(2)
+        ss = [.2, .4, .6, .8]
+        sticks = VGroup(*[Line(P(x, 0), P(x, N2(x) * U2), color=LIME, stroke_width=4) for x in ss])
+        lifts = [P(x, N1(x) * U1)[1] - P(x, 0)[1] for x in ss]
+        eqF = E(r"u|=|N_1|u_1|+|N_2|u_2", size=52)
+        eqF.move_to([RX, 1.5, 0])
+        with self.say("In other words, each node gets a ramp that is one at its own node and zero at the other. "
+                      "Multiply each ramp by its node's displacement, add, and you get the straight line between "
+                      "them.") as d:
+            self.play(self.unspot(), run_time=.07 * d)
+            self.play(ind(VGroup(dA1, vA1), LIME), ind(VGroup(n1, nm1), LIME), run_time=.17 * d)
+            self.play(ind(VGroup(dB2, vB2), LIME), ind(VGroup(n2, nm2), LIME), run_time=.17 * d)
+            self.play(line.animate.set_stroke(opacity=.18), pin1.animate.set_opacity(.3),
+                      pin2.animate.set_opacity(.3), run_time=.07 * d)
+            self.play(TransformFromCopy(r1n, r1), TransformFromCopy(r2n, r2), ind(d1, SKY), ind(d2, SKY),
+                      run_time=.18 * d)
+            self.play(FadeIn(sticks), run_time=.06 * d)
+            self.play(Transform(r2, total), *[s_.animate.shift(UP * h) for s_, h in zip(sticks, lifts)],
+                      pin1.animate.set_opacity(1), pin2.animate.set_opacity(1), run_time=.14 * d)
+            self.play(Write(eqF), run_time=.1 * d)
+            self.play(FadeIn(glow(eqF, SKY)), run_time=.04 * d)
+        self.wait(1.5)
+        self.wipe()

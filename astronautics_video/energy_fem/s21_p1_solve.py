@@ -65,7 +65,7 @@ class S21_P1_Solve(VScene):
 
         # the system from S20, '=' signs aligned
         r1 = E(r"2|K_2|q_1|-|K_2|q_2|=|P_1", size=48)
-        r2 = E(r"-|K_2|q_1|+|(K_1+K_2+K_3)|\,q_2|-|K_3|q_3|=|P_2|+|P_3", size=48)
+        r2 = E(r"-|K_2|q_1|+|(K_1+K_2+K_3)|q_2|-|K_3|q_3|=|P_2|+|P_3", size=48)
         r3 = E(r"-|K_3|q_2|+|K_3|q_3|=|P_4", size=48)
         paint(r2, {4: LILAC})
         x_eq = -5.75 + (r2[9].get_center()[0] - r2.get_left()[0])
@@ -91,7 +91,7 @@ class S21_P1_Solve(VScene):
                   .2, w=(.45, .12, .23))
 
         # ---- beat 2: add equations 2 and 3; the K3 terms cancel ----
-        ra = E(r"-|K_2|q_1|+|(K_1+K_2)|\,q_2|-|K_3|(|q_3|-|q_2|)|=|P_2|+|P_3", size=48)
+        ra = E(r"-|K_2|q_1|+|(K_1+K_2)|q_2|-|K_3|(|q_3|-|q_2|)|=|P_2|+|P_3", size=48)
         paint(ra, {4: LILAC})
         at_eq(ra, 13, x_eq, S1)
         rb = E(r"+|K_3|(|q_3|-|q_2|)|=|P_4", size=48)
@@ -99,7 +99,7 @@ class S21_P1_Solve(VScene):
         rb[7].set_x(ra[13].get_x()); rb[8].align_to(ra[14], LEFT)
         rule = Line(ra.get_left() + DOWN * 1.35 + LEFT * .1, ra.get_right() + DOWN * 1.35 + RIGHT * .1,
                     color=INK2, stroke_width=3).set_y(-1.88)
-        rc = E(r"-|K_2|q_1|+|(K_1+K_2)|\,q_2|=|P_2|+|P_3|+|P_4", size=48)
+        rc = E(r"-|K_2|q_1|+|(K_1+K_2)|q_2|=|P_2|+|P_3|+|P_4", size=48)
         paint(rc, {4: LILAC})
         at_eq(rc, 6, ra[13].get_x(), -2.55)
         s_a = strike(VGroup(*ra[6:13]))
@@ -120,28 +120,13 @@ class S21_P1_Solve(VScene):
             self.wait(.05 * d)
 
         # ---- beat 3: the physics: bar + outer node as one free body ----
-        yT, yM, yB, xb, xj, xw, xo = -1.0, -1.95, -2.9, .4, -2.55, -5.4, 3.4
-        wl = wall(np.array([xw, yM, 0]), side=LEFT, h=3.5)
-        barm = Rectangle(width=.3, height=3.1, color=INK2, fill_color=SURFACE, fill_opacity=1,
-                         stroke_width=3).move_to([xb, yM, 0])
-        k1 = spring(np.array([xw, yT, 0]), np.array([xb - .15, yT, 0]), coils=6, amp=.22)
-        k2a = spring(np.array([xw, yB, 0]), np.array([xj, yB, 0]), coils=4, amp=.22)
-        k2b = spring(np.array([xj, yB, 0]), np.array([xb - .15, yB, 0]), coils=4, amp=.22)
-        k3 = spring(np.array([xb + .15, yM, 0]), np.array([xo, yM, 0]), coils=4, amp=.22)
-        lk1 = M("K_1", size=40, color=LILAC).next_to(k1, UP, buff=.12)
-        lk2a = M("K_2", size=40, color=LILAC).next_to(k2a, DOWN, buff=.12)
-        lk2b = M("K_2", size=40, color=LILAC).next_to(k2b, DOWN, buff=.12)
-        lk3 = M("K_3", size=40, color=LILAC).next_to(k3, UP, buff=.12)
-        nj, no = node(np.array([xj, yB, 0]), r=.11), node(np.array([xo, yM, 0]), r=.11)
-        stem = Line([xj, yB, 0], [xj, yB + .55, 0], color=MUTED, stroke_width=3)
-        f1 = force(np.array([xj, yB + .55, 0]), RIGHT, length=.9, label="P_1", size=38)
-        f2 = force(np.array([xb + .15, -.65, 0]), RIGHT, length=1.1, label="P_2", size=38)
-        f3 = force(np.array([xb + .15, -3.3, 0]), RIGHT, length=1.1, label="P_3", size=38)
-        f4 = force(np.array([xo, yM, 0]), RIGHT, length=1.1, label="P_4", size=38)
-        sketch = VGroup(wl, k1, k2a, k2b, k3, lk1, lk2a, lk2b, lk3, barm, nj, no, stem, f1, f2, f3, f4)
-        fb = DashedVMobject(Rectangle(width=6.35, height=3.65).move_to([2.8, -1.95, 0]), num_dashes=70)
-        fb.set_stroke(GOLD, 3)
-        cut = VGroup(k1, lk1, k2b, lk2b)
+        sketch = hw_figure(k2b_label=True)            # the shared HW 6 P1 figure (same as S16-S22)
+        sketch.scale(.85).move_to([0, -1.85, 0])
+        k1, k2b, lk1, lk2b = sketch.k1, sketch.k2b, sketch.klab["K1"], sketch.klab["K2b"]
+        body = VGroup(sketch.bar, sketch.O, sketch.k3, sketch.klab["K3"], sketch.q[2], sketch.q[3],
+                      *[sketch.P[i] for i in (2, 3, 4)], *[sketch.Plab[i] for i in (2, 3, 4)])
+        fb = DashedVMobject(SurroundingRectangle(body, buff=.15), num_dashes=80).set_stroke(INK2, 3)
+        loads = VGroup(*[sketch.P[i] for i in (2, 3, 4)], *[sketch.Plab[i] for i in (2, 3, 4)])
         with self.say("That makes sense physically. It's the force balance of the bar together with the outer "
                       "point: the two springs on the bar's left side, K one and the second K two, hold P two, P "
                       "three and P four together.") as d:
@@ -150,7 +135,7 @@ class S21_P1_Solve(VScene):
                       r3b.animate.set_opacity(.35), chips[2].animate.set_opacity(.35), run_time=.14 * d)
             self.play(FadeIn(sketch, lag_ratio=.05), run_time=.2 * d)
             self.play(Create(fb), run_time=.12 * d)
-            self.play(Indicate(VGroup(f2, f3, f4), color=ROSE, scale_factor=1.08), run_time=.14 * d)
+            self.play(Indicate(loads, color=ROSE, scale_factor=1.08), run_time=.14 * d)
             gk = VGroup(glow(k1, LILAC), glow(k2b, LILAC))
             self.play(FadeIn(gk), Indicate(lk1), Indicate(lk2b),
                       Indicate(rc[4], color=LILAC), run_time=.18 * d)
@@ -173,10 +158,10 @@ class S21_P1_Solve(VScene):
                   Write(VGroup(*qb[4:])), .25, w=(.15, .25, .35))
 
         # ---- beat 6: collect the q2 terms ----
-        qc = E(r"(K_1+K_2|-\tfrac12 K_2)|\,q_2|=|(K_1+\tfrac12 K_2)|\,q_2", size=48)
+        qc = E(r"(K_1+K_2|-\tfrac12 K_2)|q_2|=|(K_1+\tfrac12 K_2)|q_2", size=48)
         paint(qc, {0: LILAC, 1: LILAC, 4: LILAC})
         at_eq(qc, 3, XW, S2)
-        qd = E(r"(K_1+\tfrac12 K_2)|\,q_2|-|\tfrac12|P_1|=|P_2|+|P_3|+|P_4", size=48)
+        qd = E(r"(K_1+\tfrac12 K_2)|q_2|-|\tfrac12|P_1|=|P_2|+|P_3|+|P_4", size=48)
         paint(qd, {0: LILAC})
         at_eq(qd, 5, XW, S3)
         with self.say("So the q two terms are K one plus K two, minus one half K two, which is K one plus one half "
@@ -196,19 +181,19 @@ class S21_P1_Solve(VScene):
             self.wait(.14 * d)
 
         # ---- beat 7: times two, solve for q2 ----
-        qx = E(r"(2K_1+K_2)|\,q_2|-|P_1|=|2(|P_2|+|P_3|+|P_4|)", size=48)
+        qx = E(r"(2K_1+K_2)|q_2|-|P_1|=|2(|P_2|+|P_3|+|P_4|)", size=48)
         paint(qx, {0: LILAC})
-        at_eq(qx, 4, XW, S2)
+        at_eq(qx, 4, XW, -1.35)
         x2 = M(r"\times 2", size=36, color=MUTED).next_to(qx, LEFT, buff=.6)
         q2r = E(r"q_2|=|\frac{P_1+2(P_2+P_3+P_4)}{2K_1+K_2}", size=52)
         fcol(q2r[2], [((0, 2), ROSE), ((5, 7), ROSE), ((8, 10), ROSE), ((11, 13), ROSE),
                       ((16, 18), LILAC), ((19, 21), LILAC)])
-        at_eq(q2r, 1, XW, S3 - .05)
+        at_eq(q2r, 1, XW, -2.65)
         b2 = rbox(q2r)
         g2 = glow(q2r, SKY)
         with self.say("Multiply through by two and solve. q two equals P one, plus two times the sum of P two, P "
                       "three and P four, all over two K one plus K two.") as d:
-            self.play(FadeOut(VGroup(qb, qc, g_qc)), qd.animate.shift(UP * (S1 - S3)), run_time=.12 * d)
+            self.play(FadeOut(VGroup(qb, qc, g_qc)), qd.animate.shift(UP * (-.35 - S3)), run_time=.12 * d)
             self.play(FadeIn(x2, shift=RIGHT * .2), TransformFromCopy(VGroup(*qd[0:2]), VGroup(*qx[0:2])),
                       TransformFromCopy(qd[2], qx[2]), TransformFromCopy(qd[4], qx[3]),
                       TransformFromCopy(qd[5], qx[4]), *[TransformFromCopy(qd[6 + i], qx[6 + i]) for i in range(5)],

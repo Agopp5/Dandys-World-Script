@@ -46,18 +46,48 @@ PI_Y, D_Y, W_Y = 3.4, 1.35, 0.1         # Pi (two lines from here down), derivat
 TX, TY = 2.0, [-1.15, -2.1, -3.05]      # tray: results stacked, "=" aligned at x = TX
 
 
+# squares of the unknowns are single tokens: give them the unknown's hue
+CM = {"q_1^2": SKY, "q_2^2": SKY, "q_3^2": SKY}
+
+
+def EG(spec, size=48):
+    """E() split at "|" into parts, each part split further at "~" into tokens, so every K_i and q_i (and P_i)
+    is its own token and picks up its hue; returns a VGroup whose [i] is part i (a VGroup of its tokens)."""
+    parts = [c.split("~") for c in spec.split("|")]
+    e = E("|".join(t for c in parts for t in c), size=size, cmap=CM)
+    out, k = VGroup(), 0
+    for c in parts:
+        out.add(VGroup(*e[k:k + len(c)]))
+        k += len(c)
+    return out
+
+
+def dq(i):
+    """d Pi / d q_i as one part, Pi GOLD and q_i SKY (glyphs: d, Pi, bar, d, q, i)."""
+    m = EG(r"\frac{\partial \Pi}{\partial q_%d}" % i)
+    g = m[0][0]
+    g[1].set_color(GOLD)
+    g[4:6].set_color(SKY)
+    return m
+
+
+def join(a, b):
+    """a's parts then b's parts, b set just right of a, as one VGroup indexed across both."""
+    b.next_to(a, RIGHT, buff=.18)
+    return VGroup(*a, *b)
+
+
 class S19_P1_Derivs(VScene):
     budget = 250
 
     def construct(self):
         # Pi on two lines (strain energy, then the loads); pi[i] numbers the parts across both lines
-        la = E(r"\Pi|=|\tfrac12 K_1 q_2^2|+|\tfrac12 K_2 q_1^2|+|\tfrac12 K_2(q_2-q_1)^2|+|\tfrac12 K_3(q_3-q_2)^2",
-               size=48)
-        lb = E(r"-|P_1 q_1|-|(P_2+P_3)\,q_2|-|P_4 q_3|", size=48)
+        la = EG(r"\Pi|=|\tfrac12~K_1~q_2^2|+|\tfrac12~K_2~q_1^2|+|\tfrac12~K_2~(~q_2~-~q_1~)^2"
+                r"|+|\tfrac12~K_3~(~q_3~-~q_2~)^2")
+        lb = EG(r"-|P_1~q_1|-|(~P_2~+~P_3~)~q_2|-|P_4~q_3|")
         la.move_to([0, PI_Y, 0])
         lb.next_to(la, DOWN, buff=.25).align_to(la[2], LEFT)
         pi = VGroup(*la, *lb)
-        paint(pi, {2: MINT, 4: MINT, 6: MINT, 8: MINT, 10: EMBER, 12: EMBER, 14: EMBER})
         terms = [2, 4, 6, 8, 10, 12, 14]
         state = {"boxes": VGroup()}
 
@@ -92,7 +122,7 @@ class S19_P1_Derivs(VScene):
         self.beat("Start with q one. It appears in two springs: the first K two, and the second K two, where it shows up inside q two minus q one.",
                   FadeIn(pi), .1, focus([4, 6]), w=(.3, .6))
 
-        d1 = at(E(r"\frac{\partial \Pi}{\partial q_1}|=|K_2 q_1|-|K_2(q_2-q_1)|-|P_1|=|0", size=48), D_Y)
+        d1 = at(join(dq(1), EG(r"=|K_2~q_1|-|K_2~(~q_2~-~q_1~)|-|P_1|=|0")), D_Y)
         with self.say("The first gives K two q one. The second gives K two times q two minus q one, times minus one, from the chain rule. And the load gives minus P one.") as d:
             self.play(Write(d1[0:2]), run_time=.1 * d)
             self.play(TransformFromCopy(pi[4], d1[2]), run_time=.15 * d)
@@ -104,8 +134,8 @@ class S19_P1_Derivs(VScene):
                       TransformFromCopy(pi[10], d1[5:7]), FadeIn(d1[7:]), run_time=.17 * d)
             self.wait(.1 * d)
 
-        e1 = at(E(r"K_2 q_1|-|K_2 q_2|+|K_2 q_1|-|P_1|=|0", size=48), W_Y)
-        r1 = at(E(r"2K_2 q_1|-|K_2 q_2|=|P_1", size=48), W_Y)
+        e1 = at(EG(r"K_2~q_1|-|K_2~q_2|+|K_2~q_1|-|P_1|=|0"), W_Y)
+        r1 = at(EG(r"2~K_2~q_1|-|K_2~q_2|=|P_1"), W_Y)
         with self.say("Multiply out: K two q one, minus K two q two, plus K two q one, minus P one, equals zero. The two K two q one terms make two K two q one. So: two K two q one, minus K two q two, equals P one.") as d:
             self.play(FadeOut(chain), *unfocus(), TransformFromCopy(d1[2], e1[0]),
                       TransformFromCopy(d1[3:5], e1[1:5]), TransformFromCopy(d1[5:], e1[5:]), run_time=.4 * d)
@@ -124,9 +154,7 @@ class S19_P1_Derivs(VScene):
                   [FadeOut(g1), FadeOut(d1), Transform(r1, t1)], .05, focus([2, 6, 8, 12]), w=(.3, .65))
         self.checkpoint("3.1", "HW 1: take the partial derivative of Pi with respect to q2")
 
-        d2 = at(E(r"\frac{\partial \Pi}{\partial q_2}|=|K_1 q_2|+|K_2(q_2-q_1)|-|K_3(q_3-q_2)|-|(P_2+P_3)|=|0",
-                  size=48), D_Y)
-        paint(d2, {8: ROSE})
+        d2 = at(join(dq(2), EG(r"=|K_1~q_2|+|K_2~(~q_2~-~q_1~)|-|K_3~(~q_3~-~q_2~)|-|(~P_2~+~P_3~)|=|0")), D_Y)
         with self.say("K one gives K one q two. The second K two gives plus K two times q two minus q one. K three gives K three times q three minus q two, times minus one. And the loads give minus P two plus P three.") as d:
             self.play(Write(d2[0:2]), TransformFromCopy(pi[2], d2[2]), run_time=.17 * d)
             self.wait(.03 * d)
@@ -137,10 +165,8 @@ class S19_P1_Derivs(VScene):
             self.play(TransformFromCopy(pi[12], d2[7:9]), FadeIn(d2[9:]), run_time=.17 * d)
             self.wait(.08 * d)
 
-        ex = at(E(r"K_1 q_2|+|K_2 q_2|-|K_2 q_1|-|K_3 q_3|+|K_3 q_2|=|P_2+P_3", size=48), W_Y)
-        paint(ex, {10: ROSE})
-        r2 = at(E(r"-K_2 q_1|+|(K_1+K_2+K_3)\,q_2|-|K_3 q_3|=|P_2+P_3", size=48), W_Y)
-        paint(r2, {6: ROSE})
+        ex = at(EG(r"K_1~q_2|+|K_2~q_2|-|K_2~q_1|-|K_3~q_3|+|K_3~q_2|=|P_2~+~P_3"), W_Y)
+        r2 = at(EG(r"-~K_2~q_1|+|(~K_1~+~K_2~+~K_3~)~q_2|-|K_3~q_3|=|P_2~+~P_3"), W_Y)
         with self.say("Multiply out and group by unknown: minus K two q one, plus K one plus K two plus K three, times q two, minus K three q three, equals P two plus P three.") as d:
             self.play(*unfocus(), TransformFromCopy(d2[2], ex[0]), TransformFromCopy(d2[3:5], ex[1:5]),
                       TransformFromCopy(d2[5:7], ex[5:9]), TransformFromCopy(d2[7:], ex[9:]), run_time=.25 * d)
@@ -156,8 +182,8 @@ class S19_P1_Derivs(VScene):
 
         # ---------- q3 ----------
         t2 = tray_target(r2, 5, 1)
-        d3 = at(E(r"\frac{\partial \Pi}{\partial q_3}|=|K_3(q_3-q_2)|-|P_4|=|0", size=48), D_Y)
-        r3 = at(E(r"-K_3 q_2|+|K_3 q_3|=|P_4", size=48), W_Y)
+        d3 = at(join(dq(3), EG(r"=|K_3~(~q_3~-~q_2~)|-|P_4|=|0")), D_Y)
+        r3 = at(EG(r"-~K_3~q_2|+|K_3~q_3|=|P_4"), W_Y)
         with self.say("Last, q three. Only K three and P four contain it: K three times q three minus q two, minus P four, equals zero. So minus K three q two, plus K three q three, equals P four.") as d:
             self.play(FadeOut(g2), FadeOut(d2), Transform(r2, t2), *focus([8, 14]), run_time=.15 * d)
             self.play(Write(d3[0:2]), TransformFromCopy(pi[8], d3[2]), run_time=.15 * d)

@@ -55,7 +55,7 @@ class S31_Discretize(VScene):
         load = VGroup(tip, tip_l)
         floads = VGroup(*[dist_load(XS[i] + 0.35, XS[i + 1] - 0.75, YB, n=3, d=RIGHT, color=ROSE)
                           for i in range(3)])
-        f_l = M("f", size=40, color=ROSE).move_to(p((XS[0] + XS[1]) / 2, YB - 0.7))
+        f_l = M("f", size=40, color=ROSE).move_to(p(XS[0] + 0.45, YB + H / 2 + 0.45))
 
         el_t = T("element", size=40, color=INK).move_to(p((XS[1] + XS[2]) / 2, YB + 2.3))
         el_a = Arrow(el_t.get_bottom(), tags[1].get_top(), buff=0.12, color=INK2,
@@ -94,7 +94,7 @@ class S31_Discretize(VScene):
         u_l = M("u(x)", size=44, color=SKY).next_to(pts[3], RIGHT, buff=0.25)
         exact = dashed(ParametricFunction(lambda t: p(XS[0] + t * (XS[3] - XS[0]), y0 + UMAX * g(t) / g(1.0)),
                                           t_range=[0, 1], color=MUTED, stroke_width=3))
-        exact.set_stroke(opacity=.6)
+        exact.set_stroke(width=4, opacity=.8)
         plot = VGroup(base, exact, sticks, dots, broken, u_l)
         self.beat("Between the nodes, we assume the displacement is a straight line. So once we know the four "
                   "node values, we know u everywhere.",

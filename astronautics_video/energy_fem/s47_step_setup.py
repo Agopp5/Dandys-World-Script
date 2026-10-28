@@ -14,7 +14,7 @@ assert np.allclose(_q, [0.2, 0.1])
 assert np.isclose(P_LOAD + 28000 * (0 - _q[0]) + (-K_SP * _q[1]), 0)
 
 
-def stepped_bar(x0=-6.0, x3=6.0, y=1.7, h1=1.2, h2=0.5, f1=0.37, f2=0.37):
+def stepped_bar(x0=-6.0, x3=6.0, y=2.0, h1=1.4, h2=0.6, f1=0.37, f2=0.37):
     """The S47-S53 figure. Left wall face at x0, right wall face at x3, bar axis at height y.
     Element 1 (thick, h1) runs x0..x1, element 2 (thin, h2) x1..x2, the LILAC spring x2..x3.
     Returns VGroup(wl, e1, e2, sp, wr); extras (not in the group) as attributes:
@@ -36,13 +36,13 @@ def stepped_bar(x0=-6.0, x3=6.0, y=1.7, h1=1.2, h2=0.5, f1=0.37, f2=0.37):
     g.add(g.wl, g.e1, g.e2, g.sp, g.wr)
     ya, yb = y - h1 / 2 - 0.42, y - h1 / 2 - 1.0          # rows below the bar
     g.nodes = VGroup(*[node(p(i), r=0.11).set_z_index(3) for i in range(4)])
-    inset = [0.3, 0, 0, -0.3]                              # keep 0 and 3 clear of the wall faces
+    inset = [0.4, 0, 0, -0.4]                              # keep 0 and 3 clear of the wall faces
     g.nums = VGroup(*[T(str(i), size=42, weight=BOLD).move_to([xs[i] + inset[i], ya, 0]) for i in range(4)])
     g.elabs = VGroup(T("element 1", size=36, color=INK2).move_to([(x0 + x1) / 2, ya, 0]),
                      T("element 2", size=36, color=INK2).move_to([(x1 + x2) / 2, ya, 0]))
-    g.klab = M("K", size=44, color=LILAC).move_to([(x2 + x3) / 2, y + 0.75, 0])
-    g.load = force(np.array([x1, y + (h1 + h2) / 4, 0]), d=RIGHT, length=1.3)
-    g.plab = E(r"P|=|7000\ \text{N}", size=40).next_to(g.load, RIGHT, buff=0.15)
+    g.klab = M("K", size=60, color=LILAC).move_to([(x2 + x3) / 2, y + 0.8, 0])
+    g.load = force(np.array([x1, y + (h1 + h2) / 4, 0]), d=RIGHT, length=0.9)
+    g.plab = E(r"P|=|7000\ \text{N}", size=54).next_to(g.load, RIGHT, buff=0.1)
     yd = y + h1 / 2 + 0.35
     def dim(a, b):
         ln = Line([a + 0.06, yd, 0], [b - 0.06, yd, 0], color=MUTED, stroke_width=3)
@@ -53,18 +53,9 @@ def stepped_bar(x0=-6.0, x3=6.0, y=1.7, h1=1.2, h2=0.5, f1=0.37, f2=0.37):
     def qa(i, tex):
         a = Arrow(np.array([xs[i], yb, 0]), np.array([xs[i] + 0.85, yb, 0]), buff=0, color=SKY,
                   stroke_width=6, max_tip_length_to_length_ratio=0.3)
-        return VGroup(a, M(tex, size=42, color=SKY).next_to(a, RIGHT, buff=0.12))
+        return VGroup(a, M(tex, size=60, color=SKY).next_to(a, RIGHT, buff=0.12))
     g.qs = VGroup(qa(1, "q_1"), qa(2, "q_2"))
     return g
-
-
-def _card_rows(rows):
-    """Stack equation rows with their '=' signs aligned."""
-    col = VGroup(*rows).arrange(DOWN, buff=0.32, aligned_edge=LEFT)
-    xe = max(r[1].get_center()[0] for r in rows)
-    for r in rows:
-        r.shift((xe - r[1].get_center()[0]) * RIGHT)
-    return col
 
 
 class S47_Step_Setup(VScene):
@@ -79,10 +70,9 @@ class S47_Step_Setup(VScene):
                   .15, Create(g.wl), [FadeIn(g.e1), FadeIn(g.elabs[0])], [FadeIn(g.e2), FadeIn(g.elabs[1])])
 
         # beat 2: spring, right wall, the load, the question
-        q_lines = VGroup(T("How does the load split", size=40),
-                         T("between the two walls?", size=40)).arrange(DOWN, buff=0.18)
+        q_lines = T("How does the load split between the two walls?", size=40)
         qc = panel(q_lines, color=ROSE)
-        qc.move_to([3.0, -1.95, 0])
+        qc.move_to([0, -0.95, 0])
         self.beat("Then a spring connects the end of the thin piece to a second wall on the right. And a load of "
                   "seven thousand newtons pushes right, at the step between the two pieces. The question: how "
                   "does that load divide between the two walls?",
@@ -90,14 +80,18 @@ class S47_Step_Setup(VScene):
                   .15, FadeIn(qc, shift=.2 * UP))
 
         # beat 3: data card part 1
-        rows = [E(r"E|=|70{,}000\ \text{N/mm}^2", size=42),
-                E(r"A_1|=|200\ \text{mm}^2", size=42),
-                E(r"A_2|=|100\ \text{mm}^2", size=42),
-                E(r"l|=|500\ \text{mm (each)}", size=42),
-                E(r"K|=|14{,}000\ \text{N/mm}", size=42)]
-        col = _card_rows(rows)
+        rows = [E(r"E|=|70{,}000\ \text{N/mm}^2", size=50),
+                E(r"A_1|=|200\ \text{mm}^2", size=50),
+                E(r"A_2|=|100\ \text{mm}^2", size=50),
+                E(r"l|=|500\ \text{mm (each)}", size=50),
+                E(r"K|=|14{,}000\ \text{N/mm}", size=50)]
+        r1 = VGroup(*rows[:3]).arrange(RIGHT, buff=0.9)
+        rows[3].next_to(rows[0], DOWN, buff=0.4, aligned_edge=LEFT)
+        rows[4].next_to(rows[3], RIGHT, buff=0.9).align_to(rows[1], LEFT).match_y(rows[3])
+        col = VGroup(r1, rows[3], rows[4])
         card = panel(col)
-        card.to_edge(LEFT, buff=0.35).to_edge(DOWN, buff=0.3)
+        fit(card, 13.4, 2.2)
+        card.move_to([0, -2.95, 0])
         self.beat("The material first. Aluminum: E is seventy thousand newtons per square millimeter. The thick "
                   "piece has an area of two hundred square millimeters, the thin one one hundred.",
                   [FadeIn(card[0]), FadeIn(rows[0])], .1,
@@ -111,13 +105,12 @@ class S47_Step_Setup(VScene):
                   [FadeIn(rows[4]), FadeIn(g.klab), Indicate(g.sp, color=LILAC)], .2)
 
         # beat 5: nodes, q1 q2, goals
-        goal_rows = VGroup(
-            VGroup(T("displacements", size=36), M(r"q_1,\ q_2", size=42, color=SKY)).arrange(RIGHT, buff=0.22),
-            VGroup(T("stresses", size=36), M(r"\sigma_1,\ \sigma_2", size=42, color=ACCENT)).arrange(RIGHT, buff=0.22),
-            VGroup(T("wall reactions", size=36), M(r"R_0,\ R_3", size=42, color=ROSE)).arrange(RIGHT, buff=0.22),
-        ).arrange(DOWN, buff=0.28, aligned_edge=LEFT)
-        goals = panel(VGroup(T("We want:", size=34, color=MUTED), goal_rows).arrange(DOWN, buff=0.25,
-                                                                                   aligned_edge=LEFT))
+        def goal(word, tex, color):
+            return VGroup(T(word, size=36), M(tex, size=58, color=color)).arrange(RIGHT, buff=0.2)
+        goal_rows = VGroup(goal("displacements", r"q_1,\ q_2", SKY), goal("stresses", r"\sigma_1,\ \sigma_2", ACCENT),
+                           goal("wall reactions", r"R_0,\ R_3", ROSE)).arrange(RIGHT, buff=0.7)
+        goals = panel(goal_rows)
+        fit(goals, 13.6, 1.2)
         goals.move_to(qc)
         self.beat("Number the nodes: zero at the left wall, one at the step, two at the end of the thin piece, "
                   "three at the right wall. We want the displacements, the stresses, and the wall reactions.",
