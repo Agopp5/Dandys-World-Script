@@ -130,7 +130,7 @@ class S21_P1_Solve(VScene):
         with self.say("That makes sense physically. It's the force balance of the bar together with the outer "
                       "point: the two springs on the bar's left side, K one and the second K two, hold P two, P "
                       "three and P four together.") as d:
-            self.play(FadeOut(VGroup(ra, rb, rule, s_a, s_b, g_rc)),
+            self.play(FadeOut(VGroup(ra, rb, rule, s_a, s_b, g_rc, sep)),
                       rc.animate.shift(np.array([x_eq, Y2, 0]) - rc[6].get_center()),
                       r3b.animate.set_opacity(.35), chips[2].animate.set_opacity(.35), run_time=.14 * d)
             self.play(FadeIn(sketch, lag_ratio=.05), run_time=.2 * d)
@@ -146,7 +146,7 @@ class S21_P1_Solve(VScene):
         qa = frac_q1()
         at_eq(qa, 1, XW, S1)
         self.beat("From the first equation, q one equals P one plus K two q two, all over two K two.",
-                  [FadeOut(VGroup(sketch, fb, gk)), Circumscribe(VGroup(r1, chips[0]), color=GOLD)],
+                  [FadeOut(VGroup(sketch, fb, gk)), FadeIn(sep), Circumscribe(VGroup(r1, chips[0]), color=GOLD)],
                   [TransformFromCopy(r1[2], qa[0]), Write(qa[1:])], .3, w=(.3, .4))
 
         # ---- beat 5: substitute into the new second equation ----
