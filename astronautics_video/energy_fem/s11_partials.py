@@ -118,7 +118,7 @@ class S11_Partials(VScene):
         # beat 5: collect, compare with Newton row 1
         G = E(r"(|k_1|+|k_2|)|q_1|-|k_2|q_2|=|F_1", size=44)
         G.move_to([0, ROW_C, 0]).set_x(X.get_left()[0] + G.width / 2)
-        SC = N1.height / E(r"(|k_1|+|k_2|)|\\,|q_1|-|k_2|q_2|=|F_1", size=44).height      # land at the panel's size
+        SC = .85 * 48 / 44                       # land at the panel's size (48 scaled by .85)
         G_end = G.copy().scale(SC).next_to(card, DOWN, buff=.3).align_to(N1, LEFT)
         with self.say("Group the q one terms and move F one across: k one plus k two, times q one, minus k two q "
                       "two, equals F one. Exactly Newton's first equation.") as d:

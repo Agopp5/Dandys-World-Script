@@ -66,18 +66,21 @@ class S42_BC(VScene):
         sums = VGroup(*[M(r"\to\ 0", size=48).move_to([qv.get_center()[0] + 0.25, r.get_y(), 0]) for r in rows])
 
         # ---- the bowl with a flat valley: Pi depends only on (q_a - q_b), so no single lowest point
-        zmax = 0.32 * 2.4 ** 2
-        g = param_grid(lambda u, v: (u, v, 0.32 * (u - v) ** 2), (-1.2, 1.2), (-1.2, 1.2), nu=120, nv=120)
-        Z = 0.32 * (g.U - g.V) ** 2
-        bowl = SurfaceImage(g, vals=Z / zmax, width=4.6, elev=28, azim=-20, cmap="heat", vmax=1,
-                            marks=[(np.abs(g.U - g.V) < 0.05, GOLD)])
-        fit(bowl, 5.0, 3.2)
-        bowl.move_to([-0.3, -2.05, 0])
-        bowl.add_updater(lambda m, dt: None)   # keep the image out of the static-frame cache
-        pil = E(r"\Pi", size=52).next_to(bowl, LEFT, buff=0.1).shift(0.6 * UP)
-        tt = ValueTracker(-1.0)
-        ball = Dot(color=GOLD, radius=0.11).set_z_index(3)
-        ball.add_updater(lambda m: m.move_to(bowl.at([tt.get_value(), tt.get_value(), 0])))
+        def proj(s, w):                          # oblique view of Pi = (w)^2 over (s along the valley, w across)
+            return np.array([1.1 * (s + 0.5 * w), 1.1 * (0.9 * w ** 2 + 0.45 * w), 0.0])
+        ss, ws = np.linspace(-1.6, 1.6, 9), np.linspace(-1.3, 1.3, 7)
+        cross = VGroup(*[ParametricFunction(lambda w, s=s: proj(s, w), t_range=[-1.3, 1.3], color=GOLD,
+                                            stroke_width=3, stroke_opacity=0.55) for s in ss])
+        along = VGroup(*[Line(proj(-1.6, w), proj(1.6, w), color=GOLD, stroke_width=2, stroke_opacity=0.4)
+                         for w in ws if abs(w) > 1e-9])
+        floor = Line(proj(-1.6, 0), proj(1.6, 0), color=GOLD, stroke_width=8)
+        bowl = VGroup(cross, along, floor)
+        off = np.array([-0.3, -2.15, 0]) - bowl.get_center()
+        bowl.shift(off)
+        pil = E(r"\Pi", size=52).next_to(bowl, LEFT, buff=0.25).shift(0.5 * UP)
+        tt = ValueTracker(-1.2)
+        ball = Dot(color=INK, radius=0.13).set_z_index(3)
+        ball.add_updater(lambda m: m.move_to(proj(tt.get_value(), 0) + off + 0.12 * UP))
         note = VGroup(T("no support:", 32, MUTED), T("no single answer", 32, MUTED)).arrange(DOWN, buff=0.2)
         note.move_to([4.75, -2.0, 0])
         ghost = VGroup(*[DashedVMobject(b.copy().set_fill(opacity=0).set_stroke(MUTED, 2), num_dashes=24)
@@ -91,13 +94,13 @@ class S42_BC(VScene):
             self.play(LaggedStart(*[AnimationGroup(Indicate(r, color=GOLD, scale_factor=1.08), FadeIn(s))
                                     for r, s in zip(rows, sums)], lag_ratio=0.6), run_time=0.22 * d)
             self.wait(0.08 * d)
-            self.play(FadeIn(bowl), FadeIn(pil), run_time=0.08 * d)
-            self.add(ball)
-            self.play(FadeIn(ball), tt.animate.set_value(1.0), run_time=0.1 * d)
-            self.play(tt.animate.set_value(-0.4), Circumscribe(K, color=BAD), run_time=0.1 * d)
+            self.play(Create(bowl), FadeIn(pil), run_time=0.08 * d)
+            self.play(FadeIn(ball), Indicate(floor, color=GOLD), run_time=0.04 * d)
+            self.play(tt.animate.set_value(1.2), run_time=0.08 * d)
+            self.play(tt.animate.set_value(-0.3), Circumscribe(K, color=BAD), run_time=0.1 * d)
             self.play(FadeIn(ghost), col.animate.shift(0.9 * DOWN), run_time=0.15 * d)
             self.play(FadeIn(note), run_time=0.07 * d)
-            self.wait(0.08 * d)
+            self.wait(0.06 * d)
 
         ball.clear_updaters()
         ground = wall([xc, yb, 0], side=LEFT, h=1.7).rotate(PI / 2, about_point=[xc, yb, 0])
