@@ -88,11 +88,12 @@ class S58_P2_Reaction(VScene):
                       "removed to solve the system is the one that gives the reaction back. Here, R equals fifty "
                       "pounds.", style="slower and deliberate, stressing the key words") as d:
             self.play(FadeOut(VGroup(rowg, zeros)), VGroup(l1, l2).animate.shift(1.9 * UP), run_time=.15 * d)
-            box = SurroundingRectangle(l1, color=ACCENT, buff=0.15).shift(1.9 * UP)
+            box = SurroundingRectangle(l1, color=ACCENT, buff=0.15)
             self.play(Create(box), run_time=.12 * d)
             self.wait(.2 * d)
             self.play(FadeOut(box), Write(res), run_time=.15 * d)
             self.play(self.spotlight(res), run_time=.1 * d)
+            self.snap("spotlight on")
             self.wait(max(2.1, .27 * d))   # hold the spotlight at least 2 s
 
         # beat 4: the wall pushes right; global check

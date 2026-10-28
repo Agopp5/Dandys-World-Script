@@ -31,7 +31,7 @@ assert np.isclose(F2 / 1000 + 0, 0.05)               # 1000 (q2 - 0) = 50
 
 # ---- the homework bar, drawn as in S54 ----
 X0, X1, X2 = -6.0, -0.8, 4.4          # wall / node 1 (x = 20 in) / tip (x = 40 in)
-YB, HB = 2.0, 0.6
+YB, HB = 2.3, 0.6
 assert np.isclose(X0 + (X2 - X0) * 20 / 40, X1)
 EX = 0.6                              # exaggerated tip motion on screen (true: 0.05 in)
 
@@ -54,17 +54,14 @@ class S57_P2_Solve(VScene):
 
     def construct(self):
         # figure
-        wl = wall(np.array([X0, YB, 0]), side=LEFT, h=1.6)
-        br = bar(X0, X2, y=YB, h=HB)
-        fl = dist_load(X0 + 0.3, X2 - 0.6, YB, n=15, d=LEFT, color=ROSE)
-        n0, n1, n2 = (node(np.array([x, YB, 0])).set_z_index(3) for x in (X0, X1, X2))
-        b0, b1, b2 = (badge(i).move_to(np.array([x, YB - HB / 2 - 0.42, 0])) for i, x in enumerate((X0, X1, X2)))
-        p1 = force(np.array([X1, YB + HB / 2 + 0.32, 0]), d=RIGHT, length=1.1)
-        p1l = M(r"P_1 = 50\text{ lb}", size=36, color=ROSE).next_to(p1, RIGHT, buff=.15)
-        p2 = force(np.array([X2, YB, 0]), d=RIGHT, length=1.0)
-        p2l = M(r"P_2 = 100\text{ lb}", size=36, color=ROSE).next_to(p2, UP, buff=.25)
-        fll = M(r"f = 5\text{ lb/in}", size=36, color=ROSE).move_to(np.array([-3.4, YB + HB / 2 + 0.36, 0]))
-        fig = VGroup(wl, br, fl, n0, n1, n2, b0, b1, b2, p1, p1l, p2, p2l, fll)
+        hb = hw2_bar(y=YB, x0=X0, x1=X2, h=HB)
+        fig = hb
+        br, fl = hb.bar, hb.farr
+        n0, n1, n2 = hb.nodes
+        b0, b1, b2 = hb.rings
+        p1, p2 = hb.P1, hb.P2
+        for n in hb.nodes:
+            n.set_z_index(3)
 
         # full 3 by 3 system (from part a)
         Km = mat([["1", "-1", "0"], ["-1", "2", "-1"], ["0", "-1", "1"]])
@@ -130,12 +127,12 @@ class S57_P2_Solve(VScene):
         s1, s2 = strike(Kre[1]), strike(Kre[3])
         nk = M(r"-1+1=0", size=36, color=LILAC).next_to(Krm, DOWN, buff=.18).align_to(Kre[1], RIGHT)
         nf = M(r"-50+50=0", size=36, color=ROSE).next_to(Frv, DOWN, buff=.18)
-        gb = glow(eq_b, GOLD)
+        gb = glow(eq_b, SKY)
         eq_b.set_z_index(5)
 
         with self.say("Add the two equations. The q two terms cancel: one thousand q one equals zero. "
                       "So q one is zero.") as d:
-            self.play(Indicate(r0, color=GOLD), Indicate(r1, color=GOLD), run_time=.18 * d)
+            self.play(Indicate(r0, color=INK2), Indicate(r1, color=INK2), run_time=.18 * d)
             self.play(Create(s1), Create(s2), FadeIn(nk), Indicate(qre[1], color=SKY), run_time=.2 * d)
             self.play(FadeIn(nf), run_time=.08 * d)
             self.play(Write(eq_a), run_time=.2 * d)
@@ -143,37 +140,34 @@ class S57_P2_Solve(VScene):
             self.play(FadeIn(gb), Flash(n1, color=SKY), run_time=.1 * d)
             self.wait(.12 * d)
 
-        abox = answer_box(eq_d)
-        tag = chip("part b", ACCENT).next_to(abox, RIGHT, buff=.3)
+        abox = SurroundingRectangle(eq_d, color=SKY, buff=.18, corner_radius=.08)
+        tag = chip("part b", ACCENT).scale(1.7).next_to(abox, RIGHT, buff=.3)
         # deformed shape: node 1 stays, the right half stretches (exaggerated)
         ghost = DashedLine(np.array([X2, YB - .45, 0]), np.array([X2, YB + .45, 0]), color=MUTED)
-        br2 = bar(X0, X2 + EX, y=YB, h=HB)
+        br2 = hw2_bar(y=YB, x0=X0, x1=X2 + EX, h=HB).bar
         sc = (X2 + EX - X1) / (X2 - X1)
         fmoves = [a.animate.shift(RIGHT * ((a.get_center()[0] - X1) * (sc - 1)))
                   for a in fl if a.get_center()[0] > X1]
-        dq = Arrow(np.array([X2, 0.65, 0]), np.array([X2 + EX, 0.65, 0]), buff=0, color=SKY,
-                   stroke_width=5, max_tip_length_to_length_ratio=.35)
-        dql = M(r"q_2", size=36, color=SKY).next_to(dq, RIGHT, buff=.12)
-        exn = T("stretch exaggerated", size=30, color=MUTED).move_to(np.array([1.8, YB - HB / 2 - 0.42, 0]))
+        exn = T("stretch exaggerated", size=30, color=MUTED).move_to(np.array([-3.6, YB + 0.62, 0]))
 
         with self.say("Then the second equation: one thousand times q two minus zero equals fifty. "
                       "So q two is zero point zero five inches.") as d:
             self.play(FadeOut(VGroup(s1, s2, nk, nf)), eq_a.animate.set_opacity(.45), run_time=.1 * d)
-            self.play(Indicate(r1, color=GOLD), Indicate(qre, color=SKY), run_time=.14 * d)
+            self.play(Indicate(r1, color=INK2), Indicate(qre, color=SKY), run_time=.14 * d)
             self.play(Write(eq_c), run_time=.24 * d)
             self.wait(.06 * d)
             self.play(Write(eq_d), Create(abox), FadeIn(tag), run_time=.2 * d)
             self.add(ghost)
             self.play(Transform(br, br2), *fmoves,
-                      VGroup(n2, b2, p2, p2l).animate.shift(RIGHT * EX),
-                      GrowArrow(dq), FadeIn(dql), FadeIn(exn), FadeIn(ghost), run_time=.2 * d)
+                      VGroup(n2, b2, p2).animate.shift(RIGHT * EX), hb.flab.animate.shift(RIGHT * EX / 2),
+                      FadeIn(exn), FadeIn(ghost), run_time=.2 * d)
             self.wait(.06 * d)
 
-        qm = M("?", size=96, color=GOLD).move_to(np.array([X1, YB + HB / 2 + 1.0, 0]))
+        qm = M("?", size=72, color=INK2).move_to(np.array([X1, YB + 1.3, 0]))
         with self.say("Wait. Point one doesn't move at all, even though a load pushes right on it? That's "
                       "surprising. Hold that thought; we'll explain it in a moment.") as d:
-            self.play(Indicate(VGroup(p1, p1l), color=ROSE), Flash(n1, color=SKY), run_time=.2 * d)
-            self.play(FadeIn(qm, scale=1.6), Indicate(eq_b, color=GOLD), run_time=.2 * d)
+            self.play(Indicate(p1, color=ROSE), Flash(n1, color=SKY), run_time=.2 * d)
+            self.play(FadeIn(qm, scale=1.6), Indicate(eq_b, color=SKY), run_time=.2 * d)
             self.play(Wiggle(qm), run_time=.2 * d)
             self.wait(.4 * d)
         self.wipe()
