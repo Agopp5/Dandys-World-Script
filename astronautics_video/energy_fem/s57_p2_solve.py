@@ -71,7 +71,7 @@ class S57_P2_Solve(VScene):
         qv = vec(["q_0", "q_1", "q_2"], SKY)
         Fv = vec(["R-50", "-50", "50"], ROSE)
         full = VGroup(M("1000", size=48), Km, qv, M("=", size=48), Fv).arrange(RIGHT, buff=.2)
-        full.move_to(np.array([0, -1.3, 0]))
+        full.move_to(np.array([0, -0.7, 0]))
         Ke, qe, Fe = Km.get_entries(), qv.get_entries(), Fv.get_entries()
 
         # reduced 2 by 2 system
@@ -79,7 +79,7 @@ class S57_P2_Solve(VScene):
         qrv = vec(["q_1", "q_2"], SKY)
         Frv = vec(["-50", "50"], ROSE)
         red = VGroup(M("1000", size=48), Krm, qrv, M("=", size=48), Frv).arrange(RIGHT, buff=.2)
-        red.move_to(np.array([-3.55, -0.45, 0]))
+        red.move_to(np.array([0, -0.45, 0])).align_to(np.array([-6.75, 0, 0]), LEFT)
         Kre, qre, Fre = Krm.get_entries(), qrv.get_entries(), Frv.get_entries()
 
         # the constrained equation, set aside
@@ -87,6 +87,9 @@ class S57_P2_Solve(VScene):
         aeq = E(r"1000\,(|q_0|-|q_1|)|=|R|-50", size=44, cmap={"q_0": SKY})
         acard = panel(VGroup(alab, aeq).arrange(DOWN, buff=.2))
         acard.move_to(np.array([-3.55, -2.95, 0]))
+        aeq.set_z_index(4)
+        VGroup(Ke[0], Ke[1], Ke[2], qe[0], Fe[0]).set_z_index(4)
+        alab.set_z_index(4)
 
         colx = Line(Km.get_columns()[0].get_top() + UP * .15, Km.get_columns()[0].get_bottom() + DOWN * .15,
                     color=BAD, stroke_width=7)
@@ -97,8 +100,9 @@ class S57_P2_Solve(VScene):
             self.play(FadeIn(fig), FadeIn(full), run_time=.14 * d)
             self.play(Indicate(qe[0], color=SKY, scale_factor=1.3), Flash(n0, color=SKY),
                       Indicate(b0, color=SKY), run_time=.14 * d)
-            self.play(Create(colx), Create(sq0), run_time=.16 * d)
-            self.play(FadeIn(acard[0]), FadeIn(alab),
+            self.play(Create(colx), Create(sq0), FadeIn(acard[0]), run_time=.16 * d)
+            self.bring_to_front(Ke[0], Ke[1], Ke[2], qe[0], Fe[0], colx, sq0)
+            self.play(FadeIn(alab),
                       ReplacementTransform(VGroup(Ke[0], Ke[1], Ke[2], qe[0], Fe[0]), aeq),
                       FadeOut(colx), FadeOut(sq0), run_time=.2 * d)
             self.play(FadeOut(VGroup(Ke[3], Ke[6])),
@@ -114,12 +118,12 @@ class S57_P2_Solve(VScene):
             self.wait(.1 * d)
 
         # right column of results
-        XR = 0.75
+        XR = 1.5
         eq_a = E(r"1000\,|q_1|=|0", size=48)
         eq_b = E(r"q_1|=|0", size=52)
         eq_c = E(r"1000\,(|q_2|-|0|)|=|50", size=48, cmap={"0": SKY})
         eq_d = E(r"q_2|=|0.05\text{ in}", size=52)
-        for m, y in ((eq_a, 0.3), (eq_b, -0.6), (eq_c, -1.65), (eq_d, -2.7)):
+        for m, y in ((eq_a, 0.15), (eq_b, -0.75), (eq_c, -1.75), (eq_d, -2.75)):
             m.move_to(np.array([0, y, 0])).align_to(np.array([XR, 0, 0]), LEFT)
         r0 = VGroup(Kre[0], Kre[1], Fre[0])
         r1 = VGroup(Kre[2], Kre[3], Fre[1])
@@ -127,6 +131,7 @@ class S57_P2_Solve(VScene):
         nk = M(r"-1+1=0", size=36, color=LILAC).next_to(Krm, DOWN, buff=.18).align_to(Kre[1], RIGHT)
         nf = M(r"-50+50=0", size=36, color=ROSE).next_to(Frv, DOWN, buff=.18)
         gb = glow(eq_b, GOLD)
+        eq_b.set_z_index(5)
 
         with self.say("Add the two equations. The q two terms cancel: one thousand q one equals zero. "
                       "So q one is zero.") as d:
@@ -134,8 +139,9 @@ class S57_P2_Solve(VScene):
             self.play(Create(s1), Create(s2), FadeIn(nk), Indicate(qre[1], color=SKY), run_time=.2 * d)
             self.play(FadeIn(nf), run_time=.08 * d)
             self.play(Write(eq_a), run_time=.2 * d)
-            self.play(Write(eq_b), FadeIn(gb), Flash(n1, color=SKY), run_time=.2 * d)
-            self.wait(.14 * d)
+            self.play(Write(eq_b), run_time=.12 * d)
+            self.play(FadeIn(gb), Flash(n1, color=SKY), run_time=.1 * d)
+            self.wait(.12 * d)
 
         abox = answer_box(eq_d)
         tag = chip("part b", ACCENT).next_to(abox, RIGHT, buff=.3)
@@ -147,8 +153,8 @@ class S57_P2_Solve(VScene):
                   for a in fl if a.get_center()[0] > X1]
         dq = Arrow(np.array([X2, 0.65, 0]), np.array([X2 + EX, 0.65, 0]), buff=0, color=SKY,
                    stroke_width=5, max_tip_length_to_length_ratio=.35)
-        dql = M(r"q_2", size=36, color=SKY).next_to(dq, DOWN, buff=.1)
-        exn = T("displacements exaggerated", size=30, color=MUTED).move_to(np.array([-3.4, YB - HB / 2 - 0.42, 0]))
+        dql = M(r"q_2", size=36, color=SKY).next_to(dq, RIGHT, buff=.12)
+        exn = T("stretch exaggerated", size=30, color=MUTED).move_to(np.array([1.8, YB - HB / 2 - 0.42, 0]))
 
         with self.say("Then the second equation: one thousand times q two minus zero equals fifty. "
                       "So q two is zero point zero five inches.") as d:

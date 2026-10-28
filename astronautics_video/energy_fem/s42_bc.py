@@ -36,7 +36,7 @@ class S42_BC(VScene):
         xc, yb, H = -5.7, -2.7, 5.0
         l = H / 3
         ys = [yb + i * l for i in range(4)]
-        bars = VGroup(*[bar(ys[i], ys[i + 1], h=0.5).rotate(PI / 2, about_point=ORIGIN).shift(xc * RIGHT)
+        bars = VGroup(*[bar(ys[i], ys[i + 1], h=0.56).rotate(PI / 2, about_point=ORIGIN).shift(xc * RIGHT)
                         for i in range(3)])
         nodes = VGroup(*[node([xc, y, 0], r=0.1) for y in ys])
         qlab = VGroup(*[E("q_%d" % (i + 1), size=40).next_to(nodes[i], RIGHT, buff=0.42) for i in range(4)])
@@ -66,14 +66,15 @@ class S42_BC(VScene):
         sums = VGroup(*[M(r"\to\ 0", size=48).move_to([qv.get_center()[0] + 0.25, r.get_y(), 0]) for r in rows])
 
         # ---- the bowl with a flat valley: Pi depends only on (q_a - q_b), so no single lowest point
-        def proj(s, w):                          # oblique view of Pi = (w)^2 over (s along the valley, w across)
-            return np.array([1.1 * (s + 0.5 * w), 1.1 * (0.9 * w ** 2 + 0.45 * w), 0.0])
-        ss, ws = np.linspace(-1.6, 1.6, 9), np.linspace(-1.3, 1.3, 7)
-        cross = VGroup(*[ParametricFunction(lambda w, s=s: proj(s, w), t_range=[-1.3, 1.3], color=GOLD,
-                                            stroke_width=3, stroke_opacity=0.55) for s in ss])
-        along = VGroup(*[Line(proj(-1.6, w), proj(1.6, w), color=GOLD, stroke_width=2, stroke_opacity=0.4)
-                         for w in ws if abs(w) > 1e-9])
-        floor = Line(proj(-1.6, 0), proj(1.6, 0), color=GOLD, stroke_width=8)
+        def proj(s, w):                          # cabinet view of Pi = w^2: w across the valley, s along it (receding)
+            return 1.2 * np.array([w + 0.6 * s, 0.8 * w ** 2 + 0.35 * s, 0.0])
+        ss, ws = np.linspace(-1.6, 1.6, 9), [-1.2, -0.8, -0.4, 0.4, 0.8, 1.2]
+        cross = VGroup(*[ParametricFunction(lambda w, s=s: proj(s, w), t_range=[-1.2, 1.2], color=GOLD,
+                                            stroke_width=5 if abs(s) > 1.5 else 3,
+                                            stroke_opacity=1 if abs(s) > 1.5 else 0.5) for s in ss])
+        along = VGroup(*[Line(proj(-1.6, w), proj(1.6, w), color=GOLD, stroke_width=4 if abs(w) > 1.1 else 2,
+                              stroke_opacity=0.9 if abs(w) > 1.1 else 0.4) for w in ws])
+        floor = Line(proj(-1.6, 0), proj(1.6, 0), color=GOLD, stroke_width=9)
         bowl = VGroup(cross, along, floor)
         off = np.array([-0.3, -2.15, 0]) - bowl.get_center()
         bowl.shift(off)
@@ -137,11 +138,15 @@ class S42_BC(VScene):
             self.play(self.spotlight(*rows[0], *cols[0][1:], q1, f1, R1), run_time=0.07 * d)
             self.play(Indicate(q1, color=SKY), Circumscribe(cols[0], color=BAD), run_time=0.12 * d)
             self.play(Create(colstrike), Create(qstrike), run_time=0.1 * d)
-            self.play(VGroup(cols[0], q1).animate.set_opacity(0.35), run_time=0.05 * d)
+            self.snap("column 1 crossed out")
             self.play(Circumscribe(R1, color=ROSE), Circumscribe(rows[0], color=GOLD), run_time=0.12 * d)
-            self.play(moving.animate.shift((r1eq.get_y() - rows[0].get_y()) * UP), run_time=0.12 * d)
+            # the spotlight's halos stay where they were drawn: lift it before row 1 moves, then light the new home
+            self.play(self.unspot(), run_time=0.05 * d)
+            self.play(moving.animate.shift((r1eq.get_y() - rows[0].get_y()) * UP),
+                      VGroup(cols[0], q1).animate.set_opacity(0.5), run_time=0.12 * d)
             self.play(FadeTransform(moving, r1eq), FadeIn(aside, shift=0.2 * UP), run_time=0.1 * d)
-            self.wait(0.1 * d)
+            self.play(self.spotlight(r1eq, aside), run_time=0.06 * d)
+            self.wait(0.14 * d)
         self.wait(2)
 
         # ---- beat 4: the reduced 3 by 3 system
@@ -154,7 +159,7 @@ class S42_BC(VScene):
         red.move_to([1.35, 1.45, 0])
         box = SurroundingRectangle(red, color=INK2, buff=0.3, corner_radius=0.12, stroke_width=4)
         Kin = VGroup(K.get_brackets(), *[rows[i][j] for i in range(1, 4) for j in range(1, 4)])
-        gone = VGroup(cols[0], rows[0][0], colstrike, qstrike, q1, pl, rv.get_brackets(), *rv.get_entries()[1:])
+        gone = VGroup(cols[0], colstrike, qstrike, q1, pl, rv.get_brackets(), *rv.get_entries()[1:])
         hb = red[1].height
         rowbox = Rectangle(width=red[1].width + 0.1, height=hb / 3.1, color=LILAC, stroke_width=5)
         rowbox.move_to(red[1].get_center() + hb / 3 * UP)

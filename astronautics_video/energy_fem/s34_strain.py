@@ -93,18 +93,20 @@ class S34_Strain(VScene):
         DX1, STR = .35, .55   # drawn: rigid shift u1, extra length u2 - u1
         bar_d = bar(X0, X1, y=YD)
         bar_s = bar(X0 + DX1, X1 + DX1 + STR, y=YD)
-        ghost = DashedVMobject(Rectangle(width=X1 - X0, height=.42, color=MUTED, stroke_width=2)
-                               .move_to([(X0 + X1) / 2, YD, 0]), num_dashes=40)
-        ext = VGroup(Line([X1 + DX1, YD + .42, 0], [X1 + DX1 + STR, YD + .42, 0], color=SKY, stroke_width=4),
-                     Line([X1 + DX1, YD + .3, 0], [X1 + DX1, YD + .54, 0], color=SKY, stroke_width=3),
-                     Line([X1 + DX1 + STR, YD + .3, 0], [X1 + DX1 + STR, YD + .54, 0], color=SKY, stroke_width=3))
+        # ghost: the original length l, drawn ON TOP of the bar (brighter, taller, z above) and carried along
+        # with the rigid shift, so the stretched bar visibly pokes out past it by u2 - u1
+        ghost = DashedVMobject(Rectangle(width=X1 - X0, height=.66, color=INK, stroke_width=3.5)
+                               .move_to([(X0 + X1) / 2, YD, 0]), num_dashes=48).set_z_index(5)
+        ext = VGroup(Line([X1 + DX1, YD + .52, 0], [X1 + DX1 + STR, YD + .52, 0], color=SKY, stroke_width=4),
+                     Line([X1 + DX1, YD + .4, 0], [X1 + DX1, YD + .64, 0], color=SKY, stroke_width=3),
+                     Line([X1 + DX1 + STR, YD + .4, 0], [X1 + DX1 + STR, YD + .64, 0], color=SKY, stroke_width=3))
         ext_l = tex(r"u_2 - u_1", 40, SKY).next_to(ext, UP, buff=.1)
         with self.say("So the strain is u two minus u one, over l. The element's change in length, over its length. "
                       "Exactly what strain means.") as d:
             self.play(Write(eq3), run_time=.2 * d)
             self.play(Create(box), FadeIn(glow(eq3, ACCENT)), run_time=.12 * d)
             self.play(FadeIn(ghost), FadeIn(bar_d), run_time=.1 * d)
-            self.play(bar_d.animate.shift(RIGHT * DX1), run_time=.12 * d)
+            self.play(bar_d.animate.shift(RIGHT * DX1), ghost.animate.shift(RIGHT * DX1), run_time=.12 * d)
             self.play(Transform(bar_d, bar_s), run_time=.16 * d)
             self.play(Create(ext), FadeIn(ext_l), Indicate(eq3[2], color=SKY), run_time=.14 * d)
             self.wait(.16 * d)

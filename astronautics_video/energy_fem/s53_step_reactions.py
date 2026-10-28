@@ -35,22 +35,11 @@ class S53_Step_Reactions(VScene):
     def construct(self):
         # ---- the stepped bar (top half of the frame) ----
         y0 = 1.25
-        x0, x1, x2, x3 = -5.6, -2.0, 1.4, 5.6
-        wl = wall(np.array([x0, y0, 0]), side=LEFT, h=1.9)
-        wr = wall(np.array([x3, y0, 0]), side=RIGHT, h=1.9)
-        e1 = bar(x0, x1, y=y0, h=0.9)          # thick element 1 (twice as tall)
-        e2 = bar(x1, x2, y=y0, h=0.45)         # thin element 2
-        sp = spring(np.array([x2, y0, 0]), np.array([x3, y0, 0]), coils=6, amp=0.26, color=LILAC)
-        xs = [x0, x1, x2, x3]
-        dots = VGroup(*[node(np.array([x, y0, 0]), r=0.09) for x in xs])
-        nlab = VGroup()
-        for i, x in enumerate(xs):
-            dx = 0.3 if i == 0 else (-0.3 if i == 3 else 0)
-            nlab.add(M(str(i), size=40, color=INK).move_to([x + dx, y0 - 0.85, 0]))
-        p_arr = force(np.array([x1 + 0.06, y0 + 0.62, 0]), d=RIGHT, length=1.5)
-        p_lab = M(r"P = 7000\text{ N}", size=40, color=ROSE).next_to(p_arr, UP, buff=0.12)
-        p_lab.align_to(p_arr, LEFT)
-        fig = VGroup(wl, wr, e1, e2, sp, dots, nlab, p_arr, p_lab)
+        x0, x3 = -5.6, 5.6
+        sb = stepped_bar(x0=x0, x3=x3, y=y0, h1=0.9, h2=0.45)   # shared S47-S53 figure
+        wl, e1, e2, sp, wr = sb
+        sb.plab.next_to(sb.load, UP, buff=0.1).align_to(sb.load, LEFT)   # lift P label clear of the spring
+        fig = VGroup(sb, sb.nodes, sb.nums, sb.load, sb.plab)
 
         # ---- the set-aside rows (bottom half: two columns) ----
         lab0 = T("row 0, set aside", 30, color=MUTED).move_to([-3.55, -0.3, 0])
@@ -74,9 +63,15 @@ class S53_Step_Reactions(VScene):
                   Write(r0), Indicate(r0[4], color=ROSE))
         self.beat("Row three: minus fourteen thousand times q two, equals R three. Minus fourteen hundred newtons.",
                   [FadeIn(lab3), FadeIn(row3, shift=UP * 0.3)], Write(r3), Indicate(r3[4], color=ROSE))
+        # spotlight by dimming only: a scrim under the rows, rows kept sharp above it, crisp ACCENT outlines
+        scrim = Rectangle(width=16, height=10, stroke_width=0, fill_color=BG, fill_opacity=0.78).set_z_index(5)
+        for g in (lab0, row0, r0, lab3, row3, r3):
+            g.set_z_index(10)
+        boxes = VGroup(*[SurroundingRectangle(VGroup(l, a, b), color=ACCENT, buff=0.18, stroke_width=4)
+                         .set_z_index(10) for l, a, b in ((lab0, row0, r0), (lab3, row3, r3))])
         self.beat("Pay close attention to this move, because problem two of your homework tests exactly this. "
                   "The rows we set aside to solve the system are the ones that give back the wall forces.",
-                  self.spotlight(VGroup(lab0, row0, r0), VGroup(lab3, row3, r3)), .45,
+                  FadeIn(scrim), [Create(b) for b in boxes], .45,
                   style="slower and deliberate, stressing the key words")
 
         # ---- reaction arrows at the walls ----
@@ -91,25 +86,26 @@ class S53_Step_Reactions(VScene):
         m3 = M("R_3", size=40, color=ROSE).next_to(a3, LEFT, buff=0.15)
         self.beat("Both reactions point left. At the left wall, the thick piece is in tension, so the wall pulls it "
                   "back. At the right wall, the spring is squeezed, so the wall pushes it back.",
-                  self.unspot(), [GrowArrow(a0), FadeIn(m0)], Indicate(e1, color=ACCENT), FadeIn(t0), .1,
+                  [FadeOut(scrim), FadeOut(boxes)], [GrowArrow(a0), FadeIn(m0)], Indicate(e1, color=ACCENT), FadeIn(t0), .1,
                   [GrowArrow(a3), FadeIn(m3)], Indicate(sp, color=LILAC), FadeIn(t3))
 
         # ---- the sum check, the 4 : 1 split, the question card ----
         old = VGroup(lab0, row0, r0, lab3, row3, r3)
-        tot = E(r"7000|-|5600|-|1400|=|0", size=52).move_to([-3.9, -0.75, 0])
+        tot = E(r"7000|-|5600|-|1400|=|0", size=52).move_to([-3.9, -0.5, 0])
         tick = M(r"\checkmark", size=60, color=GOOD).next_to(tot, RIGHT, buff=0.35)
         bx = -3.6
         seg_l = Rectangle(width=4.8, height=0.6, stroke_color=INK2, stroke_width=3,
-                          fill_color=ROSE, fill_opacity=0.55).move_to([bx - 0.6, -2.35, 0])
+                          fill_color=ROSE, fill_opacity=0.55).move_to([bx - 0.6, -2.65, 0])
         seg_r = Rectangle(width=1.2, height=0.6, stroke_color=INK2, stroke_width=3,
                           fill_color=ROSE, fill_opacity=0.25).next_to(seg_l, RIGHT, buff=0)
-        f_l = M(r"\frac45", size=40, color=INK).next_to(seg_l, UP, buff=0.12)
-        f_r = M(r"\frac15", size=40, color=INK).next_to(seg_r, UP, buff=0.12)
+        f_l = M(r"\frac45", size=56, color=INK).next_to(seg_l, UP, buff=0.12)
+        f_r = M(r"\frac15", size=56, color=INK).next_to(seg_r, UP, buff=0.12)
         n_l = M(r"5600\text{ N}", size=40, color=ROSE).next_to(seg_l, DOWN, buff=0.15)
         n_r = M(r"1400\text{ N}", size=40, color=ROSE).next_to(seg_r, DOWN, buff=0.15)
         split = VGroup(seg_l, seg_r, f_l, f_r, n_l, n_r)
         # S47's question card (a panel); the top-right corner holds the figure here, so it sits bottom-right
-        card = panel(VGroup(T("how does the", 36), T("load split?", 36)).arrange(DOWN, buff=0.15))
+        card = panel(VGroup(T("How does the load split", 36), T("between the two walls?", 36))
+                     .arrange(DOWN, buff=0.15), color=ROSE)
         card.move_to([3.9, -1.75, 0])
         ctick = M(r"\checkmark", size=72, color=GOOD).next_to(card, DOWN, buff=0.2)
         self.beat("Together, fifty six hundred plus fourteen hundred is seven thousand. They balance the load "

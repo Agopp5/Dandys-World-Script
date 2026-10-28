@@ -32,23 +32,13 @@ class S50_Step_BC(VScene):
 
     def construct(self):
         # ---- the stepped bar (top half) ----
-        y = 2.25
-        x0, x1, x2, x3 = -6.0, -1.5, 2.5, 6.0
-        w0 = wall(np.array([x0, y, 0]), side=LEFT, h=2.0)
-        w3 = wall(np.array([x3, y, 0]), side=RIGHT, h=2.0)
-        e1 = bar(x0, x1, y=y, h=1.0)
-        e2 = bar(x1, x2, y=y, h=0.5)
-        sp = spring(np.array([x2, y, 0]), np.array([x3, y, 0]), coils=6, amp=0.3, color=LILAC)
-        dots = VGroup(*[node(np.array([x, y, 0]), r=0.1) for x in (x0, x1, x2, x3)])
-        nlabs = VGroup(*[M(str(i), size=40, color=INK).move_to([x, y - 0.8, 0])
-                         for i, x in enumerate((x0 + 0.35, x1, x2, x3 - 0.35))])
-        arr = Arrow(np.array([x1, y + 0.42, 0]), np.array([x1 + 1.6, y + 0.42, 0]), buff=0,
-                    color=ROSE, stroke_width=8, max_tip_length_to_length_ratio=0.25)
-        plab = M(r"P = 7000\ \mathrm{N}", size=40, color=ROSE).next_to(arr, UP, buff=0.12)
-        plab.align_to(arr, LEFT)
-        fig = VGroup(w0, w3, e1, e2, sp, dots, nlabs, arr, plab)
-        f0 = E(r"q_0|=|0", size=40, cmap={"q_0": SKY}).move_to([x0 + 0.75, y - 1.55, 0])
-        f3 = E(r"q_3|=|0", size=40).move_to([x3 - 0.75, y - 1.55, 0])
+        sb = stepped_bar(y=2.4)                      # shared S47-S53 figure
+        w0, w3 = sb[0], sb[4]
+        fig = VGroup(sb, sb.nodes, sb.nums, sb.load, sb.plab, sb.klab)
+        f0 = E(r"q_0|=|0", size=40, cmap={"q_0": SKY})
+        f0.next_to(sb.nums, DOWN, buff=0.25).set_x(sb.x[0] + 0.8)
+        f3 = E(r"q_3|=|0", size=40)
+        f3.next_to(sb.nums, DOWN, buff=0.25).set_x(sb.x[3] - 0.8)
 
         # ---- the 4 by 4 system (bottom half) ----
         cfg = {"font_size": 46}
@@ -112,7 +102,7 @@ class S50_Step_BC(VScene):
                 r"|\begin{Bmatrix}q_1\\q_2\end{Bmatrix}|=|\begin{Bmatrix}7000\\0\end{Bmatrix}", size=60)
         paint(red, {0: LILAC, 1: SKY, 3: ROSE})
         red.move_to([0, -1.7, 0])
-        rbox = SurroundingRectangle(red, color=GOLD, buff=0.3, stroke_width=5)
+        rbox = SurroundingRectangle(red, color=ACCENT, buff=0.3, stroke_width=5)
         keep = VGroup(rows[1][1], rows[1][2], rows[2][1], rows[2][2])
         gone = VGroup(rows[1][0], rows[1][3], rows[2][0], rows[2][3], sl[1, 0], sl[1, 3], sl[2, 0], sl[2, 3], s0, s3, qe[0], qe[3])
 

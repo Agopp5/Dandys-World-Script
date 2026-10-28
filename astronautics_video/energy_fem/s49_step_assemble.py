@@ -20,10 +20,9 @@ assert np.allclose(Kg.sum(axis=1), 0)          # rows sum to zero before support
 P = 7000
 
 # layout
-YB = 2.45                                      # bar axis
-XN = [-6.0, -2.0, 2.0, 6.0]                    # nodes 0..3
+YB = 2.15                                      # bar axis
 CW, CH = 1.9, 0.85                             # grid cell
-GX, GTOP = -2.4, 0.1                           # grid centre x, grid top y
+GX, GTOP = -2.4, 0.0                           # grid centre x, grid top y
 VX, VW = 2.6, 1.4                              # load-vector column
 
 
@@ -32,7 +31,7 @@ def cell_c(i, j):
 
 
 def fmt(v):
-    s = "{:,}".format(int(abs(v))).replace(",", r"\,")
+    s = "{:,}".format(int(abs(v))).replace(",", "{,}")
     return ("-" if v < 0 else "") + s
 
 
@@ -57,7 +56,7 @@ def sum_card(a, b, c, spot):
     line.next_to(rows, DOWN, buff=.2).align_to(rows, RIGHT)
     bot = M(c, size=48, color=LILAC).next_to(line, DOWN, buff=.25).align_to(rows, RIGHT)
     tag.next_to(VGroup(rows, line), UP, buff=.35)
-    g = VGroup(tag, top, mid, line, bot).move_to([5.5, -1.6, 0])
+    g = VGroup(tag, top, mid, line, bot).move_to([5.5, -1.15, 0])
     return g
 
 
@@ -65,22 +64,15 @@ class S49_Step_Assemble(VScene):
     budget = 128
 
     def construct(self):
-        # ---- the stepped bar (top half) ----
-        wl = wall([XN[0], YB, 0], side=LEFT, h=1.8)
-        wr = wall([XN[3], YB, 0], side=RIGHT, h=1.8)
-        e1 = bar(XN[0], XN[1], y=YB, h=0.9)
-        e2 = bar(XN[1], XN[2], y=YB, h=0.45)
-        sp = spring([XN[2], YB, 0], [XN[3], YB, 0], coils=6, amp=0.22, color=LILAC)
-        dots = VGroup(*[node([x, YB, 0]) for x in XN]).set_z_index(3)
-        nlab = VGroup(*[M(str(n), size=40, color=INK).move_to([x + (.3, 0, 0, -.3)[n], YB - 1.15, 0])
-                        for n, x in enumerate(XN)])
-        klab = VGroup(M(r"k_1 = 28\,000", size=36, color=LILAC).move_to([(XN[0] + XN[1]) / 2, YB - 1.15, 0]),
-                      M(r"k_2 = 14\,000", size=36, color=LILAC).move_to([(XN[1] + XN[2]) / 2, YB - 1.15, 0]),
-                      M(r"k_3 = 14\,000", size=36, color=LILAC).move_to([(XN[2] + XN[3]) / 2, YB - 1.15, 0]))
-        arr = Arrow([XN[1] + .02, YB + .33, 0], [XN[1] + 1.5, YB + .33, 0], buff=0, color=ROSE,
-                    stroke_width=8, max_tip_length_to_length_ratio=.3)
-        plab = M(r"P = 7000\ \mathrm{N}", size=40, color=ROSE).next_to(arr, UP, buff=.15)
-        fig = VGroup(wl, wr, e1, e2, sp, dots, nlab, klab, arr, plab)
+        # ---- the stepped bar (top half): the shared S47-S53 figure ----
+        sb = stepped_bar(y=YB)
+        wl, e1, e2, sp, wr = sb
+        nlab, arr, plab = sb.nums, sb.load, sb.plab
+        XN = sb.x
+        klab = VGroup(M(r"k_1 = 28{,}000", size=36, color=LILAC).move_to([(XN[0] + XN[1]) / 2, nlab.get_y(), 0]),
+                      M(r"k_2 = 14{,}000", size=36, color=LILAC).move_to([(XN[1] + XN[2]) / 2, nlab.get_y(), 0]),
+                      sb.klab)
+        fig = VGroup(sb, sb.nodes, nlab, klab, arr, plab)
 
         # ---- the empty 4x4 grid ----
         cells = VGroup(*[Rectangle(width=CW, height=CH).set_stroke(HAIR, 2).move_to(cell_c(i, j))
@@ -90,7 +82,7 @@ class S49_Step_Assemble(VScene):
         clab = VGroup(*[M(str(j), size=40, color=INK2).move_to([cell_c(0, j)[0], GTOP + .38, 0])
                         for j in range(4)])
         kname = M("K", size=48, color=LILAC).move_to([rlab[0].get_x(), clab[0].get_y(), 0])
-        note = T("stiffness in N/mm", size=30, color=MUTED).move_to([GX, GTOP - 4 * CH - .45, 0])
+        note = T("stiffness in N/mm", size=30, color=MUTED).move_to([5.4, GTOP - 4 * CH + .2, 0])
         grid = VGroup(cells, rlab, clab, kname)
 
         self.beat("Four nodes, so a four by four matrix. Each of the three springs drops in its two by two block.",
@@ -115,12 +107,12 @@ class S49_Step_Assemble(VScene):
 
         # ---- element 2: nodes 1, 2 ----
         b2 = block(1, 2, 14000, skip=[(1, 1)])
-        sc1 = sum_card(r"28\,000", r"14\,000", r"42\,000", r"\text{spot } (1,1)")
+        sc1 = sum_card(r"28{,}000", r"14{,}000", r"42{,}000", r"\text{spot } (1,1)")
         new11 = entry(1, 1, 42000)
         self.beat("Element two, nodes one and two: fourteen thousand. At spot one-one it adds to the twenty "
                   "eight thousand already there, making forty two thousand.",
                   [e1.animate.set_stroke(INK2, 2), e2.animate.set_stroke(LILAC, 6), FadeIn(b2, shift=DOWN * .8)],
-                  [Indicate(old11, color=GOLD), FadeIn(sc1[0]), TransformFromCopy(old11, sc1[1]),
+                  [Indicate(old11, color=LILAC), FadeIn(sc1[0]), TransformFromCopy(old11, sc1[1]),
                    FadeIn(sc1[2], shift=LEFT * .5)],
                   [Create(sc1[3]), Write(sc1[4])],
                   [FadeOut(old11), TransformFromCopy(sc1[4], new11)],
@@ -129,7 +121,7 @@ class S49_Step_Assemble(VScene):
 
         # ---- the spring: nodes 2, 3 ----
         b3 = block(2, 3, 14000, skip=[(2, 2)])
-        sc2 = sum_card(r"14\,000", r"14\,000", r"28\,000", r"\text{spot } (2,2)")
+        sc2 = sum_card(r"14{,}000", r"14{,}000", r"28{,}000", r"\text{spot } (2,2)")
         new22 = entry(2, 2, 28000)
         zeros = VGroup(*[entry(i, j, 0, color=MUTED) for i, j in
                          [(0, 2), (0, 3), (1, 3), (2, 0), (3, 0), (3, 1)]])
@@ -137,7 +129,7 @@ class S49_Step_Assemble(VScene):
                   "fourteen, twenty eight thousand.",
                   [FadeOut(sc1), e2.animate.set_stroke(INK2, 2), Indicate(sp, color=LILAC),
                    FadeIn(b3, shift=DOWN * .8)],
-                  [Indicate(old22, color=GOLD), FadeIn(sc2[0]), TransformFromCopy(old22, sc2[1]),
+                  [Indicate(old22, color=LILAC), FadeIn(sc2[0]), TransformFromCopy(old22, sc2[1]),
                    FadeIn(sc2[2], shift=LEFT * .5)],
                   [Create(sc2[3]), Write(sc2[4])],
                   [FadeOut(old22), TransformFromCopy(sc2[4], new22)],

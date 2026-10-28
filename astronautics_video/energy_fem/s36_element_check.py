@@ -31,7 +31,7 @@ class S36_Element_Check(VScene):
         self.beat("Your turn: pause and do checkpoint five point one in your guide.",
                   Write(formula), LaggedStart(*[FadeIn(v, shift=.2 * RIGHT) for v in vals], lag_ratio=.3),
                   w=(.4, .6))
-        self.checkpoint("5.1", "Element stiffness: E = 70,000 N/mm2, A = 100 mm2, l = 250 mm")
+        self.checkpoint("5.1", "Element stiffness: E = 70,000 N/mm², A = 100 mm², l = 250 mm")
 
         # ---- beat 2: the arithmetic
         calc = E(r"\frac{70{,}000 \times 100}{250}|=|28{,}000\text{ N/mm}", size=68)
@@ -44,7 +44,7 @@ class S36_Element_Check(VScene):
 
         # ---- beat 3: rigid translation, rows sum to zero
         # left half: one element, drawn large
-        y0 = 1.0
+        y0 = 1.4
         x1, x2 = -6.6, -2.0
         shift = 1.3
         el = bar(x1, x2, y=y0, h=.9)
@@ -61,7 +61,7 @@ class S36_Element_Check(VScene):
                    max_tip_length_to_length_ratio=.3)
         d1 = M("d", size=52, color=SKY).next_to(a1, DOWN, buff=.15)
         d2 = M("d", size=52, color=SKY).next_to(a2, DOWN, buff=.15)
-        stretch = E(r"u_2 - u_1|=|d - d|=|0", size=56).move_to([(x1 + x2 + shift) / 2, -2.2, 0])
+        stretch = E(r"u_2 - u_1|=|d - d|=|0", size=56).move_to([(x1 + x2 + shift) / 2, -2.6, 0])
         stretch[4].set_color(GOOD)
 
         # right half: the element matrix with its row sums
@@ -72,14 +72,13 @@ class S36_Element_Check(VScene):
         pre = E(r"k|=|\frac{E A}{l}", size=60)
         kmat = VGroup(pre, mat).arrange(RIGHT, buff=.25)
         rows = mat.get_rows()
-        sums = VGroup(M(r"1 - 1 = 0", size=50, color=GOOD), M(r"-1 + 1 = 0", size=50, color=GOOD))
-        for s_, r_ in zip(sums, rows):
-            s_.next_to(mat, RIGHT, buff=.4).set_y(r_.get_y())
-        sums[0].align_to(sums[1], RIGHT)
-        right = VGroup(kmat, sums)
-        fit(right, 6.6, 4.0)
-        right.move_to([3.5, y0, 0])
-        fz = E(r"F|=|0,\quad|U_e|=|0", size=56).move_to([3.5, -2.2, 0])
+        fit(kmat, 6.6, 2.8)
+        kmat.move_to([3.5, y0, 0])
+        sums = VGroup(M(r"\text{row 1: }\ 1 - 1 = 0", size=46, color=GOOD),
+                      M(r"\text{row 2: }\ {-1} + 1 = 0", size=46, color=GOOD))
+        sums.arrange(DOWN, buff=.3, aligned_edge=RIGHT).next_to(kmat, DOWN, buff=.45)
+        sums.set_x(mat.get_x())
+        fz = E(r"F|=|0,\quad|U_e|=|0", size=56).move_to([3.5, -2.6, 0])
         fz[0].set_color(ROSE)
 
         old = VGroup(formula, vals, calc, g_ans)
@@ -91,7 +90,7 @@ class S36_Element_Check(VScene):
             self.play(Write(stretch), run_time=.12 * d)
             self.wait(.04 * d)
             for r_, s_ in zip(rows, sums):
-                self.play(Indicate(r_, color=GOLD), FadeIn(s_, shift=.2 * RIGHT), run_time=.13 * d)
+                self.play(Indicate(r_, color=LILAC), FadeIn(s_, shift=.2 * RIGHT), run_time=.13 * d)
             self.play(FadeIn(fz), run_time=.1 * d)
             self.play(Circumscribe(fz, color=GOOD), run_time=.12 * d)
             self.wait(.04 * d)

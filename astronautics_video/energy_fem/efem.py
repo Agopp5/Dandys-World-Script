@@ -18,6 +18,36 @@ import mtk.core as core
 
 core.FONT = "Lato"   # Avenir Next is not installed here
 
+# Series-wide readability overrides (the viewer struggles with small, soft text; reviews found halos smearing math):
+# 1. stress/strain hue: the default ACCENT (#95a2ff) is nearly LILAC (stiffness), so use a clearly different cyan.
+ACCENT = "#36d6e7"
+
+
+# 2. glow(m) draws a crisp rounded box behind m (faint fill, thin outline) instead of a blurred halo over glyphs.
+def glow(m, color=None, buff=0.14):
+    color = color or m.get_color()
+    z = max(x.z_index for x in m.get_family())
+    box = SurroundingRectangle(m, color=color, buff=buff, corner_radius=0.12, stroke_width=3,
+                               fill_color=color, fill_opacity=0.10)
+    m.set_z_index(z + 1)
+    return box.set_z_index(z)
+
+
+# 3. spotlight dims everything else but adds no halo, so the spotlit math stays sharp (unspot/wipe work as before).
+def _spotlight(self, *mobs, color=None):
+    c, w, _ = self._frame()
+    scrim = FullScreenRectangle(stroke_width=0, fill_color=BG, fill_opacity=0.78)
+    scrim.scale(w / config.frame_width).move_to(c).set_z_index(89)
+    z = [(x, x.z_index) for m in mobs for x in m.get_family()]
+    for m in mobs:
+        m.set_z_index(90)
+    self._spot = (scrim, [], z)
+    self.lint_on = False
+    return FadeIn(scrim)
+
+
+VScene.spotlight = _spotlight
+
 
 def wall(p, side=LEFT, h=1.6, color=INK2):
     """Hatched support with its face through p. side LEFT/RIGHT: a vertical wall (hatching on that side);
@@ -207,6 +237,51 @@ def hw_figure(at=ORIGIN, k2b_label=False):
                 spring(pts["J"] + s(dq1), pts["b_bot"] + s(dq2), coils=5),
                 spring(pts["b_mid"] + s(dq2), pts["O"] + s(dq3), coils=5))
     g.rebuild_springs = rebuild_springs
+    return g
+
+
+# ---- Episode 7 stepped bar (from S47), shared by S47-S53 ----
+def stepped_bar(x0=-6.0, x3=6.0, y=2.0, h1=1.4, h2=0.6, f1=0.37, f2=0.37):
+    """The S47-S53 figure. Left wall face at x0, right wall face at x3, bar axis at height y.
+    Element 1 (thick, h1) runs x0..x1, element 2 (thin, h2) x1..x2, the LILAC spring x2..x3.
+    Returns VGroup(wl, e1, e2, sp, wr); extras (not in the group) as attributes:
+    .x node x's, .p(i) node point, .nodes dots, .nums node numbers (row below the bar), .elabs
+    "element 1/2" (a third row, below the q arrows, at element mids), .klab K over the spring, .load + .plab the ROSE P at the
+    step, .dims two "500 mm" dimension lines above the bars, .qs SKY q_1, q_2 arrows (row under .nums)."""
+    L = x3 - x0
+    x1 = x0 + f1 * L
+    x2 = x1 + f2 * L
+    xs = [x0, x1, x2, x3]
+    p = lambda i: np.array([xs[i], y, 0.0])
+    g = VGroup()
+    g.x, g.p = xs, p
+    g.wl = wall(p(0), side=LEFT, h=h1 + 1.2)
+    g.e1 = bar(x0, x1, y=y, h=h1)
+    g.e2 = bar(x1, x2, y=y, h=h2)
+    g.sp = spring(p(2), p(3), coils=6, amp=0.3)
+    g.wr = wall(p(3), side=RIGHT, h=h1 + 1.2)
+    g.add(g.wl, g.e1, g.e2, g.sp, g.wr)
+    ya, yb, yc = y - h1 / 2 - 0.42, y - h1 / 2 - 1.0, y - h1 / 2 - 1.6   # rows below the bar
+    g.nodes = VGroup(*[node(p(i), r=0.11).set_z_index(3) for i in range(4)])
+    inset = [0.4, 0, 0, -0.4]                              # keep 0 and 3 clear of the wall faces
+    g.nums = VGroup(*[T(str(i), size=42, weight=BOLD).move_to([xs[i] + inset[i], ya, 0]) for i in range(4)])
+    g.elabs = VGroup(T("element 1", size=36, color=INK2).move_to([(x0 + x1) / 2, yc, 0]),
+                     T("element 2", size=36, color=INK2).move_to([(x1 + x2) / 2, yc, 0]))
+    g.klab = M("K", size=60, color=LILAC).move_to([(x2 + x3) / 2, y + 0.8, 0])
+    g.load = force(np.array([x1, y + (h1 + h2) / 4, 0]), d=RIGHT, length=0.9)
+    g.plab = E(r"P|=|7000\ \text{N}", size=54).next_to(g.load, UP, buff=0.12).align_to(g.load, LEFT)
+    yd = y + h1 / 2 + 0.35
+    def dim(a, b):
+        ln = Line([a + 0.06, yd, 0], [b - 0.06, yd, 0], color=MUTED, stroke_width=3)
+        ticks = VGroup(*[Line([xx, yd - 0.14, 0], [xx, yd + 0.14, 0], color=MUTED, stroke_width=3)
+                         for xx in (a + 0.06, b - 0.06)])
+        return VGroup(ln, ticks, T("500 mm", size=36, color=INK2).next_to(ln, UP, buff=0.12))
+    g.dims = VGroup(dim(x0, x1), dim(x1, x2))
+    def qa(i, tex):
+        a = Arrow(np.array([xs[i], yb, 0]), np.array([xs[i] + 0.85, yb, 0]), buff=0, color=SKY,
+                  stroke_width=6, max_tip_length_to_length_ratio=0.3)
+        return VGroup(a, M(tex, size=60, color=SKY).next_to(a, RIGHT, buff=0.12))
+    g.qs = VGroup(qa(1, "q_1"), qa(2, "q_2"))
     return g
 
 

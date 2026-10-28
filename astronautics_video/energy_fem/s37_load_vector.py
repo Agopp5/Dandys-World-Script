@@ -48,13 +48,13 @@ class S37_Load_Vector(VScene):
         fig = VGroup(el, load, n1, n2, f_lab, s0, s1, d1, d2, u1l, u2l, span_l)
 
         # ---- beat 1: the work integral ----
-        eq1 = E(r"W_e|=|\int_0^1|f|\big[|(1-s)|u_1|+|s|u_2|\big]|l\,ds", size=50, cmap=WE)
+        eq1 = E(r"W_e|=|\int_0^1|f|\big[|(1-|s|)|u_1|+|s|u_2|\big]|l\,ds", size=50, cmap=WE)
         eq1.move_to([0, -1.6, 0])
         self.beat("Last piece: the work potential of a spread-out load f on one element. It's the integral of f times u, d x. Put in our u and d x equals l d s.",
                   [FadeIn(el), FadeIn(n1), FadeIn(n2), FadeIn(d1), FadeIn(d2), FadeIn(u1l), FadeIn(u2l),
                    FadeIn(span_l), FadeIn(s0), FadeIn(s1)],
                   [LaggedStart(*[GrowArrow(a) for a in load], lag_ratio=0.1), FadeIn(f_lab)],
-                  Write(eq1), Circumscribe(eq1[4:10], color=SKY), Circumscribe(eq1[10], color=LIME),
+                  Write(eq1), Circumscribe(eq1[4:13], color=SKY), Circumscribe(eq1[13], color=LIME),
                   w=(.12, .15, .3, .2, .2))
 
         # ---- beat 2: split into u1 Q1 + u2 Q2 ----
@@ -64,7 +64,7 @@ class S37_Load_Vector(VScene):
         t2 = E(r"u_2|Q_2", size=52)
         t1.move_to([-2.4, -0.55, 0]); t2.move_to([3.4, -0.55, 0]); pl.move_to([0.5, -0.55, 0])
         lhs.next_to(t1, LEFT, buff=0.3)
-        def1 = E(r"Q_1|=|\int_0^1|f|(1-s)|l\,ds", size=48).move_to([-2.4, -2.25, 0])
+        def1 = E(r"Q_1|=|\int_0^1|f|(1-|s|)|l\,ds", size=48).move_to([-2.4, -2.25, 0])
         def2 = E(r"Q_2|=|\int_0^1|f|s|l\,ds", size=48).move_to([3.4, -2.25, 0])
         br1 = Brace(t1, DOWN, buff=0.15, color=INK2)
         br2 = Brace(t2, DOWN, buff=0.15, color=INK2)
@@ -100,20 +100,20 @@ class S37_Load_Vector(VScene):
 
         # ---- beat 4: f constant = c ----
         fc = M(r"f=c", size=44, color=ROSE).move_to(f_lab)
-        eqQ1 = E(r"Q_1|=|c|\,l\int_0^1(1-s)\,ds|=|\frac{cl}{2}", size=48, cmap=WE)
-        eqQ2 = E(r"Q_2|=|c|\,l\int_0^1 s\,ds|=|\frac{cl}{2}", size=48, cmap=WE)
+        eqQ1 = E(r"Q_1|=|c|\,l\int_0^1(1-|s|)\,ds|=|\frac{cl}{2}", size=48, cmap=WE)
+        eqQ2 = E(r"Q_2|=|c|\,l\int_0^1|s|\,ds|=|\frac{cl}{2}", size=48, cmap=WE)
         eqQ1.move_to([2.0, -0.75, 0])
         eqQ2.move_to([2.0, -2.6, 0])
         eqQ2.align_to(eqQ1, LEFT)
         with self.say("Now take the common case, f constant, equal to c. The integral of one minus s from zero to one is one half, and so is the integral of s. So Q one and Q two are both c l over two.") as d:
-            self.play(ReplacementTransform(f_lab, fc), vcard.animate.scale(0.9).move_to([-4.6, -1.7, 0]),
+            self.play(ReplacementTransform(f_lab, fc), vcard.animate.move_to([-4.6, -1.7, 0]),
                       FadeOut(VGroup(qa1, qa2, q1l, q2l)), run_time=.16 * d)
-            self.play(Write(eqQ1[:4]), run_time=.14 * d)
-            self.play(Circumscribe(eqQ1[3], color=LIME), run_time=.12 * d)
-            self.play(Write(eqQ2[:4]), run_time=.14 * d)
-            self.play(Circumscribe(eqQ2[3], color=LIME), run_time=.12 * d)
-            self.play(Write(eqQ1[4:]), Write(eqQ2[4:]), run_time=.16 * d)
-            self.play(FadeIn(glow(eqQ1[5], ROSE)), FadeIn(glow(eqQ2[5], ROSE)), run_time=.1 * d)
+            self.play(Write(eqQ1[:6]), run_time=.14 * d)
+            self.play(Circumscribe(eqQ1[3:6], color=LIME), run_time=.12 * d)
+            self.play(Write(eqQ2[:6]), run_time=.14 * d)
+            self.play(Circumscribe(eqQ2[3:6], color=LIME), run_time=.12 * d)
+            self.play(Write(eqQ1[6:]), Write(eqQ2[6:]), run_time=.16 * d)
+            self.play(FadeIn(glow(eqQ1[7], ROSE)), FadeIn(glow(eqQ2[7], ROSE)), run_time=.1 * d)
             self.wait(.06 * d)
 
         # ---- beat 5: total c l, half to each node ----
@@ -133,6 +133,6 @@ class S37_Load_Vector(VScene):
                       *[a.animate.scale(0.3).move_to([X2 + 0.8, YB, 0]).set_opacity(0) for a in right_arrows],
                       GrowArrow(big1), GrowArrow(big2), run_time=.3 * d)
             self.play(FadeIn(h1, shift=DOWN * 0.2), FadeIn(h2, shift=DOWN * 0.2),
-                      Circumscribe(eqQ1[5], color=ROSE), Circumscribe(eqQ2[5], color=ROSE), run_time=.2 * d)
+                      Circumscribe(eqQ1[7], color=ROSE), Circumscribe(eqQ2[7], color=ROSE), run_time=.2 * d)
             self.wait(.17 * d)
         self.wipe()

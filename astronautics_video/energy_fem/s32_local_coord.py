@@ -43,14 +43,18 @@ class S32_Local_Coord(VScene):
                         for i in range(3)])
         ucm = {"U_1": MINT, "U_2": MINT, "U_3": MINT}
         e1 = E(r"U|=|\frac12\int_0^L EA\Big(\frac{du}{dx}\Big)^2 dx", size=48)
-        e2 = E(r"U|=|\int_{\mathrm{el}\,1}\!\!\cdots|+|\int_{\mathrm{el}\,2}\!\!\cdots|+|\int_{\mathrm{el}\,3}\!\!\cdots",
-               size=48)
+        e2 = E(r"U|=|\int\!\cdots|+|\int\!\cdots|+|\int\!\cdots", size=52)   # no fit(): stays at 52
         e3 = E(r"U|=|U_1|+|U_2|+|U_3", size=56, cmap=ucm)
-        for e in (e1, e2, e3):
-            fit(e, 6.3, 2)
-        e1.move_to([EQX, 1.9, 0])
-        e2.move_to([EQX, 0.1, 0])
-        e3.move_to([EQX, -1.8, 0])
+        fit(e1, 6.3, 2)
+        fit(e3, 6.3, 2)
+        assert e2.width < 6.6
+        e1.move_to([EQX, 2.0, 0])
+        e2.move_to([EQX, 0.3, 0])
+        e3.move_to([EQX, -2.1, 0])
+        # circled element numbers under each integral (size 36, matching the bar's element tags)
+        e2tags = VGroup(*[VGroup(Circle(radius=.28, color=INK2, stroke_width=3), M(str(k + 1), size=36))
+                          .next_to(e2[2 + 2 * k], DOWN, buff=.15) for k in range(3)])
+        e2 = VGroup(e2, e2tags)
         sep = VGroup(*[DashedLine([xs[i], YB - 0.5, 0], [xs[i], YB + 0.5, 0], color=MUTED) for i in (1, 2)])
         self.beat("Why can we study one element alone? The bar's energy is an integral along the bar, and an "
                   "integral along the bar splits into one integral per element. Work out one element's energy, "

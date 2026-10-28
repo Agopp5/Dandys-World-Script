@@ -111,21 +111,23 @@ class S38_Element_Recap(VScene):
             self.play(FadeOut(eq_u), FadeOut(eq_k), FadeOut(eq_Q), run_time=.05 * d)
             self.play(Write(eq_pi), run_time=.14 * d)
             self.wait(.04 * d)
-            self.play(Indicate(n1, scale_factor=1.8, color=GOLD), Indicate(n2, scale_factor=1.8, color=GOLD),
+            self.play(Indicate(n1, scale_factor=1.8, color=SKY), Indicate(n2, scale_factor=1.8, color=SKY),
                       run_time=.1 * d)
             self.play(TransformFromCopy(eq_pi[4], eq_kq[0]), TransformFromCopy(eq_pi[5], eq_kq[1]),
                       FadeIn(eq_kq[2]), TransformFromCopy(eq_pi[8], eq_kq[3]), run_time=.14 * d)
-            halo = glow(eq_kq, LILAC)
-            self.play(FadeIn(halo), FadeIn(note), run_time=.08 * d)
+            halo = SurroundingRectangle(eq_kq, color=INK2, buff=0.2, stroke_width=2.5)
+            self.play(Create(halo), FadeIn(note), run_time=.08 * d)
             self.wait(.1 * d)
             self.play(Circumscribe(note, color=MUTED), run_time=.15 * d)
             self.wait(.2 * d)
 
         # ---- beat 4: the summary card
-        box = key_box(E(r"u|(|s|)|=|(1-|s|)|u_1|+|s|u_2", size=54),
+        # own card: key_box's built-in label is too small for this viewer (needs >= 32)
+        rows = VGroup(T("ONE ELEMENT", size=36, color=INK, weight=BOLD),
+                      E(r"u|(|s|)|=|(1-|s|)|u_1|+|s|u_2", size=54),
                       E(r"k|=|\frac{EA}{l}|\begin{bmatrix}1&-1\\-1&1\end{bmatrix}", size=54),
-                      E(r"Q_1|=|Q_2|=|\frac{cl}{2}|\quad (f = c)", size=54, cmap=EXTRA),
-                      label="ONE ELEMENT")
+                      E(r"Q_1|=|Q_2|=|\frac{cl}{2}|\quad (f = c)", size=54, cmap=EXTRA)).arrange(DOWN, buff=0.4)
+        box = panel(rows, color=INK2)
         fit(box, 12.5, 7.2)
         box.move_to(ORIGIN + DOWN * 0.1)
         self.beat("Here's everything about one element in one place.",

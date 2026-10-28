@@ -41,8 +41,8 @@ def sx(x_in):
 XN = [sx(0), sx(20), sx(40)]
 assert np.isclose(XN[1], -0.8)
 MID1, MID2 = (XN[0] + XN[1]) / 2, (XN[1] + XN[2]) / 2
-RING_Y = BY - BH / 2 - 0.5
-WORK_Y = RING_Y - 0.68
+RING_Y = BY - BH / 2 - 0.6
+WORK_Y = RING_Y - 0.66
 
 
 def span_rect(a, b, color, opacity, stroke=0):
@@ -68,7 +68,7 @@ class S56_P2_Assemble(VScene):
 
     def construct(self):
         # ---------- figure ----------
-        wall_m = wall((X0, BY, 0), side=LEFT, h=1.6)
+        wall_m = wall((X0, BY, 0), side=LEFT, h=1.0)
         bar_m = bar(X0, X1, y=BY, h=BH)
         fl = dist_load(X0 + 0.5, X1 - 0.05, BY, n=15, d=LEFT, color=ROSE)
         flab = M(r"f = 5\ \text{lb/in}", size=36, color=ROSE).move_to((MID1, BY + BH / 2 + 0.42, 0))
@@ -120,7 +120,7 @@ class S56_P2_Assemble(VScene):
         Flhs.next_to(Fmat, LEFT, buff=0.25)
         Funit.next_to(Fmat, RIGHT, buff=0.25)
         Fgrp = VGroup(Flhs, Fmat, Funit)
-        row = VGroup(Kgrp, Fgrp).arrange(RIGHT, buff=1.0).move_to((0, -2.15, 0))
+        row = VGroup(Kgrp, Fgrp).arrange(RIGHT, buff=1.0).move_to((0, -1.95, 0))
         fit(row, 13.6, 3.2)
         ents = Kmat.get_entries()
 
@@ -212,6 +212,7 @@ class S56_P2_Assemble(VScene):
         with self.say("So F is R minus fifty, minus fifty, and fifty. That's part a.") as d:
             for i in range(3):
                 self.play(Indicate(fents[i], color=INK, scale_factor=1.2), run_time=.15 * d)
+            self.play(FadeOut(VGroup(w0, w1, w2)), run_time=.05 * d)   # the sums now live in F
             self.play(Create(fbox), FadeIn(tag, shift=.2 * DOWN), run_time=.2 * d)
             self.wait(.3 * d)
         self.wipe()

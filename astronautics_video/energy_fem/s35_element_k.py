@@ -131,8 +131,8 @@ class S35_Element_K(VScene):
         B2 = E(r"=|u_1|(|u_1|-|u_2|)|+|u_2|(-|u_1|+|u_2|)", size=EQ_SIZE).move_to(DOWN * 2.3)
         B3 = E(r"=|{u_1}^2|-|2|u_1|u_2|+|{u_2}^2", size=EQ_SIZE, cmap=SQ).move_to(DOWN * 2.3)
         rows = mat5.get_rows()
-        r1 = SurroundingRectangle(rows[0], color=GOLD, buff=0.12, corner_radius=0.08)
-        c1 = SurroundingRectangle(col5.get_entries(), color=GOLD, buff=0.12, corner_radius=0.08)
+        r1 = SurroundingRectangle(rows[0], color=INK2, buff=0.12, corner_radius=0.08)
+        c1 = SurroundingRectangle(col5.get_entries(), color=SKY, buff=0.12, corner_radius=0.08)
         with self.say("Here's a row, times a matrix, times a column, that gives exactly that: the row u one, u two, "
                       "times the matrix one, minus one, minus one, one, times the column u one, u two. "
                       "Multiply it out and the same three terms appear.") as d:
@@ -152,7 +152,7 @@ class S35_Element_K(VScene):
             self.regroup(B2)
             self.play(*morph(B2, B3, [(0, 0)]), run_time=.08 * d)
             self.regroup(B3)
-            self.play(Circumscribe(VGroup(*B3[1:]), color=GOLD), Circumscribe(VGroup(*ex[6:]), color=GOLD),
+            self.play(Circumscribe(VGroup(*B3[1:]), color=INK2), Circumscribe(VGroup(*ex[6:]), color=INK2),
                       run_time=.08 * d)
             self.wait(.02 * d)
 

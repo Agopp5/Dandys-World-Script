@@ -18,7 +18,7 @@ assert ELEM2 == (2, 2 + 1)
 # exact bar under uniform f plus tip load P = f L / 2 (L = 1): u ~ (L x - x^2/2) + (L/2) x = 1.5 x - x^2/2
 def g(t):
     return 1.5 * t - 0.5 * t ** 2
-UMAX = 2.0                              # screen height of the tip value
+UMAX = 1.7                              # screen height of the tip value
 QV = [UMAX * g(t) / g(1.0) for t in (0, 1 / 3, 2 / 3, 1)]
 assert np.allclose(np.array(QV) / UMAX, [0, 4 / 9, 7 / 9, 1])
 
@@ -55,6 +55,7 @@ class S31_Discretize(VScene):
         load = VGroup(tip, tip_l)
         floads = VGroup(*[dist_load(XS[i] + 0.35, XS[i + 1] - 0.75, YB, n=3, d=RIGHT, color=ROSE)
                           for i in range(3)])
+        floads.set_z_index(3)                  # stay above the bar fill after Indicate
         f_l = M("f", size=40, color=ROSE).move_to(p(XS[0] + 0.45, YB + H / 2 + 0.45))
 
         el_t = T("element", size=40, color=INK).move_to(p((XS[1] + XS[2]) / 2, YB + 2.3))
@@ -66,7 +67,7 @@ class S31_Discretize(VScene):
         self.beat("Take the bar fixed to a wall, and chop it into three pieces. Each piece is called an element. "
                   "The points where they join, and the two ends, are called nodes.",
                   [FadeIn(wl), FadeIn(fb), FadeIn(tags)], [FadeIn(load), FadeIn(floads), FadeIn(f_l)], .1,
-                  [FadeIn(el_t), GrowArrow(el_a), Indicate(VGroup(fb.elems[1], tags[1]), color=LILAC)], .1,
+                  [FadeIn(el_t), GrowArrow(el_a), Indicate(tags[1], color=SKY)], .1,
                   [FadeIn(nd_t), LaggedStart(*[GrowArrow(a) for a in nd_a], lag_ratio=.2)],
                   w=(.25, .1, .3, .35))
 
@@ -75,13 +76,16 @@ class S31_Discretize(VScene):
         dof = T("4 degrees of freedom", size=44, color=INK).move_to(p(-0.6, YB - 2.55))
         dof[0].set_color(SKY)
         dof_g = glow(dof, SKY)
+        q1_n = VGroup(M(r"q_1 = 0", size=36, color=MUTED), T("at the wall (applied later)", size=30,
+                     color=MUTED)).arrange(RIGHT, buff=0.18)
+        q1_n.next_to(qs[0], DOWN, buff=0.15).align_to(p(XS[0] - 0.3, 0), LEFT)
         dof_s = T("instead of infinitely many", size=32, color=MUTED).next_to(dof, DOWN, buff=0.2)
         self.beat("The displacements of the nodes, q one, q two, q three, q four, are our unknowns. Just four "
                   "numbers, instead of infinitely many. Each one is called a degree of freedom: a number the "
                   "structure is free to choose.",
                   [FadeOut(nd_t), FadeOut(nd_a)],
                   LaggedStart(*[FadeIn(q, shift=.2 * DOWN) for q in qs], lag_ratio=.5), .1,
-                  [FadeIn(dof), FadeIn(dof_s)], FadeIn(dof_g),
+                  [FadeIn(dof), FadeIn(dof_s), FadeIn(q1_n)], FadeIn(dof_g),
                   w=(.08, .42, .22, .28))
 
         # ---- beat 3: straight lines between node values ----
@@ -121,7 +125,7 @@ class S31_Discretize(VScene):
         self.add(ends)
         with self.say("Neighbors share a node, so the displacement can't jump: the right end of element one "
                       "moves exactly as much as the left end of element two.") as d:
-            self.play(FadeOut(plot), FadeOut(qs), FadeOut(dof), FadeOut(dof_s), FadeOut(dof_g), run_time=.08 * d)
+            self.play(FadeOut(plot), FadeOut(qs), FadeOut(dof), FadeOut(dof_s), FadeOut(dof_g), FadeOut(q1_n), run_time=.08 * d)
             self.play(pieces[1].animate.shift(SH[1] * RIGHT), pieces[2].animate.shift(SH[2] * RIGHT),
                       load.animate.shift(SH[2] * RIGHT), run_time=.2 * d)
             self.play(FadeIn(gaps), FadeIn(same), run_time=.15 * d)
@@ -136,7 +140,7 @@ class S31_Discretize(VScene):
 
         # ---- beat 5: element 2 lifted out; local u1, u2 = global q2, q3 ----
         LIFT = 2.4
-        e2 = VGroup(bar(XS[1], XS[2], y=YB, h=H, color=LILAC), Dot(p(XS[1], YB), radius=0.1, color=INK),
+        e2 = VGroup(bar(XS[1], XS[2], y=YB, h=H, color=INK2), Dot(p(XS[1], YB), radius=0.1, color=INK),
                     Dot(p(XS[2], YB), radius=0.1, color=INK))
         u1 = M("u_1", size=44, color=SKY).move_to(p(XS[1], YB + LIFT + 0.75))
         u2 = M("u_2", size=44, color=SKY).move_to(p(XS[2], YB + LIFT + 0.75))
