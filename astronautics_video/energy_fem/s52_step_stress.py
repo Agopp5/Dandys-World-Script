@@ -49,7 +49,7 @@ class S52_Step_Stress(VScene):
 
         self.beat("Stress in each element is E times its strain: the displacement of its right node minus its left node, over its length. The same formula as the column.",
                   [FadeIn(sb), FadeIn(sb.nodes), FadeIn(sb.nums), FadeIn(sb.elabs), FadeIn(sb.klab),
-                   FadeIn(sb.dims)],
+                   FadeIn(sb.dims[0])],
                   [FadeIn(sb.load, shift=RIGHT * 0.2), FadeIn(sb.plab), FadeIn(qv)],
                   Write(geq),
                   [FadeIn(qtags), Indicate(VGroup(geq[2][1], geq[2][2], geq[2][4], geq[2][5]), color=SKY),
@@ -64,14 +64,14 @@ class S52_Step_Stress(VScene):
         b.shift([a[1].get_center()[0] - b[0].get_center()[0], 0, 0])
         box1 = SurroundingRectangle(b[3], color=ACCENT, buff=0.1, stroke_width=4)
         c1, c2 = (xs[0] + xs[1]) / 2, (xs[1] + xs[2]) / 2
-        yt = 3.2                                # tag row above the bars (dims fade out first)
+        yt = 3.5                                # tag row above the bars (dims fade out first)
         ten = T("tension", size=36, color=ACCENT).move_to([c1, yt, 0])
 
         self.beat("Thick piece: seventy thousand times zero point two minus zero, over five hundred. Twenty eight newtons per square millimeter. That unit is also called a megapascal, M P a. Positive, so tension.",
                   [FadeOut(qtags), geq.animate.move_to([3.6, -2.2, 0]), Write(a), Indicate(qv[1]),
                    Indicate(qv[0]), Indicate(sb.dims[0])], .05,
                   Write(VGroup(b[0], b[1])), [Write(VGroup(b[2], b[3])), Create(box1)],
-                  [el1.animate.set_fill(ACCENT, opacity=0.6), FadeOut(sb.dims), FadeIn(ten)],
+                  [el1.animate.set_fill(ACCENT, opacity=0.6), FadeOut(sb.dims[0]), FadeIn(ten)],
                   .1, w=(.3, .2, .2, .15))
 
         # ---- your turn: element 2 (right half) ----

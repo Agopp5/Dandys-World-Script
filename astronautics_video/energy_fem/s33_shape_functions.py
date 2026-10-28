@@ -121,8 +121,7 @@ class S33_Shape_Functions(VScene):
             self.play(*morph(eqA2, eqA3, [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (12, 8), (6, 11), (10, 10),
                                           (11, 9)]),
                       FadeOut(eqB), FadeOut(eqC2), run_time=.24 * d)
-            g3 = glow(eqA3, LIME)
-            self.play(FadeIn(g3), run_time=.1 * d)
+            self.wait(.1 * d)
             self.play(ind(eqA3[5:9], LIME), run_time=.17 * d)
             self.play(ind(eqA3[10:12], LIME), run_time=.17 * d)
 
@@ -139,7 +138,7 @@ class S33_Shape_Functions(VScene):
         dA1, dB1 = Dot(a1.c2p(0, 1), radius=.1, color=LIME), Dot(a1.c2p(1, 0), radius=.1, color=LIME)
         dA2, dB2 = Dot(a2.c2p(0, 0), radius=.1, color=LIME), Dot(a2.c2p(1, 1), radius=.1, color=LIME)
         vA1 = M("1", size=40, color=INK).next_to(a1.c2p(0, 1), LEFT, buff=.25)
-        vB1 = M("0", size=40, color=INK).next_to(a1.c2p(1, 0), UR, buff=.12)
+        vB1 = M("0", size=40, color=INK).next_to(a1.c2p(1, 0), DOWN, buff=.25)
         vA2 = M("0", size=40, color=INK).next_to(a2.c2p(0, 0), LEFT, buff=.25)
         vB2 = M("1", size=40, color=INK).next_to(a2.c2p(1, 1), RIGHT, buff=.25)
         tN1 = E(r"N_1|=|1-|s", size=48)
@@ -153,7 +152,7 @@ class S33_Shape_Functions(VScene):
                       "that is one at the left node and zero at the right. s is a ramp that is zero at the left "
                       "and one at the right. They're called shape functions, N one and N two.",
                       style="slower and deliberate, stressing the key words") as d:
-            self.play(Create(a1), Create(a2), FadeIn(sl1), FadeIn(sl2), FadeOut(g3), run_time=.14 * d)
+            self.play(Create(a1), Create(a2), FadeIn(sl1), FadeIn(sl2), run_time=.14 * d)
             self.wait(.06 * d)
             self.play(ind(eqA3[5:8], LIME), run_time=.08 * d)
             self.play(Create(r1n), run_time=.1 * d)
@@ -171,25 +170,30 @@ class S33_Shape_Functions(VScene):
         r1 = Line(P(0, U1), P(1, 0), color=LIME, stroke_width=6)
         r2 = Line(P(0, 0), P(1, U2), color=LIME, stroke_width=6)
         total = Line(P(0, U1), P(1, U2), color=SKY, stroke_width=7).set_z_index(2)
-        ss = [.2, .4, .6, .8]
+        ss = [.15, .3, .45, .6]          # sticks leave room at the right for their label
         sticks = VGroup(*[Line(P(x, 0), P(x, N2(x) * U2), color=LIME, stroke_width=4) for x in ss])
         lifts = [P(x, N1(x) * U1)[1] - P(x, 0)[1] for x in ss]
         eqF = E(r"u|=|N_1|u_1|+|N_2|u_2", size=52)
         eqF.move_to([RX, 1.5, 0])
+        lab1 = E(r"N_1|u_1", size=44).move_to(P(.2, 0) + UP * .45)          # in the triangle under the ramp
+        brc = Brace(Line(P(.6, N1(.6) * U1), P(.6, U1 + (U2 - U1) * .6)), direction=RIGHT, buff=.08, color=INK2)
+        lab2 = E(r"N_2|u_2", size=44).next_to(brc, RIGHT, buff=.1)          # the lifted sticks
+        labu = M("u", size=48, color=SKY).move_to(P(.75, U1 + (U2 - U1) * .75) + UP * .45)
         with self.say("In other words, each node gets a ramp that is one at its own node and zero at the other. "
                       "Multiply each ramp by its node's displacement, add, and you get the straight line between "
                       "them.") as d:
             self.play(self.unspot(), run_time=.07 * d)
-            self.play(ind(VGroup(dA1, vA1), LIME), ind(VGroup(n1, nm1), LIME), run_time=.17 * d)
-            self.play(ind(VGroup(dB2, vB2), LIME), ind(VGroup(n2, nm2), LIME), run_time=.17 * d)
+            self.play(ind(VGroup(dA1, vA1), LIME), ind(VGroup(n1, nm1), LIME), run_time=.18 * d)
+            self.play(ind(VGroup(dB2, vB2), LIME), ind(VGroup(n2, nm2), LIME), run_time=.18 * d)
             self.play(line.animate.set_stroke(opacity=.18), pin1.animate.set_opacity(.3),
                       pin2.animate.set_opacity(.3), run_time=.07 * d)
             self.play(TransformFromCopy(r1n, r1), TransformFromCopy(r2n, r2), ind(d1, SKY), ind(d2, SKY),
-                      run_time=.18 * d)
-            self.play(FadeIn(sticks), run_time=.06 * d)
+                      run_time=.15 * d)
+            self.play(FadeIn(sticks), run_time=.05 * d)
             self.play(Transform(r2, total), *[s_.animate.shift(UP * h) for s_, h in zip(sticks, lifts)],
-                      pin1.animate.set_opacity(1), pin2.animate.set_opacity(1), run_time=.14 * d)
-            self.play(Write(eqF), run_time=.1 * d)
-            self.play(FadeIn(glow(eqF, SKY)), run_time=.04 * d)
-        self.wait(1.5)
+                      pin1.animate.set_opacity(1), pin2.animate.set_opacity(1), run_time=.12 * d)
+            self.play(FadeIn(lab1), GrowFromCenter(brc), FadeIn(lab2), FadeIn(labu), run_time=.08 * d)
+            self.play(Write(eqF), run_time=.08 * d)
+        self.play(FadeIn(glow(eqF)), run_time=.5)
+        self.wait(1.2)
         self.wipe()
