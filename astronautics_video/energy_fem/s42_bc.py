@@ -112,7 +112,7 @@ class S42_BC(VScene):
                   [Create(ground), FadeOut(gap)],
                   Flash(nodes[0].get_center() + 0.9 * UP, color=SKY, flash_radius=0.35),
                   morph(qlab[0], q1eq, [(0, 0)]), .3,
-                  w=(.12, .14, .12, .1, .17, .3))
+                  w=(.12, .14, .12, .1, .17))
 
         # ---- beat 3: cross out column 1, set row 1 aside
         q1 = qv.get_entries()[0]
