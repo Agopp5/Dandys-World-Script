@@ -37,7 +37,7 @@ class S52_Step_Stress(VScene):
             m.move_to([x, 0.3, 0])
 
         # ---- the general formula (below the figure) ----
-        geq = E(r"\sigma|=|E\,\frac{q_b - q_a}{l}", size=56, cmap=SIG).move_to([0, -2.0, 0])
+        geq = E(r"\sigma|=|E\,\frac{q_b - q_a}{l}", size=56, cmap=SIG).move_to([0, -2.2, 0])
         for i in (1, 2, 4, 5):                  # q_b = glyphs 1-2, q_a = glyphs 4-5
             geq[2][i].set_color(SKY)
         p0, p1 = sb.p(0), sb.p(1)
@@ -57,10 +57,10 @@ class S52_Step_Stress(VScene):
                   .15, w=(.2, .15, .3, .2))
 
         # ---- element 1 (left half below the figure) ----
-        a = E(r"\sigma_1|=|70{,}000\cdot\frac{0.2 - 0}{500}", size=48, cmap=SIG)
-        b = E(r"=|28\text{ N/mm}^2|=|28\text{ MPa}", size=48, cmap=SIG)
-        a.shift([-4.6 - a[1].get_center()[0], -1.45 - a.get_center()[1], 0])
-        b.next_to(a, DOWN, buff=0.45)
+        a = E(r"\sigma_1|=|70{,}000\cdot\frac{0.2 - 0}{500}", size=52, cmap=SIG)
+        b = E(r"=|28\text{ N/mm}^2|=|28\text{ MPa}", size=52, cmap=SIG)
+        a.shift([-5.0 - a[1].get_center()[0], -1.7 - a.get_center()[1], 0])
+        b.next_to(a, DOWN, buff=0.5)
         b.shift([a[1].get_center()[0] - b[0].get_center()[0], 0, 0])
         box1 = SurroundingRectangle(b[3], color=ACCENT, buff=0.1, stroke_width=4)
         c1, c2 = (xs[0] + xs[1]) / 2, (xs[1] + xs[2]) / 2
@@ -68,24 +68,24 @@ class S52_Step_Stress(VScene):
         ten = T("tension", size=36, color=ACCENT).move_to([c1, yt, 0])
 
         self.beat("Thick piece: seventy thousand times zero point two minus zero, over five hundred. Twenty eight newtons per square millimeter. That unit is also called a megapascal, M P a. Positive, so tension.",
-                  [FadeOut(qtags), geq.animate.move_to([3.6, -2.0, 0]), Write(a), Indicate(qv[1]),
+                  [FadeOut(qtags), geq.animate.move_to([3.6, -2.2, 0]), Write(a), Indicate(qv[1]),
                    Indicate(qv[0]), Indicate(sb.dims[0])], .05,
                   Write(VGroup(b[0], b[1])), [Write(VGroup(b[2], b[3])), Create(box1)],
                   [el1.animate.set_fill(ACCENT, opacity=0.6), FadeOut(sb.dims), FadeIn(ten)],
                   .1, w=(.3, .2, .2, .15))
 
         # ---- your turn: element 2 (right half) ----
-        ask = E(r"\sigma_2|=|?", size=48, cmap=SIG)
-        ask.shift([2.4 - ask[1].get_center()[0], -1.45 - ask.get_center()[1], 0])
+        ask = E(r"\sigma_2|=|?", size=52, cmap=SIG)
+        ask.shift([2.4 - ask[1].get_center()[0], -1.7 - ask.get_center()[1], 0])
         self.beat("Your turn: pause and do checkpoint seven point two in your guide, and find the stress in the thin piece.",
                   FadeOut(geq), FadeIn(ask), Circumscribe(el2, color=ACCENT),
                   .1, w=(.25, .25, .35))
         self.checkpoint("7.2", "Stepped bar: the stress in the thin piece")
 
         # ---- element 2 ----
-        c = E(r"\sigma_2|=|70{,}000\cdot\frac{0.1 - 0.2}{500}", size=48, cmap=SIG)
-        c.shift([2.4 - c[1].get_center()[0], -1.45 - c.get_center()[1], 0])
-        d = E(r"=|-14\text{ MPa}", size=48, cmap=SIG).next_to(c, DOWN, buff=0.45)
+        c = E(r"\sigma_2|=|70{,}000\cdot\frac{0.1 - 0.2}{500}", size=52, cmap=SIG)
+        c.shift([2.4 - c[1].get_center()[0], -1.7 - c.get_center()[1], 0])
+        d = E(r"=|-14\text{ MPa}", size=52, cmap=SIG).next_to(c, DOWN, buff=0.5)
         d.shift([c[1].get_center()[0] - d[0].get_center()[0], 0, 0])
         box2 = SurroundingRectangle(d[1], color=ACCENT, buff=0.1, stroke_width=4)
         comp = T("compression", size=36, color=ACCENT).move_to([c2 + 0.3, yt, 0])
