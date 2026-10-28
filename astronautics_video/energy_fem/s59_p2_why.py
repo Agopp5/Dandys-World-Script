@@ -90,15 +90,12 @@ class S59_P2_Why(VScene):
             xa, xb = min(x, 10.0), min(max(x, 10.0), 20.0)
             return S_EXAG * (t1.get_value() * u_left(xa) + t2.get_value() * (u_left(xb) - u_left(10.0)))
 
-        # ---------- the homework bar, as S54/S55 draw it ----------
-        wl = wall(np.array([X0, YB, 0]), side=LEFT, h=1.6)
-        br = bar(X0, XL(40), y=YB, h=BH)
-        fl = dist_load(XL(0) + 0.3, XL(40) - 0.05, YB - 0.62, n=16, d=LEFT, color=ROSE)
-        flab = E(r"f|=|5\text{ lb/in}", size=40).move_to([2.0, YB - 1.38, 0])
-        p1 = force(np.array([XL(20), YB, 0]), d=RIGHT, length=1.0, color=ROSE).set_z_index(3)
-        p1lab = E(r"P_1|=|50\text{ lb}", size=40)
-        p1lab.move_to([XL(20) + 0.1 + p1lab.width / 2, YB + 0.62, 0])
-        p1g = VGroup(p1, p1lab)
+        # ---------- the shared homework bar (S54-S58), on this scene's x scale ----------
+        hb = hw2_bar(y=YB, x0=X0, x1=XL(40), h=BH)
+        assert np.isclose(hb.X(10), XL(10)) and np.isclose(hb.X(40), XL(40))
+        fl, tags, tag3 = hb.farr, hb.rings, hb.ring3
+        p1g, p2 = hb.P1.set_z_index(7), hb.P2
+        p1 = p1g[0]
         p1g.d_last = 0.0
 
         def follow(m):
@@ -106,21 +103,10 @@ class S59_P2_Why(VScene):
             m.shift((dd - m.d_last) * RIGHT)
             m.d_last = dd
         p1g.add_updater(follow)
-        p2 = force(np.array([XL(40), YB, 0]), d=RIGHT, length=1.0, color=ROSE).set_z_index(3)
-        p2lab = E(r"P_2|=|100\text{ lb}", size=40).move_to([XL(40) + 0.5, YB + 0.62, 0])
-        n2 = node(np.array([XL(40), YB, 0])).set_z_index(4)
-        n1 = always_redraw(lambda: node(np.array([XL(20) + D(20), YB, 0])).set_z_index(4))
-        p3 = always_redraw(lambda: DashedLine([XL(10) + D(10), YB - 0.42, 0], [XL(10) + D(10), YB + 0.42, 0],
-                                              color=MUTED, stroke_width=3, dash_length=0.08).set_z_index(3))
-
-        def tag(n, x, col=INK2, dashed=False):
-            c = Circle(radius=0.33, color=col, stroke_width=3)
-            if dashed:
-                c = DashedVMobject(c, num_dashes=14)
-            return VGroup(c, M(str(n), size=44, color=MUTED if dashed else INK)).move_to([XL(x), YB - 1.38, 0])
-        tags = VGroup(tag(0, 0), tag(1, 20), tag(2, 40))
-        tag3 = tag(3, 10, MUTED, dashed=True)
-        fig = VGroup(wl, br, fl, flab, p2, p2lab, n2, tags, tag3)
+        dot1, tick3 = hb.nodes[1], hb.tick3
+        n1 = always_redraw(lambda: dot1.copy().move_to([XL(20) + D(20), YB, 0]).set_z_index(4))
+        p3 = always_redraw(lambda: tick3.copy().move_to([XL(10) + D(10), YB, 0]).set_z_index(3))
+        fig = VGroup(hb.wall, hb.bar, fl, hb.flab, p2, hb.nodes[0], hb.nodes[2], tags, tag3)
 
         # ---------- the cut ----------
         def shade_at(xc):
@@ -129,12 +115,12 @@ class S59_P2_Why(VScene):
 
         def box_at(xc):
             x1, x2 = XL(xc) + 0.07, XL(40) + 1.2
-            r = RoundedRectangle(corner_radius=0.12, width=x2 - x1, height=1.35, stroke_color=ROSE, stroke_width=3,
+            r = RoundedRectangle(corner_radius=0.12, width=x2 - x1, height=1.23, stroke_color=ROSE, stroke_width=3,
                                  fill_color=ROSE, fill_opacity=0.07)
-            return r.move_to([(x1 + x2) / 2, YB - 0.2, 0]).set_z_index(1)
+            return r.move_to([(x1 + x2) / 2, YB - 0.235, 0]).set_z_index(1)
 
         def cut_at(xc):
-            return DashedLine([XL(xc), YB - 0.75, 0], [XL(xc), YB + 0.6, 0], color=INK, stroke_width=4,
+            return DashedLine([XL(xc), YB - 0.75, 0], [XL(xc), YB + 0.36, 0], color=INK, stroke_width=4,
                               dash_length=0.1).set_z_index(6)
 
         def right_of(xc):
@@ -148,7 +134,7 @@ class S59_P2_Why(VScene):
         deflab = E(r"N(x)|=|\text{sum of loads to the right}", size=44, cmap={"N(x)": ACCENT})
         fit(deflab, 6.4, 1.0)
         deflab.move_to([XR, 2.85, 0])
-        tens = TX(r"(tension $+$)", size=32, color=MUTED).next_to(deflab, DOWN, buff=0.18)
+        tens = T("(tension positive)", size=36, color=INK2).next_to(deflab, DOWN, buff=0.18)
 
         # ---------- beat 1 ----------
         with self.say("Now, why does point one stay put? Cut the bar anywhere. The force inside the bar at the cut, "
@@ -161,7 +147,7 @@ class S59_P2_Why(VScene):
             self.play(GrowArrow(narr), FadeIn(nlab), run_time=.08 * d)
             self.play(Write(deflab), run_time=.12 * d)
             self.play(FadeIn(tens), run_time=.05 * d)
-            self.play(Indicate(VGroup(p1, p2, right_of(xc1)), color=INK), run_time=.12 * d)
+            self.play(Indicate(VGroup(p1, p2[0], right_of(xc1)), color=INK), run_time=.12 * d)
 
         # ---------- the N(x) plot, above the left half of the bar (same x scale) ----------
         xax = Line(pN(0, 0), pN(21, 0), color=AXIS, stroke_width=3)
@@ -184,10 +170,10 @@ class S59_P2_Why(VScene):
 
         eq1 = E(r"N(0)|=|150|-|200|=|-50\text{ lb}", size=48,
                 cmap={"N(0)": ACCENT, "150": ROSE, "200": ROSE, r"-50\text{ lb}": ACCENT}).move_to([XR, 1.6, 0])
-        comp = T("compression", size=32, color=INK2).next_to(eq1, DOWN, buff=0.16)
+        comp = T("compression", size=36, color=INK2).next_to(eq1, DOWN, buff=0.16)
         eq2 = E(r"N(20^-)|=|150|-|100|=|+50\text{ lb}", size=48,
                 cmap={"N(20^-)": ACCENT, "150": ROSE, "100": ROSE, r"+50\text{ lb}": ACCENT}).move_to([XR, 0.1, 0])
-        tnote = T("tension", size=32, color=INK2).next_to(eq2, DOWN, buff=0.16)
+        tnote = T("tension", size=36, color=INK2).next_to(eq2, DOWN, buff=0.16)
 
         # ---------- beat 2 ----------
         x2 = 0.6
@@ -196,7 +182,7 @@ class S59_P2_Why(VScene):
             self.play(FadeOut(narr, nlab), Transform(cut, cut_at(x2)), Transform(shade, shade_at(x2)),
                       Transform(box, box_at(x2)), run_time=.14 * d)
             self.wait(.02 * d)
-            self.play(Indicate(p1, color=INK), Indicate(p2, color=INK), Write(eq1[0:3]), run_time=.2 * d)
+            self.play(Indicate(p1, color=INK), Indicate(p2[0], color=INK), Write(eq1[0:3]), run_time=.2 * d)
             self.wait(.09 * d)
             self.play(Indicate(fl, color=INK), Write(eq1[3:5]), run_time=.16 * d)
             self.wait(.1 * d)
@@ -228,7 +214,7 @@ class S59_P2_Why(VScene):
                           fill_color=ACCENT, fill_opacity=0.6).set_z_index(2)
         eqd = E(r"d\Delta|=|\frac{N}{EA}\,dx", size=48).move_to([XR, 2.45, 0])
         eqint = E(r"\Delta_{\text{left}}|=|\frac{1}{EA}\int_0^{20} N\,dx", size=48).move_to([XR, 1.15, 0])
-        eanote = TX(r"$EA = 20{,}000$ lb", size=32, color=MUTED).move_to([XR, 0.2, 0])
+        eanote = M(r"EA = 20{,}000\text{ lb}", size=40, color=INK2).move_to([XR, 0.2, 0])
         sweep = ValueTracker(0.01)
 
         def area_upto(xe):
@@ -267,8 +253,8 @@ class S59_P2_Why(VScene):
         mat = always_redraw(lambda: VGroup(*[Line([XL(x) + D(x), YB - 0.24, 0], [XL(x) + D(x), YB + 0.24, 0],
                                                    color=INK2, stroke_width=2.5) for x in mat_x]).set_z_index(2))
         exag = T("deformation exaggerated", size=30, color=MUTED).move_to([XR, -0.45, 0])
-        lab_sh = T("shortens", size=36, color=INK2).move_to([XL(5), -1.12, 0])
-        lab_st = T("stretches", size=36, color=INK2).move_to([XL(15), -1.12, 0])
+        lab_sh = T("shortens", size=36, color=INK2).move_to([XL(5), -1.0, 0])
+        lab_st = T("stretches", size=36, color=INK2).move_to([XL(14.2), -1.0, 0])
         with self.say("Minus two hundred fifty plus two hundred fifty is zero. The left half shortens near the wall "
                       "and stretches near the middle by exactly the same amount, so point one ends up where it "
                       "started.") as d:
@@ -319,14 +305,21 @@ class S59_P2_Why(VScene):
         nds.set_z_index(6)
         lab2 = T("2 elements", size=36, color=LIME).move_to(pN(10, 0) + 0.78 * UP)
         lab4 = T("4 elements", size=36, color=LIME).move_to(pU(10, -0.0036))
-        eqf = E(r"u_{\text{FEM}}(10)|=|0", size=48, cmap={r"u_{\text{FEM}}(10)": LIME}).move_to([XR, 1.05, 0])
+        eqf = E(r"u_{\text{FEM}}(10)|=|0", size=48, cmap={r"u_{\text{FEM}}(10)": LIME}).move_to([XR, 1.15, 0])
+        eqf2 = E(r"\text{2 elements: }|u(10)|=|0", size=48).set_color(MUTED)
+        fit(eqf2, 6.4, 0.8)
+        eqf2.move_to([XR, 1.15, 0])
+        eq4 = E(r"\text{4 elements: }|u(10)|=|-0.0125", size=48).set_color(LIME)
+        fit(eq4, 6.4, 0.8)
+        eq4.move_to([XR, 0.2, 0])
+        assert np.isclose(Q4[1], -0.0125)
         gap = DoubleArrow(pU(10, 0), pU(10, u_left(10)), buff=0, color=BAD, stroke_width=5, tip_length=0.18,
                           max_tip_length_to_length_ratio=0.2).set_z_index(5)
         with self.say("Pay close attention to this last point. Our two-element model draws a straight line from zero "
                       "to zero there, so it says point three doesn't move. The nodes are right, but between them the "
                       "model is only approximate. More elements, and the straight lines follow the true curve.",
                       style="slower and deliberate, stressing the key words") as d:
-            self.play(Indicate(udot, color=SKY, scale_factor=1.6), run_time=.1 * d)
+            self.play(Indicate(udot, color=SKY, scale_factor=1.6), run_time=.08 * d)
             self.wait(.03 * d)
             self.play(Create(fem2), FadeIn(nds), run_time=.12 * d)
             self.play(FadeIn(lab2), run_time=.05 * d)
@@ -338,6 +331,7 @@ class S59_P2_Why(VScene):
             self.play(Indicate(nds, color=SKY, scale_factor=1.6), run_time=.1 * d)
             self.wait(.04 * d)
             self.add(old2)
-            self.play(Transform(fem2, fem4), FadeOut(gap), lab2.animate.set_color(MUTED), run_time=.13 * d)
-            self.play(FadeIn(lab4), run_time=.04 * d)
+            self.play(Transform(fem2, fem4), FadeOut(gap), lab2.animate.set_color(MUTED), FadeTransform(eqf, eqf2),
+                      FadeOut(eanote), run_time=.13 * d)
+            self.play(FadeIn(lab4), FadeIn(eq4), run_time=.06 * d)
         self.wipe()

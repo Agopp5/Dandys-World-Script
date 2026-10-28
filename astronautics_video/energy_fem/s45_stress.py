@@ -50,17 +50,16 @@ class S45_Stress(VScene):
         elems = VGroup(*[Rectangle(width=0.8, height=ys[i + 1] - ys[i], color=INK2, stroke_width=3,
                                    fill_color=SURFACE, fill_opacity=1).move_to([cx, (ys[i] + ys[i + 1]) / 2, 0])
                          for i in range(3)])
-        ground = VGroup(Line([cx - 0.9, ys[0], 0], [cx + 0.9, ys[0], 0], color=INK2, stroke_width=4),
-                        *[Line([cx - 0.8 + 0.27 * k, ys[0], 0], [cx - 1.0 + 0.27 * k, ys[0] - 0.3, 0],
-                               color=INK2, stroke_width=2) for k in range(7)])
+        ground = wall(np.array([cx, ys[0], 0]), side=DOWN, h=1.8)
         dots = VGroup(*[node([cx, y, 0], r=0.1) for y in ys])
         tags = VGroup(*[badge(i + 1).scale(1.15).move_to([cx - 0.95, (ys[i] + ys[i + 1]) / 2, 0])
                         for i in range(3)])
         qtex = [r"0", r"-\frac59", r"-\frac89", r"-1"]
         qlab = VGroup(*[E(r"q_%d|=|%s" % (i + 1, qtex[i]), size=44).next_to(dots[i], RIGHT, buff=0.75)
                         for i in range(4)])
-        unit = TX(r"$q$ in units of $\dfrac{\rho g L^2}{2E}$", size=30, color=INK2)
-        unit.next_to(ground, DOWN, buff=0.35).set_x(cx + 0.9)
+        qlab[0].shift(0.3 * UP)
+        unit = TX(r"$q$ in units of $\rho g L^2/2E$", size=36, color=INK2)
+        unit.next_to(ground, DOWN, buff=0.3).set_x(cx + 1.2)
         col = VGroup(ground, elems, dots, tags, qlab, unit)
 
         # ---- beat 1: the stress formula ----
@@ -106,17 +105,17 @@ class S45_Stress(VScene):
         res = VGroup(res1, res2, res3)
 
         # ---- beat 5: the plot, left half ----
-        ax = Axes(x_range=[0, 1, 1], y_range=[-1.2, 0, 1], x_length=5.5, y_length=5.6, tips=False,
+        ax = Axes(x_range=[0, 1, 1], y_range=[-1.2, 0, 1], x_length=4.9, y_length=5.6, tips=False,
                   axis_config=dict(color=AXIS, stroke_width=3, include_ticks=False))
-        ax.move_to([-3.5, -0.75, 0])
+        ax.move_to([-3.25, -0.75, 0])
         ticks = VGroup(*[Line(ax.c2p(Fr(k, 6), 0), ax.c2p(Fr(k, 6), 0) + 0.14 * UP, color=AXIS, stroke_width=3)
                          for k in range(1, 7)],
                        *[Line(ax.c2p(0, y), ax.c2p(0, y) + 0.14 * LEFT, color=AXIS, stroke_width=3)
                          for y in (-1, -0.5)])
-        xt = VGroup(*[M(t, size=36, color=INK2).next_to(ax.c2p(v, 0), UP, buff=0.25)
-                      for t, v in ((r"\frac13", Fr(1, 3)), (r"\frac23", Fr(2, 3)), (r"1", 1))])
-        yt = VGroup(M(r"-1", size=36, color=INK2).next_to(ax.c2p(0, -1), LEFT, buff=0.25),
-                    M(r"-\frac12", size=36, color=INK2).next_to(ax.c2p(0, -0.5), LEFT, buff=0.25))
+        xt = VGroup(*[M(t, size=40, color=INK2).next_to(ax.c2p(v, 0), UP, buff=0.25)
+                      for t, v in ((r"1/3", Fr(1, 3)), (r"2/3", Fr(2, 3)), (r"1", 1))])
+        yt = VGroup(M(r"-1", size=40, color=INK2).next_to(ax.c2p(0, -1), LEFT, buff=0.2),
+                    M(r"-1/2", size=40, color=INK2).next_to(ax.c2p(0, -0.5), LEFT, buff=0.2))
         xl = M(r"x/L", size=40, color=INK).next_to(ax.c2p(1, 0), RIGHT, buff=0.25)
         yl = E(r"\sigma|\,/\,\rho g L", size=40).next_to(ax.c2p(0, 0), UP, buff=1.05).align_to(ax, LEFT)
         frame_ax = VGroup(ax, ticks, xt, yt, xl, yl)
@@ -138,7 +137,7 @@ class S45_Stress(VScene):
                         T("exact", 36, INK))
         leg_ex[1].next_to(leg_ex[0], RIGHT, buff=0.2)
         legend = VGroup(leg_fem, leg_ex).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
-        legend.move_to(ax.c2p(0.68, -1.02))
+        legend.move_to([RX, -3.0, 0])
         self.beat("Plot them. Each element's stress is a flat step, because its strain is constant. The exact stress is a straight line, from minus rho g L at the base to zero at the top.",
                   [FadeOut(col), Create(frame_ax)],
                   [Create(st3[0][0]), Indicate(res1)], [Create(st3[0][1]), Indicate(res2)],
@@ -147,22 +146,20 @@ class S45_Stress(VScene):
                   w=(.14, .1, .1, .1, .08, .28, .2))
 
         # ---- beat 6: where they meet ----
-        mids = VGroup(*[Dot(ax.c2p(m, exact(m)), radius=0.12, color=GOLD).set_z_index(5) for m in MIDS])
-        rings = VGroup(*[Circle(radius=0.28, color=GOLD, stroke_width=4).move_to(d) for d in mids])
-        mlab = VGroup(*[M(t, size=36, color=GOLD).next_to(ax.c2p(m, 0), DOWN, buff=0.25)
-                        for t, m in ((r"\frac16", MIDS[0]), (r"\frac12", MIDS[1]), (r"\frac56", MIDS[2]))])
-        guides = VGroup(*[DashedLine(ax.c2p(m, 0), ax.c2p(m, exact(m)), color=GOLD, stroke_width=2,
-                                     stroke_opacity=0.7) for m in MIDS])
+        mids = VGroup(*[Dot(ax.c2p(m, exact(m)), radius=0.12, color=INK).set_z_index(5) for m in MIDS])
+        rings = VGroup(*[Circle(radius=0.28, color=INK, stroke_width=4).move_to(d) for d in mids])
+        mlab = VGroup(*[M(t, size=40, color=INK).next_to(r, DR, buff=0.02)
+                        for t, r in zip((r"1/6", r"1/2", r"5/6"), rings)])
         p1 = ax.c2p(MIDS[0], SIG[0])
         z_fem = E(r"\text{step}|=|-\frac56", size=36, cmap={r"\text{step}": ACCENT})
-        z_fem.next_to(p1, UP, buff=0.55).shift(1.0 * RIGHT)
+        z_fem.next_to(ax.c2p(Fr(1, 12), SIG[0]), UP, buff=0.3)
         z_ex = E(r"\text{exact at }\frac16|=|-\frac56", size=36)
-        z_ex.next_to(p1, DOWN, buff=0.55).shift(1.5 * RIGHT)
+        z_ex.next_to(p1, DOWN, buff=1.0).shift(1.6 * RIGHT)
         zl = VGroup(backed(z_fem), backed(z_ex)).set_z_index(6)
         fr = self.camera.frame
         with self.say("Look closely at where they meet. At x over L equal to one sixth, the middle of element one, the exact stress is minus five sixths rho g L: exactly the step's value. Each step crosses the line right at its element's middle.") as d:
-            self.play(LaggedStart(*[AnimationGroup(Create(g), FadeIn(m), FadeIn(dt), Create(r))
-                                    for g, m, dt, r in zip(guides, mlab, mids, rings)], lag_ratio=.4),
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(m), FadeIn(dt), Create(r))
+                                    for m, dt, r in zip(mlab, mids, rings)], lag_ratio=.4),
                       run_time=.2 * d)
             self.play(fr.animate.scale(0.55).move_to(p1 + 0.9 * RIGHT + 0.1 * DOWN), FadeOut(legend), run_time=.15 * d)
             self.play(FadeIn(zl[0]), Indicate(st3[0][0], color=ACCENT), run_time=.15 * d)
@@ -170,29 +167,31 @@ class S45_Stress(VScene):
             self.snap("zoomed: -5/6 on both")
             self.wait(.15 * d)
             self.play(fr.animate.scale(1 / 0.55).move_to(ORIGIN), FadeOut(zl), FadeIn(legend), run_time=.1 * d)
-            self.play(*[Flash(dt, color=GOLD) for dt in mids], run_time=.1 * d)
+            self.play(*[Flash(dt, color=INK) for dt in mids], run_time=.1 * d)
 
         # ---- beat 7: the second question answered; finer steps ----
-        qhead = T("Question 2", 30, MUTED)
-        qtext = T("Where is the stress highest?", 36, INK)
-        tick = M(r"\checkmark", size=64, color=GOOD)
-        qans = T("At the base: it holds", 32, INK)
-        qans2 = T("up the whole weight", 32, INK)
-        qbody = VGroup(qhead, qtext, VGroup(qans, qans2).arrange(DOWN, aligned_edge=LEFT, buff=0.15))
-        qbody.arrange(DOWN, aligned_edge=LEFT, buff=0.3)
-        card = panel(qbody, color=GOOD)
-        card.move_to([RX + 0.05, 1.7, 0])
-        tick.next_to(qhead, RIGHT, buff=0.4)
+        card = panel(T("Where is the stress highest?", size=36))
+        card.move_to([RX + 0.35, 1.0, 0])
+        tick = M(r"\checkmark", size=48, color=GOOD).next_to(card, RIGHT, buff=0.15)
+        over = tick.get_right()[0] - 6.85
+        if over > 0:
+            card.shift(over * LEFT)
+            tick.shift(over * LEFT)
+        qans = VGroup(T("At the base: it holds", 32, INK), T("up the whole weight", 32, INK))
+        qans.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(card, DOWN, buff=0.35).align_to(card, LEFT)
         note1 = T("Stress is the slope of the", 30, INK2)
         note2 = T("straight-line guess:", 30, INK2)
         note3 = T("one order rougher than u", 30, INK2)
-        notes = VGroup(note1, note2, note3).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([RX + 0.05, -1.6, 0])
+        notes = VGroup(note1, note2, note3).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(qans, DOWN, buff=0.4).align_to(card, LEFT)
         base_dot = Dot(ax.c2p(0, -1), radius=0.14, color=GOOD).set_z_index(6)
+        base_lab = TX(r"largest compression: $|\sigma| = \rho g L$", size=36)
+        base_lab.next_to(base_dot, RIGHT, buff=0.3).shift(0.4 * DOWN)
         st6 = stairs(SIX)
         leg6 = T("FEM, 6 elements", 36, INK).move_to(leg_fem[1], aligned_edge=LEFT)
         self.beat("That answers our second question: the stress is highest at the base, where the column holds up its whole weight. And stresses are rougher than displacements, because they come from the slope of the straight-line guess. More elements, finer steps.",
-                  [FadeOut(res), FadeOut(guides), FadeOut(mlab), FadeOut(rings), FadeOut(mids), FadeIn(card)],
-                  [FadeIn(base_dot, scale=2), Flash(base_dot, color=GOOD), Write(tick)], .1,
+                  [FadeOut(res), FadeOut(mlab), FadeOut(rings), FadeOut(mids), FadeIn(card)],
+                  [FadeIn(base_dot, scale=2), Flash(base_dot, color=GOOD), FadeIn(base_lab), Write(tick),
+                   FadeIn(qans)], .1,
                   FadeIn(notes, shift=0.2 * UP), .05,
                   [ReplacementTransform(st3, st6), ReplacementTransform(leg_fem[1], leg6)], .1,
                   w=(.12, .15, .25, .2))

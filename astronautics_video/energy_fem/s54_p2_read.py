@@ -17,7 +17,7 @@ c = -5                              # lb/in, f points in -x
 assert c < 0 and abs(c) == 5
 
 # figure: the shared homework bar (efem.hw2_bar), placed in the lower half
-YB = -0.6
+YB = -1.0
 
 
 class S54_P2_Read(VScene):
@@ -90,7 +90,7 @@ class S54_P2_Read(VScene):
                   w=(.05, .15, .2, .15, .2))
 
         # ---------- distributed load ----------
-        feq = E(r"f|=|c|=\\;|-5|\\text{ lb/in}", size=52).move_to([2.6, 1.6, 0])
+        feq = E(r"f|=|c|=\;|-5|\text{ lb/in}", size=52).move_to([2.6, 1.6, 0])
         paint(feq, {2: ROSE})
         w0 = feq[4].width
         feq[4].scale(60 / 52, about_edge=LEFT).set_color(ACCENT)

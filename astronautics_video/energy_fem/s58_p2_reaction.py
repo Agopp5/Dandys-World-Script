@@ -93,7 +93,6 @@ class S58_P2_Reaction(VScene):
             self.wait(.2 * d)
             self.play(FadeOut(box), Write(res), run_time=.15 * d)
             self.play(self.spotlight(res), run_time=.1 * d)
-            self.snap("spotlight on")
             self.wait(max(2.1, .27 * d))   # hold the spotlight at least 2 s
 
         # beat 4: the wall pushes right; global check

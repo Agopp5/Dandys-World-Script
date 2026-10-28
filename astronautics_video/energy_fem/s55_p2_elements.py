@@ -45,8 +45,10 @@ class S55_P2_Elements(VScene):
         cut = DashedLine([X1, YB + 0.7, 0], [X1, YB - 0.7, 0], color=ACCENT, stroke_width=5)
         split = Line([X1, hb.bar.get_bottom()[1], 0], [X1, hb.bar.get_top()[1], 0], color=INK2,
                      stroke_width=4).set_z_index(2)
-        el_tags = VGroup(T("element 1", size=36, color=INK2).move_to([X0 + 0.62 * (X1 - X0), YB, 0]),
-                         T("element 2", size=36, color=INK2).move_to([(X1 + X2) / 2 + 0.6, YB, 0])).set_z_index(2)
+        # element tags just above the bar, clear of the P labels and the dashed point-3 tick
+        YT = hb.P1[1].get_center()[1]
+        el_tags = VGroup(T("element 1", size=36, color=INK2).move_to([(X0 + X1) / 2, YT, 0]),
+                         T("element 2", size=36, color=INK2).move_to([(X1 + X2) / 2 + 0.45, YT, 0])).set_z_index(2)
         spans = VGroup()
         for a, b in [(X0, X1), (X1, X2)]:
             da = DoubleArrow([a + 0.05, YS, 0], [b - 0.05, YS, 0], buff=0, color=MUTED, stroke_width=3,
