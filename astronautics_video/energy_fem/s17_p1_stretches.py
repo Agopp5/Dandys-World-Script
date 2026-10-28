@@ -50,7 +50,6 @@ class S17_P1_Stretches(VScene):
         fig.scale(0.6)
         fig.move_to([-3.65, -0.2, 0]).align_to(np.array([-6.85, 0, 0]), LEFT)
         tab = table()
-        print('FIGX', fig.get_left()[0], fig.get_right()[0], 'TABX', tab.get_left()[0])
         s1, s2a, s2b, s3 = fig.k1, fig.k2a, fig.k2b, fig.k3
         dq1, dq2, dq3 = fig.q[1], fig.q[2], fig.q[3]
         rows = tab.rows
@@ -94,7 +93,8 @@ class S17_P1_Stretches(VScene):
         # 5. the key step: spotlight the stretch column, hold
         col = VGroup(tab.head[3], *[r[3] for r in rows])
         box = SurroundingRectangle(col, color=SKY, buff=0.18, corner_radius=0.08, stroke_width=4)
+        col.set_z_index(100)   # stays crisp and undimmed above the spotlight; only the box gets its glow
         self.beat("This is the step to get right, so let's say it once more: a spring between two moving points stretches by the difference of their displacements. Get these four right, and the rest is just algebra.",
-                  FadeOut(g3), Create(box), self.spotlight(box), .1, col.animate.set_opacity(1), .45,
-                  w=(.15, .25, .35, .25), style="slower and deliberate, stressing the key words")
+                  FadeOut(g3), Create(box), self.spotlight(box), .55,
+                  w=(.2, .3, .5), style="slower and deliberate, stressing the key words")
         self.wipe()

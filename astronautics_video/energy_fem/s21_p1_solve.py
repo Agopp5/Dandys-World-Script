@@ -123,7 +123,7 @@ class S21_P1_Solve(VScene):
         sketch = hw_figure(k2b_label=True)            # the shared HW 6 P1 figure (same as S16-S22)
         sketch.scale(.85).move_to([0, -1.85, 0])
         k1, k2b, lk1, lk2b = sketch.k1, sketch.k2b, sketch.klab["K1"], sketch.klab["K2b"]
-        body = VGroup(sketch.bar, sketch.O, sketch.k3, sketch.klab["K3"], sketch.q[2], sketch.q[3],
+        body = VGroup(sketch.bar, sketch.O, sketch.k3, sketch.klab["K3"],
                       *[sketch.P[i] for i in (2, 3, 4)], *[sketch.Plab[i] for i in (2, 3, 4)])
         fb = DashedVMobject(SurroundingRectangle(body, buff=.15), num_dashes=80).set_stroke(INK2, 3)
         loads = VGroup(*[sketch.P[i] for i in (2, 3, 4)], *[sketch.Plab[i] for i in (2, 3, 4)])
