@@ -43,10 +43,10 @@ class S43_Solve(VScene):
 
     def construct(self):
         # ---------- the column (left half) ----------
-        cx, y0, y3 = -4.3, -3.2, 2.9
+        cx, y0, y3 = -4.3, -2.85, 3.05
         ln = (y3 - y0) / 3
         ys = [y0 + i * ln for i in range(4)]
-        W = 1.0
+        W = 1.5
 
         def elem(ya, yb):
             return Rectangle(width=W, height=yb - ya, stroke_color=INK2, stroke_width=3,
@@ -59,9 +59,10 @@ class S43_Solve(VScene):
         nodes = VGroup(*[node([cx, y, 0], r=0.1) for y in ys])
         qlab = VGroup(*[M("q_%d" % (i + 1), size=44, color=SKY).next_to(nodes[i], LEFT, buff=0.75)
                         for i in range(4)])
-        xarr = Arrow([cx + 1.0, y0 + 0.15, 0], [cx + 1.0, y0 + 1.5, 0], buff=0, color=INK2, stroke_width=4)
+        xarr = Arrow([cx + 1.3, y0 + 0.15, 0], [cx + 1.3, y0 + 1.5, 0], buff=0, color=INK2, stroke_width=4)
         xlab = M("x", size=40, color=INK2).next_to(xarr, RIGHT, buff=0.12)
         column = VGroup(ground, hatch, elems, nodes, qlab, xarr, xlab)
+        qlab[0].shift(0.4 * UP)
         for m in qlab:
             m.set_z_index(3)
         nodes.set_z_index(2)
@@ -147,14 +148,15 @@ class S43_Solve(VScene):
         new_ys = [ys[i] - S * DROP[i] for i in range(4)]
         ghost = DashedVMobject(Rectangle(width=W, height=y3 - y0, color=MUTED, stroke_width=2.5)
                                .move_to([cx, (y0 + y3) / 2, 0]), num_dashes=40)
-        ax_ = cx + 1.0
+        ax_ = cx + 1.3
         arrows = VGroup(*[Arrow([ax_, ys[i], 0], [ax_, ys[i] - S * DROP[i], 0], buff=0, color=SKY,
                                 stroke_width=6, max_tip_length_to_length_ratio=.45) for i in (1, 2, 3)])
         alab = VGroup(*[M(t, size=40, color=SKY).next_to(arrows[k], RIGHT, buff=0.15)
-                        for k, t in enumerate((r"-\frac59", r"-\frac89", r"-1"))])
-        exag = T("sinking exaggerated", size=30, color=MUTED).move_to([cx + 0.6, y0 - 0.65, 0])
-        card = qcard("Q1", T("How much does the flagpole shorten?", size=34))
-        fit(card, 6.4, 2.2)
+                        for k, t in enumerate(("-5/9", "-8/9", "-1"))])
+        exag = T("sinking exaggerated", size=30, color=MUTED).move_to([cx + 0.4, y0 - 0.65, 0])
+        card = panel(VGroup(T("FIRST QUESTION", size=30, color=GOLD, weight=BOLD),
+                            T("How much does the flagpole shorten?", size=36)).arrange(DOWN, buff=0.25))
+        fit(card, 6.0, 2.2)
         card.move_to([RX, -2.6, 0])
         tick = M(r"\checkmark", size=72, color=GOOD).next_to(card, RIGHT, buff=0.15)
         if tick.get_right()[0] > 6.9:

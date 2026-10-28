@@ -57,7 +57,7 @@ class S44_Compare_u(VScene):
 
         self.beat("This column has an exact answer: u of x equals rho g over E, times x squared over two minus L x. Let's plot it.",
                   Write(eq), [Create(ax), FadeIn(xt), FadeIn(xl), FadeIn(yl)], Create(curve), .1,
-                  w=(.45, .2, .35))
+                  w=(.4, .2, .3))
 
         # ---- node values ---------------------------------------------------------------------------
         dots, guides, labs = VGroup(), VGroup(), VGroup()
@@ -70,7 +70,7 @@ class S44_Compare_u(VScene):
 
         self.beat("At x over L equal to one third, two thirds and one, it gives minus five ninths, minus eight ninths and minus one. The exact values at the nodes.",
                   *[[Create(guides[i]), GrowFromCenter(dots[i]), FadeIn(labs[i], shift=0.2 * DOWN)] for i in range(3)],
-                  .2, w=(1, 1, 1))
+                  .2, w=(.27, .27, .26))
 
         # ---- FEM broken line -----------------------------------------------------------------------
         pts = [ax.c2p(0, 0)] + [ax.c2p(x, v) for x, v in zip(XS, VALS)]
@@ -86,7 +86,7 @@ class S44_Compare_u(VScene):
         legend.move_to(ax.c2p(0.74, -0.28)).align_to(ax.c2p(0.7, 0), LEFT)
 
         self.beat("Now the finite element answer: straight lines between those same node values.",
-                  Create(fem), FadeIn(legend), .2, w=(.7, .3))
+                  Create(fem), FadeIn(legend), .2, w=(.55, .25))
 
         # ---- nodes exact, interior gaps ------------------------------------------------------------
         rings = VGroup(*[Circle(radius=0.24, color=GOOD, stroke_width=5).move_to(d) for d in dots])
@@ -94,14 +94,14 @@ class S44_Compare_u(VScene):
         note2 = VGroup(T("other structures:", size=32, color=MUTED),
                        T("close, not exact", size=32, color=MUTED)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         notes = VGroup(note1, note2).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
-        notes.move_to(ax.c2p(0.03, -1.0)).align_to(ax.c2p(0.04, 0), LEFT)
+        notes.align_to(ax.c2p(0.04, -0.9), UL)
 
         gaps = VGroup()
         for a, b in zip([0] + XS[:-1], XS):
             cpts = [ax.c2p(t, ue(t)) for t in np.linspace(a, b, 40)]
             gaps.add(Polygon(*cpts, color=BAD, stroke_width=0, fill_color=BAD, fill_opacity=0.55))
         gaps.set_z_index(1)
-        focus = ax.c2p(0.5, (ue(1 / 3) + ue(2 / 3)) / 2 - 0.01)
+        focus = VGroup(dots[0], dots[1], labs[0], labs[1], rings[0], rings[1]).get_center()
 
         with self.say("For a simple bar like this, linear elements put the nodes exactly right. In other structures the nodes are close, not exact. And between the nodes, straight lines can't quite follow the curve.") as d:
             self.play(LaggedStart(*[Create(r) for r in rings], lag_ratio=0.3), FadeIn(note1), run_time=.15 * d)
@@ -109,6 +109,7 @@ class S44_Compare_u(VScene):
             self.play(FadeIn(note2), run_time=.1 * d)
             self.wait(.14 * d)
             self.play(FadeIn(gaps), run_time=.1 * d)
-            self.play(self.camera.frame.animate.scale(0.32).move_to(focus), run_time=.2 * d)
+            self.snap("gaps before zoom")
+            self.play(self.camera.frame.animate.scale(0.42).move_to(focus), FadeOut(notes), run_time=.2 * d)
             self.wait(.18 * d)
         self.wipe()

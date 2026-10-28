@@ -64,10 +64,12 @@ class S48_Step_k(VScene):
         s1, s2 = springs_for(Y)
         rule = E(r"k|=|\frac{EA}{l}", size=52)
 
-        self.beat("Each piece of bar is an element, and each element is a spring with stiffness E A over l.",
-                  FadeIn(fig), .1,
-                  [ReplacementTransform(fig["e1"], s1), ReplacementTransform(fig["e2"], s2)],
-                  Write(rule.move_to([0, -0.9, 0])), w=(.25, .4, .3))
+        with self.say("Each piece of bar is an element, and each element is a spring with stiffness E A over l.") as d:
+            self.play(FadeIn(fig), run_time=.22 * d)
+            self.snap("the stepped bar")
+            self.wait(.08 * d)
+            self.play(ReplacementTransform(fig["e1"], s1), ReplacementTransform(fig["e2"], s2), run_time=.38 * d)
+            self.play(Write(rule.move_to([0, -0.9, 0])), run_time=.32 * d)
 
         eq1 = E(r"k_1|=|\frac{70{,}000 \times 200}{500}|=|28{,}000\text{ N/mm}", size=48)
         eq2 = E(r"k_2|=|14{,}000\text{ N/mm}", size=48)

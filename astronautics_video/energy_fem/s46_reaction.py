@@ -19,7 +19,7 @@ assert np.isclose(5 / 6 + 1 / 6, 1)
 
 def column_figure():
     """Vertical column, three elements, base fixed, x upward. Big labels (>= 36)."""
-    cx, y0, y1, w = -4.9, -2.55, 2.85, 0.95
+    cx, y0, y1, w = -4.9, -2.55, 2.85, 1.3
     ys = [y0 + i * (y1 - y0) / 3 for i in range(4)]
     elems = VGroup(*[Rectangle(width=w, height=ys[i + 1] - ys[i]).set_fill(SURFACE, 1)
                      .set_stroke(INK2, 3).move_to([cx, (ys[i] + ys[i + 1]) / 2, 0]) for i in range(3)])
@@ -27,7 +27,7 @@ def column_figure():
     qlab = VGroup(*[M("q_%d" % (i + 1), size=44, color=SKY).next_to(nodes[i], RIGHT, buff=0.75)
                     for i in range(4)])
     ticks = VGroup(*[Line([cx + w / 2, y, 0], [cx + w / 2 + 0.55, y, 0], color=HAIR, stroke_width=2) for y in ys])
-    ground = wall([cx, y0, 0], side=DOWN, h=2.2)
+    ground = wall([cx, y0, 0], side=DOWN, h=1.7)
     # weight per length: small ROSE arrows down the left side
     wts = VGroup(*[Arrow([cx - w / 2 - 0.45, y + 0.3, 0], [cx - w / 2 - 0.45, y - 0.3, 0], buff=0,
                          color=ROSE, stroke_width=4, max_tip_length_to_length_ratio=0.35)
@@ -92,11 +92,12 @@ class S46_Reaction(VScene):
         lines = [T("assemble K and F (overlaps add)", size=38),
                  T("remove supported rows and columns", size=38),
                  T("solve for the free q's", size=38),
-                 TX(r"$\sigma = E\,(q_b - q_a)/l$;  removed rows give $R$", size=38)]
+                 VGroup(E(r"\sigma|=|E\,(q_b - q_a)/l", size=44), T(";  removed rows give", size=38),
+                        M("R", size=44, color=ROSE)).arrange(RIGHT, buff=0.2)]
         rows = VGroup(*[VGroup(badge(i + 1), ln).arrange(RIGHT, buff=0.4) for i, ln in enumerate(lines)])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.5)
         card = panel(VGroup(head, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.55), color=GOLD)
-        card.move_to(ORIGIN)
+        card.scale_to_fit_width(11.6).move_to(ORIGIN)
         with self.say("So, stepping back: assemble the blocks, add the loads, fix the supports by removing their "
                       "rows and columns, solve, then get stresses and use the removed rows for the reactions.") as d:
             self.play(*[FadeOut(m) for m in self.mobjects], run_time=.08 * d)
