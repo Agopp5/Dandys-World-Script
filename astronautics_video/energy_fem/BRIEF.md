@@ -1,4 +1,4 @@
-# Energy Methods and the Finite Element Method  (~82 min, 8 episodes)
+# Energy Methods and the Finite Element Method  (~70 min, 8 episodes)
 
 **Viewer**: an AERSP 301 (aerospace structures) student who has NOT been coming to class and has HW 6 due: Problem 1
 (springs, stationary principle) and Problem 2 (a bar by the finite element method). They need the ideas from zero,

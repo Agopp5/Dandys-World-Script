@@ -1,0 +1,349 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.583
+So far every structure had a handful of points that move.
+
+00:00:04.583 --> 00:00:15.680
+Now take a bar: fixed to a wall at the left, pulled along its length by a load spread over it, f per unit length, and a load P at the tip.
+
+00:00:15.980 --> 00:00:20.593
+A bar like this is loaded along its axis, so it only stretches or shortens.
+
+00:00:20.593 --> 00:00:25.820
+That's what makes it a bar, as opposed to a beam, which is loaded sideways and bends.
+
+00:00:26.720 --> 00:00:34.199
+Every point along the bar moves a little to the right, by an amount that depends on where it is.
+
+00:00:34.199 --> 00:00:35.368
+Call it u of x.
+
+00:00:35.368 --> 00:00:37.160
+At the wall, u is zero.
+
+00:00:37.460 --> 00:00:40.401
+So how many unknowns is that?
+
+00:00:40.401 --> 00:00:45.878
+Every point has its own displacement: infinitely many.
+
+00:00:45.878 --> 00:00:50.340
+We can't list them as q one, q two, q three.
+
+00:00:51.273 --> 00:00:52.588
+Here's the plan.
+
+00:00:52.588 --> 00:00:57.354
+First, find the strain energy and work potential of a bar.
+
+00:00:57.354 --> 00:01:03.353
+Then, find a clever way to turn infinitely many unknowns into just a few.
+
+00:01:04.500 --> 00:01:10.389
+To find the energy in the bar, zoom in on a tiny slice, of length d x.
+
+00:01:10.389 --> 00:01:17.540
+Inside it, the material is stretched by a strain epsilon, and carries a stress sigma.
+
+00:01:17.840 --> 00:01:25.229
+For an elastic material, stress and strain are related by Hooke's law: sigma equals E times epsilon.
+
+00:01:25.229 --> 00:01:29.440
+On a graph, a straight line from the origin with slope E.
+
+00:01:33.220 --> 00:01:35.442
+Now connect it to the spring.
+
+00:01:35.442 --> 00:01:38.737
+Stress times the slice's area A is a force.
+
+00:01:38.737 --> 00:01:41.879
+Strain times its length d x is a stretch.
+
+00:01:41.879 --> 00:01:46.860
+So this graph is just the spring's force-stretch graph, rescaled.
+
+00:01:48.524 --> 00:01:53.839
+So the slice stores the area of the triangle under the line, times A d x.
+
+00:01:53.839 --> 00:02:02.284
+Per unit volume, the energy is just the triangle's area: half base times height, one half, epsilon, times E epsilon.
+
+00:02:02.584 --> 00:02:07.951
+We'll call it U star: the strain energy per unit volume.
+
+00:02:07.951 --> 00:02:12.168
+It's the same shape as one half K q squared.
+
+00:02:12.168 --> 00:02:17.344
+Stiffness, times deformation, squared, times one half.
+
+00:02:20.100 --> 00:02:24.950
+To get the whole bar's energy, add up every slice.
+
+00:02:24.950 --> 00:02:31.159
+A slice has volume A, the bar's cross-sectional area, times d x.
+
+00:02:31.159 --> 00:02:36.300
+So it stores one half E epsilon squared, times A d x.
+
+00:02:38.220 --> 00:02:40.702
+What's the strain of a slice?
+
+00:02:40.702 --> 00:02:47.120
+Its left face moves u, its right face moves u plus d u, so it grows by d u.
+
+00:02:47.120 --> 00:02:48.660
+Its length is d x.
+
+00:02:48.660 --> 00:02:52.340
+Change in length over length: d u over d x.
+
+00:02:52.640 --> 00:03:03.800
+Add up the slices with an integral from zero to L, and the bar's strain energy is one half, the integral of E A, times d u d x, squared, d x.
+
+00:03:04.133 --> 00:03:11.597
+This is the formula the whole rest of the series stands on, so let's make sure it feels familiar.
+
+00:03:11.597 --> 00:03:16.368
+Stiffness, times how much it deforms, squared, times one half.
+
+00:03:16.368 --> 00:03:20.293
+Exactly the spring's formula, spread along the bar.
+
+00:03:20.627 --> 00:03:36.457
+In fact, if the bar stretches evenly, so its tip moves q, then d u d x is q over L everywhere, and U becomes one half, E A over L, q squared.
+
+00:03:36.457 --> 00:03:40.387
+A spring with stiffness E A over L.
+
+00:03:40.760 --> 00:03:47.290
+And if the bar just slides along without stretching, d u d x is zero, and so is U.
+
+00:03:47.290 --> 00:03:49.600
+No stretch, no stored energy.
+
+00:03:50.833 --> 00:03:56.395
+The work potential is load times displacement, as always.
+
+00:03:56.395 --> 00:04:03.713
+The tip load P acts where the bar moves u of L, so it gives P times u at L.
+
+00:04:04.013 --> 00:04:07.080
+The spread-out load acts everywhere.
+
+00:04:07.080 --> 00:04:13.213
+A slice d x carries f d x, and moves u, so add up f u d x along the bar.
+
+00:04:13.546 --> 00:04:21.955
+So W equals P u at L, plus the integral of f u d x.
+
+00:04:21.955 --> 00:04:27.066
+And Pi is U minus W, as before.
+
+00:04:27.400 --> 00:04:28.910
+But here's the problem.
+
+00:04:28.910 --> 00:04:31.734
+Pi now depends on a whole function, u of x.
+
+00:04:31.734 --> 00:04:35.870
+We can't take a partial derivative with respect to every point.
+
+00:04:35.870 --> 00:04:36.920
+We need a trick.
+
+00:04:38.000 --> 00:04:39.042
+Here's the trick.
+
+00:04:39.042 --> 00:04:42.840
+Guess the shape of u of x, but leave a number in it to adjust.
+
+00:04:42.840 --> 00:04:48.600
+Then Pi depends only on that number, and we're back to finding the bottom of an ordinary bowl.
+
+00:04:48.900 --> 00:04:50.158
+Let's try it.
+
+00:04:50.158 --> 00:04:53.641
+Only the spread load f, no tip load.
+
+00:04:53.641 --> 00:04:56.157
+Assume u equals a times x.
+
+00:04:56.157 --> 00:05:00.995
+It's zero at the wall, so it respects the support.
+
+00:05:00.995 --> 00:05:03.220
+Then d u d x is just a.
+
+00:05:03.553 --> 00:05:13.750
+U is one half, E A a squared, integrated over the length: one half E A a squared L.
+
+00:05:13.750 --> 00:05:20.753
+W is the integral of f times a x: one half f a L squared.
+
+00:05:21.087 --> 00:05:29.273
+So Pi of a is one half E A a squared L, minus one half f a L squared.
+
+00:05:29.273 --> 00:05:34.967
+A parabola in a: a bowl, just like the spring's.
+
+00:05:35.320 --> 00:05:43.022
+Set its derivative to zero: E A a L minus one half f L squared equals zero.
+
+00:05:43.022 --> 00:05:46.000
+So a equals f L over two E A.
+
+00:05:46.387 --> 00:05:49.803
+Why is that the best straight line?
+
+00:05:49.803 --> 00:05:53.708
+The true shape has the lowest Pi of all.
+
+00:05:53.708 --> 00:06:01.907
+So among straight lines, the one with the lowest Pi is the one closest to the truth.
+
+00:06:01.907 --> 00:06:06.787
+Its tip moves a times L: f L squared over two E A.
+
+00:06:07.187 --> 00:06:11.603
+Pay close attention, because this is the idea finite elements are built on.
+
+00:06:11.603 --> 00:06:18.787
+Assume a shape that respects the supports, with a few unknown numbers in it, and the infinite problem becomes a small one.
+
+00:06:19.933 --> 00:06:21.899
+How good is that guess?
+
+00:06:21.899 --> 00:06:24.975
+This simple bar has an exact answer.
+
+00:06:24.975 --> 00:06:34.888
+Cut it at x: the piece beyond the cut carries f times L minus x, so the strain there is f times L minus x, over E A.
+
+00:06:34.888 --> 00:06:42.493
+Integrate that, and you get u of x equals f over E A, times L x minus x squared over two.
+
+00:06:42.793 --> 00:06:47.059
+At the tip, the exact answer is f L squared over two E A.
+
+00:06:47.059 --> 00:06:49.753
+Exactly what our straight line gave.
+
+00:06:50.053 --> 00:06:54.734
+Your turn: pause and do checkpoint four point one in your guide.
+
+00:06:54.734 --> 00:06:57.733
+Compare the two at the middle of the bar.
+
+00:07:00.933 --> 00:07:05.539
+At the middle, the straight line gives one quarter f L squared over E A.
+
+00:07:05.539 --> 00:07:07.713
+The exact answer is three eighths.
+
+00:07:07.713 --> 00:07:10.783
+The line sits too low everywhere inside the bar.
+
+00:07:10.783 --> 00:07:14.173
+The tip matching was a lucky coincidence, not a rule.
+
+00:07:16.062 --> 00:07:20.070
+That's the honest truth about assumed shapes: they're approximate.
+
+00:07:20.070 --> 00:07:22.317
+A better shape gives a better answer.
+
+00:07:22.317 --> 00:07:26.142
+But choosing one good shape for a whole real structure is hard.
+
+00:07:27.565 --> 00:07:32.592
+The course slides use the same trick on a beam, so let's see it once.
+
+00:07:32.592 --> 00:07:39.221
+A beam of length L, stiffness E I, supported at both ends, with a point load at the middle.
+
+00:07:39.221 --> 00:07:45.485
+The slides call that load W; we'll call it P, so it doesn't clash with work potential.
+
+00:07:47.577 --> 00:07:57.675
+Measure z along the beam, and let v be how far it sags, positive downward, the way the load points.
+
+00:07:57.675 --> 00:08:01.857
+Call the middle point B, and its sag v B.
+
+00:08:02.190 --> 00:08:08.590
+Assume the sag is a sine hump: v equals v B times sine of pi z over L.
+
+00:08:08.590 --> 00:08:13.985
+It's zero at both supports, and peaks at v B in the middle.
+
+00:08:13.985 --> 00:08:16.270
+It respects the supports.
+
+00:08:16.570 --> 00:08:29.101
+For a beam, the deformation is the bending, the curvature, and the strain energy is the integral of M squared over two E I, with M equal to minus E I times v double prime.
+
+00:08:29.101 --> 00:08:33.570
+Same pattern: one half, stiffness, times deformation squared.
+
+00:08:33.870 --> 00:08:35.331
+Put the sine in.
+
+00:08:35.331 --> 00:08:41.723
+Its second derivative is minus v B, pi over L squared, times the sine.
+
+00:08:41.723 --> 00:08:50.670
+Square it and integrate, and U comes out to pi to the fourth, E I, v B squared, over four L cubed.
+
+00:08:50.970 --> 00:08:53.595
+Pi is that, minus P times v B.
+
+00:08:53.595 --> 00:09:02.258
+Set its derivative with respect to v B to zero: v B equals two P L cubed over pi to the fourth E I.
+
+00:09:02.258 --> 00:09:07.770
+That's zero point zero two zero five three, P L cubed over E I.
+
+00:09:08.104 --> 00:09:15.304
+Beam theory's exact answer is P L cubed over forty eight E I, which is zero point zero two zero eight three.
+
+00:09:15.304 --> 00:09:18.904
+A one-line guess, within about one and a half percent.
+
+00:09:20.165 --> 00:09:29.045
+So assumed shapes work, but one shape for the whole structure is hard to choose, and our single straight line missed the curve inside the bar.
+
+00:09:29.465 --> 00:09:33.476
+Here's the way out, and it's the whole idea of finite elements.
+
+00:09:33.476 --> 00:09:35.450
+Chop the bar into short pieces.
+
+00:09:35.450 --> 00:09:39.524
+In each piece, use the simplest shape there is, a straight line.
+
+00:09:39.524 --> 00:09:41.625
+The pieces join at shared points.
+
+00:09:41.898 --> 00:09:48.479
+And now the unknowns are just the displacements of those shared points: q one, q two, q three, q four.
+
+00:09:48.479 --> 00:09:51.898
+A handful of numbers again, exactly like our springs.
+
+00:09:52.198 --> 00:09:55.782
+Lots of short straight lines can follow any curve.
+
+00:09:55.782 --> 00:10:01.158
+And each piece is so simple that we can work out its energy once, for good.
+
+00:10:01.498 --> 00:10:08.664
+So, stepping back: the strain energy of a bar is one half the integral of E A times strain squared.
+
+00:10:08.664 --> 00:10:11.849
+Assume a shape, and Pi becomes a bowl again.
+
+00:10:11.849 --> 00:10:15.178
+Next time: one element, worked out completely.

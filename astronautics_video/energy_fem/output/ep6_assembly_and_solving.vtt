@@ -1,0 +1,310 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.605
+A flagpole stands on the ground and carries nothing but its own weight.
+
+00:00:04.605 --> 00:00:06.226
+How much does it shorten?
+
+00:00:06.226 --> 00:00:08.951
+And where inside it is the stress highest?
+
+00:00:08.951 --> 00:00:11.480
+Let's answer both with finite elements.
+
+00:00:11.813 --> 00:00:14.477
+This example is from the course slides.
+
+00:00:14.477 --> 00:00:17.415
+The column has height L, fixed at its base.
+
+00:00:17.415 --> 00:00:19.533
+Measure x upward from the base.
+
+00:00:19.867 --> 00:00:24.055
+Its weight acts all along it, pointing down.
+
+00:00:24.055 --> 00:00:31.766
+Per unit length that's rho, times A, times g: density, times area, times gravity.
+
+00:00:31.766 --> 00:00:37.858
+Since x points up, the load is negative: f equals minus rho A g.
+
+00:00:37.858 --> 00:00:42.427
+In our element formulas, c equals minus rho A g.
+
+00:00:42.833 --> 00:00:47.145
+Use three equal elements, each of length l equals L over three.
+
+00:00:47.145 --> 00:00:50.157
+Nodes one to four, from the base to the top.
+
+00:00:50.157 --> 00:00:52.073
+Node one sits on the ground.
+
+00:00:53.066 --> 00:00:55.512
+First, connect this back to the bowl.
+
+00:00:55.512 --> 00:01:02.058
+The column's Pi is the sum of every element's strain energy, minus the work potential of the loads.
+
+00:01:02.058 --> 00:01:09.066
+Take a partial derivative for each node and set it to zero, just as we did for the springs in episode two.
+
+00:01:09.366 --> 00:01:15.648
+Each element's energy is the spring formula, with stiffness E A over l.
+
+00:01:15.648 --> 00:01:27.326
+So the result is the same kind of matrix we built from springs: a stiffness matrix K, times the displacements q, equals the loads F.
+
+00:01:27.600 --> 00:01:30.907
+Element one connects nodes one and two.
+
+00:01:30.907 --> 00:01:40.320
+Its local spot one-one goes to the big matrix's spot one-one, and its block fills rows and columns one and two.
+
+00:01:40.653 --> 00:01:43.270
+Element two connects nodes two and three.
+
+00:01:43.270 --> 00:01:47.165
+Its local spot one-one goes to the big matrix's spot two-two.
+
+00:01:47.165 --> 00:01:50.293
+But spot two-two is already taken by element one.
+
+00:01:50.620 --> 00:01:54.532
+This is the key step of assembly, so watch it closely.
+
+00:01:54.532 --> 00:01:58.733
+Where two blocks land on the same spot, their entries add.
+
+00:01:58.733 --> 00:02:00.400
+One plus one gives two.
+
+00:02:00.400 --> 00:02:00.689
+Why?
+
+00:02:00.689 --> 00:02:09.020
+Because q two appears in two elements' energies, so the derivative with respect to q two picks up a term from each.
+
+00:02:09.387 --> 00:02:16.570
+Element three goes into rows and columns three and four, adding at spot three-three.
+
+00:02:16.570 --> 00:02:20.075
+Everywhere no element touches, it's zero.
+
+00:02:20.075 --> 00:02:32.987
+The result: E A over l, times one, minus one, zero, zero; minus one, two, minus one, zero; zero, minus one, two, minus one; zero, zero, minus one, one.
+
+00:02:35.099 --> 00:02:37.283
+The loads assemble the same way.
+
+00:02:37.283 --> 00:02:45.339
+Each element carries a total weight c l, with c equal to minus rho A g, and sends half of it to each of its two nodes.
+
+00:02:45.632 --> 00:02:51.232
+Your turn: pause and do checkpoint six point one in your guide, and build the load vector.
+
+00:02:54.465 --> 00:02:58.503
+Node one gets c l over two from element one.
+
+00:02:58.503 --> 00:03:06.397
+Node two is shared: c l over two from element one, plus c l over two from element two.
+
+00:03:06.397 --> 00:03:07.407
+That's c l.
+
+00:03:07.407 --> 00:03:09.701
+Node three also gets c l.
+
+00:03:09.701 --> 00:03:13.465
+Node four, at the top, only c l over two.
+
+00:03:15.832 --> 00:03:23.512
+And one more force: the ground pushes up on node one with a reaction R that we don't know yet.
+
+00:03:23.512 --> 00:03:29.394
+R is a force at node one like any other, so it goes in node one's entry.
+
+00:03:29.394 --> 00:03:35.032
+We include it so that row one stays a true equation we can use later.
+
+00:03:35.365 --> 00:03:40.177
+So K times q equals F, with four equations.
+
+00:03:40.177 --> 00:03:43.086
+But we can't solve it yet.
+
+00:03:43.086 --> 00:03:45.325
+Something's missing.
+
+00:03:46.832 --> 00:03:52.821
+Remember: every row of this matrix adds to zero, because sliding the whole column along stores no energy.
+
+00:03:52.821 --> 00:03:58.182
+So the bowl has a flat valley instead of a single lowest point, and the matrix has no inverse.
+
+00:03:58.182 --> 00:04:02.232
+Without its support, the column would just slide away under its weight.
+
+00:04:02.580 --> 00:04:04.840
+What's missing is the support.
+
+00:04:04.840 --> 00:04:07.551
+The base is fixed, so q one is zero.
+
+00:04:07.551 --> 00:04:08.380
+We know it.
+
+00:04:08.661 --> 00:04:10.831
+Here's what to do, and why.
+
+00:04:10.831 --> 00:04:19.187
+Because q one is zero, everything in column one gets multiplied by zero, so we can cross out column one.
+
+00:04:19.187 --> 00:04:26.821
+And row one is the equation that contains the unknown reaction R, so we set it aside for later.
+
+00:04:29.121 --> 00:04:46.056
+What's left is a three by three system for q two, q three and q four: E A over l, times two, minus one, zero; minus one, two, minus one; zero, minus one, one.
+
+00:04:46.056 --> 00:04:51.201
+On the right, c l over two, times two, two, one.
+
+00:04:52.464 --> 00:04:58.578
+To keep the numbers clean, measure every q in units of c l squared over two E A.
+
+00:04:58.578 --> 00:05:08.664
+Then the system is just: two, minus one, zero; minus one, two, minus one; zero, minus one, one, times the q's, equals two, two, one.
+
+00:05:08.964 --> 00:05:16.044
+The last row says minus x three plus x four equals one.
+
+00:05:16.377 --> 00:05:21.937
+Add the last row to the middle row: minus x two plus x three equals three.
+
+00:05:22.277 --> 00:05:26.625
+Add that result to the first row, and you get x two equals five.
+
+00:05:26.625 --> 00:05:29.477
+Then x three is eight, and x four is nine.
+
+00:05:29.811 --> 00:05:31.648
+Now put the units back.
+
+00:05:31.648 --> 00:05:41.708
+c l squared over two E A, with c equal to minus rho A g and l equal to L over three, is minus rho g L squared over eighteen E.
+
+00:05:41.708 --> 00:05:49.851
+So the q's are rho g L squared over two E, times minus five ninths, minus eight ninths, and minus one.
+
+00:05:50.311 --> 00:05:52.671
+All negative: every point sinks.
+
+00:05:52.671 --> 00:05:56.357
+The top sinks most, by rho g L squared over two E.
+
+00:05:56.357 --> 00:06:01.591
+That answers our first question: that's how much the flagpole shortens.
+
+00:06:02.631 --> 00:06:13.976
+This column has an exact answer: u of x equals rho g over E, times x squared over two minus L x.
+
+00:06:13.976 --> 00:06:15.631
+Let's plot it.
+
+00:06:15.931 --> 00:06:25.635
+At x over L equal to one third, two thirds and one, it gives minus five ninths, minus eight ninths and minus one.
+
+00:06:25.635 --> 00:06:28.211
+The exact values at the nodes.
+
+00:06:28.531 --> 00:06:34.851
+Now the finite element answer: straight lines between those same node values.
+
+00:06:35.164 --> 00:06:39.802
+For a simple bar like this, linear elements put the nodes exactly right.
+
+00:06:39.802 --> 00:06:43.088
+In other structures the nodes are close, not exact.
+
+00:06:43.088 --> 00:06:47.404
+And between the nodes, straight lines can't quite follow the curve.
+
+00:06:48.331 --> 00:06:49.130
+Now stress.
+
+00:06:49.130 --> 00:07:00.531
+In each element, sigma is E times strain, and the strain is the change in displacement over the length: q of the top node minus q of the bottom node, over l.
+
+00:07:01.441 --> 00:07:12.353
+Element one: q two minus q one is minus five ninths, times rho g L squared over two E.
+
+00:07:12.353 --> 00:07:20.601
+Divide by L over three, multiply by E: minus five sixths rho g L.
+
+00:07:20.901 --> 00:07:25.941
+Your turn: pause and do checkpoint six point two in your guide.
+
+00:07:25.941 --> 00:07:28.421
+Find the stress in element two.
+
+00:07:31.654 --> 00:07:38.914
+Element two: minus eight ninths plus five ninths is minus three ninths.
+
+00:07:38.914 --> 00:07:42.697
+The stress is minus one half rho g L.
+
+00:07:42.697 --> 00:07:47.094
+And element three, minus one sixth rho g L.
+
+00:07:47.754 --> 00:07:48.633
+Plot them.
+
+00:07:48.633 --> 00:07:54.702
+Each element's stress is a flat step, because its strain is constant.
+
+00:07:54.702 --> 00:08:02.354
+The exact stress is a straight line, from minus rho g L at the base to zero at the top.
+
+00:08:02.754 --> 00:08:04.773
+Look closely at where they meet.
+
+00:08:04.773 --> 00:08:13.038
+At x over L equal to one sixth, the middle of element one, the exact stress is minus five sixths rho g L: exactly the step's value.
+
+00:08:13.038 --> 00:08:16.634
+Each step crosses the line right at its element's middle.
+
+00:08:17.021 --> 00:08:24.567
+That answers our second question: the stress is highest at the base, where the column holds up its whole weight.
+
+00:08:24.567 --> 00:08:31.642
+And stresses are rougher than displacements, because they come from the slope of the straight-line guess.
+
+00:08:31.642 --> 00:08:33.461
+More elements, finer steps.
+
+00:08:34.397 --> 00:08:37.446
+Remember row one, the one we set aside?
+
+00:08:37.446 --> 00:08:41.277
+Now that we know q two, it tells us the reaction.
+
+00:08:41.610 --> 00:08:49.524
+It says E A over l, times q one minus q two, equals c l over two plus R.
+
+00:08:49.524 --> 00:08:53.810
+q one is zero, and q two we just found.
+
+00:08:54.144 --> 00:08:58.456
+Put the numbers in, and R comes out to rho g A L.
+
+00:08:58.456 --> 00:09:03.736
+The ground pushes up with exactly the column's whole weight.
+
+00:09:03.736 --> 00:09:04.704
+As it must.
+
+00:09:05.110 --> 00:09:19.870
+So, stepping back: assemble the blocks, add the loads, fix the supports by removing their rows and columns, solve, then get stresses and use the removed rows for the reactions.
