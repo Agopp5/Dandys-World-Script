@@ -34,6 +34,16 @@ def sag_y(x):
     return YB - AMP * np.sin(np.pi * (x - X0) / (X1 - X0))
 
 
+def tint_frac(part, where, idx, color=LILAC):
+    """Color glyphs of a fraction by TeX order: 'num' = before the bar, 'den' = after it."""
+    gs = list(part.submobjects)
+    b = [i for i, g in enumerate(gs) if g.width > 4 * g.height][0]
+    seq = gs[:b] if where == "num" else gs[b + 1:]
+    for i in idx:
+        seq[i].set_color(color)
+    return part
+
+
 def pin(x):
     tri = Triangle(color=INK2, stroke_width=4).scale(0.32)
     tri.move_to([x, YB - 0.15 - tri.height / 2, 0])
@@ -58,7 +68,7 @@ class S29_Beam(VScene):
         # ---- beat 1: the beam, its supports, the load P -------------------------------------------
         beam = bar(X0, X1, y=YB, h=0.3)
         sup = VGroup(pin(X0), roller(X1))
-        ei = M(r"EI", size=46, color=INK2).next_to(beam, UP, buff=0.2).align_to(beam, LEFT).shift(RIGHT * 0.3)
+        ei = M(r"EI", size=46, color=LILAC).next_to(beam, UP, buff=0.2).align_to(beam, LEFT).shift(RIGHT * 0.3)
         p_arr = force([XM, YB + 2.2, 0], d=DOWN, length=2.05)
         p_lab = M(r"P", size=52, color=ROSE).next_to(p_arr, LEFT, buff=0.2).shift(UP * 0.3)
         note_w = TX(r"slides: $W$", size=42).set_color(MUTED).next_to(p_arr, RIGHT, buff=0.3).shift(UP * 0.3)
@@ -109,8 +119,11 @@ class S29_Beam(VScene):
         # ---- beat 4: strain energy of bending ----------------------------------------------------
         RX = 3.6
         u_int = E(r"U|=|\int_0^L \frac{M^2}{2EI}\,dz", size=52).move_to([RX, 2.3, 0])
-        m_def = E(r"M|=|-EI|\,v''", size=48, cmap=VC).move_to([RX, 0.6, 0])
+        tint_frac(u_int[2], "den", (1, 2))                     # EI is a stiffness: LILAC
+        m_def = E(r"M|=|-|EI|v''", size=48, cmap=dict(VC, EI=LILAC)).move_to([RX, 0.6, 0])
         n_pat = TX(r"$=\tfrac12\,EI\,(\text{curvature})^2$, integrated", size=42).move_to([RX, -0.8, 0])
+        n_pat[0][4].set_color(LILAC)
+        n_pat[0][5].set_color(LILAC)
         self.beat("For a beam, the deformation is the bending, the curvature, and the strain energy is the "
                   "integral of M squared over two E I, with M equal to minus E I times v double prime. Same "
                   "pattern: one half, stiffness, times deformation squared.",
@@ -121,6 +134,7 @@ class S29_Beam(VScene):
         vpp_eq = E(r"v''|=|-v_B\frac{\pi^2}{L^2}\sin\frac{\pi z}{L}", size=48, cmap=VC).move_to([RX, 0.6, 0])
         n_sin = TX(r"using $\int_0^L \sin^2\frac{\pi z}{L}\,dz = \frac{L}{2}$", size=42).move_to([RX, -0.8, 0])
         u_res = E(r"U|=|\frac{\pi^4 EI\,v_B^2}{4L^3}", size=56).move_to([RX, -2.2, 0])
+        tint_frac(u_res[2], "num", (2, 3))
         u_glow = glow(u_res, MINT)
         self.beat("Put the sine in. Its second derivative is minus v B, pi over L squared, times the sine. Square "
                   "it and integrate, and U comes out to pi to the fourth, E I, v B squared, over four L cubed.",
@@ -131,6 +145,12 @@ class S29_Beam(VScene):
         pi_eq = E(r"\Pi|=|\frac{\pi^4 EI\,v_B^2}{4L^3}|-|P|\,v_B", size=52, cmap=VC).move_to([RX, 2.3, 0])
         dpi = E(r"\frac{d\Pi}{dv_B}|=|\frac{\pi^4 EI\,v_B}{2L^3}|-|P|=|0", size=48, cmap=VC).move_to([RX, 0.5, 0])
         res = E(r"v_B|=|\frac{2PL^3}{\pi^4 EI}|\approx|0.02053\,\frac{PL^3}{EI}", size=48, cmap=VC)
+        tint_frac(pi_eq[2], "num", (2, 3))
+        tint_frac(dpi[2], "num", (2, 3))
+        tint_frac(res[2], "den", (2, 3))
+        tint_frac(res[2], "num", (1,), ROSE)
+        tint_frac(res[4], "den", (0, 1))
+        tint_frac(res[4], "num", (-3,), ROSE)
         res.move_to([RX - 0.15, -1.7, 0])
         res_box = SurroundingRectangle(res, color=SKY, buff=0.2, stroke_width=4)
         with self.say("Pi is that, minus P times v B. Set its derivative with respect to v B to zero: v B equals "
@@ -146,9 +166,13 @@ class S29_Beam(VScene):
 
         # ---- beat 7: compare with beam theory ----------------------------------------------------
         exact = E(r"\frac{PL^3}{48EI}|\approx|0.02083\,\frac{PL^3}{EI}", size=48).move_to([RX, -0.3, 0])
-        ex_tag = T("beam theory, exact", size=32, color=MUTED).next_to(exact, UP, buff=0.25)
+        tint_frac(exact[0], "den", (2, 3))
+        tint_frac(exact[0], "num", (0,), ROSE)
+        tint_frac(exact[2], "den", (0, 1))
+        tint_frac(exact[2], "num", (-3,), ROSE)
+        ex_tag = T("beam theory, exact", size=40, color=MUTED).next_to(exact, UP, buff=0.25)
         BW = 4.2                                   # exact bar length; the guess is 98.55 percent of it
-        b_lbl = VGroup(T("guess", size=32, color=SKY), T("exact", size=32, color=INK2))
+        b_lbl = VGroup(T("guess", size=40, color=SKY), T("exact", size=40, color=INK2))
         bx = RX - 1.6
         g_bar = Rectangle(width=BW * (1 - low), height=0.55, color=SKY, fill_color=SKY, fill_opacity=.6)
         e_bar = Rectangle(width=BW, height=0.55, color=INK2, fill_color=INK2, fill_opacity=.35)
