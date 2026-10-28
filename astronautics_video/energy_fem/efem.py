@@ -269,7 +269,7 @@ def stepped_bar(x0=-6.0, x3=6.0, y=2.0, h1=1.4, h2=0.6, f1=0.37, f2=0.37):
                      T("element 2", size=36, color=INK2).move_to([(x1 + x2) / 2, yc, 0]))
     g.klab = M("K", size=60, color=LILAC).move_to([(x2 + x3) / 2, y + 0.8, 0])
     g.load = force(np.array([x1, y + (h1 + h2) / 4, 0]), d=RIGHT, length=0.9)
-    g.plab = E(r"P|=|7000\ \text{N}", size=54).next_to(g.load, UP, buff=0.12).align_to(g.load, LEFT)
+    g.plab = E(r"P|=|7000\ \text{N}", size=54).next_to(g.load, RIGHT, buff=0.1).shift(UP * 0.25)
     yd = y + h1 / 2 + 0.35
     def dim(a, b):
         ln = Line([a + 0.06, yd, 0], [b - 0.06, yd, 0], color=MUTED, stroke_width=3)
