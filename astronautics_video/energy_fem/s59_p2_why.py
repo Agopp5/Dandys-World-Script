@@ -253,8 +253,8 @@ class S59_P2_Why(VScene):
         mat = always_redraw(lambda: VGroup(*[Line([XL(x) + D(x), YB - 0.24, 0], [XL(x) + D(x), YB + 0.24, 0],
                                                    color=INK2, stroke_width=2.5) for x in mat_x]).set_z_index(2))
         exag = T("deformation exaggerated", size=30, color=MUTED).move_to([XR, -0.45, 0])
-        lab_sh = T("shortens", size=36, color=INK2).move_to([XL(5), -1.0, 0])
-        lab_st = T("stretches", size=36, color=INK2).move_to([XL(14.2), -1.0, 0])
+        lab_sh = T("shortens", size=36, color=INK2).move_to([XL(5), -0.95, 0])
+        lab_st = T("stretches", size=36, color=INK2).move_to([XL(15.1), -0.95, 0])
         with self.say("Minus two hundred fifty plus two hundred fifty is zero. The left half shortens near the wall "
                       "and stretches near the middle by exactly the same amount, so point one ends up where it "
                       "started.") as d:

@@ -137,7 +137,7 @@ class S45_Stress(VScene):
                         T("exact", 36, INK))
         leg_ex[1].next_to(leg_ex[0], RIGHT, buff=0.2)
         legend = VGroup(leg_fem, leg_ex).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
-        legend.move_to([RX, -3.0, 0])
+        legend.move_to([RX, -3.25, 0])
         self.beat("Plot them. Each element's stress is a flat step, because its strain is constant. The exact stress is a straight line, from minus rho g L at the base to zero at the top.",
                   [FadeOut(col), Create(frame_ax)],
                   [Create(st3[0][0]), Indicate(res1)], [Create(st3[0][1]), Indicate(res2)],
@@ -179,10 +179,9 @@ class S45_Stress(VScene):
             tick.shift(over * LEFT)
         qans = VGroup(T("At the base: it holds", 32, INK), T("up the whole weight", 32, INK))
         qans.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(card, DOWN, buff=0.35).align_to(card, LEFT)
-        note1 = T("Stress is the slope of the", 30, INK2)
-        note2 = T("straight-line guess:", 30, INK2)
-        note3 = T("one order rougher than u", 30, INK2)
-        notes = VGroup(note1, note2, note3).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(qans, DOWN, buff=0.4).align_to(card, LEFT)
+        note1 = T("Stress is the slope of the guess:", 30, INK2)
+        note2 = T("one order rougher than u", 30, INK2)
+        notes = VGroup(note1, note2).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(qans, DOWN, buff=0.4).align_to(card, LEFT)
         base_dot = Dot(ax.c2p(0, -1), radius=0.14, color=GOOD).set_z_index(6)
         base_lab = TX(r"largest compression: $|\sigma| = \rho g L$", size=36)
         base_lab.next_to(base_dot, RIGHT, buff=0.3).shift(0.4 * DOWN)
