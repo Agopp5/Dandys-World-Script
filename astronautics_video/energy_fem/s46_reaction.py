@@ -89,7 +89,7 @@ class S46_Reaction(VScene):
             self.wait(.2 * d)
 
         # summary panel (own build: key_box shrinks lines below the readable size)
-        head = T("THE FEM RECIPE", size=36, color=GOLD, weight=BOLD)
+        head = T("THE FEM RECIPE", size=36, color=INK, weight=BOLD)
         lines = [T("assemble K and F (overlaps add)", size=38),
                  T("remove supported rows and columns", size=38),
                  T("solve for the free q's", size=38),
@@ -97,7 +97,7 @@ class S46_Reaction(VScene):
                         M("R", size=44, color=ROSE)).arrange(RIGHT, buff=0.2)]
         rows = VGroup(*[VGroup(badge(i + 1), ln).arrange(RIGHT, buff=0.4) for i, ln in enumerate(lines)])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.5)
-        card = panel(VGroup(head, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.55), color=GOLD)
+        card = panel(VGroup(head, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.55), color=INK2)
         card.scale_to_fit_width(11.6).move_to(ORIGIN)
         with self.say("So, stepping back: assemble the blocks, add the loads, fix the supports by removing their "
                       "rows and columns, solve, then get stresses and use the removed rows for the reactions.") as d:

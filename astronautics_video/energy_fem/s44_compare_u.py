@@ -29,7 +29,7 @@ gap = max(((ue(a) + (ue(b) - ue(a)) * (t - a) / (b - a)) - ue(t))
           for a, b in zip([0] + XS[:-1], XS) for t in np.linspace(a, b, 2001))
 assert np.isclose(gap, 1 / 36, rtol=1e-4)
 
-FEMC = interpolate_color(ManimColor(SKY), ManimColor(WHITE), 0.5)
+FEMC = interpolate_color(ManimColor(SKY), ManimColor(INK), 0.45)   # lighter SKY: still a displacement
 
 
 class S44_Compare_u(VScene):
@@ -40,17 +40,16 @@ class S44_Compare_u(VScene):
         eq = E(r"u|(x)|=|\frac{\rho g}{E}|\Big(\frac{x^2}{2} - L x\Big)", size=52)
         eq.to_edge(UP, buff=0.3)
 
-        ax = Axes(x_range=[0, 1.1, 1 / 3], y_range=[-1.2, 0.1, 0.1], x_length=10.2, y_length=4.8,
+        ax = Axes(x_range=[0, 1.1, 1 / 3], y_range=[-1.2, 0.1, 0.1], x_length=9.8, y_length=4.8,
                   axis_config={"color": AXIS, "include_tip": False, "stroke_width": 3},
                   y_axis_config={"include_ticks": False})
-        ax.shift(RIGHT * 0.9 + (1.45 - ax.c2p(0, 0)[1]) * UP)
-        xt = VGroup(*[M(s, size=36, color=INK2).next_to(ax.c2p(x, 0), UP, buff=0.15)
-                      for s, x in [("0", 0), (r"\frac{1}{3}", 1 / 3), (r"\frac{2}{3}", 2 / 3), ("1", 1)]])
+        ax.shift(RIGHT * 1.25 + (1.45 - ax.c2p(0, 0)[1]) * UP)
+        xt = VGroup(*[M(s, size=40, color=INK2).next_to(ax.c2p(x, 0), UP, buff=0.15)
+                      for s, x in [("0", 0), ("1/3", 1 / 3), ("2/3", 2 / 3), ("1", 1)]])
         xt[0].next_to(ax.c2p(0, 0), UL, buff=0.12)
         xl = M(r"x / L", size=40, color=INK).next_to(ax.c2p(1.1, 0), DOWN, buff=0.25)
         yl = E(r"u|\,\big/\,|\frac{\rho g L^2}{2E}", size=40)
-        fit(yl, 2.5, 1.2)
-        yl.next_to(ax.c2p(0, -0.6), LEFT, buff=0.2)
+        yl.next_to(ax.c2p(0, -0.6), LEFT, buff=0.25)
         frame_mobs = VGroup(ax, xt, xl, yl)
 
         curve = ax.plot(ue, x_range=[0, 1], color=SKY, stroke_width=6)
@@ -64,7 +63,7 @@ class S44_Compare_u(VScene):
         for xi, v, s in zip(XS, VALS, [r"-\frac{5}{9}", r"-\frac{8}{9}", "-1"]):
             d = Dot(ax.c2p(xi, v), radius=0.1, color=SKY).set_z_index(5)
             g = DashedLine(ax.c2p(xi, 0), ax.c2p(xi, v), color=MUTED, stroke_width=2, dash_length=0.08)
-            lab = M(s, size=40, color=SKY).next_to(d, DL, buff=0.12)
+            lab = M(s, size=50, color=SKY).next_to(d, DL, buff=0.12)
             dots.add(d); guides.add(g); labs.add(lab)
         labs[2].next_to(dots[2], DOWN, buff=0.3)
 

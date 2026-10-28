@@ -92,7 +92,7 @@ class S42_BC(VScene):
                       "matrix has no inverse. Without its support, the column would just slide away under its "
                       "weight.") as d:
             self.play(FadeIn(col), Create(gap), Write(pre), Write(K), run_time=0.12 * d)
-            self.play(LaggedStart(*[AnimationGroup(Indicate(r, color=GOLD, scale_factor=1.08), FadeIn(s))
+            self.play(LaggedStart(*[AnimationGroup(Indicate(r, color=INK, scale_factor=1.08), FadeIn(s))
                                     for r, s in zip(rows, sums)], lag_ratio=0.6), run_time=0.22 * d)
             self.wait(0.08 * d)
             self.play(Create(bowl), FadeIn(pil), run_time=0.08 * d)
@@ -139,7 +139,7 @@ class S42_BC(VScene):
             self.play(Indicate(q1, color=SKY), Circumscribe(cols[0], color=BAD), run_time=0.12 * d)
             self.play(Create(colstrike), Create(qstrike), run_time=0.1 * d)
             self.snap("column 1 crossed out")
-            self.play(Circumscribe(R1, color=ROSE), Circumscribe(rows[0], color=GOLD), run_time=0.12 * d)
+            self.play(Circumscribe(R1, color=ROSE), Circumscribe(rows[0], color=INK), run_time=0.12 * d)
             # the spotlight's halos stay where they were drawn: lift it before row 1 moves, then light the new home
             self.play(self.unspot(), run_time=0.05 * d)
             self.play(moving.animate.shift((r1eq.get_y() - rows[0].get_y()) * UP),

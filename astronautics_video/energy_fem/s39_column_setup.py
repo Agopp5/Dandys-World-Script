@@ -43,7 +43,7 @@ class S39_Column_Setup(VScene):
             self.wait(.1 * d)
             self.play(FadeIn(q_b, shift=LEFT * .3), run_time=.15 * d)
             self.wait(.15 * d)
-            self.play(Circumscribe(col, color=ACCENT), run_time=.2 * d)
+            self.play(Circumscribe(col, color=INK), run_time=.2 * d)
             self.wait(.05 * d)
 
         # ---- beat 2: height L, fixed base, x upward
@@ -61,9 +61,9 @@ class S39_Column_Setup(VScene):
         with self.say("This example is from the course slides. The column has height L, fixed at its base. "
                       "Measure x upward from the base.") as d:
             self.play(FadeOut(cards), run_time=.15 * d)
-            self.play(Create(tL), Create(guideL), FadeIn(lL), Indicate(col, color=ACCENT, scale_factor=1.02),
+            self.play(Create(tL), Create(guideL), FadeIn(lL), Indicate(col, color=INK, scale_factor=1.02),
                       run_time=.2 * d)
-            self.play(Indicate(floor_l, color=ACCENT), FadeIn(fixed), run_time=.2 * d)
+            self.play(Indicate(floor_l, color=INK), FadeIn(fixed), run_time=.2 * d)
             self.play(GrowArrow(x_arrow), Create(t0), FadeIn(l0), FadeIn(x_lab), run_time=.25 * d)
             self.play(Write(rng), run_time=.15 * d)
             self.wait(.05 * d)
@@ -88,12 +88,12 @@ class S39_Column_Setup(VScene):
             self.play(FadeIn(note, shift=UP * .2), run_time=.1 * d)
             self.wait(.08 * d)
             # x up, load down: the minus sign
-            self.play(Indicate(x_arrow, color=ACCENT), Indicate(arrows, color=ACCENT), run_time=.12 * d)
+            self.play(Indicate(x_arrow, color=INK), Indicate(arrows, color=INK), run_time=.12 * d)
             self.play(*morph(rag, eqA, [(0, 3)]), run_time=.1 * d)
-            self.play(Indicate(eqA[2], color=ACCENT, scale_factor=1.4), run_time=.08 * d)
+            self.play(Indicate(eqA[2], color=INK, scale_factor=1.4), run_time=.08 * d)
             self.wait(.04 * d)
             self.play(*morph(eqA, eqB, [(0, 0), (1, 1), (2, 4), (3, 5)]), run_time=.1 * d)
-            self.play(Indicate(eqB[2], color=ACCENT, scale_factor=1.4), run_time=.06 * d)
+            self.play(Indicate(eqB[2], color=INK, scale_factor=1.4), run_time=.06 * d)
             self.wait(.02 * d)
 
         # ---- beat 4: three equal elements, nodes 1..4, q1..q4, l = L/3
@@ -127,7 +127,7 @@ class S39_Column_Setup(VScene):
             self.play(LaggedStart(*[AnimationGroup(GrowArrow(a), FadeIn(l)) for a, l in zip(q_arr, q_lab)],
                                   lag_ratio=.3), run_time=.14 * d)
             self.wait(.04 * d)
-            self.play(Indicate(nums[0], color=ACCENT, scale_factor=1.4), Indicate(floor_r, color=ACCENT),
-                      Flash(dots[0], color=ACCENT), run_time=.1 * d)
+            self.play(Indicate(nums[0], color=INK, scale_factor=1.4), Indicate(floor_r, color=INK),
+                      Flash(dots[0], color=INK), run_time=.1 * d)
             self.wait(.04 * d)
         self.wipe()

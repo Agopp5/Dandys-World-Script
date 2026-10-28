@@ -31,7 +31,7 @@ CS = 1.2                                   # global cell size
 G0 = np.array([-6.1, 2.0, 0.])             # top-left corner of the 4 by 4 grid
 SC = .7                                    # element blocks wait at 70 % size, then grow as they land
 BX, BY = [1.05, 3.5, 5.95], .85            # where the three element blocks wait
-HUES = [GOLD, MINT, SKY]                   # element tints, as in the slides
+HUES = [LILAC, interpolate_color(LILAC, INK, .45), interpolate_color(LILAC, BG, .35)]  # stiffness shades
 FC, C2 = np.array([1.3, -.4, 0.]), 1.05    # the finished matrix: centre and entry pitch
 UC = {"U_1": MINT, "U_2": MINT, "U_3": MINT}
 
@@ -147,14 +147,14 @@ class S40_Assembly_K(VScene):
         loc, glob, arr = trace(b, 0)
         with self.say("Element one connects nodes one and two. Its local spot one-one goes to the big matrix's "
                       "spot one-one, and its block fills rows and columns one and two.") as d:
-            self.play(Indicate(b["cap"], color=GOLD, scale_factor=1.1),
-                      *[l.animate.set_color(GOLD) for l in (rlab[1], rlab[2], clab[1], clab[2])], run_time=.2 * d)
+            self.play(Indicate(b["cap"], color=INK, scale_factor=1.1),
+                      *[l.animate.set_color(b["hue"]) for l in (rlab[1], rlab[2], clab[1], clab[2])], run_time=.2 * d)
             self.wait(.03 * d)
             self.play(Create(loc), run_time=.1 * d)
             self.play(GrowArrow(arr), Create(glob), run_time=.17 * d)
             self.wait(.1 * d)
             self.play(*land(b, 0), FadeOut(loc), FadeOut(arr), run_time=.2 * d)
-            self.play(FadeOut(glob), Indicate(VGroup(rlab[1], rlab[2], clab[1], clab[2]), color=GOLD),
+            self.play(FadeOut(glob), Indicate(VGroup(rlab[1], rlab[2], clab[1], clab[2]), color=INK),
                       run_time=.12 * d)
             self.wait(.08 * d)
 
@@ -163,9 +163,9 @@ class S40_Assembly_K(VScene):
         loc, glob, arr = trace(b, 1)
         with self.say("Element two connects nodes two and three. Its local spot one-one goes to the big matrix's "
                       "spot two-two. But spot two-two is already taken by element one.") as d:
-            self.play(Indicate(b["cap"], color=MINT, scale_factor=1.1),
+            self.play(Indicate(b["cap"], color=INK, scale_factor=1.1),
                       *[l.animate.set_color(INK2) for l in (rlab[1], clab[1])],
-                      *[l.animate.set_color(MINT) for l in (rlab[2], rlab[3], clab[2], clab[3])], run_time=.2 * d)
+                      *[l.animate.set_color(b["hue"]) for l in (rlab[2], rlab[3], clab[2], clab[3])], run_time=.2 * d)
             self.wait(.04 * d)
             self.play(Create(loc), run_time=.1 * d)
             self.play(GrowArrow(arr), Create(glob), run_time=.17 * d)
@@ -174,7 +174,7 @@ class S40_Assembly_K(VScene):
             a, bb = blocks[0]["ents"][(2, 2)], b["ents"][(1, 1)]
             self.play(*land(b, 1, shared=a), FadeOut(loc), FadeOut(arr), run_time=.2 * d)
             self.play(FadeOut(glob), Circumscribe(gcell[(2, 2)], color=INK), run_time=.1 * d)
-            self.play(Indicate(a, color=GOLD, scale_factor=1.4), run_time=.1 * d)
+            self.play(Indicate(a, color=INK, scale_factor=1.4), run_time=.1 * d)
             self.wait(.03 * d)
 
         # ------------------------------------------------ beat 5 (crux): overlapping entries add
@@ -198,8 +198,8 @@ class S40_Assembly_K(VScene):
             self.play(ReplacementTransform(a, two), FadeOut(bb, target_position=gp(2, 2)),
                       FadeOut(plus, target_position=gp(2, 2)), run_time=.1 * d)
             self.wait(.05 * d)
-            self.play(FadeIn(Ls), Indicate(pi_eq[2], color=MINT), Indicate(pi_eq[4], color=MINT), run_time=.14 * d)
-            self.play(Circumscribe(L1[5], color=SKY), Circumscribe(L2[7], color=SKY), run_time=.12 * d)
+            self.play(FadeIn(Ls), Indicate(pi_eq[2], color=INK), Indicate(pi_eq[4], color=INK), run_time=.14 * d)
+            self.play(Circumscribe(L1[5], color=INK), Circumscribe(L2[7], color=INK), run_time=.12 * d)
             self.wait(.14 * d)
 
         # ------------------------------------------------ beat 6: element 3, zeros, the finished K
@@ -225,9 +225,9 @@ class S40_Assembly_K(VScene):
                       "Everywhere no element touches, it's zero. The result: E A over l, times one, minus one, "
                       "zero, zero; minus one, two, minus one, zero; zero, minus one, two, minus one; zero, zero, "
                       "minus one, one.") as d:
-            self.play(self.unspot(), FadeOut(Ls), Indicate(b["cap"], color=SKY, scale_factor=1.1),
+            self.play(self.unspot(), FadeOut(Ls), Indicate(b["cap"], color=INK, scale_factor=1.1),
                       *[l.animate.set_color(INK2) for l in (rlab[2], clab[2])],
-                      *[l.animate.set_color(SKY) for l in (rlab[3], rlab[4], clab[3], clab[4])], run_time=.1 * d)
+                      *[l.animate.set_color(b["hue"]) for l in (rlab[3], rlab[4], clab[3], clab[4])], run_time=.1 * d)
             self.play(*land(b, 2, shared=a3), run_time=.1 * d)
             self.play(FadeIn(plus3), run_time=.04 * d)
             self.play(ReplacementTransform(a3, two3), FadeOut(b3, target_position=gp(3, 3)),

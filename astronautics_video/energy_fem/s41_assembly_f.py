@@ -88,7 +88,7 @@ class S41_Assembly_F(VScene):
                          for i in range(3)])
         ground = wall(np.array([COLX, YN[0], 0]), side=DOWN, h=1.3)
         dots = VGroup(*[node(np.array([COLX, y, 0]), r=0.09) for y in YN])
-        nlabs = VGroup(*[T(str(i + 1), size=36, color=INK).move_to([COLX - 0.85, YN[i] + 0.12, 0]) for i in range(4)])
+        nlabs = VGroup(*[T(str(i + 1), size=36, color=INK).move_to([COLX - 0.85, YN[i] + (0.32 if i == 0 else 0.12), 0]) for i in range(4)])
         tags = VGroup()
         for i in range(3):
             ring = Circle(radius=0.34, color=INK2, stroke_width=3)
@@ -104,7 +104,8 @@ class S41_Assembly_F(VScene):
             dist.append([down_arrow(COLX + XB, YN[i] + t, 0.42, sw=4) for t in (0.6, 0.95, 1.3, 1.65)])
         # nodal arrows: below[n] comes from the element under node n, above[n] from the element over it
         below = {n: down_arrow(COLX + XB, YN[n], LA) for n in (1, 2, 3)}
-        above = {n: down_arrow(COLX + XA, YN[n], LA) for n in (0, 1, 2)}
+        above = {n: down_arrow(COLX + XA, YN[n], LA) for n in (1, 2)}
+        above[0] = down_arrow(COLX + XA, YN[0] + LA, LA)   # node 1: beside the column, ending at the node, above the ground
 
         # ---------- right-hand math ----------
         cnote = E(r"c|=|-\rho A g", size=48).move_to([3.4, 3.0, 0])
@@ -135,10 +136,10 @@ class S41_Assembly_F(VScene):
         self.checkpoint("6.1", "Column under its own weight: assemble the load vector")
 
         # ---------- stacking at each node ----------
-        stacked = {0: down_arrow(COLX + XS, YN[0], LA), 3: down_arrow(COLX + XS, YN[3], LA),
+        stacked = {0: down_arrow(COLX + XS, YN[0] + LA, LA), 3: down_arrow(COLX + XS, YN[3], LA),
                    1: down_arrow(COLX + XS, YN[1], 2 * LA), 2: down_arrow(COLX + XS, YN[2], 2 * LA)}
-        stex = [r"\frac{cl}{2}", r"cl", r"cl", r"\frac{cl}{2}"]
-        slabs = [E(stex[n], size=40).next_to(stacked[n], RIGHT, buff=0.22) for n in range(4)]
+        stex = [r"cl/2", r"cl", r"cl", r"cl/2"]
+        slabs = [E(stex[n], size=44).next_to(stacked[n], RIGHT, buff=0.22) for n in range(4)]
         work = []
         for k, tx in enumerate([r"\frac{cl}{2}", r"\frac{cl}{2}|+|\frac{cl}{2}|=|cl",
                                 r"\frac{cl}{2}|+|\frac{cl}{2}|=|cl", r"\frac{cl}{2}"]):
@@ -199,7 +200,7 @@ class S41_Assembly_F(VScene):
 
         # ---------- the full system ----------
         kq = E(r"K|q|=|F", size=56).move_to([-0.6, 3.0, 0])
-        qmark = M("?", size=110, color=GOLD).next_to(kq, RIGHT, buff=0.6)
+        qmark = M("?", size=110, color=INK2).next_to(kq, RIGHT, buff=0.6)
         rows = [["1", "-1", "0", "0"], ["-1", "2", "-1", "0"], ["0", "-1", "2", "-1"], ["0", "0", "-1", "1"]]
         kmat = CMat([[E(x, size=44).set_color(LILAC) for x in r] for r in rows], pitch=1.15, gap=0.6)
         pre = E(r"\frac{EA}{l}", size=48).set_color(LILAC)

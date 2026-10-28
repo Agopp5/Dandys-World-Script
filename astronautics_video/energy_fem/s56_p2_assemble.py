@@ -41,8 +41,6 @@ def sx(x_in):
 XN = [sx(0), sx(20), sx(40)]
 assert np.isclose(XN[1], -0.8)
 MID1, MID2 = (XN[0] + XN[1]) / 2, (XN[1] + XN[2]) / 2
-RING_Y = BY - BH / 2 - 0.6
-WORK_Y = RING_Y - 0.66
 
 
 def span_rect(a, b, color, opacity, stroke=0):
@@ -68,22 +66,13 @@ class S56_P2_Assemble(VScene):
 
     def construct(self):
         # ---------- figure ----------
-        wall_m = wall((X0, BY, 0), side=LEFT, h=1.0)
-        bar_m = bar(X0, X1, y=BY, h=BH)
-        fl = dist_load(X0 + 0.5, X1 - 0.05, BY, n=15, d=LEFT, color=ROSE)
-        flab = M(r"f = 5\ \text{lb/in}", size=36, color=ROSE).move_to((MID1, BY + BH / 2 + 0.42, 0))
-        p1a = force((XN[1], BY + BH / 2 + 0.32, 0), d=RIGHT, length=1.0)
-        p1l = M(r"P_1 = 50\ \text{lb}", size=36, color=ROSE).next_to(p1a, UP, buff=0.12)
-        p2a = force((X1, BY, 0), d=RIGHT, length=1.1)
-        p2l = M(r"P_2 = 100\ \text{lb}", size=36, color=ROSE).next_to(p2a, UP, buff=0.42)
-        clamp(p2l)
-        dots = VGroup(*[node((x, BY, 0)) for x in XN])
-        rings = VGroup()
-        for i, x in enumerate(XN):
-            c = Circle(radius=0.3).set_stroke(INK2, 3).move_to((x, RING_Y, 0))
-            rings.add(VGroup(c, M(str(i), size=36, color=INK).move_to(c)))
-        elabs = VGroup(T("element 1", size=36, color=INK2).move_to((MID1, RING_Y, 0)),
-                       T("element 2", size=36, color=INK2).move_to((MID2, RING_Y, 0)))
+        hb = hw2_bar(y=BY, x0=X0, x1=X1, h=BH)          # the shared homework bar (same as S54)
+        assert all(np.isclose(hb.X(xi), xs) for xi, xs in zip((0, 20, 40), XN))
+        wall_m, fl, rings = hb.wall, hb.farr, hb.rings
+        p1g, p2g = hb.P1, hb.P2
+        work_y = rings[0].get_y() - 0.7
+        elabs = VGroup(*[T("element %d" % (i + 1), size=36, color=INK2).move_to((x, 0, 0))
+                         .set_y(BY + BH / 2 + 0.4) for i, x in enumerate((MID1, MID2))])
 
         # element highlights (solid = element 1, dashed = element 2, same as their blocks in K)
         el1 = span_rect(XN[0], XN[1], LILAC, 0.28, stroke=6)
@@ -101,7 +90,7 @@ class S56_P2_Assemble(VScene):
         w1 = E(r"-50|-50|+50|=|-50", size=36).set_color(ROSE)
         w2 = E(r"-50|+100|=|50", size=36).set_color(ROSE)
         for w, x in zip((w0, w1, w2), XN):
-            w.move_to((x, WORK_Y, 0))
+            w.move_to((x, work_y, 0))
             clamp(w)
         for w in (w1, w2):
             paint(w, {len(w) - 2: INK})
@@ -140,11 +129,10 @@ class S56_P2_Assemble(VScene):
         # ---------- beat 1: the bar, then the checkpoint ----------
         self.section("HW P2, part a: assemble K and F")
         self.beat("Your turn first: pause and do checkpoint eight point one in your guide, and assemble K and F.",
-                  [FadeIn(wall_m), Create(bar_m)],
-                  [FadeIn(dots), FadeIn(rings), FadeIn(elabs)],
-                  [FadeIn(fl, lag_ratio=0.1), FadeIn(flab)],
-                  [GrowArrow(p1a) if isinstance(p1a, Arrow) else FadeIn(p1a), FadeIn(p1l),
-                   GrowArrow(p2a) if isinstance(p2a, Arrow) else FadeIn(p2a), FadeIn(p2l)],
+                  [FadeIn(hb.wall), Create(hb.bar)],
+                  [FadeIn(hb.nodes), FadeIn(hb.rings), FadeIn(hb.tick3), FadeIn(hb.ring3), FadeIn(elabs)],
+                  [FadeIn(hb.farr, lag_ratio=0.1), FadeIn(hb.flab)],
+                  [FadeIn(p1g), FadeIn(p2g)],
                   w=(.25, .25, .25, .25))
         self.checkpoint("8.1", "HW 2: assemble the global K and F")
 
@@ -191,14 +179,14 @@ class S56_P2_Assemble(VScene):
             self.play(FadeOut(shares[0]), FadeIn(shares[1]), Indicate(rings[1], color=INK), run_time=.05 * d)
             self.play(Write(w1[0]), Write(w1[1]), Indicate(arrows_in(MID1, MID2), color=ROSE, scale_factor=1.3),
                       run_time=.1 * d)
-            self.play(Write(w1[2]), Indicate(VGroup(p1a, p1l), color=ROSE), run_time=.09 * d)
+            self.play(Write(w1[2]), Indicate(p1g, color=ROSE), run_time=.09 * d)
             self.play(Write(w1[3:]), run_time=.06 * d)
             self.play(ReplacementTransform(w1[4].copy(), fents[1]), run_time=.07 * d)
             self.wait(.05 * d)
             self.play(FadeOut(shares[1]), FadeIn(shares[2]), Indicate(rings[2], color=INK), run_time=.05 * d)
             self.play(Write(w2[0]), Indicate(arrows_in(MID2, XN[2]), color=ROSE, scale_factor=1.3),
                       run_time=.1 * d)
-            self.play(Write(w2[1]), Indicate(VGroup(p2a, p2l), color=ROSE), run_time=.1 * d)
+            self.play(Write(w2[1]), Indicate(p2g, color=ROSE), run_time=.1 * d)
             self.play(Write(w2[2:]), run_time=.06 * d)
             self.play(ReplacementTransform(w2[3].copy(), fents[2]), run_time=.07 * d)
             self.play(FadeOut(shares[2]), run_time=.04 * d)
