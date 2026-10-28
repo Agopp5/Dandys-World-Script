@@ -125,8 +125,7 @@ class S54_P2_Read(VScene):
 
         # ---------- point 3 ----------
         later = T("point 3: later", size=32, color=MUTED).move_to([X(10), ly, 0])
-        later.shift(RIGHT * max(0, (xl1.get_left()[0] - 0.3) - later.get_right()[0]) * 0 +
-                    LEFT * max(0, later.get_right()[0] - (xl1.get_left()[0] - 0.3)))
+        later.shift(LEFT * max(0, later.get_right()[0] - (xl1.get_left()[0] - 0.3)))
         self.beat("The figure also marks a point three at a quarter of the length. The questions don't ask about "
                   "it, but we'll use it at the end to learn something.",
                   [FadeIn(glow(mark3, MUTED)), Indicate(c3, color=INK2)], .1, FadeIn(later, shift=UP * 0.2), .3,

@@ -171,3 +171,31 @@ class S45_Stress(VScene):
             self.wait(.15 * d)
             self.play(fr.animate.scale(1 / 0.55).move_to(ORIGIN), FadeOut(zl), run_time=.1 * d)
             self.play(*[Flash(dt, color=GOLD) for dt in mids], run_time=.1 * d)
+
+        # ---- beat 7: the second question answered; finer steps ----
+        qhead = T("Question 2", 30, MUTED)
+        qtext = T("Where is the stress highest?", 36, INK)
+        tick = M(r"\checkmark", size=64, color=GOOD)
+        qans = T("At the base: it holds", 32, INK)
+        qans2 = T("up the whole weight", 32, INK)
+        qbody = VGroup(qhead, qtext, VGroup(qans, qans2).arrange(DOWN, aligned_edge=LEFT, buff=0.15))
+        qbody.arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        card = panel(qbody, color=GOOD)
+        card.move_to([RX + 0.2, 1.7, 0])
+        tick.next_to(card, RIGHT, buff=0.15).align_to(card, UP).shift(0.1 * DOWN)
+        if tick.get_right()[0] > 6.9:
+            tick.next_to(qtext, UP, buff=0.1).align_to(card, RIGHT).shift(0.25 * LEFT)
+        note1 = T("Stress is the slope of the", 30, INK2)
+        note2 = T("straight-line guess:", 30, INK2)
+        note3 = T("one order rougher than u", 30, INK2)
+        notes = VGroup(note1, note2, note3).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([RX + 0.2, -1.6, 0])
+        base_dot = Dot(ax.c2p(0, -1), radius=0.14, color=GOOD).set_z_index(6)
+        st6 = stairs(SIX)
+        leg6 = T("FEM, 6 elements", 36, INK).move_to(leg_fem[1], aligned_edge=LEFT)
+        self.beat("That answers our second question: the stress is highest at the base, where the column holds up its whole weight. And stresses are rougher than displacements, because they come from the slope of the straight-line guess. More elements, finer steps.",
+                  [FadeOut(res), FadeOut(guides), FadeOut(mlab), FadeOut(rings), FadeOut(mids), FadeIn(card)],
+                  [FadeIn(base_dot, scale=2), Flash(base_dot, color=GOOD), Write(tick)], .1,
+                  FadeIn(notes, shift=0.2 * UP), .05,
+                  [ReplacementTransform(st3, st6), ReplacementTransform(leg_fem[1], leg6)], .1,
+                  w=(.12, .15, .1, .25, .03, .2, .15))
+        self.wipe()

@@ -15,7 +15,12 @@ N_NODES, N_ELEMS = len(XS), len(XS) - 1
 assert (N_NODES, N_ELEMS) == (4, 3)
 ELEM2 = (2, 3)                         # element 2: global nodes (u1, u2) -> (q2, q3)
 assert ELEM2 == (2, 2 + 1)
-QV = [0.0, 1.0, 1.65, 2.0]              # sketch heights of the node values (illustrative only)
+# exact bar under uniform f plus tip load P = f L / 2 (L = 1): u ~ (L x - x^2/2) + (L/2) x = 1.5 x - x^2/2
+def g(t):
+    return 1.5 * t - 0.5 * t ** 2
+UMAX = 2.0                              # screen height of the tip value
+QV = [UMAX * g(t) / g(1.0) for t in (0, 1 / 3, 2 / 3, 1)]
+assert np.allclose(np.array(QV) / UMAX, [0, 4 / 9, 7 / 9, 1])
 
 
 def p(x, y):
@@ -48,6 +53,9 @@ class S31_Discretize(VScene):
         tip = force(p(XS[3], YB), d=RIGHT, length=1.2, color=ROSE)
         tip_l = M("P", size=44, color=ROSE).next_to(tip, UP, buff=0.12)
         load = VGroup(tip, tip_l)
+        floads = VGroup(*[dist_load(XS[i] + 0.35, XS[i + 1] - 0.75, YB, n=3, d=RIGHT, color=ROSE)
+                          for i in range(3)])
+        f_l = M("f", size=40, color=ROSE).move_to(p((XS[0] + XS[1]) / 2, YB - 0.7))
 
         el_t = T("element", size=40, color=INK).move_to(p((XS[1] + XS[2]) / 2, YB + 2.3))
         el_a = Arrow(el_t.get_bottom(), tags[1].get_top(), buff=0.12, color=INK2,
@@ -57,7 +65,7 @@ class S31_Discretize(VScene):
                               max_tip_length_to_length_ratio=0.08) for x in XS])
         self.beat("Take the bar fixed to a wall, and chop it into three pieces. Each piece is called an element. "
                   "The points where they join, and the two ends, are called nodes.",
-                  [FadeIn(wl), FadeIn(fb), FadeIn(tags)], FadeIn(load), .1,
+                  [FadeIn(wl), FadeIn(fb), FadeIn(tags)], [FadeIn(load), FadeIn(floads), FadeIn(f_l)], .1,
                   [FadeIn(el_t), GrowArrow(el_a), Indicate(VGroup(fb.elems[1], tags[1]), color=LILAC)], .1,
                   [FadeIn(nd_t), LaggedStart(*[GrowArrow(a) for a in nd_a], lag_ratio=.2)],
                   w=(.25, .1, .3, .35))
@@ -84,18 +92,20 @@ class S31_Discretize(VScene):
         sticks = VGroup(*[DashedLine(p(x, y0), q, color=MUTED, stroke_width=2) for x, q in zip(XS, pts)])
         broken = VMobject(color=SKY, stroke_width=6).set_points_as_corners(pts)
         u_l = M("u(x)", size=44, color=SKY).next_to(pts[3], RIGHT, buff=0.25)
-        note = T("node values: a sketch", size=30, color=MUTED).move_to(p(-3.6, 3.4))
-        plot = VGroup(base, sticks, dots, broken, u_l, note)
+        exact = dashed(ParametricFunction(lambda t: p(XS[0] + t * (XS[3] - XS[0]), y0 + UMAX * g(t) / g(1.0)),
+                                          t_range=[0, 1], color=MUTED, stroke_width=3))
+        exact.set_stroke(opacity=.6)
+        plot = VGroup(base, exact, sticks, dots, broken, u_l)
         self.beat("Between the nodes, we assume the displacement is a straight line. So once we know the four "
                   "node values, we know u everywhere.",
-                  [FadeOut(el_t), FadeOut(el_a), Create(base)], [Create(sticks), FadeIn(dots), FadeIn(note)],
+                  [FadeOut(el_t), FadeOut(el_a), Create(base)], [Create(sticks), FadeIn(dots), Create(exact)],
                   Create(broken), FadeIn(u_l),
                   w=(.1, .25, .4, .25))
 
         # ---- beat 4: explode, equal end displacements at each gap, reassemble ----
         ends = VGroup(*[VGroup(Dot(p(XS[i], YB), radius=0.09, color=INK),
                                Dot(p(XS[i + 1], YB), radius=0.09, color=INK)) for i in range(3)])
-        pieces = [VGroup(fb.elems[i], tags[i], ends[i]) for i in range(3)]
+        pieces = [VGroup(fb.elems[i], tags[i], ends[i], floads[i]) for i in range(3)]
         SH = [0.0, 1.0, 2.0]                     # how far each element slides right
         ya = YB - 0.62
         gaps = VGroup()

@@ -26,6 +26,7 @@ def column_figure():
     nodes = VGroup(*[node([cx, y, 0], r=0.1) for y in ys])
     qlab = VGroup(*[M("q_%d" % (i + 1), size=44, color=SKY).next_to(nodes[i], RIGHT, buff=0.75)
                     for i in range(4)])
+    qlab[0].shift(UP * 0.3 + RIGHT * 0.15)   # clear of the ground hatching
     ticks = VGroup(*[Line([cx + w / 2, y, 0], [cx + w / 2 + 0.55, y, 0], color=HAIR, stroke_width=2) for y in ys])
     ground = wall([cx, y0, 0], side=DOWN, h=1.7)
     # weight per length: small ROSE arrows down the left side

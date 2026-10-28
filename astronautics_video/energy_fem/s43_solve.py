@@ -57,7 +57,7 @@ class S43_Solve(VScene):
         hatch = VGroup(*[Line([cx - 1.0 + 0.25 * k, y0, 0], [cx - 1.2 + 0.25 * k, y0 - 0.3, 0],
                               color=INK2, stroke_width=2.5) for k in range(9)])
         nodes = VGroup(*[node([cx, y, 0], r=0.1) for y in ys])
-        qlab = VGroup(*[M("q_%d" % (i + 1), size=44, color=SKY).next_to(nodes[i], LEFT, buff=0.75)
+        qlab = VGroup(*[M("q_%d" % (i + 1), size=44, color=SKY).next_to(nodes[i], LEFT, buff=1.05)
                         for i in range(4)])
         xarr = Arrow([cx + 1.3, y0 + 0.15, 0], [cx + 1.3, y0 + 1.5, 0], buff=0, color=INK2, stroke_width=4)
         xlab = M("x", size=40, color=INK2).next_to(xarr, RIGHT, buff=0.12)
@@ -154,9 +154,10 @@ class S43_Solve(VScene):
         alab = VGroup(*[M(t, size=40, color=SKY).next_to(arrows[k], RIGHT, buff=0.15)
                         for k, t in enumerate(("-5/9", "-8/9", "-1"))])
         exag = T("sinking exaggerated", size=30, color=MUTED).move_to([cx + 0.4, y0 - 0.65, 0])
-        card = panel(VGroup(T("FIRST QUESTION", size=30, color=GOLD, weight=BOLD),
-                            T("How much does the flagpole shorten?", size=36)).arrange(DOWN, buff=0.25))
-        fit(card, 6.0, 2.2)
+        card = panel(VGroup(T("FIRST QUESTION", size=32, color=GOLD, weight=BOLD),
+                            T("How much does the flagpole", size=40),
+                            T("shorten?", size=40)).arrange(DOWN, buff=0.25))
+        fit(card, 5.6, 2.6)
         card.move_to([RX, -2.6, 0])
         tick = M(r"\checkmark", size=72, color=GOOD).next_to(card, RIGHT, buff=0.15)
         if tick.get_right()[0] > 6.9:

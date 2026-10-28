@@ -124,5 +124,5 @@ class S47_Step_Setup(VScene):
                   LaggedStart(*[FadeIn(VGroup(g.nodes[i], g.nums[i]), scale=1.3) for i in range(4)],
                               lag_ratio=.6),
                   FadeIn(g.qs, shift=.2 * RIGHT), .05, [FadeOut(qc), FadeIn(goals)], .2,
-                  w=(.4, .15, .05, .15, .25))
+                  w=(.45, .2, .35))
         self.wipe()

@@ -66,7 +66,7 @@ class S44_Compare_u(VScene):
             g = DashedLine(ax.c2p(xi, 0), ax.c2p(xi, v), color=MUTED, stroke_width=2, dash_length=0.08)
             lab = M(s, size=40, color=SKY).next_to(d, DL, buff=0.12)
             dots.add(d); guides.add(g); labs.add(lab)
-        labs[2].next_to(dots[2], DOWN, buff=0.15)
+        labs[2].next_to(dots[2], DOWN, buff=0.3)
 
         self.beat("At x over L equal to one third, two thirds and one, it gives minus five ninths, minus eight ninths and minus one. The exact values at the nodes.",
                   *[[Create(guides[i]), GrowFromCenter(dots[i]), FadeIn(labs[i], shift=0.2 * DOWN)] for i in range(3)],

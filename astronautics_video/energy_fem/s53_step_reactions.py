@@ -90,3 +90,43 @@ class S53_Step_Reactions(VScene):
                   "back. At the right wall, the spring is squeezed, so the wall pushes it back.",
                   self.unspot(), [GrowArrow(a0), FadeIn(m0)], Indicate(e1, color=ACCENT), FadeIn(t0), .1,
                   [GrowArrow(a3), FadeIn(m3)], Indicate(sp, color=LILAC), FadeIn(t3))
+
+        # ---- the sum check, the 4 : 1 split, the question card ----
+        old = VGroup(lab0, row0, r0, lab3, row3, r3)
+        tot = E(r"7000|-|5600|-|1400|=|0", size=52).move_to([-3.9, -0.75, 0])
+        tick = M(r"\checkmark", size=60, color=GOOD).next_to(tot, RIGHT, buff=0.35)
+        bx = -3.6
+        seg_l = Rectangle(width=4.8, height=0.6, stroke_color=INK2, stroke_width=3,
+                          fill_color=ROSE, fill_opacity=0.55).move_to([bx - 0.6, -2.35, 0])
+        seg_r = Rectangle(width=1.2, height=0.6, stroke_color=INK2, stroke_width=3,
+                          fill_color=ROSE, fill_opacity=0.25).next_to(seg_l, RIGHT, buff=0)
+        f_l = M(r"\frac45", size=40, color=INK).next_to(seg_l, UP, buff=0.12)
+        f_r = M(r"\frac15", size=40, color=INK).next_to(seg_r, UP, buff=0.12)
+        n_l = M(r"5600\text{ N}", size=40, color=ROSE).next_to(seg_l, DOWN, buff=0.15)
+        n_r = M(r"1400\text{ N}", size=40, color=ROSE).next_to(seg_r, DOWN, buff=0.15)
+        split = VGroup(seg_l, seg_r, f_l, f_r, n_l, n_r)
+        card = qcard("Q", T("Where does the", 32), T("7000 N go?", 32))
+        fit(card, 5.4, 3.0)
+        card.move_to([3.9, -1.75, 0])
+        ctick = M(r"\checkmark", size=72, color=GOOD).next_to(card, DOWN, buff=0.2)
+        self.beat("Together, fifty six hundred plus fourteen hundred is seven thousand. They balance the load "
+                  "exactly. So four fifths of the load goes to the left wall, through the stiff thick piece, and "
+                  "one fifth goes right, through the softer path.",
+                  FadeOut(old), Write(tot), FadeIn(tick, scale=1.5), .05,
+                  [FadeIn(split[0]), FadeIn(split[2]), FadeIn(split[4]), Indicate(a0, color=ROSE)],
+                  [FadeIn(split[1]), FadeIn(split[3]), FadeIn(split[5]), Indicate(a3, color=ROSE)],
+                  FadeIn(card), FadeIn(ctick, scale=1.6))
+
+        # ---- summary panel (own build: key_box shrinks lines) ----
+        head = T("STEPPED BAR", 36, color=ACCENT, weight=BOLD)
+        l1 = E(r"q_1|=|0.2\text{ mm},\ |q_2|=|0.1\text{ mm}", size=48, cmap=CM)
+        l2 = E(r"\sigma_1|=|28,\ |\sigma_2|=|-14\text{ MPa}", size=48, cmap=CM)
+        l3 = E(r"R_0|=|-5600,\ |R_3|=|-1400\text{ N}", size=48, cmap=CM)
+        body = VGroup(head, l1, l2, l3).arrange(DOWN, buff=0.45)
+        summ = panel(body, color=ACCENT)
+        fit(summ, 12.5, 6.4)
+        summ.move_to(DOWN * 0.3)
+        everything = VGroup(fig, a0, a3, t0, t3, m0, m3, tot, tick, split, card, ctick)
+        self.beat("So, stepping back: the same recipe as the column, now with real numbers and two supports.",
+                  FadeOut(everything), FadeIn(summ, shift=UP * 0.2))
+        self.wipe()
